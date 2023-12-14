@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+
+html{
+    font-family: 'Poppins', sans-serif;
+}
+.pill-header {
+    background-color: #ffffff;
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 20px;
+    border: 2px solid darkgrey;
+    margin: 20px;
+    padding: 20px;
+}
+
+.options-dropdown {
+    margin-top: 10px;
+    border: 2px solid darkgrey;
+    padding: 10px;
+    display: none;
+    position: absolute;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+.options-dropdown a {
+    color: black;
+    padding: 10px;
+    text-decoration: none;
+    display: block;
+}
+
+.options-dropdown a:hover {
+    background-color: rgba(169, 169, 169, 0.5);
+    border-radius: 20px;
+}
+
+button{
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border-radius: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border: 2px solid darkgrey;
+}
+
+button:hover{
+    background-color: rgba(169, 169, 169, 0.5);
+    border: 2.5px solid darkgrey;
+}
+
+.fas{
+    font-size: 20px;
+    font-weight: 900;
+}

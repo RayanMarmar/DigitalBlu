@@ -4,40 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2D Grid</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
+    <link rel="stylesheet" href="grid.component.css">
 
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(10, 50px); /* Adjust the number of columns and width as needed */
-            grid-template-rows: repeat(10, 50px); /* Adjust the number of rows and height as needed */
-            gap: 1px; /* Adjust the gap between grid cells as needed */
-        }
 
-        .grid-item {
-            width: 100%;
-            height: 100%;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-        }
-    </style>
 </head>
-<body>
+<div class="grid-body">
 <div class="grid-container" id="grid">
     <!-- Grid cells will be dynamically generated here -->
 </div>
-
 <script>
     // JavaScript to dynamically generate grid cells
     const gridContainer = document.getElementById('grid');
     const numRows = 10; // Adjust the number of rows as needed
-    const numCols = 10; // Adjust the number of columns as needed
+    const numCols = 16; // Adjust the number of columns as needed
 
     for (let row = 0; row < numRows; row++) {
         for (let col = 0; col < numCols; col++) {
@@ -47,5 +26,5 @@
         }
     }
 </script>
-</body>
+</div>
 </html>

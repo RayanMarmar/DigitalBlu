@@ -1,0 +1,21 @@
+.grid-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(16, 50px); /* Adjust the number of columns and width as needed */
+    grid-template-rows: repeat(10, 50px); /* Adjust the number of rows and height as needed */
+    gap: 1px; /* Adjust the gap between grid cells as needed */
+}
+
+.grid-item {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+}
