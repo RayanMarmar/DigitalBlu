@@ -4,7 +4,10 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Build + Running application
 
+Run `npm install` to install dependencies.
+
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+
 Run `node sever/server.js` to run the server.
 
 
