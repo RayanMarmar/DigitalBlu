@@ -3,49 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2D Grid</title>
+    <title>Zoomable and Draggable Grid with Mouse Coordinates</title>
     <style>
         body {
+            margin: 0;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
+            background-color: #f0f0f0;
         }
 
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(10, 50px); /* Adjust the number of columns and width as needed */
-            grid-template-rows: repeat(10, 50px); /* Adjust the number of rows and height as needed */
-            gap: 1px; /* Adjust the gap between grid cells as needed */
-        }
-
-        .grid-item {
-            width: 100%;
-            height: 100%;
-            box-sizing: border-box;
+        canvas {
             border: 1px solid #ccc;
+            cursor: grab;
+            user-select: none;
+        }
+
+        #coordinates {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: white;
+            padding: 5px;
+            border: 1px solid #ccc;
+            font-family: Arial, sans-serif;
         }
     </style>
 </head>
 <body>
-<div class="grid-container" id="grid">
-    <!-- Grid cells will be dynamically generated here -->
-</div>
+<canvas id="gridCanvas"></canvas>
+<div id="coordinates">Mouse Coordinates: <span id="mouseCoordinates">N/A</span></div>
 
 <script>
-    // JavaScript to dynamically generate grid cells
-    const gridContainer = document.getElementById('grid');
-    const numRows = 10; // Adjust the number of rows as needed
-    const numCols = 10; // Adjust the number of columns as needed
+    const canvas = document.getElementById('gridCanvas');
+    const ctx = canvas.getContext('2d');
+    const gridSize = 20; // Adjust the size of the grid cells as needed
+    let zoomLevel = 1;
+    const maxZoom = 2;
+    const minZoom = 0.5;
 
-    for (let row = 0; row < numRows; row++) {
+    // Set initial canvas size
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    function drawGrid() {
+        const numCols = Math.ceil(canvas.width / (gridSize * zoomLevel));
+        const numRows = Math.ceil(canvas.height / (gridSize * zoomLevel));
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
         for (let col = 0; col < numCols; col++) {
-            const gridItem = document.createElement('div');
-            gridItem.classList.add('grid-item');
-            gridContainer.appendChild(gridItem);
+            for (let row = 0; row < numRows; row++) {
+                const x = col * gridSize * zoomLevel;
+                const y = row * gridSize * zoomLevel;
+
+                ctx.beginPath();
+                ctx.rect(x, y, gridSize * zoomLevel, gridSize * zoomLevel);
+                ctx.strokeStyle = '#ddd';
+                ctx.stroke();
+                ctx.closePath();
+            }
         }
     }
+
+    function updateCanvas() {
+        drawGrid();
+        // Add additional drawing functions here
+    }
+
+    function handleZoom(event) {
+        const zoomFactor = 0.1;
+        if (event.deltaY < 0) {
+            zoomLevel += zoomFactor;
+        } else {
+            zoomLevel -= zoomFactor;
+        }
+
+        // Limit zoom level within the specified range
+        zoomLevel = Math.max(minZoom, Math.min(maxZoom, zoomLevel));
+
+        updateCanvas();
+    }
+
+    function handleDragStart(event) {
+        canvas.style.cursor = 'grabbing';
+        canvas.addEventListener('mousemove', handleDrag);
+        canvas.addEventListener('mouseup', handleDragEnd);
+    }
+
+    function handleDrag(event) {
+        const offsetX = event.movementX;
+        const offsetY = event.movementY;
+
+        canvas.scrollLeft -= offsetX;
+        canvas.scrollTop -= offsetY;
+
+        updateCanvas();
+    }
+
+    function handleDragEnd() {
+        canvas.style.cursor = 'grab';
+        canvas.removeEventListener('mousemove', handleDrag);
+        canvas.removeEventListener('mouseup', handleDragEnd);
+    }
+
+    function handleMouseMovement(event) {
+        const mouseX = event.clientX;
+        const mouseY = event.clientY;
+
+        // Convert mouse coordinates to canvas coordinates
+        const canvasX = mouseX + canvas.scrollLeft - canvas.getBoundingClientRect().left;
+        const canvasY = mouseY + canvas.scrollTop - canvas.getBoundingClientRect().top;
+
+        document.getElementById('mouseCoordinates').textContent = `(${canvasX.toFixed(2)}, ${canvasY.toFixed(2)})`;
+    }
+
+    canvas.addEventListener('wheel', handleZoom);
+    canvas.addEventListener('mousedown', handleDragStart);
+    canvas.addEventListener('mousemove', handleMouseMovement);
+
+    // Initial draw
+    updateCanvas();
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        updateCanvas();
+    });
 </script>
 </body>
 </html>
