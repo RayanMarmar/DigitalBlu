@@ -1,0 +1,5 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(10, 50px); /* Adjust the number of columns and width as needed */
+    grid-template-rows: repeat(10, 50px); /* Adjust the number of rows and height as needed */
+}
