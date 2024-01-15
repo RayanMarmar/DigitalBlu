@@ -2,12 +2,14 @@ import { Point } from "./point";
 
 export class Mouse {
     private _isPressed: boolean;
+    private _notFirstMouseMoveEvent: boolean;
     private _clickedCoordinates: Point | null;
     private _currentCoordinates!: Point | null;
     private _canvasRect : Point | null;
 
     constructor() {
         this._isPressed = false;
+        this._notFirstMouseMoveEvent = false;
         this._clickedCoordinates = null;
         this._currentCoordinates = null;
         this._canvasRect = null
@@ -21,6 +23,15 @@ export class Mouse {
     // Setter for isPressed property
     set isPressed(value: boolean) {
         this._isPressed = value;
+    }
+    // Getter for firstMouseMoveEvent property
+    get notFirstMouseMoveEvent(): boolean {
+        return this._notFirstMouseMoveEvent;
+    }
+
+    // Setter for firstMouseMoveEvent property
+    set notFirstMouseMoveEvent(value: boolean) {
+        this._notFirstMouseMoveEvent = value;
     }
 
     // Getter for clickedCoordinates property
@@ -70,6 +81,7 @@ export class Mouse {
     mouseUp = (event: MouseEvent) : void =>
     {
         this._isPressed = false;
+        this._notFirstMouseMoveEvent = false;
         this._currentCoordinates = new Point(
             event.clientX - this._canvasRect!.x, event.clientY - this._canvasRect!.y
         );

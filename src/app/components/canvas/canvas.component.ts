@@ -17,11 +17,13 @@ export class CanvasComponent  implements AfterViewInit{
   private mouse : Mouse;
   private canvasRect : DOMRect | null = null;
   private linesList : Line[];
+  private archiveLinesList : Line[];
   private pointsList : Point[];
 
   constructor() {
     this.mouse = new Mouse();
     this.linesList = [];
+    this.archiveLinesList = [];
     this.pointsList = [];
   }
   ngAfterViewInit(): void {
@@ -42,15 +44,17 @@ export class CanvasComponent  implements AfterViewInit{
     if(!this.mouse.isPressed)
       return;
     this.mouse.mouseMove(event);
-    this.context!.clearRect(0,0,this.canvasRect!.width,this.canvasRect!.height);
-    this.linesList.pop();
+    if(this.mouse.notFirstMouseMoveEvent)
+      this.linesList.pop();
+    else
+      this.mouse.notFirstMouseMoveEvent = true;
     this.linesList.push(new Line(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!));
-    this.drawAllLines();
-    this.drawAllPoints();
+    this.drawAll();
   }
 
   onMouseUp(event: MouseEvent) : void {
     this.mouse.mouseUp(event);
+    this.linesList.pop();
     this.linesList.push(new Line(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!));
     let point : Point = new Point(this.mouse.currentCoordinates!.x - 2, this.mouse.currentCoordinates!.y - 2);
     this.drawPoint(point);
@@ -86,6 +90,27 @@ export class CanvasComponent  implements AfterViewInit{
       this.drawPoint(point);
     });
   }
+  drawAll() : void {
+    this.clear();
+    this.drawAllLines();
+    this.drawAllPoints();
+  }
+
+  undo() : void {
+    let line : Line = this.linesList.pop()!!;
+    this.archiveLinesList.push(line)
+    this.drawAll();
+  }
+  redo() : void {
+    let line : Line = this.archiveLinesList.pop()!!;
+    this.linesList.push(line)
+    this.drawAll();
+  }
+
+  clear() : void {
+    this.context!.clearRect(0,0,this.canvasRect!.width,this.canvasRect!.height);
+  }
+
   setCanvasSize(): void {
     if (this.context) {
       // Set canvas dimensions to match window size
