@@ -19,12 +19,13 @@ export class CanvasComponent  implements AfterViewInit{
   private linesList : Line[];
   private archiveLinesList : Line[];
   private pointsList : Point[];
-
+  private archivePointsList : Point[];
   constructor() {
     this.mouse = new Mouse();
     this.linesList = [];
     this.archiveLinesList = [];
     this.pointsList = [];
+    this.archivePointsList = [];
   }
   ngAfterViewInit(): void {
     this.context = this.canvas?.nativeElement.getContext('2d');
@@ -97,14 +98,35 @@ export class CanvasComponent  implements AfterViewInit{
   }
 
   undo() : void {
-    let line : Line = this.linesList.pop()!!;
-    this.archiveLinesList.push(line)
+    if(!this.containsElements())
+      return;
+    let line : Line | undefined = this.linesList.pop();
+    if(line != undefined) {
+      this.archiveLinesList.push(line);
+      this.archivePointsList.push(this.pointsList.pop()!!);
+    }
+    this.archivePointsList.push(this.pointsList.pop()!!);
     this.drawAll();
   }
+
   redo() : void {
-    let line : Line = this.archiveLinesList.pop()!!;
-    this.linesList.push(line)
+    if(!this.containsArchivedElements())
+      return;
+    let line : Line | undefined = this.archiveLinesList.pop();
+    if(line != undefined)
+    {
+      this.linesList.push(line);
+      this.pointsList.push(this.archivePointsList.pop()!!);
+
+    }
+    this.pointsList.push(this.archivePointsList.pop()!!);
     this.drawAll();
+  }
+  containsArchivedElements() : boolean {
+    return this.archivePointsList.length > 0 || this.archiveLinesList.length > 0;
+  }
+  containsElements() : boolean {
+    return this.pointsList.length > 0 || this.linesList.length > 0;
   }
 
   clear() : void {
