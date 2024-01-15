@@ -1,0 +1,22 @@
+<div class="pill-header">
+    <!-- Left Section -->
+    <div>
+        <button><i class="fas fa-undo"></i></button>
+        <button><i class="fas fa-redo"></i></button>
+    </div>
+
+    <!-- Middle Section -->
+    <div>
+        <button #optionsButton (click)="onOptionsClicked()"><i class="fas fa-plus"></i></button>
+        <div #optionsDropdown id="options-dropdown">
+            <a href="#">Add a Wall</a>
+            <a href="#">Add a Door</a>
+            <a href="#">Add a Window</a>
+        </div>
+    </div>
+
+    <!-- Right Section -->
+    <div>
+        <button><i class="fas fa-arrow-up-from-bracket"></i></button>
+    </div>
+</div>
