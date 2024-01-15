@@ -1,6 +1,6 @@
 import {Point} from "./point";
 
-export class Wall {
+export class Line {
     private _firstPoint: Point;
     private _secondPoint: Point;
 

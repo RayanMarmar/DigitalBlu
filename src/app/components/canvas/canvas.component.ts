@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {Mouse} from "../../models/mouse";
-import {Wall} from "../../models/wall";
+import {Line} from "../../models/line";
 import {Point} from "../../models/point";
 
 @Component({
@@ -16,12 +16,12 @@ export class CanvasComponent  implements AfterViewInit{
   private context: CanvasRenderingContext2D | null = null;
   private mouse : Mouse;
   private canvasRect : DOMRect | null = null;
-  private wallsList : Wall[];
+  private linesList : Line[];
   private pointsList : Point[];
 
   constructor() {
     this.mouse = new Mouse();
-    this.wallsList = [];
+    this.linesList = [];
     this.pointsList = [];
   }
   ngAfterViewInit(): void {
@@ -43,25 +43,25 @@ export class CanvasComponent  implements AfterViewInit{
       return;
     this.mouse.mouseMove(event);
     this.context!.clearRect(0,0,this.canvasRect!.width,this.canvasRect!.height);
-    this.wallsList.pop();
-    this.wallsList.push(new Wall(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!));
-    this.drawAllWalls();
+    this.linesList.pop();
+    this.linesList.push(new Line(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!));
+    this.drawAllLines();
     this.drawAllPoints();
   }
 
   onMouseUp(event: MouseEvent) : void {
     this.mouse.mouseUp(event);
-    this.wallsList.push(new Wall(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!));
+    this.linesList.push(new Line(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!));
     let point : Point = new Point(this.mouse.currentCoordinates!.x - 2, this.mouse.currentCoordinates!.y - 2);
     this.drawPoint(point);
     this.pointsList.push(point);
   }
 
-  drawWall(wall: Wall) : void {
+  drawLine(line: Line) : void {
     if (this.context) {
       this.context.beginPath();
-      this.context.moveTo(wall.firstPoint.x, wall.firstPoint.y);
-      this.context.lineTo(wall.secondPoint.x, wall.secondPoint.y);
+      this.context.moveTo(line.firstPoint.x, line.firstPoint.y);
+      this.context.lineTo(line.secondPoint.x, line.secondPoint.y);
       this.context.stroke();
     } else {
       console.error('Context is null.');
@@ -76,9 +76,9 @@ export class CanvasComponent  implements AfterViewInit{
     }
   }
 
-  drawAllWalls() : void {
-    this.wallsList.forEach((wall : Wall): void => {
-      this.drawWall(wall);
+  drawAllLines() : void {
+    this.linesList.forEach((line : Line): void => {
+      this.drawLine(line);
     });
   }
   drawAllPoints() : void {
