@@ -28,4 +28,12 @@ export class Line {
     set secondPoint(value: Point) {
         this._secondPoint = value;
     }
+
+    isLineExtremity(point: Point): boolean {
+        return this._firstPoint.equals(point) || this._secondPoint.equals(point);
+    }
+
+    toString(): string {
+        return "{a = " + this._firstPoint.toString() + ", b = " + this._secondPoint.toString() + "}";
+    }
 }

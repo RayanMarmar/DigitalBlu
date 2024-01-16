@@ -26,4 +26,12 @@ export class Point {
     set y(value: number) {
         this._y = value;
     }
+
+    equals(point: Point): boolean {
+        return point.x == this._x && point.y == this._y;
+    }
+
+    toString(): string {
+        return "(x = " + this._x + ", y = " + this._y + ")";
+    }
 }

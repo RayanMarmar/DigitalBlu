@@ -104,6 +104,10 @@ export class CanvasComponent implements AfterViewInit {
         let line: Line | undefined = this.linesList.pop();
         if (line != undefined) {
             this.archiveLinesList.push(line);
+            this.archivePointsList.push(this.pointsList.pop()!!);
+            if (this.ghostPoint()) {
+                this.archivePointsList.push(this.pointsList.pop()!!);
+            }
         }
         this.drawAll();
     }
@@ -114,6 +118,10 @@ export class CanvasComponent implements AfterViewInit {
         let line: Line | undefined = this.archiveLinesList.pop();
         if (line != undefined) {
             this.linesList.push(line);
+            this.pointsList.push(this.archivePointsList.pop()!!);
+            if (this.shouldAddPoint(line)) {
+                this.pointsList.push(this.archivePointsList.pop()!!);
+            }
         }
         this.drawAll();
     }
@@ -136,6 +144,20 @@ export class CanvasComponent implements AfterViewInit {
             this.canvas.nativeElement.width = window.innerWidth;
             this.canvas.nativeElement.height = window.innerHeight;
         }
+    }
+
+    ghostPoint(): boolean {
+        if (this.linesList.length == 0) return true;
+        let lastLine: Line = this.linesList[this.linesList.length - 1];
+        let lastPoint: Point = this.pointsList[this.pointsList.length - 1];
+
+        return !lastLine.isLineExtremity(lastPoint);
+    }
+
+    shouldAddPoint(line: Line): boolean {
+        let lastPoint: Point = this.archivePointsList[this.archivePointsList.length - 1];
+
+        return lastPoint != undefined && line.isLineExtremity(lastPoint);
     }
 
     @HostListener('document:keydown', ['$event'])
