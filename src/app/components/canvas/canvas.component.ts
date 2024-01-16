@@ -71,6 +71,8 @@ export class CanvasComponent implements AfterViewInit {
     addLine(line: Line): void {
         this.linesList.pop();
         this.linesList.push(line);
+        this.archiveLinesList = [];
+        this.archivePointsList = [];
     }
 
     drawPoint(point: Point): void {
@@ -162,11 +164,14 @@ export class CanvasComponent implements AfterViewInit {
 
     @HostListener('document:keydown', ['$event'])
     handleKeyDown(event: KeyboardEvent): void {
-        if (event.key === 'Escape') {
+        if (event.key === 'Escape' && this.mouse.drawing) {
             this.mouse.drawing = false;
             if (this.mouse.moving) {
                 this.mouse.moving = false;
                 this.linesList.pop();
+                if (this.ghostPoint()) {
+                    this.pointsList.pop();
+                }
             }
             this.drawAll();
         }
