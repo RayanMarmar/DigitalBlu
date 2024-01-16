@@ -38,11 +38,19 @@ export class CanvasComponent implements AfterViewInit {
 
     onMouseDown(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
+        let point: Point = this.mouse.currentCoordinates!!;
+        let snapped: Point = this.snapPoint(point);
         if (this.mouse.drawing)
-            this.addLine(new Line(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!))
-        this.mouse.mouseDown(event);
-        let point: Point = new Point(this.mouse.clickedCoordinates!.x, this.mouse.clickedCoordinates!.y);
-        this.pointsList.push(point);
+            this.addLine(new Line(this.mouse.clickedCoordinates!!, snapped))
+        if (snapped.equals(point)) {
+            this.mouse.mouseDown(event);
+            this.pointsList.push(point);
+        } else {
+            this.mouse.drawing = true;
+            this.mouse.moving = false;
+            this.mouse.clickedCoordinates = snapped;
+            this.mouse.notFirstMouseMoveEvent = false;
+        }
     }
 
     onMouseMove(event: MouseEvent): void {
@@ -175,5 +183,20 @@ export class CanvasComponent implements AfterViewInit {
             }
             this.drawAll();
         }
+    }
+
+    private snapPoint(point: Point): Point {
+        let index: number = this.inRangeOfAnExistingPoint(point);
+        return index == -1 ? point : this.pointsList[index];
+    }
+
+    private inRangeOfAnExistingPoint(point: Point): number {
+        for (let i: number = 0; i < this.pointsList.length; i++) {
+            const p: Point = this.pointsList[i];
+            if (p.inPointRange(point)) {
+                return i; // Return the index if a matching point is found
+            }
+        }
+        return -1; // Return -1 if no matching point is found
     }
 }

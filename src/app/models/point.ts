@@ -1,6 +1,7 @@
 export class Point {
     private _x: number;
     private _y: number;
+    private range: number = 5;
 
     constructor(x: number, y: number) {
         this._x = x;
@@ -33,5 +34,17 @@ export class Point {
 
     toString(): string {
         return "(x = " + this._x + ", y = " + this._y + ")";
+    }
+
+    inPointRange(point: Point): boolean {
+        return this.inXRange(point.x) && this.inyRange(point.y);
+    }
+
+    inXRange(x: number): boolean {
+        return this._x - this.range <= x && this._x + this.range >= x;
+    }
+
+    inyRange(y: number): boolean {
+        return this._y - this.range <= y && this._y + this.range >= y;
     }
 }
