@@ -104,9 +104,7 @@ export class CanvasComponent implements AfterViewInit {
         let line: Line | undefined = this.linesList.pop();
         if (line != undefined) {
             this.archiveLinesList.push(line);
-            this.archivePointsList.push(this.pointsList.pop()!!);
         }
-        this.archivePointsList.push(this.pointsList.pop()!!);
         this.drawAll();
     }
 
@@ -116,15 +114,12 @@ export class CanvasComponent implements AfterViewInit {
         let line: Line | undefined = this.archiveLinesList.pop();
         if (line != undefined) {
             this.linesList.push(line);
-            this.pointsList.push(this.archivePointsList.pop()!!);
-
         }
-        this.pointsList.push(this.archivePointsList.pop()!!);
         this.drawAll();
     }
 
     containsArchivedElements(): boolean {
-        return this.archivePointsList.length > 0 || this.archiveLinesList.length > 0;
+        return this.archiveLinesList.length > 0;
     }
 
     containsElements(): boolean {
