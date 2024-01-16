@@ -40,11 +40,11 @@ export class Point {
         return this.inXRange(point.x) && this.inyRange(point.y);
     }
 
-    inXRange(x: number): boolean {
+    private inXRange(x: number): boolean {
         return this._x - this.range <= x && this._x + this.range >= x;
     }
 
-    inyRange(y: number): boolean {
+    private inyRange(y: number): boolean {
         return this._y - this.range <= y && this._y + this.range >= y;
     }
 }

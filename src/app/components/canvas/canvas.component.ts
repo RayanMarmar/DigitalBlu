@@ -20,6 +20,7 @@ export class CanvasComponent implements AfterViewInit {
     private archiveLinesList: Line[];
     private pointsList: Point[];
     private archivePointsList: Point[];
+    private snapMode: boolean;
 
     constructor() {
         this.mouse = new Mouse();
@@ -27,6 +28,7 @@ export class CanvasComponent implements AfterViewInit {
         this.archiveLinesList = [];
         this.pointsList = [];
         this.archivePointsList = [];
+        this.snapMode = false;
     }
 
     ngAfterViewInit(): void {
@@ -185,7 +187,12 @@ export class CanvasComponent implements AfterViewInit {
         }
     }
 
+    changeSnapMode(): void {
+        this.snapMode = !this.snapMode;
+    }
+
     private snapPoint(point: Point): Point {
+        if (!this.snapMode) return point;
         let index: number = this.inRangeOfAnExistingPoint(point);
         return index == -1 ? point : this.pointsList[index];
     }
