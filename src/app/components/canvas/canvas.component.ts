@@ -41,8 +41,7 @@ export class CanvasComponent implements AfterViewInit {
         if (this.mouse.drawing)
             this.addLine(new Line(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!))
         this.mouse.mouseDown(event);
-        let point: Point = new Point(this.mouse.clickedCoordinates!.x - 2, this.mouse.clickedCoordinates!.y - 2);
-        this.drawPoint(point);
+        let point: Point = new Point(this.mouse.clickedCoordinates!.x, this.mouse.clickedCoordinates!.y);
         this.pointsList.push(point);
     }
 
@@ -76,7 +75,7 @@ export class CanvasComponent implements AfterViewInit {
 
     drawPoint(point: Point): void {
         if (this.context) {
-            this.context.fillRect(point.x, point.y, 5, 5);
+            this.context.fillRect(point.x, point.y, 1, 1);
         } else {
             console.error('Context is null.');
         }
@@ -97,7 +96,6 @@ export class CanvasComponent implements AfterViewInit {
     drawAll(): void {
         this.clear();
         this.drawAllLines();
-        this.drawAllPoints();
     }
 
     undo(): void {
