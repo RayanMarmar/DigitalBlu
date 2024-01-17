@@ -43,11 +43,15 @@ button {
     border-radius: 30px;
     padding: 0px;
     border: 0px solid darkgrey;
+    transition: background-color 0.3s ease; /* Add a smooth transition effect */
+
+
 }
 
 button:hover {
-    background-color: rgba(169, 169, 169, 0.2);
+    background-color: rgba(169, 169, 169, 0.3);
     border: 0px solid darkgrey;
+
 }
 
 .iconoir {
