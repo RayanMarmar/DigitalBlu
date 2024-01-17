@@ -80,6 +80,7 @@ export class CanvasService {
             if (this.mouse.moving) {
                 this.mouse.moving = false;
                 this.archiveService.popLine();
+                this.archiveService.popWall();
                 if (this.archiveService.ghostPoint()) {
                     this.archiveService.popPoint();
                 }
@@ -99,8 +100,13 @@ export class CanvasService {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
         let snapped: Point = this.archiveService.snapPoint(point, this.modesConfiguration.snapMode);
-        if (this.modesConfiguration.drawing)
-            this.archiveService.addWall(new Wall(this.mouse.clickedCoordinates!!, snapped))
+        if (this.modesConfiguration.drawing) {
+            this.archiveService.addWall(new Wall(this.mouse.clickedCoordinates!!, snapped));
+            this.modesConfiguration.drawing = false;
+            this.mouse.moving = false;
+        } else {
+            this.modesConfiguration.drawing = true;
+        }
         if (snapped.equals(point)) {
             this.mouse.mouseDown(event);
             this.archiveService.pushPoint(point);
@@ -109,7 +115,6 @@ export class CanvasService {
             this.mouse.clickedCoordinates = snapped;
             this.mouse.notFirstMouseMoveEvent = false;
         }
-        this.modesConfiguration.drawing = true;
     }
 
     onMouseDownLineMode(event: MouseEvent): void {
@@ -163,14 +168,10 @@ export class CanvasService {
 
     drawWall(wall: Wall) {
         // Draw a black-outlined rectangle
-        if (wall.xFactor >= 0 && wall.yFactor >= 0)
-            this.context?.strokeRect(wall.firstPoint.x, wall.firstPoint.y, wall.width, wall.height);
-        else if (wall.xFactor < 0 && wall.yFactor >= 0)
-            this.context?.strokeRect(wall.secondPoint.x, wall.secondPoint.y, wall.width, wall.height);
-        else if (wall.xFactor >= 0 && wall.yFactor < 0)
-            this.context?.strokeRect(wall.fourthPoint.x, wall.fourthPoint.y, wall.width, wall.height);
-        else
-            this.context?.strokeRect(wall.thirdPoint.x, wall.thirdPoint.y, wall.width, wall.height);
+        this.drawLine(wall.firstLine);
+        this.drawLine(wall.secondLine);
+        this.drawLine(wall.thirdLine);
+        this.drawLine(wall.fourthLine);
     }
 
     drawAllWalls(): void {
