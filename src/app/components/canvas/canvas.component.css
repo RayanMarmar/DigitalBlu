@@ -1,4 +1,7 @@
-canvas{
-    border: 1px solid black;
-    margin: 5px;
+canvas {
+    margin: 20px;
+    margin-top: 10px;
+    border-radius: 20px;
+    border: 1px solid grey;
+
 }

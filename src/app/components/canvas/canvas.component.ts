@@ -32,6 +32,14 @@ export class CanvasComponent implements AfterViewInit {
         this.mouse.setCanvasRectFromDomRect(this.canvasRect);
     }
 
+    @HostListener('window:resize', ['$event'])
+    onResize(event: Event): void {
+        this.setCanvasSize();
+        this.canvasRect = this.canvas.nativeElement.getBoundingClientRect();
+        this.mouse.setCanvasRectFromDomRect(this.canvasRect);
+        this.drawAll();
+    }
+
     onMouseDown(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
@@ -114,8 +122,8 @@ export class CanvasComponent implements AfterViewInit {
     setCanvasSize(): void {
         if (this.context) {
             // Set canvas dimensions to match window size
-            this.canvas.nativeElement.width = window.innerWidth;
-            this.canvas.nativeElement.height = window.innerHeight;
+            this.canvas.nativeElement.width = window.innerWidth - 75;
+            this.canvas.nativeElement.height = window.innerHeight - (87 + 115);
         }
     }
 
