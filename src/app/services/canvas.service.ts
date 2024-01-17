@@ -100,13 +100,8 @@ export class CanvasService {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
         let snapped: Point = this.archiveService.snapPoint(point, this.modesConfiguration.snapMode);
-        if (this.modesConfiguration.drawing) {
+        if (this.modesConfiguration.drawing)
             this.archiveService.addWall(new Wall(this.mouse.clickedCoordinates!!, snapped));
-            this.modesConfiguration.drawing = false;
-            this.mouse.moving = false;
-        } else {
-            this.modesConfiguration.drawing = true;
-        }
         if (snapped.equals(point)) {
             this.mouse.mouseDown(event);
             this.archiveService.pushPoint(point);
@@ -115,6 +110,8 @@ export class CanvasService {
             this.mouse.clickedCoordinates = snapped;
             this.mouse.notFirstMouseMoveEvent = false;
         }
+        this.modesConfiguration.drawing = !this.modesConfiguration.drawing;
+        this.mouse.moving = false;
     }
 
     onMouseDownLineMode(event: MouseEvent): void {
