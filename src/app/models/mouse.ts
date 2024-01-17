@@ -1,7 +1,6 @@
 import {Point} from "./point";
 
 export class Mouse {
-    private _drawing: boolean;
     private _moving: boolean;
     private _notFirstMouseMoveEvent: boolean;
     private _clickedCoordinates: Point | null;
@@ -9,22 +8,11 @@ export class Mouse {
     private _canvasRect: Point | null;
 
     constructor() {
-        this._drawing = false;
         this._moving = false;
         this._notFirstMouseMoveEvent = false;
         this._clickedCoordinates = null;
         this._currentCoordinates = null;
         this._canvasRect = null
-    }
-
-    // Getter for isPressed property
-    get drawing(): boolean {
-        return this._drawing;
-    }
-
-    // Setter for isPressed property
-    set drawing(value: boolean) {
-        this._drawing = value;
     }
 
     // Getter for isPressed property
@@ -90,7 +78,6 @@ export class Mouse {
     }
 
     mouseDown = (event: MouseEvent): void => {
-        this._drawing = true;
         this._moving = false;
         this._clickedCoordinates = new Point(
             event.clientX - this._canvasRect!.x, event.clientY - this._canvasRect!.y

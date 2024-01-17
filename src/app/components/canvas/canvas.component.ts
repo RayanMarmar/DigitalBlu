@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ElementRef, HostListener, ViewChild} from '@an
 import {Mouse} from "../../models/mouse";
 import {Line} from "../../models/line";
 import {Point} from "../../models/point";
+import {ModesConfiguration} from "../../models/modesConfiguration";
 
 @Component({
     selector: 'app-canvas',
@@ -20,7 +21,7 @@ export class CanvasComponent implements AfterViewInit {
     private archiveLinesList: Line[];
     private pointsList: Point[];
     private archivePointsList: Point[];
-    private snapMode: boolean;
+    public modesConfiguration: ModesConfiguration;
 
     constructor() {
         this.mouse = new Mouse();
@@ -28,7 +29,7 @@ export class CanvasComponent implements AfterViewInit {
         this.archiveLinesList = [];
         this.pointsList = [];
         this.archivePointsList = [];
-        this.snapMode = false;
+        this.modesConfiguration = new ModesConfiguration();
     }
 
     ngAfterViewInit(): void {
@@ -42,21 +43,21 @@ export class CanvasComponent implements AfterViewInit {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
         let snapped: Point = this.snapPoint(point);
-        if (this.mouse.drawing)
+        if (this.modesConfiguration.drawing)
             this.addLine(new Line(this.mouse.clickedCoordinates!!, snapped))
         if (snapped.equals(point)) {
             this.mouse.mouseDown(event);
             this.pointsList.push(point);
         } else {
-            this.mouse.drawing = true;
             this.mouse.moving = false;
             this.mouse.clickedCoordinates = snapped;
             this.mouse.notFirstMouseMoveEvent = false;
         }
+        this.modesConfiguration.drawing = true;
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (!this.mouse.drawing)
+        if (!this.modesConfiguration.drawing)
             return;
         this.mouse.mouseMove(event);
         if (this.mouse.notFirstMouseMoveEvent)
@@ -174,8 +175,8 @@ export class CanvasComponent implements AfterViewInit {
 
     @HostListener('document:keydown', ['$event'])
     handleKeyDown(event: KeyboardEvent): void {
-        if (event.key === 'Escape' && this.mouse.drawing) {
-            this.mouse.drawing = false;
+        if (event.key === 'Escape' && this.modesConfiguration.drawing) {
+            this.modesConfiguration.drawing = false;
             if (this.mouse.moving) {
                 this.mouse.moving = false;
                 this.linesList.pop();
@@ -187,12 +188,8 @@ export class CanvasComponent implements AfterViewInit {
         }
     }
 
-    changeSnapMode(): void {
-        this.snapMode = !this.snapMode;
-    }
-
     private snapPoint(point: Point): Point {
-        if (!this.snapMode) return point;
+        if (!this.modesConfiguration.snapMode) return point;
         let index: number = this.inRangeOfAnExistingPoint(point);
         return index == -1 ? point : this.pointsList[index];
     }
