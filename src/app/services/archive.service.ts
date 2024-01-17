@@ -61,12 +61,12 @@ export class ArchiveService {
     undo(): void {
         if (!this.containsElements())
             return;
-        let line: Line | undefined = this.linesList.pop();
+        let line: Line | undefined = this._linesList.pop();
         if (line != undefined) {
             this._archiveLinesList.push(line);
-            this._archivePointsList.push(this.pointsList.pop()!!);
+            this._archivePointsList.push(this._pointsList.pop()!!);
             if (this.ghostPoint()) {
-                this._archivePointsList.push(this.pointsList.pop()!!);
+                this._archivePointsList.push(this._pointsList.pop()!!);
             }
         }
     }
@@ -76,10 +76,10 @@ export class ArchiveService {
             return;
         let line: Line | undefined = this._archiveLinesList.pop();
         if (line != undefined) {
-            this.linesList.push(line);
-            this.pointsList.push(this._archivePointsList.pop()!!);
+            this._linesList.push(line);
+            this._pointsList.push(this._archivePointsList.pop()!!);
             if (this.shouldAddPoint(line)) {
-                this.pointsList.push(this._archivePointsList.pop()!!);
+                this._pointsList.push(this._archivePointsList.pop()!!);
             }
         }
     }
