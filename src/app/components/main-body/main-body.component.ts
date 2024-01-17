@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {HeaderComponent} from "../header/header.component";
 import {CanvasComponent} from "../canvas/canvas.component";
+import {CanvasService} from "../../services/canvas.service";
 
 @Component({
     selector: 'app-main-body',
@@ -11,6 +12,6 @@ import {CanvasComponent} from "../canvas/canvas.component";
 })
 export class MainBodyComponent {
 
-    constructor() {
+    constructor(private canvasService: CanvasService) {
     }
 }
