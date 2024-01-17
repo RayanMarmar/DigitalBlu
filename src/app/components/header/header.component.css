@@ -35,22 +35,37 @@
     border-radius: 20px;
 }
 
-button{
+button {
+    z-index: 1;
     width: 40px;
     height: 40px;
     background-color: transparent;
     border-radius: 30px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    border: 2px solid darkgrey;
+    padding: 0px;
+    border: 0px solid darkgrey;
 }
 
-button:hover{
-    background-color: rgba(169, 169, 169, 0.5);
-    border: 2.5px solid darkgrey;
+button:hover {
+    background-color: rgba(169, 169, 169, 0.2);
+    border: 0px solid darkgrey;
 }
 
-.fas{
-    font-size: 20px;
-    font-weight: 900;
+.iconoir {
+    font-size: 35px;
+}
+
+
+.button-label {
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease; /* Add a smooth transition effect */
+}
+
+.button-label span {
+
+}
+
+/* Show the label on hover */
+button:hover .button-label {
+    opacity: 1;
 }
