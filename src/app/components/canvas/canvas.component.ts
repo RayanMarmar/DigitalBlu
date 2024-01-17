@@ -3,6 +3,7 @@ import {Mouse} from "../../models/mouse";
 import {Line} from "../../models/line";
 import {Point} from "../../models/point";
 import {ModesConfiguration} from "../../models/modesConfiguration";
+import {ArchiveService} from "../../services/archive.service";
 
 @Component({
     selector: 'app-canvas',
@@ -17,18 +18,10 @@ export class CanvasComponent implements AfterViewInit {
     private context: CanvasRenderingContext2D | null = null;
     private mouse: Mouse;
     private canvasRect: DOMRect | null = null;
-    private linesList: Line[];
-    private archiveLinesList: Line[];
-    private pointsList: Point[];
-    private archivePointsList: Point[];
     public modesConfiguration: ModesConfiguration;
 
-    constructor() {
+    constructor(private archiveService: ArchiveService) {
         this.mouse = new Mouse();
-        this.linesList = [];
-        this.archiveLinesList = [];
-        this.pointsList = [];
-        this.archivePointsList = [];
         this.modesConfiguration = new ModesConfiguration();
     }
 
@@ -42,12 +35,12 @@ export class CanvasComponent implements AfterViewInit {
     onMouseDown(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
-        let snapped: Point = this.snapPoint(point);
+        let snapped: Point = this.archiveService.snapPoint(point, this.modesConfiguration.snapMode);
         if (this.modesConfiguration.drawing)
-            this.addLine(new Line(this.mouse.clickedCoordinates!!, snapped))
+            this.archiveService.addLine(new Line(this.mouse.clickedCoordinates!!, snapped))
         if (snapped.equals(point)) {
             this.mouse.mouseDown(event);
-            this.pointsList.push(point);
+            this.archiveService.pushPoint(point);
         } else {
             this.mouse.moving = false;
             this.mouse.clickedCoordinates = snapped;
@@ -61,10 +54,10 @@ export class CanvasComponent implements AfterViewInit {
             return;
         this.mouse.mouseMove(event);
         if (this.mouse.notFirstMouseMoveEvent)
-            this.linesList.pop();
+            this.archiveService.popLine();
         else
             this.mouse.notFirstMouseMoveEvent = true;
-        this.linesList.push(new Line(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!));
+        this.archiveService.pushLine(new Line(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!));
         this.drawAll();
     }
 
@@ -79,13 +72,6 @@ export class CanvasComponent implements AfterViewInit {
         }
     }
 
-    addLine(line: Line): void {
-        this.linesList.pop();
-        this.linesList.push(line);
-        this.archiveLinesList = [];
-        this.archivePointsList = [];
-    }
-
     drawPoint(point: Point): void {
         if (this.context) {
             this.context.fillRect(point.x, point.y, 1, 1);
@@ -95,13 +81,13 @@ export class CanvasComponent implements AfterViewInit {
     }
 
     drawAllLines(): void {
-        this.linesList.forEach((line: Line): void => {
+        this.archiveService.linesList.forEach((line: Line): void => {
             this.drawLine(line);
         });
     }
 
     drawAllPoints(): void {
-        this.pointsList.forEach((point: Point): void => {
+        this.archiveService.pointsList.forEach((point: Point): void => {
             this.drawPoint(point);
         });
     }
@@ -112,39 +98,13 @@ export class CanvasComponent implements AfterViewInit {
     }
 
     undo(): void {
-        if (!this.containsElements())
-            return;
-        let line: Line | undefined = this.linesList.pop();
-        if (line != undefined) {
-            this.archiveLinesList.push(line);
-            this.archivePointsList.push(this.pointsList.pop()!!);
-            if (this.ghostPoint()) {
-                this.archivePointsList.push(this.pointsList.pop()!!);
-            }
-        }
+        this.archiveService.undo();
         this.drawAll();
     }
 
     redo(): void {
-        if (!this.containsArchivedElements())
-            return;
-        let line: Line | undefined = this.archiveLinesList.pop();
-        if (line != undefined) {
-            this.linesList.push(line);
-            this.pointsList.push(this.archivePointsList.pop()!!);
-            if (this.shouldAddPoint(line)) {
-                this.pointsList.push(this.archivePointsList.pop()!!);
-            }
-        }
+        this.archiveService.redo();
         this.drawAll();
-    }
-
-    containsArchivedElements(): boolean {
-        return this.archiveLinesList.length > 0;
-    }
-
-    containsElements(): boolean {
-        return this.pointsList.length > 0 || this.linesList.length > 0;
     }
 
     clear(): void {
@@ -159,48 +119,18 @@ export class CanvasComponent implements AfterViewInit {
         }
     }
 
-    ghostPoint(): boolean {
-        if (this.linesList.length == 0) return true;
-        let lastLine: Line = this.linesList[this.linesList.length - 1];
-        let lastPoint: Point = this.pointsList[this.pointsList.length - 1];
-
-        return !lastLine.isLineExtremity(lastPoint);
-    }
-
-    shouldAddPoint(line: Line): boolean {
-        let lastPoint: Point = this.archivePointsList[this.archivePointsList.length - 1];
-
-        return lastPoint != undefined && line.isLineExtremity(lastPoint);
-    }
-
     @HostListener('document:keydown', ['$event'])
     handleKeyDown(event: KeyboardEvent): void {
         if (event.key === 'Escape' && this.modesConfiguration.drawing) {
             this.modesConfiguration.drawing = false;
             if (this.mouse.moving) {
                 this.mouse.moving = false;
-                this.linesList.pop();
-                if (this.ghostPoint()) {
-                    this.pointsList.pop();
+                this.archiveService.popLine();
+                if (this.archiveService.ghostPoint()) {
+                    this.archiveService.popPoint();
                 }
             }
             this.drawAll();
         }
-    }
-
-    private snapPoint(point: Point): Point {
-        if (!this.modesConfiguration.snapMode) return point;
-        let index: number = this.inRangeOfAnExistingPoint(point);
-        return index == -1 ? point : this.pointsList[index];
-    }
-
-    private inRangeOfAnExistingPoint(point: Point): number {
-        for (let i: number = 0; i < this.pointsList.length; i++) {
-            const p: Point = this.pointsList[i];
-            if (p.inPointRange(point)) {
-                return i; // Return the index if a matching point is found
-            }
-        }
-        return -1; // Return -1 if no matching point is found
     }
 }
