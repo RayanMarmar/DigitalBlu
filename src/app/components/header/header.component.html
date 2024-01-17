@@ -1,10 +1,10 @@
 <div class="pill-header">
     <!-- Left Section -->
     <div class="left-section">
-        <button><i class="iconoir iconoir-undo-circle"></i>
+        <button (click)="undo()"><i class="iconoir iconoir-undo-circle"></i>
             <span class="button-label">Undo</span>
         </button>
-        <button><i class="iconoir iconoir-redo-circle"></i>
+        <button (click)="redo()"><i class="iconoir iconoir-redo-circle"></i>
             <span class="button-label">Redo</span>
         </button>
         <img class="logo-img" src="assets/logo.png" alt="Digital Blu Logo"/>
@@ -21,7 +21,7 @@
             <a href="#">Add a Window</a>
         </div>
 
-        <button>
+        <button (click)="switchSnapMode()">
             <i class="iconoir iconoir-one-point-circle"></i>
             <span class="button-label">Snap to point</span>
         </button>

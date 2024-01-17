@@ -1,5 +1,7 @@
 import {Component, ElementRef, HostListener, ViewChild} from '@angular/core';
 import {CanvasComponent} from "../canvas/canvas.component";
+import {CanvasService} from "../../services/canvas.service";
+import {ModesConfiguration} from "../../models/modesConfiguration";
 
 @Component({
     selector: 'app-header',
@@ -13,8 +15,21 @@ export class HeaderComponent {
     @ViewChild('optionsDropdown', {static: true}) private optionsDropdown!: ElementRef;
     private optionsDropped: boolean;
 
-    constructor() {
+    constructor(private canvasService: CanvasService,
+                private modesConfiguration: ModesConfiguration,) {
         this.optionsDropped = false;
+    }
+
+    switchSnapMode() {
+        this.modesConfiguration.changeSnapMode();
+    }
+
+    undo() {
+        this.canvasService.undo();
+    }
+
+    redo() {
+        this.canvasService.redo();
     }
 
     onOptionsClicked(): void {
