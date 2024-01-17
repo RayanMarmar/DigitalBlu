@@ -1,6 +1,5 @@
 
 .pill-header {
-    background-color: #ffffff;
     color: #fff;
     display: flex;
     justify-content: space-between;
@@ -46,8 +45,8 @@ button {
     height: 40px;
     background-color: transparent;
     border-radius: 30px;
-    padding: 0px;
-    border: 0px solid darkgrey;
+    padding: 0;
+    border: 0 solid darkgrey;
     transition: background-color 0.3s ease; /* Add a smooth transition effect */
 
 
@@ -55,7 +54,7 @@ button {
 
 button:hover {
     background-color: rgba(169, 169, 169, 0.3);
-    border: 0px solid darkgrey;
+    border: 0 solid darkgrey;
 
 }
 
