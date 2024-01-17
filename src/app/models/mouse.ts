@@ -1,5 +1,9 @@
 import {Point} from "./point";
+import {Injectable} from "@angular/core";
 
+@Injectable({
+    providedIn: 'root',
+})
 export class Mouse {
     private _moving: boolean;
     private _notFirstMouseMoveEvent: boolean;
