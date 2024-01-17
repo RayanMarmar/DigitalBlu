@@ -127,7 +127,14 @@ export class CanvasComponent implements AfterViewInit {
 
     drawWall(wall: Wall) {
         // Draw a black-outlined rectangle
-        this.context?.strokeRect(wall.firstPoint.x, wall.firstPoint.y, wall.width, wall.height);
+        if (wall.xFactor >= 0 && wall.yFactor >= 0)
+            this.context?.strokeRect(wall.firstPoint.x, wall.firstPoint.y, wall.width, wall.height);
+        else if (wall.xFactor < 0 && wall.yFactor >= 0)
+            this.context?.strokeRect(wall.secondPoint.x, wall.secondPoint.y, wall.width, wall.height);
+        else if (wall.xFactor >= 0 && wall.yFactor < 0)
+            this.context?.strokeRect(wall.fourthPoint.x, wall.fourthPoint.y, wall.width, wall.height);
+        else
+            this.context?.strokeRect(wall.thirdPoint.x, wall.thirdPoint.y, wall.width, wall.height);
     }
 
     drawAllLines(): void {

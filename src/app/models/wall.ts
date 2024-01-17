@@ -12,14 +12,21 @@ export class Wall {
     private _fourthLine: Line;
     private _width: number;
     private _height: number;
+    private _xFactor: number;
+    private _yFactor: number;
+    private defaultThickness: number = 50;
 
     constructor(firstPoint: Point, thirdPoint: Point) {
-        this._width = Math.abs(firstPoint.x - thirdPoint.x);
-        this._height = Math.abs(firstPoint.y - thirdPoint.y);
+        let xDiff: number = thirdPoint.x - firstPoint.x;
+        let yDiff: number = thirdPoint.y - firstPoint.y;
+        this._width = Math.abs(xDiff);
+        this._height = Math.abs(yDiff);
+        this._xFactor = xDiff >= 0 ? 1 : -1;
+        this._yFactor = yDiff >= 0 ? 1 : -1;
         this._firstPoint = firstPoint;
         this._thirdPoint = thirdPoint;
-        this._secondPoint = new Point(firstPoint.x + this._width, firstPoint.y);
-        this._fourthPoint = new Point(firstPoint.x - this._width, firstPoint.y);
+        this._secondPoint = new Point(firstPoint.x + (this._width * this.xFactor), firstPoint.y);
+        this._fourthPoint = new Point(thirdPoint.x - (this._width * this.xFactor), thirdPoint.y);
         this._firstLine = new Line(firstPoint, this._secondPoint);
         this._secondLine = new Line(this._secondPoint, thirdPoint);
         this._thirdLine = new Line(thirdPoint, this._fourthPoint);
@@ -116,6 +123,16 @@ export class Wall {
         return this._height;
     }
 
+    // Getter for xFactor
+    get xFactor(): number {
+        return this._xFactor;
+    }
+
+    // Getter for yFactor
+    get yFactor(): number {
+        return this._yFactor;
+    }
+
     isLineExtremity(point: Point): boolean {
         return this._firstPoint.equals(point) || this._secondPoint.equals(point)
             || this._thirdPoint.equals(point) || this._fourthPoint.equals(point);
@@ -123,6 +140,6 @@ export class Wall {
 
     toString(): string {
         return "{a = " + this._firstPoint.toString() + ", b = " + this._secondPoint.toString()
-            + ", c = " + this._thirdPoint.toString() + +", d = " + this._fourthPoint.toString() + "}";
+            + ", c = " + this._thirdPoint.toString() + ", d = " + this._fourthPoint.toString() + "}";
     }
 }
