@@ -1,2 +1,6 @@
-<canvas #myCanvas (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp($event)"></canvas>
+<canvas #myCanvas (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)"></canvas>
+
+<button (click)="undo()">UNDO</button>
+<button (click)="redo()">REDO</button>
+<button (click)="switchSnapMode()">SNAP</button>
 
