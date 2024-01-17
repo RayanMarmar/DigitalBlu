@@ -34,6 +34,30 @@ export class CanvasComponent implements AfterViewInit {
     }
 
     onMouseDown(event: MouseEvent): void {
+        if (this.modesConfiguration.wallMode)
+            this.onMouseDownWallMode(event);
+        else
+            this.onMouseDownLineMode(event);
+    }
+
+    onMouseDownWallMode(event: MouseEvent): void {
+        this.mouse.setCurrentCoordinatesFromEvent(event);
+        let point: Point = this.mouse.currentCoordinates!!;
+        let snapped: Point = this.archiveService.snapPoint(point, this.modesConfiguration.snapMode);
+        if (this.modesConfiguration.drawing)
+            this.archiveService.addWall(new Wall(this.mouse.clickedCoordinates!!, snapped))
+        if (snapped.equals(point)) {
+            this.mouse.mouseDown(event);
+            this.archiveService.pushPoint(point);
+        } else {
+            this.mouse.moving = false;
+            this.mouse.clickedCoordinates = snapped;
+            this.mouse.notFirstMouseMoveEvent = false;
+        }
+        this.modesConfiguration.drawing = true;
+    }
+
+    onMouseDownLineMode(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
         let snapped: Point = this.archiveService.snapPoint(point, this.modesConfiguration.snapMode);
@@ -50,7 +74,15 @@ export class CanvasComponent implements AfterViewInit {
         this.modesConfiguration.drawing = true;
     }
 
+
     onMouseMove(event: MouseEvent): void {
+        if (this.modesConfiguration.wallMode)
+            this.onMouseMoveWallMode(event);
+        else
+            this.onMouseMoveLineMode(event);
+    }
+
+    onMouseMoveLineMode(event: MouseEvent): void {
         if (!this.modesConfiguration.drawing)
             return;
         this.mouse.mouseMove(event);
@@ -59,6 +91,18 @@ export class CanvasComponent implements AfterViewInit {
         else
             this.mouse.notFirstMouseMoveEvent = true;
         this.archiveService.pushLine(new Line(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!));
+        this.drawAll();
+    }
+
+    onMouseMoveWallMode(event: MouseEvent): void {
+        if (!this.modesConfiguration.drawing)
+            return;
+        this.mouse.mouseMove(event);
+        if (this.mouse.notFirstMouseMoveEvent)
+            this.archiveService.popWall();
+        else
+            this.mouse.notFirstMouseMoveEvent = true;
+        this.archiveService.pushWall(new Wall(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!));
         this.drawAll();
     }
 
@@ -92,6 +136,12 @@ export class CanvasComponent implements AfterViewInit {
         });
     }
 
+    drawAllWalls(): void {
+        this.archiveService.wallsList.forEach((wall: Wall): void => {
+            this.drawWall(wall);
+        });
+    }
+
     drawAllPoints(): void {
         this.archiveService.pointsList.forEach((point: Point): void => {
             this.drawPoint(point);
@@ -101,6 +151,7 @@ export class CanvasComponent implements AfterViewInit {
     drawAll(): void {
         this.clear();
         this.drawAllLines();
+        this.drawAllWalls();
     }
 
     undo(): void {
@@ -127,6 +178,10 @@ export class CanvasComponent implements AfterViewInit {
 
     switchSnapMode() {
         this.modesConfiguration.changeSnapMode();
+    }
+
+    switchWallMode() {
+        this.modesConfiguration.changeWallMode();
     }
 
     @HostListener('document:keydown', ['$event'])

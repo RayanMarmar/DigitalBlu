@@ -13,17 +13,17 @@ export class Wall {
     private _width: number;
     private _height: number;
 
-    constructor(firstPoint: Point, secondPoint: Point, thirdPoint: Point, fourthPoint: Point) {
-        this._firstPoint = firstPoint;
-        this._secondPoint = secondPoint;
-        this._thirdPoint = thirdPoint;
-        this._fourthPoint = fourthPoint;
-        this._firstLine = new Line(firstPoint, secondPoint);
-        this._secondLine = new Line(secondPoint, thirdPoint);
-        this._thirdLine = new Line(thirdPoint, fourthPoint);
-        this._fourthLine = new Line(fourthPoint, firstPoint);
+    constructor(firstPoint: Point, thirdPoint: Point) {
         this._width = Math.abs(firstPoint.x - thirdPoint.x);
         this._height = Math.abs(firstPoint.y - thirdPoint.y);
+        this._firstPoint = firstPoint;
+        this._thirdPoint = thirdPoint;
+        this._secondPoint = new Point(firstPoint.x + this._width, firstPoint.y);
+        this._fourthPoint = new Point(firstPoint.x - this._width, firstPoint.y);
+        this._firstLine = new Line(firstPoint, this._secondPoint);
+        this._secondLine = new Line(this._secondPoint, thirdPoint);
+        this._thirdLine = new Line(thirdPoint, this._fourthPoint);
+        this._fourthLine = new Line(this._fourthPoint, firstPoint);
     }
 
     // Getter for firstPoint
