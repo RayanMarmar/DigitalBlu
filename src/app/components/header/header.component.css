@@ -11,6 +11,11 @@
     padding: 20px;
 }
 
+.pill-header .left-section {
+    display: flex;
+    align-items: center;
+}
+
 #options-dropdown {
     margin-top: 10px;
     border: 2px solid darkgrey;
@@ -72,4 +77,10 @@ button:hover {
 /* Show the label on hover */
 button:hover .button-label {
     opacity: 1;
+}
+
+.logo-img {
+    margin-left: 10px;
+    height: 47px;
+    width: auto;
 }
