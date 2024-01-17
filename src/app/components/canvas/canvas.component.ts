@@ -18,7 +18,7 @@ export class CanvasComponent implements AfterViewInit {
     private context: CanvasRenderingContext2D | null = null;
     private mouse: Mouse;
     private canvasRect: DOMRect | null = null;
-    public modesConfiguration: ModesConfiguration;
+    private modesConfiguration: ModesConfiguration;
 
     constructor(private archiveService: ArchiveService) {
         this.mouse = new Mouse();
@@ -117,6 +117,10 @@ export class CanvasComponent implements AfterViewInit {
             this.canvas.nativeElement.width = window.innerWidth;
             this.canvas.nativeElement.height = window.innerHeight;
         }
+    }
+
+    switchSnapMode() {
+        this.modesConfiguration.changeSnapMode();
     }
 
     @HostListener('document:keydown', ['$event'])
