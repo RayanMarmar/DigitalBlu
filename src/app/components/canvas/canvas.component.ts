@@ -4,6 +4,7 @@ import {Line} from "../../models/line";
 import {Point} from "../../models/point";
 import {ModesConfiguration} from "../../models/modesConfiguration";
 import {ArchiveService} from "../../services/archive.service";
+import {Wall} from "../../models/wall";
 
 @Component({
     selector: 'app-canvas',
@@ -78,6 +79,11 @@ export class CanvasComponent implements AfterViewInit {
         } else {
             console.error('Context is null.');
         }
+    }
+
+    drawWall(wall: Wall) {
+        // Draw a black-outlined rectangle
+        this.context?.strokeRect(wall.firstPoint.x, wall.firstPoint.y, wall.width, wall.height);
     }
 
     drawAllLines(): void {
