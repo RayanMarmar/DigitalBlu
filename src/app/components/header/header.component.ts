@@ -15,8 +15,10 @@ export class HeaderComponent {
     @ViewChild('optionsDropdown', {static: true}) private optionsDropdown!: ElementRef;
     private optionsDropped: boolean;
 
-    constructor(private canvasService: CanvasService,
-                private modesConfiguration: ModesConfiguration,) {
+    constructor(
+        private canvasService: CanvasService,
+        private modesConfiguration: ModesConfiguration,
+    ) {
         this.optionsDropped = false;
     }
 
@@ -30,6 +32,12 @@ export class HeaderComponent {
 
     redo() {
         this.canvasService.redo();
+    }
+
+    switchWallMode() {
+        this.modesConfiguration.changeWallMode();
+        this.optionsDropdown.nativeElement.style.display = 'none';
+        this.optionsDropped = !this.optionsDropped;
     }
 
     onOptionsClicked(): void {
