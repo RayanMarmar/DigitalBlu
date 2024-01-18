@@ -13,14 +13,17 @@ export class Wall {
     private _width: number;
     private _height: number;
     private _xFactor: number;
+    private _yFactor: number;
     private defaultThickness: number = 50;
 
     constructor(firstPoint: Point, secondPoint: Point) {
-        this._xFactor = (secondPoint.x - firstPoint.x) >= 0 ? 1 : -1;
+        this._xFactor = (secondPoint.x - firstPoint.x) >= 0 ? -1 : 1;
         this._width = this.calculateDistance(firstPoint, secondPoint);
         this._height = this.defaultThickness;
         this._firstPoint = this._xFactor >= 0 ? firstPoint : secondPoint;
         this._secondPoint = this._xFactor >= 0 ? secondPoint : firstPoint;
+        this._yFactor = (this._firstPoint.y - this._secondPoint.y) >= 0 ? -1 : 1;
+        this._xFactor = (this._firstPoint.x - this._secondPoint.x) >= 0 ? -1 : 1;
         this.calculateRectangleCoordinates();
         this._firstLine = new Line(this._firstPoint, this._secondPoint);
         this._secondLine = new Line(this._secondPoint, this._thirdPoint);
@@ -126,13 +129,23 @@ export class Wall {
     calculateRectangleCoordinates(): void {
         const originalSlope: number = (this._secondPoint.y - this._firstPoint.y) / (this._secondPoint.x - this._firstPoint.x);
 
+        if (originalSlope == 0) {
+            this._fourthPoint = new Point(this._firstPoint.x, this._firstPoint.y + this.height);
+            this._thirdPoint = new Point(this._secondPoint.x, this._secondPoint.y + this.height);
+            return;
+        }
         const perpendicularSlope: number = -1 / originalSlope;
 
         const offsetX: number = this._height / Math.sqrt(1 + Math.pow(perpendicularSlope, 2));
-        const offsetY: number = offsetX * perpendicularSlope;
+        const offsetY: number = offsetX * perpendicularSlope * this._yFactor;
 
-        this._fourthPoint = new Point(this._firstPoint.x + offsetX, this._firstPoint.y + offsetY);
-        this._thirdPoint = new Point(this._secondPoint.x + offsetX, this._secondPoint.y + offsetY);
+        console.log("A:" + this._firstPoint.toString());
+        console.log("B:" + this._secondPoint.toString());
+        console.log("Y:" + offsetY + "factor : " + this._yFactor);
+        console.log("X:" + offsetX + "factor : " + this._xFactor);
+        const newXFactor: number = this._yFactor == -1 ? this._xFactor : -1 * this._xFactor;
+        this._fourthPoint = new Point(this._firstPoint.x + offsetX * newXFactor, this._firstPoint.y + offsetY);
+        this._thirdPoint = new Point(this._secondPoint.x + offsetX * newXFactor, this._secondPoint.y + offsetY);
     }
 
     calculateDistance(a: Point, b: Point): number {
