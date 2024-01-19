@@ -23,6 +23,7 @@ export class Wall {
         this._secondPoint = secondPoint;
         this._yFactor = (this._firstPoint.y - this._secondPoint.y) >= 0 ? -1 : 1;
         this._xFactor = (this._firstPoint.x - this._secondPoint.x) >= 0 ? -1 : 1;
+        this.calculateRectangleFirstAndSecondCoordinates();
         this.calculateRectangleCoordinates();
         this._firstLine = new Line(this._firstPoint, this._secondPoint);
         this._secondLine = new Line(this._secondPoint, this._thirdPoint);
@@ -129,8 +130,8 @@ export class Wall {
         const originalSlope: number = (this._secondPoint.y - this._firstPoint.y) / (this._secondPoint.x - this._firstPoint.x);
 
         if (originalSlope == 0) {
-            this._fourthPoint = new Point(this._firstPoint.x, this._firstPoint.y + this.height);
-            this._thirdPoint = new Point(this._secondPoint.x, this._secondPoint.y + this.height);
+            this._fourthPoint = new Point(this._firstPoint.x, this._firstPoint.y + this._height);
+            this._thirdPoint = new Point(this._secondPoint.x, this._secondPoint.y + this._height);
             return;
         }
         const perpendicularSlope: number = -1 / originalSlope;
@@ -140,6 +141,23 @@ export class Wall {
 
         this._fourthPoint = new Point(this._firstPoint.x + offsetX * this._yFactor * -1, this._firstPoint.y + offsetY * this._xFactor);
         this._thirdPoint = new Point(this._secondPoint.x + offsetX * this._yFactor * -1, this._secondPoint.y + offsetY * this._xFactor);
+    }
+
+    calculateRectangleFirstAndSecondCoordinates(): void {
+        const originalSlope: number = (this._secondPoint.y - this._firstPoint.y) / (this._secondPoint.x - this._firstPoint.x);
+
+        if (originalSlope == 0) {
+            this._firstPoint = new Point(this._firstPoint.x, this._firstPoint.y - this._height / 2);
+            this._secondPoint = new Point(this._secondPoint.x, this._secondPoint.y - this._height / 2);
+            return;
+        }
+        const perpendicularSlope: number = -1 / originalSlope;
+
+        const offsetX: number = -Math.abs(this._height / 2 / Math.sqrt(1 + Math.pow(perpendicularSlope, 2)));
+        const offsetY: number = -Math.abs(offsetX * perpendicularSlope);
+
+        this._firstPoint = new Point(this._firstPoint.x + offsetX * this._yFactor * -1, this._firstPoint.y + offsetY * this._xFactor);
+        this._secondPoint = new Point(this._secondPoint.x + offsetX * this._yFactor * -1, this._secondPoint.y + offsetY * this._xFactor);
     }
 
     calculateDistance(a: Point, b: Point): number {
