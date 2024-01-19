@@ -17,11 +17,10 @@ export class Wall {
     private defaultThickness: number = 50;
 
     constructor(firstPoint: Point, secondPoint: Point) {
-        this._xFactor = (secondPoint.x - firstPoint.x) >= 0 ? -1 : 1;
         this._width = this.calculateDistance(firstPoint, secondPoint);
         this._height = this.defaultThickness;
-        this._firstPoint = this._xFactor >= 0 ? firstPoint : secondPoint;
-        this._secondPoint = this._xFactor >= 0 ? secondPoint : firstPoint;
+        this._firstPoint = firstPoint;
+        this._secondPoint = secondPoint;
         this._yFactor = (this._firstPoint.y - this._secondPoint.y) >= 0 ? -1 : 1;
         this._xFactor = (this._firstPoint.x - this._secondPoint.x) >= 0 ? -1 : 1;
         this.calculateRectangleCoordinates();
@@ -136,16 +135,11 @@ export class Wall {
         }
         const perpendicularSlope: number = -1 / originalSlope;
 
-        const offsetX: number = this._height / Math.sqrt(1 + Math.pow(perpendicularSlope, 2));
-        const offsetY: number = offsetX * perpendicularSlope * this._yFactor;
+        const offsetX: number = Math.abs(this._height / Math.sqrt(1 + Math.pow(perpendicularSlope, 2)));
+        const offsetY: number = Math.abs(offsetX * perpendicularSlope);
 
-        console.log("A:" + this._firstPoint.toString());
-        console.log("B:" + this._secondPoint.toString());
-        console.log("Y:" + offsetY + "factor : " + this._yFactor);
-        console.log("X:" + offsetX + "factor : " + this._xFactor);
-        const newXFactor: number = this._yFactor == -1 ? this._xFactor : -1 * this._xFactor;
-        this._fourthPoint = new Point(this._firstPoint.x + offsetX * newXFactor, this._firstPoint.y + offsetY);
-        this._thirdPoint = new Point(this._secondPoint.x + offsetX * newXFactor, this._secondPoint.y + offsetY);
+        this._fourthPoint = new Point(this._firstPoint.x + offsetX * this._yFactor * -1, this._firstPoint.y + offsetY * this._xFactor);
+        this._thirdPoint = new Point(this._secondPoint.x + offsetX * this._yFactor * -1, this._secondPoint.y + offsetY * this._xFactor);
     }
 
     calculateDistance(a: Point, b: Point): number {
