@@ -49,9 +49,10 @@ export class HeaderComponent {
     onWindowClick(event: Event): void {
         if (this.optionsDropped
             && event.target !== this.optionsButton.nativeElement
+            && event.target !== this.optionsButton.nativeElement.firstChild
             && !this.optionsDropdown.nativeElement.contains(event.target)) {
             this.optionsDropdown.nativeElement.style.display = 'none';
-            this.optionsDropped = !this.optionsDropped;
+            this.optionsDropped = false;
         }
     }
 
