@@ -4,8 +4,8 @@ import {Line} from "./line";
 export class Wall {
     private _firstPoint: Point;
     private _secondPoint: Point;
-    private _thirdPoint: Point = new Point(0, 0);
-    private _fourthPoint: Point = new Point(0, 0);
+    private _thirdPoint: Point;
+    private _fourthPoint: Point;
     private _firstLine: Line;
     private _secondLine: Line;
     private _thirdLine: Line;
@@ -17,18 +17,19 @@ export class Wall {
     private defaultThickness: number = 50;
 
     constructor(firstPoint: Point, secondPoint: Point) {
-        this._width = this.calculateDistance(firstPoint, secondPoint);
         this._height = this.defaultThickness;
-        this._firstPoint = firstPoint;
-        this._secondPoint = secondPoint;
-        this._yFactor = (this._firstPoint.y - this._secondPoint.y) >= 0 ? -1 : 1;
-        this._xFactor = (this._firstPoint.x - this._secondPoint.x) >= 0 ? -1 : 1;
-        this.calculateRectangleFirstAndSecondCoordinates();
-        this.calculateRectangleCoordinates();
-        this._firstLine = new Line(this._firstPoint, this._secondPoint);
+        this._yFactor = (firstPoint.y - secondPoint.y) >= 0 ? -1 : 1;
+        this._xFactor = (firstPoint.x - secondPoint.x) >= 0 ? -1 : 1;
+        this._firstLine = new Line(firstPoint, secondPoint)
+            .calculateParallelLine(this._height / 2, this._xFactor, this._yFactor, -1);
+        this._thirdLine = this._firstLine.calculateParallelLine(this._height, this._xFactor, this._yFactor);
+        this._firstPoint = this._firstLine.firstPoint;
+        this._secondPoint = this._firstLine.secondPoint;
+        this._thirdPoint = this._thirdLine.secondPoint;
+        this._fourthPoint = this._thirdLine.firstPoint;
         this._secondLine = new Line(this._secondPoint, this._thirdPoint);
-        this._thirdLine = new Line(this._thirdPoint, this._fourthPoint);
         this._fourthLine = new Line(this._fourthPoint, this._firstPoint);
+        this._width = this._firstLine.calculateDistance();
     }
 
     // Getter for firstPoint
@@ -125,46 +126,7 @@ export class Wall {
     get xFactor(): number {
         return this._xFactor;
     }
-
-    calculateRectangleCoordinates(): void {
-        const originalSlope: number = (this._secondPoint.y - this._firstPoint.y) / (this._secondPoint.x - this._firstPoint.x);
-
-        if (originalSlope == 0) {
-            this._fourthPoint = new Point(this._firstPoint.x, this._firstPoint.y + this._height);
-            this._thirdPoint = new Point(this._secondPoint.x, this._secondPoint.y + this._height);
-            return;
-        }
-        const perpendicularSlope: number = -1 / originalSlope;
-
-        const offsetX: number = Math.abs(this._height / Math.sqrt(1 + Math.pow(perpendicularSlope, 2)));
-        const offsetY: number = Math.abs(offsetX * perpendicularSlope);
-
-        this._fourthPoint = new Point(this._firstPoint.x + offsetX * this._yFactor * -1, this._firstPoint.y + offsetY * this._xFactor);
-        this._thirdPoint = new Point(this._secondPoint.x + offsetX * this._yFactor * -1, this._secondPoint.y + offsetY * this._xFactor);
-    }
-
-    calculateRectangleFirstAndSecondCoordinates(): void {
-        const originalSlope: number = (this._secondPoint.y - this._firstPoint.y) / (this._secondPoint.x - this._firstPoint.x);
-
-        if (originalSlope == 0) {
-            this._firstPoint = new Point(this._firstPoint.x, this._firstPoint.y - this._height / 2);
-            this._secondPoint = new Point(this._secondPoint.x, this._secondPoint.y - this._height / 2);
-            return;
-        }
-        const perpendicularSlope: number = -1 / originalSlope;
-
-        const offsetX: number = -Math.abs(this._height / 2 / Math.sqrt(1 + Math.pow(perpendicularSlope, 2)));
-        const offsetY: number = -Math.abs(offsetX * perpendicularSlope);
-
-        this._firstPoint = new Point(this._firstPoint.x + offsetX * this._yFactor * -1, this._firstPoint.y + offsetY * this._xFactor);
-        this._secondPoint = new Point(this._secondPoint.x + offsetX * this._yFactor * -1, this._secondPoint.y + offsetY * this._xFactor);
-    }
-
-    calculateDistance(a: Point, b: Point): number {
-        return Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2));
-    }
-
-
+    
     isLineExtremity(point: Point): boolean {
         return this._firstPoint.equals(point) || this._secondPoint.equals(point)
             || this._thirdPoint.equals(point) || this._fourthPoint.equals(point);
