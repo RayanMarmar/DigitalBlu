@@ -1,21 +1,26 @@
 import {Injectable} from '@angular/core';
 import {Line} from "../models/line";
 import {Point} from "../models/point";
+import {Wall} from "../models/wall";
 
 @Injectable({
     providedIn: 'root'
 })
 export class ArchiveService {
-    private _linesList: Line[];
-    private _archiveLinesList: Line[];
     private _pointsList: Point[];
     private _archivePointsList: Point[];
+    private _linesList: Line[];
+    private _archiveLinesList: Line[];
+    private _wallsList: Wall[];
+    private _archiveWallsList: Wall[];
 
     constructor() {
         this._linesList = [];
         this._archiveLinesList = [];
         this._pointsList = [];
         this._archivePointsList = [];
+        this._wallsList = [];
+        this._archiveWallsList = [];
     }
 
     get linesList(): Line[] {
@@ -34,6 +39,14 @@ export class ArchiveService {
         this._pointsList = value;
     }
 
+    get wallsList(): Wall[] {
+        return this._wallsList;
+    }
+
+    set wallsList(value: Wall[]) {
+        this._wallsList = value;
+    }
+
     pushLine(line: Line): void {
         this._linesList.push(line);
     }
@@ -50,11 +63,28 @@ export class ArchiveService {
         this._pointsList.pop();
     }
 
+    pushWall(wall: Wall): void {
+        this._wallsList.push(wall);
+    }
+
+    popWall(): void {
+        this._wallsList.pop();
+    }
+
     addLine(line: Line): void {
         this._linesList.pop();
         this._linesList.push(line);
         this._archiveLinesList = [];
         this._archivePointsList = [];
+        this._archiveWallsList = [];
+    }
+
+    addWall(wall: Wall): void {
+        this._wallsList.pop();
+        this._wallsList.push(wall);
+        this._archiveLinesList = [];
+        this._archivePointsList = [];
+        this._archiveWallsList = [];
     }
 
 

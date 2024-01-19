@@ -15,8 +15,10 @@ export class HeaderComponent {
     @ViewChild('optionsDropdown', {static: true}) private optionsDropdown!: ElementRef;
     private optionsDropped: boolean;
 
-    constructor(private canvasService: CanvasService,
-                private modesConfiguration: ModesConfiguration,) {
+    constructor(
+        private canvasService: CanvasService,
+        private modesConfiguration: ModesConfiguration,
+    ) {
         this.optionsDropped = false;
     }
 
@@ -32,6 +34,12 @@ export class HeaderComponent {
         this.canvasService.redo();
     }
 
+    switchWallMode() {
+        this.modesConfiguration.changeWallMode();
+        this.optionsDropdown.nativeElement.style.display = 'none';
+        this.optionsDropped = !this.optionsDropped;
+    }
+
     onOptionsClicked(): void {
         this.optionsDropdown.nativeElement.style.display = this.optionsDropped ? 'none' : 'block';
         this.optionsDropped = !this.optionsDropped;
@@ -41,9 +49,10 @@ export class HeaderComponent {
     onWindowClick(event: Event): void {
         if (this.optionsDropped
             && event.target !== this.optionsButton.nativeElement
+            && event.target !== this.optionsButton.nativeElement.firstChild
             && !this.optionsDropdown.nativeElement.contains(event.target)) {
             this.optionsDropdown.nativeElement.style.display = 'none';
-            this.optionsDropped = !this.optionsDropped;
+            this.optionsDropped = false;
         }
     }
 
