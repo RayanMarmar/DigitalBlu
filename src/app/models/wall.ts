@@ -14,7 +14,7 @@ export class Wall {
     private _height: number;
     private _xFactor: number;
     private _yFactor: number;
-    private defaultThickness: number = 50;
+    private defaultThickness: number = 20;
 
     constructor(firstPoint: Point, secondPoint: Point) {
         this._height = this.defaultThickness;
@@ -126,7 +126,7 @@ export class Wall {
     get xFactor(): number {
         return this._xFactor;
     }
-    
+
     isLineExtremity(point: Point): boolean {
         return this._firstPoint.equals(point) || this._secondPoint.equals(point)
             || this._thirdPoint.equals(point) || this._fourthPoint.equals(point);
