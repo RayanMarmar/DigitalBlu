@@ -15,8 +15,9 @@ export class Door {
     constructor(line: Line, doorType: DoorType) {
         this._line = line;
         this._doorType = doorType;
-        this._parallelLine = line.calculateParallelLine(this.height, 1, 1, this.direction);
         this._radius = this._doorType == DoorType.OPEN_TWO_WAY ? line.calculateDistance() / 2 : line.calculateDistance();
+        this.height = this._radius;
+        this._parallelLine = line.calculateParallelLine(this.height, 1, 1, this.direction);
         this._center = this._doorType == DoorType.OPEN_LEFT ? line.firstPoint :
             this._doorType == DoorType.OPEN_RIGHT ? line.secondPoint : line.calculateCenter();
     }

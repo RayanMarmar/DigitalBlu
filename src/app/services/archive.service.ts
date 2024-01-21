@@ -3,6 +3,7 @@ import {Line} from "../models/line";
 import {Point} from "../models/point";
 import {Wall} from "../models/wall";
 import {Command} from "../models/command";
+import {Door} from "../models/door";
 
 @Injectable({
     providedIn: 'root'
@@ -14,6 +15,8 @@ export class ArchiveService {
     private _archiveLinesList: Line[];
     private _wallsList: Wall[];
     private _archiveWallsList: Wall[];
+    private _doorsList: Door[];
+    private _archiveDoorsList: Door[];
     private commandsList: Command[];
     private archiveCommandsList: Command[];
 
@@ -26,6 +29,8 @@ export class ArchiveService {
         this._archiveWallsList = [];
         this.commandsList = [];
         this.archiveCommandsList = [];
+        this._doorsList = [];
+        this._archiveDoorsList = [];
     }
 
     get linesList(): Line[] {
@@ -52,6 +57,14 @@ export class ArchiveService {
         this._wallsList = value;
     }
 
+    get doorsList(): Door[] {
+        return this._doorsList;
+    }
+
+    set doorsList(value: Door[]) {
+        this._doorsList = value;
+    }
+
     pushLine(line: Line): void {
         this._linesList.push(line);
     }
@@ -76,6 +89,14 @@ export class ArchiveService {
         this._wallsList.pop();
     }
 
+    pushDoor(door: Door): void {
+        this._doorsList.push(door);
+    }
+
+    popDoor(): void {
+        this._doorsList.pop();
+    }
+
     addLine(line: Line): void {
         this._linesList.pop();
         this._linesList.push(line);
@@ -83,6 +104,7 @@ export class ArchiveService {
         this._archiveLinesList = [];
         this._archivePointsList = [];
         this._archiveWallsList = [];
+        this._archiveDoorsList = [];
         this.archiveCommandsList = [];
     }
 
@@ -93,6 +115,18 @@ export class ArchiveService {
         this._archiveLinesList = [];
         this._archivePointsList = [];
         this._archiveWallsList = [];
+        this._archiveDoorsList = [];
+        this.archiveCommandsList = [];
+    }
+
+    addDoor(door: Door): void {
+        this._doorsList.pop();
+        this._doorsList.push(door);
+        this.commandsList.push(Command.ADD_DOOR);
+        this._archiveLinesList = [];
+        this._archivePointsList = [];
+        this._archiveWallsList = [];
+        this._archiveDoorsList = [];
         this.archiveCommandsList = [];
     }
 
