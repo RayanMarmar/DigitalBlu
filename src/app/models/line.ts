@@ -63,4 +63,11 @@ export class Line {
             + Math.pow(this._firstPoint.y - this._secondPoint.y, 2)
         );
     }
+
+    calculateCenter(): Point {
+        return new Point(
+            (this._firstPoint.x + this._secondPoint.x) / 2,
+            (this._firstPoint.y + this._secondPoint.y) / 2
+        );
+    }
 }

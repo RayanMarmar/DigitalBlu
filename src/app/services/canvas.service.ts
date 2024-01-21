@@ -5,6 +5,8 @@ import {ArchiveService} from "./archive.service";
 import {Mouse} from "../models/mouse";
 import {ModesConfiguration} from "../models/modesConfiguration";
 import {Wall} from "../models/wall";
+import {Door} from "../models/door";
+import {DoorType} from "../models/doorType";
 
 @Injectable({
     providedIn: 'root'
@@ -29,6 +31,15 @@ export class CanvasService {
         this.canvasRect = canvas.nativeElement.getBoundingClientRect();
     }
 
+
+    drawPoint(point: Point): void {
+        if (this.context) {
+            this.context.fillRect(point.x, point.y, 1, 1);
+        } else {
+            console.error('Context is null.');
+        }
+    }
+
     drawLine(line: Line): void {
         if (this.context) {
             this.context.beginPath();
@@ -40,12 +51,27 @@ export class CanvasService {
         }
     }
 
-    drawPoint(point: Point): void {
-        if (this.context) {
-            this.context.fillRect(point.x, point.y, 1, 1);
-        } else {
-            console.error('Context is null.');
-        }
+    drawWall(wall: Wall) {
+        // Draw a black-outlined rectangle
+        this.drawLine(wall.firstLine);
+        this.drawLine(wall.secondLine);
+        this.drawLine(wall.thirdLine);
+        this.drawLine(wall.fourthLine);
+    }
+
+    drawDoor(door: Door): void {
+        // Start angle and end angle for a quarter of a circle
+        const startAngle = 0;
+        const endAngle = Math.PI / 2;
+
+        // Draw the quarter circle
+        this.context?.beginPath();
+        this.context?.arc(door.center.x, door.center.y, door.radius, startAngle, endAngle);
+        if (door.doorType == DoorType.OPEN_TWO_WAY)
+            this.context?.arc(door.center.x, door.center.y, door.radius, startAngle, -endAngle);
+        this.context?.lineTo(door.center.x, door.center.y); // Connect the endpoint to the center to close the path
+        this.context?.stroke(); // Add a stroke (border) to the quarter circle
+        this.context?.closePath();
     }
 
     drawAllLines(): void {
@@ -58,6 +84,18 @@ export class CanvasService {
         this.archiveService.pointsList.forEach((point: Point): void => {
             this.drawPoint(point);
         });
+    }
+
+    drawAllWalls(): void {
+        this.archiveService.wallsList.forEach((wall: Wall): void => {
+            this.drawWall(wall);
+        });
+    }
+
+    drawAll(): void {
+        this.clear();
+        this.drawAllLines();
+        this.drawAllWalls();
     }
 
     undo(): void {
@@ -160,25 +198,5 @@ export class CanvasService {
             this.mouse.notFirstMouseMoveEvent = true;
         this.archiveService.pushWall(new Wall(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!));
         this.drawAll();
-    }
-
-    drawWall(wall: Wall) {
-        // Draw a black-outlined rectangle
-        this.drawLine(wall.firstLine);
-        this.drawLine(wall.secondLine);
-        this.drawLine(wall.thirdLine);
-        this.drawLine(wall.fourthLine);
-    }
-
-    drawAllWalls(): void {
-        this.archiveService.wallsList.forEach((wall: Wall): void => {
-            this.drawWall(wall);
-        });
-    }
-
-    drawAll(): void {
-        this.clear();
-        this.drawAllLines();
-        this.drawAllWalls();
     }
 }
