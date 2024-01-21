@@ -208,4 +208,16 @@ export class ArchiveService {
         }
         return -1; // Return -1 if no matching point is found
     }
+
+
+    deleteLine(): void {
+        this.popLine();
+        if (this.ghostPoint()) {
+            this.popPoint();
+        }
+    }
+
+    deleteWall(): void {
+        this.popWall();
+    }
 }
