@@ -110,8 +110,7 @@ export class CanvasService {
             this.mouse.clickedCoordinates = snapped;
             this.mouse.notFirstMouseMoveEvent = false;
         }
-        this.modesConfiguration.drawing = !this.modesConfiguration.drawing;
-        this.mouse.moving = false;
+        this.modesConfiguration.drawing = true;
     }
 
     onMouseDownLineMode(event: MouseEvent): void {
