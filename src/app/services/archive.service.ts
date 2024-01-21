@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Line} from "../models/line";
 import {Point} from "../models/point";
 import {Wall} from "../models/wall";
+import {Command} from "../models/command";
 
 @Injectable({
     providedIn: 'root'
@@ -13,6 +14,8 @@ export class ArchiveService {
     private _archiveLinesList: Line[];
     private _wallsList: Wall[];
     private _archiveWallsList: Wall[];
+    private commandsList: Command[];
+    private archiveCommandsList: Command[];
 
     constructor() {
         this._linesList = [];
@@ -21,6 +24,8 @@ export class ArchiveService {
         this._archivePointsList = [];
         this._wallsList = [];
         this._archiveWallsList = [];
+        this.commandsList = [];
+        this.archiveCommandsList = [];
     }
 
     get linesList(): Line[] {
@@ -74,23 +79,44 @@ export class ArchiveService {
     addLine(line: Line): void {
         this._linesList.pop();
         this._linesList.push(line);
+        this.commandsList.push(Command.ADD_LINE);
         this._archiveLinesList = [];
         this._archivePointsList = [];
         this._archiveWallsList = [];
+        this.archiveCommandsList = [];
     }
 
     addWall(wall: Wall): void {
         this._wallsList.pop();
         this._wallsList.push(wall);
+        this.commandsList.push(Command.ADD_WALL);
         this._archiveLinesList = [];
         this._archivePointsList = [];
         this._archiveWallsList = [];
+        this.archiveCommandsList = [];
     }
 
 
     undo(): void {
         if (!this.containsElements())
             return;
+        let command: Command | undefined = this.commandsList.pop();
+        if (command != undefined) {
+            this.archiveCommandsList.push(command);
+            switch (command) {
+                case Command.ADD_LINE:
+                    this.undoLine();
+                    break;
+                case Command.ADD_WALL:
+                    this.undoWall();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    undoLine(): void {
         let line: Line | undefined = this._linesList.pop();
         if (line != undefined) {
             this._archiveLinesList.push(line);
@@ -101,9 +127,33 @@ export class ArchiveService {
         }
     }
 
+    undoWall(): void {
+        let wall: Wall | undefined = this._wallsList.pop();
+        if (wall != undefined) {
+            this._archiveWallsList.push(wall);
+        }
+    }
+
     redo(): void {
         if (!this.containsArchivedElements())
             return;
+        let command: Command | undefined = this.archiveCommandsList.pop();
+        if (command != undefined) {
+            this.commandsList.push(command);
+            switch (command) {
+                case Command.ADD_LINE:
+                    this.redoLine();
+                    break;
+                case Command.ADD_WALL:
+                    this.redoWall();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    redoLine(): void {
         let line: Line | undefined = this._archiveLinesList.pop();
         if (line != undefined) {
             this._linesList.push(line);
@@ -114,12 +164,19 @@ export class ArchiveService {
         }
     }
 
+    redoWall(): void {
+        let wall: Wall | undefined = this._archiveWallsList.pop();
+        if (wall != undefined) {
+            this._wallsList.push(wall);
+        }
+    }
+
     containsArchivedElements(): boolean {
-        return this._archiveLinesList.length > 0;
+        return this.archiveCommandsList.length > 0;
     }
 
     containsElements(): boolean {
-        return this._linesList.length > 0;
+        return this.commandsList.length > 0;
     }
 
     ghostPoint(): boolean {
@@ -150,5 +207,17 @@ export class ArchiveService {
             }
         }
         return -1; // Return -1 if no matching point is found
+    }
+
+
+    deleteLine(): void {
+        this.popLine();
+        if (this.ghostPoint()) {
+            this.popPoint();
+        }
+    }
+
+    deleteWall(): void {
+        this.popWall();
     }
 }

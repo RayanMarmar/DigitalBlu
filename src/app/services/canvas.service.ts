@@ -79,10 +79,10 @@ export class CanvasService {
             this.modesConfiguration.drawing = false;
             if (this.mouse.moving) {
                 this.mouse.moving = false;
-                this.archiveService.popLine();
-                this.archiveService.popWall();
-                if (this.archiveService.ghostPoint()) {
-                    this.archiveService.popPoint();
+                if (this.modesConfiguration.wallMode) {
+                    this.archiveService.deleteWall();
+                } else {
+                    this.archiveService.deleteLine();
                 }
             }
             this.drawAll();
