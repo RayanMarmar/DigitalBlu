@@ -34,6 +34,7 @@ export class CanvasComponent implements AfterViewInit {
         this.setCanvasSize();
         this.canvasRect = this.canvas.nativeElement.getBoundingClientRect();
         this.mouse.setCanvasRectFromDomRect(this.canvasRect);
+        this.canvasService.clear();
         this.canvasService.drawAll();
     }
 
