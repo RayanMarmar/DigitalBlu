@@ -75,6 +75,10 @@ export class Door {
 
     updateDoorType(doorType: DoorType) {
         this._doorType = doorType;
+        if (this._doorType == DoorType.OPEN_TWO_WAY) {
+            this._line.firstPoint.x -= this.radius / 2;
+            this._line.secondPoint.x += this.radius / 2;
+        }
         this._radius = this._doorType == DoorType.OPEN_TWO_WAY ? this._line.calculateDistance() / 2 : this._line.calculateDistance();
         this._parallelLine = this._line.calculateParallelLine(this.height, 1, 1, this._direction);
         this._center = this._doorType == DoorType.OPEN_LEFT ? this._line.firstPoint :
