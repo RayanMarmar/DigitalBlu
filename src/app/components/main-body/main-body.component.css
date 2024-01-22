@@ -1,0 +1,12 @@
+#canvas1 {
+    position: relative;
+    z-index: 5;
+}
+
+#canvas2 {
+    position: absolute;
+    left: 0;
+    margin-left: 40px;
+    margin-top: 10px;
+    z-index: 0;
+}
