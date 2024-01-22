@@ -63,19 +63,31 @@ export class CanvasService {
         // Draw quarter circle based on door type
         switch (door.doorType) {
             case DoorType.OPEN_LEFT:
-                this.drawQuarterCircle(door.center, door.radius, 0, Math.PI / 2);
+                if (door.direction > 0)
+                    this.drawQuarterCircle(door.center, door.radius, 0, door.direction * Math.PI / 2);
+                else
+                    this.drawQuarterCircle(door.center, door.radius, door.direction * Math.PI / 2, 0);
                 this.drawLine(new Line(door.parallelLine.firstPoint, door.line.firstPoint));
                 break;
 
             case DoorType.OPEN_RIGHT:
-                this.drawQuarterCircle(door.center, door.radius, Math.PI / 2, Math.PI);
+                if (door.direction > 0)
+                    this.drawQuarterCircle(door.center, door.radius, door.direction * Math.PI / 2, door.direction * Math.PI);
+                else
+                    this.drawQuarterCircle(door.center, door.radius, door.direction * Math.PI, door.direction * Math.PI / 2);
                 this.drawLine(new Line(door.parallelLine.secondPoint, door.line.secondPoint));
                 break;
 
             case DoorType.OPEN_TWO_WAY:
                 // Draw two quarter circles for OPEN_TWO_WAY
-                this.drawQuarterCircle(door.line.firstPoint, door.radius, 0, Math.PI / 2);
-                this.drawQuarterCircle(door.line.secondPoint, door.radius, Math.PI / 2, Math.PI);
+                if (door.direction > 0) {
+                    this.drawQuarterCircle(door.line.firstPoint, door.radius, 0, door.direction * Math.PI / 2);
+                    this.drawQuarterCircle(door.line.secondPoint, door.radius, door.direction * Math.PI / 2, door.direction * Math.PI);
+                } else {
+                    this.drawQuarterCircle(door.line.firstPoint, door.radius, door.direction * Math.PI / 2, 0);
+                    this.drawQuarterCircle(door.line.secondPoint, door.radius, door.direction * Math.PI, door.direction * Math.PI / 2);
+                }
+
                 this.drawLine(new Line(door.parallelLine.firstPoint, door.line.firstPoint));
                 this.drawLine(new Line(door.parallelLine.secondPoint, door.line.secondPoint));
                 break;
@@ -171,8 +183,8 @@ export class CanvasService {
         let door: Door = new Door(line, DoorType.OPEN_LEFT);
         this.archiveService.addDoor(door);
         this.mouse.mouseDown(event);
-        this.archiveService.pushPoint(point);
         this.modesConfiguration.drawing = !this.modesConfiguration;
+        this.mouse.moving = false;
         this.drawAll();
     }
 
@@ -240,5 +252,27 @@ export class CanvasService {
             this.mouse.notFirstMouseMoveEvent = true;
         this.archiveService.pushWall(new Wall(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!));
         this.drawAll();
+    }
+
+    changeDoorOrientation(): void {
+        if (this.modesConfiguration.doorMode) {
+            let door: Door | undefined = this.archiveService.doorsList.pop();
+            if (door != undefined) {
+                door.updateDoorType((door.doorType + 1) % 3);
+                this.archiveService.doorsList.push(door);
+                this.drawAll();
+            }
+        }
+    }
+
+    changeDoorDirection(up: boolean): void {
+        if (this.modesConfiguration.doorMode) {
+            let door: Door | undefined = this.archiveService.doorsList.pop();
+            if (door != undefined) {
+                door.updateDoorDirection(up ? -1 : 1);
+                this.archiveService.doorsList.push(door);
+                this.drawAll();
+            }
+        }
     }
 }

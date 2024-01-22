@@ -120,7 +120,6 @@ export class ArchiveService {
     }
 
     addDoor(door: Door): void {
-        this._doorsList.pop();
         this._doorsList.push(door);
         this.commandsList.push(Command.ADD_DOOR);
         this._archiveLinesList = [];

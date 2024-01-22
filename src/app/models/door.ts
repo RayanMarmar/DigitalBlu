@@ -3,21 +3,20 @@ import {Line} from "./line";
 import {Point} from "./point";
 
 export class Door {
-
     private _line: Line;
     private _parallelLine: Line;
     private _doorType: DoorType;
     private _radius: number;
     private _center: Point;
     private height: number = 30;
-    private direction: number = 1;
+    private _direction: number = 1;
 
     constructor(line: Line, doorType: DoorType) {
         this._line = line;
         this._doorType = doorType;
         this._radius = this._doorType == DoorType.OPEN_TWO_WAY ? line.calculateDistance() / 2 : line.calculateDistance();
         this.height = this._radius;
-        this._parallelLine = line.calculateParallelLine(this.height, 1, 1, this.direction);
+        this._parallelLine = line.calculateParallelLine(this.height, 1, 1, this._direction);
         this._center = this._doorType == DoorType.OPEN_LEFT ? line.firstPoint :
             this._doorType == DoorType.OPEN_RIGHT ? line.secondPoint : line.calculateCenter();
     }
@@ -65,6 +64,28 @@ export class Door {
     set radius(value: number) {
         this._radius = value;
     }
+
+    get direction(): number {
+        return this._direction;
+    }
+
+    set direction(value: number) {
+        this._direction = value;
+    }
+
+    updateDoorType(doorType: DoorType) {
+        this._doorType = doorType;
+        this._radius = this._doorType == DoorType.OPEN_TWO_WAY ? this._line.calculateDistance() / 2 : this._line.calculateDistance();
+        this._parallelLine = this._line.calculateParallelLine(this.height, 1, 1, this._direction);
+        this._center = this._doorType == DoorType.OPEN_LEFT ? this._line.firstPoint :
+            this._doorType == DoorType.OPEN_RIGHT ? this._line.secondPoint : this._line.calculateCenter();
+    }
+
+    updateDoorDirection(direction: number) {
+        this._direction = direction;
+        this._parallelLine = this._line.calculateParallelLine(this.height, 1, 1, this._direction);
+    }
+
 
     toString(): string {
         return this._doorType.valueOf() + " coordinates: " + this.line.toString();

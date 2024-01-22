@@ -1,5 +1,5 @@
 export enum DoorType {
-    OPEN_LEFT = "OPEN_LEFT",
-    OPEN_RIGHT = "OPEN_RIGHT",
-    OPEN_TWO_WAY = "OPEN_TWO_WAY",
+    OPEN_LEFT = 0,
+    OPEN_RIGHT = 1,
+    OPEN_TWO_WAY = 2,
 }
