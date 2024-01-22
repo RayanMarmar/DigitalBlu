@@ -143,6 +143,9 @@ export class ArchiveService {
                 case Command.ADD_WALL:
                     this.undoWall();
                     break;
+                case Command.ADD_DOOR:
+                    this.undoDoor();
+                    break;
                 default:
                     break;
             }
@@ -167,6 +170,13 @@ export class ArchiveService {
         }
     }
 
+    undoDoor(): void {
+        let door: Door | undefined = this._doorsList.pop();
+        if (door != undefined) {
+            this._archiveDoorsList.push(door);
+        }
+    }
+
     redo(): void {
         if (!this.containsArchivedElements())
             return;
@@ -179,6 +189,9 @@ export class ArchiveService {
                     break;
                 case Command.ADD_WALL:
                     this.redoWall();
+                    break;
+                case Command.ADD_DOOR:
+                    this.redoDoor();
                     break;
                 default:
                     break;
@@ -201,6 +214,13 @@ export class ArchiveService {
         let wall: Wall | undefined = this._archiveWallsList.pop();
         if (wall != undefined) {
             this._wallsList.push(wall);
+        }
+    }
+
+    redoDoor(): void {
+        let door: Door | undefined = this._archiveDoorsList.pop();
+        if (door != undefined) {
+            this._doorsList.push(door);
         }
     }
 
