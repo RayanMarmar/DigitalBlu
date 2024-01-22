@@ -57,6 +57,12 @@ export class CanvasComponent implements AfterViewInit {
     private handleKeyDown(event: KeyboardEvent): void {
         if (event.key === 'Escape') {
             this.canvasService.handleEscape();
+        } else if (event.key === ' ') {
+            this.canvasService.changeDoorOrientation();
+        } else if (event.key === 'ArrowUp') {
+            this.canvasService.changeDoorDirection(true);
+        } else if (event.key === 'ArrowDown') {
+            this.canvasService.changeDoorDirection(false);
         }
     }
 }
