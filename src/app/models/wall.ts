@@ -136,4 +136,46 @@ export class Wall {
         return "{a = " + this._firstPoint.toString() + ", b = " + this._secondPoint.toString()
             + ", c = " + this._thirdPoint.toString() + ", d = " + this._fourthPoint.toString() + "}";
     }
+
+    containsPoint(point: Point): boolean {
+        const x = point.x;
+        const y = point.y;
+
+        // Check if the point is inside the polygon formed by the wall's vertices
+        // Using the winding number algorithm
+        const windingNumber = this.calculateWindingNumber(x, y);
+
+        // If the winding number is non-zero, the point is inside the polygon
+        return windingNumber !== 0;
+    }
+
+    private calculateWindingNumber(x: number, y: number): number {
+        // Calculate the winding number using the vertices of the wall
+        let windingNumber = 0;
+
+        windingNumber += this.calculateWindingNumberForEdge(this._firstPoint, this._secondPoint, x, y);
+        windingNumber += this.calculateWindingNumberForEdge(this._secondPoint, this._thirdPoint, x, y);
+        windingNumber += this.calculateWindingNumberForEdge(this._thirdPoint, this._fourthPoint, x, y);
+        windingNumber += this.calculateWindingNumberForEdge(this._fourthPoint, this._firstPoint, x, y);
+
+        return windingNumber;
+    }
+
+    private calculateWindingNumberForEdge(start: Point, end: Point, x: number, y: number): number {
+        // Calculate the winding number for a given edge and point
+        if (start.y <= y) {
+            if (end.y > y && this.isLeft(start, end, x, y) > 0) {
+                return 1;
+            }
+        } else if (end.y <= y && this.isLeft(start, end, x, y) < 0) {
+            return -1;
+        }
+
+        return 0;
+    }
+
+    private isLeft(start: Point, end: Point, x: number, y: number): number {
+        // Helper function to determine if a point is to the left of an edge
+        return ((end.x - start.x) * (y - start.y)) - ((x - start.x) * (end.y - start.y));
+    }
 }

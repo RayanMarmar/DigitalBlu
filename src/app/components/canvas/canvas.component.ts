@@ -10,7 +10,7 @@ import {CanvasService} from "../../services/canvas.service";
     styleUrl: './canvas.component.css'
 })
 export class CanvasComponent implements AfterViewInit {
-// its important myCanvas matches the variable name in the template
+    // its important myCanvas matches the variable name in the template
     @ViewChild('myCanvas', {static: true}) private canvas!: ElementRef<HTMLCanvasElement>;
     private context: CanvasRenderingContext2D | null = null;
     private canvasRect: DOMRect | null = null;
