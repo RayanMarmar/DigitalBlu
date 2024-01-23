@@ -78,6 +78,8 @@ export class Mouse {
 
     // Setter for currentCoordinates property
     setCanvasRectFromDomRect(rect: DOMRect) {
+        console.log("left : " + rect.left);
+        console.log("top : " + rect.top);
         this._canvasRect = new Point(rect.left, rect.top);
     }
 
