@@ -141,4 +141,11 @@ export class Line {
             return Math.abs(point.x - this._firstPoint.x) < 0.0001;
         }
     }
+
+    draw(context: CanvasRenderingContext2D): void {
+        context.beginPath();
+        context.moveTo(this._firstPoint.x, this._firstPoint.y);
+        context.lineTo(this._secondPoint.x, this._secondPoint.y);
+        context.stroke();
+    }
 }

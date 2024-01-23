@@ -6,7 +6,6 @@ import {Mouse} from "../models/mouse";
 import {ModesConfiguration} from "../models/modesConfiguration";
 import {Wall} from "../models/wall";
 import {Door} from "../models/door";
-import {DoorType} from "../models/doorType";
 
 @Injectable({
     providedIn: 'root'
@@ -31,123 +30,35 @@ export class CanvasService {
         this.canvasRect = canvas.nativeElement.getBoundingClientRect();
     }
 
-
-    drawPoint(point: Point): void {
-        if (this.context) {
-            this.context.fillRect(point.x, point.y, 1, 1);
-        } else {
-            console.error('Context is null.');
-        }
-    }
-
-    drawLine(line: Line): void {
-        if (this.context) {
-            this.context.beginPath();
-            this.context.moveTo(line.firstPoint.x, line.firstPoint.y);
-            this.context.lineTo(line.secondPoint.x, line.secondPoint.y);
-            this.context.stroke();
-        } else {
-            console.error('Context is null.');
-        }
-    }
-
-    drawWall(wall: Wall) {
-        // Draw a black-outlined rectangle
-        this.drawLine(wall.firstLine);
-        this.drawLine(wall.secondLine);
-        this.drawLine(wall.thirdLine);
-        this.drawLine(wall.fourthLine);
-    }
-
-    drawDoor(door: Door): void {
-        let startAngleLeft: number = Math.atan2(door.line.secondPoint.y - door.center.y, door.line.secondPoint.x - door.center.x);
-        let endAngleLeft: number = Math.atan2(door.parallelLine.firstPoint.y - door.center.y, door.parallelLine.firstPoint.x - door.center.x);
-        let startAngleRight: number = Math.atan2(door.parallelLine.secondPoint.y - door.center.y, door.parallelLine.secondPoint.x - door.center.x);
-        let endAngleRight: number = Math.atan2(door.line.firstPoint.y - door.center.y, door.line.firstPoint.x - door.center.x);
-        // Draw quarter circle based on door type
-        switch (door.doorType) {
-            case DoorType.OPEN_LEFT:
-                if (door.direction > 0) {
-                    this.drawQuarterCircle(door.center, door.radius, startAngleLeft, endAngleLeft);
-                } else
-                    this.drawQuarterCircle(door.center, door.radius, endAngleLeft, startAngleLeft);
-                this.drawLine(new Line(door.parallelLine.firstPoint, door.line.firstPoint));
-                break;
-
-            case DoorType.OPEN_RIGHT:
-                if (door.direction > 0) {
-                    this.drawQuarterCircle(door.center, door.radius, startAngleRight, endAngleRight);
-                } else
-                    this.drawQuarterCircle(door.center, door.radius, endAngleRight, startAngleRight);
-                this.drawLine(new Line(door.parallelLine.secondPoint, door.line.secondPoint));
-                break;
-
-            case DoorType.OPEN_TWO_WAY:
-                startAngleLeft = Math.atan2(door.center.y - door.line.firstPoint.y, door.center.x - door.line.firstPoint.x);
-                endAngleLeft = Math.atan2(door.parallelLine.firstPoint.y - door.line.firstPoint.y, door.parallelLine.firstPoint.x - door.line.firstPoint.x);
-                startAngleRight = Math.atan2(door.parallelLine.secondPoint.y - door.line.secondPoint.y, door.parallelLine.secondPoint.x - door.line.secondPoint.x);
-                endAngleRight = Math.atan2(door.center.y - door.line.secondPoint.y, door.center.x - door.line.secondPoint.x);
-                // Draw two quarter circles for OPEN_TWO_WAY
-                if (door.direction > 0) {
-                    this.drawQuarterCircle(door.line.firstPoint, door.radius, startAngleLeft, endAngleLeft);
-                    this.drawQuarterCircle(door.line.secondPoint, door.radius, startAngleRight, endAngleRight);
-                } else {
-                    this.drawQuarterCircle(door.line.firstPoint, door.radius, endAngleLeft, startAngleLeft);
-                    this.drawQuarterCircle(door.line.secondPoint, door.radius, endAngleRight, startAngleRight);
-                }
-
-                this.drawLine(new Line(door.parallelLine.firstPoint, door.line.firstPoint));
-                this.drawLine(new Line(door.parallelLine.secondPoint, door.line.secondPoint));
-                break;
-
-            default:
-                // Invalid door type
-                console.error("Invalid door type");
-                break;
-        }
-    }
-
-    private drawQuarterCircle(center: Point, radius: number, startAngle: number, endAngle: number): void {
-        if (this.context == null) {
-            console.error('Context is null.');
-            return;
-        }
-        this.context.beginPath();
-        this.context.arc(center.x, center.y, radius, startAngle, endAngle);
-        this.context.lineTo(center.x, center.y);
-        // Add a fill to the quarter circle with white color
-        this.context.fillStyle = 'white';
-        this.context.fill();
-        this.context.stroke(); // Add a stroke (border) to the quarter circle
-        this.context.closePath();
-    }
-
-
-    drawAllLines(): void {
+    private drawAllLines(): void {
         this.archiveService.linesList.forEach((line: Line): void => {
-            this.drawLine(line);
+            line.draw(this.context!!);
         });
     }
 
-    drawAllPoints(): void {
+    private drawAllPoints(): void {
         this.archiveService.pointsList.forEach((point: Point): void => {
-            this.drawPoint(point);
+            point.draw(this.context!!);
         });
     }
 
-    drawAllWalls(): void {
+    private drawAllWalls(): void {
         this.archiveService.wallsList.forEach((wall: Wall): void => {
-            this.drawWall(wall);
+            wall.draw(this.context!!);
         });
     }
 
-    drawAllDoors(): void {
+    private drawAllDoors(): void {
         this.archiveService.doorsList.forEach((door: Door): void => {
-            this.drawDoor(door);
+            door.draw(this.context!!);
         });
     }
 
     drawAll(): void {
+        if (this.context == null) {
+            console.log("Context is null...")
+            return;
+        }
         this.clear();
         this.drawAllLines();
         this.drawAllWalls();
@@ -202,9 +113,7 @@ export class CanvasService {
             this.mouse.mouseDown(event);
             this.modesConfiguration.drawing = !this.modesConfiguration;
             this.mouse.moving = false;
-            this.clear();
-            this.drawLine(door.line);
-            this.drawDoor(door);
+            this.drawAll();
         }
     }
 

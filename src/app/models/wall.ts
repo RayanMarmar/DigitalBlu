@@ -178,4 +178,12 @@ export class Wall {
         // Helper function to determine if a point is to the left of an edge
         return ((end.x - start.x) * (y - start.y)) - ((x - start.x) * (end.y - start.y));
     }
+
+    draw(context: CanvasRenderingContext2D) {
+        // Draw a black-outlined rectangle
+        this._firstLine.draw(context);
+        this._secondLine.draw(context);
+        this._thirdLine.draw(context);
+        this._fourthLine.draw(context);
+    }
 }
