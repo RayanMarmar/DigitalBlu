@@ -127,9 +127,6 @@ export class Door {
         else
             context.arc(center.x, center.y, radius, startAngle, endAngle);
         context.lineTo(center.x, center.y);
-        // Add a fill to the quarter circle with white color
-        context.fillStyle = 'white';
-        context.fill();
         context.stroke(); // Add a stroke (border) to the quarter circle
         context.closePath();
     }

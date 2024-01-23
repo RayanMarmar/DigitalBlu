@@ -35,7 +35,11 @@ export class CanvasService {
             line.draw(this.context!!);
         });
     }
-    
+
+    updateCanvasRect(newValue: DOMRect): void {
+        this.canvasRect = newValue;
+    }
+
     private drawAllWalls(): void {
         this.archiveService.wallsList.forEach((wall: Wall): void => {
             wall.draw(this.context!!);
