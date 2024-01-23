@@ -84,17 +84,16 @@ export class CanvasService {
 
             case DoorType.OPEN_TWO_WAY:
                 startAngleLeft = Math.atan2(door.center.y - door.line.firstPoint.y, door.center.x - door.line.firstPoint.x);
-                endAngleLeft = Math.atan2(door.parallelLine.firstPoint.y - door.line.firstPoint.y, door.parallelLine.firstPoint.x - door.line.firstPoint.y);
-                startAngleRight = Math.atan2(door.center.y - door.parallelLine.secondPoint.y, door.center.x - door.parallelLine.secondPoint.x);
-                endAngleRight = Math.atan2(door.line.secondPoint.y - door.parallelLine.secondPoint.y, door.line.secondPoint.x - door.parallelLine.secondPoint.y);
-
+                endAngleLeft = Math.atan2(door.parallelLine.firstPoint.y - door.line.firstPoint.y, door.parallelLine.firstPoint.x - door.line.firstPoint.x);
+                startAngleRight = Math.atan2(door.parallelLine.secondPoint.y - door.line.secondPoint.y, door.parallelLine.secondPoint.x - door.line.secondPoint.x);
+                endAngleRight = Math.atan2(door.center.y - door.line.secondPoint.y, door.center.x - door.line.secondPoint.x);
                 // Draw two quarter circles for OPEN_TWO_WAY
                 if (door.direction > 0) {
-                    this.drawQuarterCircle(door.center, door.radius, startAngleRight, endAngleRight);
-                    this.drawQuarterCircle(door.center, door.radius, startAngleLeft, endAngleLeft);
+                    this.drawQuarterCircle(door.line.firstPoint, door.radius, startAngleLeft, endAngleLeft);
+                    this.drawQuarterCircle(door.line.secondPoint, door.radius, startAngleRight, endAngleRight);
                 } else {
-                    this.drawQuarterCircle(door.center, door.radius, endAngleRight, startAngleRight);
-                    this.drawQuarterCircle(door.center, door.radius, endAngleLeft, startAngleLeft);
+                    this.drawQuarterCircle(door.line.firstPoint, door.radius, endAngleLeft, startAngleLeft);
+                    this.drawQuarterCircle(door.line.secondPoint, door.radius, endAngleRight, startAngleRight);
                 }
 
                 this.drawLine(new Line(door.parallelLine.firstPoint, door.line.firstPoint));
