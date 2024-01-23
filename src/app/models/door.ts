@@ -79,8 +79,10 @@ export class Door {
     updateDoorType(doorType: DoorType) {
         let factor: number = doorType == DoorType.OPEN_TWO_WAY ? 2 : 1;
         let line: Line | null = this._line;
-        if (this._doorType == DoorType.OPEN_TWO_WAY || doorType == DoorType.OPEN_TWO_WAY)
-            line = this._line.subLine(this._line.calculateCenter(), factor * this._radius);
+        if (this._doorType == DoorType.OPEN_TWO_WAY || doorType == DoorType.OPEN_TWO_WAY) {
+            line = this._direction > 0 ? this._wall.thirdLine : this._wall.firstLine;
+            line = line.subLine(this._line.calculateCenter(), factor * this._radius);
+        }
 
         if (line != null) {
             this._doorType = doorType;
