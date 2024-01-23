@@ -2,7 +2,6 @@ import {DoorType} from "./doorType";
 import {Line} from "./line";
 import {Point} from "./point";
 import {Wall} from "./wall";
-import {CanvasDrawerService} from "../services/canvas-drawer.service";
 
 export class Door {
     private _wall: Wall;
@@ -12,7 +11,6 @@ export class Door {
     private height: number = 50;
     private _center: Point;
     private _direction: number = 1;
-    private canvasDrawer: CanvasDrawerService;
     private doorBase: Line[];
 
     constructor(wall: Wall, point: Point) {
@@ -27,7 +25,6 @@ export class Door {
             this.height, wall.xFactor, wall.yFactor, this._direction
         );
         this._center = this.doorBase[0].firstPoint;
-        this.canvasDrawer = new CanvasDrawerService();
     }
 
     // Getter for line
@@ -147,6 +144,22 @@ export class Door {
         context.closePath();
     }
 
+    drawBase(context: CanvasRenderingContext2D) {
+        // Draw a filled rectangle with the correct coordinates
+        context.beginPath();
+        context.moveTo(this.doorBase[0].firstPoint.x, this.doorBase[0].firstPoint.y);
+        context.lineTo(this.doorBase[0].secondPoint.x, this.doorBase[0].secondPoint.y);
+        context.lineTo(this.doorBase[1].secondPoint.x, this.doorBase[1].secondPoint.y);
+        context.lineTo(this.doorBase[1].firstPoint.x, this.doorBase[1].firstPoint.y);
+        context.closePath();
+        context.fillStyle = "white";
+        context.fill();
+        context.strokeStyle = "white";
+        context.stroke(); // If you want to keep the border, you can include this line
+        context.fillStyle = "black";
+        context.strokeStyle = "black";
+    }
+
     draw(context: CanvasRenderingContext2D): void {
         // Draw quarter circle based on door type
         switch (this._doorType) {
@@ -202,11 +215,6 @@ export class Door {
                 console.error("Invalid door type");
                 return;
         }
-        this.canvasDrawer.drawQad(
-            context,
-            [this.doorBase[0].firstPoint, this.doorBase[0].secondPoint,
-                this.doorBase[1].secondPoint, this.doorBase[1].firstPoint],
-            "white"
-        );
+        this.drawBase(context);
     }
 }
