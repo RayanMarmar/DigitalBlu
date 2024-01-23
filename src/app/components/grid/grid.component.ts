@@ -15,8 +15,8 @@ export class GridComponent implements AfterViewInit {
     private canvasRect: DOMRect | null = null;
 
     private zoomLevel = 1;
-    private readonly minZoom = 0.1;
-    private readonly maxZoom = 3;
+    private readonly minZoom = 0.9;
+    private readonly maxZoom = 1.3;
 
 // Inject Renderer2 in the constructor
     constructor(private renderer: Renderer2) {
@@ -41,28 +41,35 @@ export class GridComponent implements AfterViewInit {
     // Draw the grid
     drawGrid() {
         if (this.context) {
-            const gridSize = 30;
+            this.canvasRect = this.gridCanvas.nativeElement.getBoundingClientRect();
+            const gridSize = 30 * this.zoomLevel; // Adjust grid size based on zoom level
             this.context.strokeStyle = 'black';
 
             if (this.canvasRect != null) {
                 this.context.beginPath();
 
+                // Calculate the number of grid lines based on canvas size and grid size
+                const numVerticalLines = Math.ceil(this.canvasRect.width / gridSize);
+                const numHorizontalLines = Math.ceil(this.canvasRect.height / gridSize);
+
                 // Draw vertical lines
-                for (let x = 0; x <= this.canvasRect.width; x += gridSize) {
-                    this.context.moveTo(x * this.zoomLevel, 0);
-                    this.context.lineTo(x * this.zoomLevel, this.canvasRect.height * this.zoomLevel);
+                for (let x = 0; x <= numVerticalLines; x++) {
+                    this.context.moveTo(x * gridSize, 0);
+                    this.context.lineTo(x * gridSize, this.canvasRect.height);
                 }
 
                 // Draw horizontal lines
-                for (let y = 0; y <= this.gridCanvas.nativeElement.height; y += gridSize) {
-                    this.context.moveTo(0, y * this.zoomLevel);
-                    this.context.lineTo(this.canvasRect.width * this.zoomLevel, y * this.zoomLevel);
+                for (let y = 0; y <= numHorizontalLines; y++) {
+                    this.context.moveTo(0, y * gridSize);
+                    this.context.lineTo(this.canvasRect.width, y * gridSize);
                 }
+
 
                 this.context.stroke();
             }
         }
     }
+
 
     // Inside GridComponent class
     zoomIn(): void {
