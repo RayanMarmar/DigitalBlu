@@ -3,7 +3,7 @@
 
     <div id="canvasContainer">
         <app-canvas></app-canvas>
-        <app-grid></app-grid>
+        <app-grid [hidden]="!modesConfiguration.gridOn"></app-grid>
     </div>
 </div>
 
