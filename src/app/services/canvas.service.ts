@@ -31,6 +31,9 @@ export class CanvasService {
         this.canvasRect = canvas.nativeElement.getBoundingClientRect();
     }
 
+    updateCanvasRect(newValue: DOMRect): void {
+        this.canvasRect = newValue;
+    }
 
     drawPoint(point: Point): void {
         if (this.context) {
