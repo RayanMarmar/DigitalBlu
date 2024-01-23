@@ -23,7 +23,9 @@ export class Door {
             throw new Error("No sub line found");
         this.doorBase = [line, secondLine];
         this._doorType = DoorType.OPEN_LEFT;
-        this._parallelLine = this.doorBase[0].calculateParallelLine(this.height, wall.xFactor, wall.yFactor, this._direction);
+        this._parallelLine = this.doorBase[0].calculateParallelLine(
+            this.height, wall.xFactor, wall.yFactor, this._direction
+        );
         this._center = this.doorBase[0].firstPoint;
         this.canvasDrawer = new CanvasDrawerService();
     }
@@ -90,13 +92,7 @@ export class Door {
 
         if (line != null) {
             this._doorType = doorType;
-            this.doorBase[0] = line;
-            let secondLine: Line | null = this._direction > 0 ? this._wall.firstLine : this._wall.thirdLine;
-            this.doorBase[0] = line;
-            this.doorBase[1] = secondLine.subLine(this.doorBase[0].calculateCenter(), this.doorBase[0].calculateDistance())!!;
-            this._parallelLine = this.doorBase[0].calculateParallelLine(this.height, this._wall.xFactor, this._wall.yFactor, this._direction);
-            this._center = this._doorType == DoorType.OPEN_LEFT ? this.doorBase[0].firstPoint :
-                this._doorType == DoorType.OPEN_RIGHT ? this.doorBase[0].secondPoint : this.doorBase[0].calculateCenter();
+            this.updateDoorInfos(line);
         } else {
             this.updateDoorType((doorType + 1) % 3)
         }
@@ -109,11 +105,19 @@ export class Door {
         line = line.subLine(this.doorBase[0].calculateCenter(), factor * this.radius);
         if (line == null)
             throw new Error("No sub line found");
-        this.doorBase[0] = line;
+        this.updateDoorInfos(line);
+    }
+
+    updateDoorInfos(baseLine: Line) {
+        this.doorBase[0] = baseLine;
         let secondLine: Line | null = this._direction > 0 ? this._wall.firstLine : this._wall.thirdLine;
-        this.doorBase[0] = line;
-        this.doorBase[1] = secondLine.subLine(this.doorBase[0].calculateCenter(), this.doorBase[0].calculateDistance())!!;
-        this._parallelLine = this.doorBase[0].calculateParallelLine(this.height, this._wall.xFactor, this._wall.yFactor, this._direction);
+        this.doorBase[0] = baseLine;
+        this.doorBase[1] = secondLine.subLine(
+            this.doorBase[0].calculateCenter(), this.doorBase[0].calculateDistance()
+        )!!;
+        this._parallelLine = this.doorBase[0].calculateParallelLine(
+            this.height, this._wall.xFactor, this._wall.yFactor, this._direction
+        );
         this._center = this._doorType == DoorType.OPEN_LEFT ? this.doorBase[0].firstPoint :
             this._doorType == DoorType.OPEN_RIGHT ? this.doorBase[0].secondPoint : this.doorBase[0].calculateCenter();
     }
@@ -198,6 +202,11 @@ export class Door {
                 console.error("Invalid door type");
                 return;
         }
-        this.canvasDrawer.drawQad(context, [this.doorBase[0].firstPoint, this.doorBase[0].secondPoint, this.doorBase[1].secondPoint, this.doorBase[1].firstPoint], "white")
+        this.canvasDrawer.drawQad(
+            context,
+            [this.doorBase[0].firstPoint, this.doorBase[0].secondPoint,
+                this.doorBase[1].secondPoint, this.doorBase[1].firstPoint],
+            "white"
+        );
     }
 }
