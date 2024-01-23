@@ -1,8 +1,10 @@
-.canvas-container {
+#drawing-canvas {
     box-sizing: border-box;
-    margin-top: 20px;
     border-radius: 20px;
     border: 2px solid darkgrey;
-    flex: 1;
-    width: 100%;
+    width: 96vw;
+    height: 84vh;
+    position: absolute;
+    margin: 0;
+    z-index: 5;
 }

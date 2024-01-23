@@ -1,19 +1,15 @@
-#canvas1 {
-    position: relative;
-    z-index: 5;
-}
-
-#canvas2 {
-    position: absolute;
-    left: 0;
-    margin-left: 40px;
-    margin-top: 20px;
-    z-index: 0;
-}
 
 .body-container {
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    width: 96vw;
     margin: 2vh;
+}
+
+#canvasContainer {
+    margin-top: 3vh;
+    width: 100%;
+    flex: 1;
+    display: flex;
 }
