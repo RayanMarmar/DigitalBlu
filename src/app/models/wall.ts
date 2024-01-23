@@ -127,6 +127,14 @@ export class Wall {
         return this._xFactor;
     }
 
+    get yFactor(): number {
+        return this._yFactor;
+    }
+
+    set yFactor(value: number) {
+        this._yFactor = value;
+    }
+
     isLineExtremity(point: Point): boolean {
         return this._firstPoint.equals(point) || this._secondPoint.equals(point)
             || this._thirdPoint.equals(point) || this._fourthPoint.equals(point);

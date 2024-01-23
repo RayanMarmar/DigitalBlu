@@ -16,12 +16,14 @@ export class Door {
     constructor(wall: Wall, point: Point) {
         this._wall = wall;
         let line: Line | null = this._direction > 0 ? wall.firstLine : wall.thirdLine;
-        line = line.subLine(point, this.radius)
+        line = line.subLine(point, this.radius);
         if (line == null)
             throw new Error("No sub line found");
+        console.log("subline : " + line.toString());
         this._line = line;
         this._doorType = DoorType.OPEN_LEFT;
-        this._parallelLine = this._line.calculateParallelLine(this.height, 1, 1, this._direction);
+        this._parallelLine = this._line.calculateParallelLine(this.height, wall.xFactor, wall.yFactor, this._direction);
+        console.log("parallel : " + line.toString());
         this._center = this._line.firstPoint;
     }
 
@@ -86,7 +88,7 @@ export class Door {
         if (line != null) {
             this._doorType = doorType;
             this._line = line;
-            this._parallelLine = this._line.calculateParallelLine(this.height, 1, 1, this._direction);
+            this._parallelLine = this._line.calculateParallelLine(this.height, this._wall.xFactor, this._wall.yFactor, this._direction);
             this._center = this._doorType == DoorType.OPEN_LEFT ? this._line.firstPoint :
                 this._doorType == DoorType.OPEN_RIGHT ? this._line.secondPoint : this._line.calculateCenter();
         } else {
@@ -102,7 +104,7 @@ export class Door {
         if (line == null)
             throw new Error("No sub line found");
         this._line = line;
-        this._parallelLine = this._line.calculateParallelLine(this.height, 1, 1, this._direction);
+        this._parallelLine = this._line.calculateParallelLine(this.height, this._wall.xFactor, this._wall.yFactor, this._direction);
         this._center = this._doorType == DoorType.OPEN_LEFT ? this._line.firstPoint :
             this._doorType == DoorType.OPEN_RIGHT ? this._line.secondPoint : this._line.calculateCenter();
     }
