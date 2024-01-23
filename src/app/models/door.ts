@@ -15,15 +15,12 @@ export class Door {
 
     constructor(wall: Wall, point: Point) {
         this._wall = wall;
-        let line: Line | null = wall.thirdLine;
-        line = line.subLine(point, this.radius);
+        let line: Line | null = wall.thirdLine.subLine(point, this.radius);
         if (line == null)
             throw new Error("No sub line found");
-        console.log("subline : " + line.toString());
         this._line = line;
         this._doorType = DoorType.OPEN_LEFT;
         this._parallelLine = this._line.calculateParallelLine(this.height, wall.xFactor, wall.yFactor, this._direction);
-        console.log("parallel : " + line.toString());
         this._center = this._line.firstPoint;
     }
 

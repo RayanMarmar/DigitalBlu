@@ -35,13 +35,7 @@ export class CanvasService {
             line.draw(this.context!!);
         });
     }
-
-    private drawAllPoints(): void {
-        this.archiveService.pointsList.forEach((point: Point): void => {
-            point.draw(this.context!!);
-        });
-    }
-
+    
     private drawAllWalls(): void {
         this.archiveService.wallsList.forEach((wall: Wall): void => {
             wall.draw(this.context!!);
@@ -108,12 +102,16 @@ export class CanvasService {
         let point: Point = this.mouse.currentCoordinates!!;
         let wall: Wall | null = this.archiveService.snapDoor(point);
         if (wall != null) {
-            let door: Door = new Door(wall, point);
-            this.archiveService.addDoor(door);
-            this.mouse.mouseDown(event);
-            this.modesConfiguration.drawing = !this.modesConfiguration;
-            this.mouse.moving = false;
-            this.drawAll();
+            try {
+                let door: Door = new Door(wall, point);
+                this.archiveService.addDoor(door);
+                this.mouse.mouseDown(event);
+                this.modesConfiguration.drawing = !this.modesConfiguration;
+                this.mouse.moving = false;
+                this.drawAll();
+            } catch (e) {
+                console.log("Insufficient distance for door.");
+            }
         }
     }
 

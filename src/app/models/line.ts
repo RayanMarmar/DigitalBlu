@@ -75,7 +75,12 @@ export class Line {
         // Calculate the intersection point
         const intersectionPoint: Point | null = this.intersection(point);
         // Verify if the point of intersection is on the line
-        if (intersectionPoint == null || !this.isOnLine(intersectionPoint)) {
+        if (
+            intersectionPoint == null ||
+            !this.isOnLine(intersectionPoint) ||
+            new Line(intersectionPoint, this._firstPoint).calculateDistance() < width / 2 ||
+            new Line(intersectionPoint, this._secondPoint).calculateDistance() < width / 2
+        ) {
             return null;
         }
 
