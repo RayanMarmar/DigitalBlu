@@ -15,7 +15,7 @@ export class Door {
 
     constructor(wall: Wall, point: Point) {
         this._wall = wall;
-        let line: Line | null = this._direction > 0 ? wall.firstLine : wall.thirdLine;
+        let line: Line | null = wall.thirdLine;
         line = line.subLine(point, this.radius);
         if (line == null)
             throw new Error("No sub line found");
@@ -98,7 +98,7 @@ export class Door {
 
     updateDoorDirection(direction: number) {
         this._direction = direction;
-        let line: Line | null = this._direction > 0 ? this._wall.firstLine : this._wall.thirdLine;
+        let line: Line | null = this._direction > 0 ? this._wall.thirdLine : this._wall.firstLine;
         let factor: number = this._doorType == DoorType.OPEN_TWO_WAY ? 2 : 1;
         line = line.subLine(this._line.calculateCenter(), factor * this.radius);
         if (line == null)
