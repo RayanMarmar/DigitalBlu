@@ -4,8 +4,6 @@ import {AfterViewInit, Component, ElementRef, HostListener, Renderer2, ViewChild
 @Component({
     selector: 'app-grid',
     standalone: true,
-    /*template: '<canvas #gridCanvas (keydown)="onKeyDown($event)"></canvas>',
-    styles: ['canvas { border: 1px solid #000; }'],*/
     templateUrl: './grid.component.html',
     styleUrl: './grid.component.css'
 })
@@ -105,10 +103,7 @@ export class GridComponent implements AfterViewInit {
 
     @HostListener('window:resize', ['$event'])
     onResize(event: Event): void {
-        this.setGridSize();
-        this.canvasRect = this.gridCanvas.nativeElement.getBoundingClientRect();
-        this.clear();
-        this.drawGrid();
+        this.updateCanvas();
     }
 
 
