@@ -8,17 +8,19 @@ export class Door {
     private _wall: Wall;
     private _parallelLine: Line;
     private _doorType: DoorType;
-    private _radius: number;
+    private _radius: number = 50;
+    private height: number = 50;
     private _center: Point;
-    private height: number = 30;
     private _direction: number = 1;
 
     constructor(wall: Wall, point: Point) {
         this._wall = wall;
-        this._line = new Line(new Point(point.x - 50 / 2, point.y), new Point(point.x + 50 / 2, point.y));
+        let line: Line | null = this._direction > 0 ? wall.firstLine : wall.thirdLine;
+        line = line.subLine(point, this.radius)
+        if (line == null)
+            throw new Error("No sub line found");
+        this._line = line;
         this._doorType = DoorType.OPEN_LEFT;
-        this._radius = this._line.calculateDistance();
-        this.height = this._radius;
         this._parallelLine = this._line.calculateParallelLine(this.height, 1, 1, this._direction);
         this._center = this._line.firstPoint;
     }
@@ -76,19 +78,33 @@ export class Door {
     }
 
     updateDoorType(doorType: DoorType) {
-        let factor: number = this._doorType == DoorType.OPEN_TWO_WAY ? -1 : doorType == DoorType.OPEN_TWO_WAY ? 1 : 0;
-        this._doorType = doorType;
-        this._line.firstPoint.x -= factor * this.radius / 2;
-        this._line.secondPoint.x += factor * this.radius / 2;
-        this._radius = this._doorType == DoorType.OPEN_TWO_WAY ? this._line.calculateDistance() / 2 : this._line.calculateDistance();
-        this._parallelLine = this._line.calculateParallelLine(this.height, 1, 1, this._direction);
-        this._center = this._doorType == DoorType.OPEN_LEFT ? this._line.firstPoint :
-            this._doorType == DoorType.OPEN_RIGHT ? this._line.secondPoint : this._line.calculateCenter();
+        let factor: number = this._doorType == DoorType.OPEN_TWO_WAY ? 0.5 : doorType == DoorType.OPEN_TWO_WAY ? 2 : 1;
+        let line: Line | null = this._line;
+        if (this._doorType == DoorType.OPEN_TWO_WAY || doorType == DoorType.OPEN_TWO_WAY)
+            line = this._line.subLine(this._line.calculateCenter(), factor * this._radius);
+
+        if (line != null) {
+            this._radius = factor * this._radius;
+            this._doorType = doorType;
+            this._line = this._line.subLine(this._line.calculateCenter(), this._radius) ?? this._line;
+            this._parallelLine = this._line.calculateParallelLine(this.height, 1, 1, this._direction);
+            this._center = this._doorType == DoorType.OPEN_LEFT ? this._line.firstPoint :
+                this._doorType == DoorType.OPEN_RIGHT ? this._line.secondPoint : this._line.calculateCenter();
+        } else {
+            this.updateDoorType((doorType + 1) % 3)
+        }
     }
 
     updateDoorDirection(direction: number) {
         this._direction = direction;
+        let line: Line | null = this._direction > 0 ? this._wall.firstLine : this._wall.thirdLine;
+        line = line.subLine(this._line.calculateCenter(), this.radius);
+        if (line == null)
+            throw new Error("No sub line found");
+        this._line = line;
         this._parallelLine = this._line.calculateParallelLine(this.height, 1, 1, this._direction);
+        this._center = this._doorType == DoorType.OPEN_LEFT ? this._line.firstPoint :
+            this._doorType == DoorType.OPEN_RIGHT ? this._line.secondPoint : this._line.calculateCenter();
     }
 
 

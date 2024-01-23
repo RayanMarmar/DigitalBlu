@@ -60,32 +60,41 @@ export class CanvasService {
     }
 
     drawDoor(door: Door): void {
+        let startAngleLeft: number = Math.atan2(door.line.secondPoint.y - door.center.y, door.line.secondPoint.x - door.center.x);
+        let endAngleLeft: number = Math.atan2(door.parallelLine.firstPoint.y - door.center.y, door.parallelLine.firstPoint.x - door.center.x);
+        let startAngleRight: number = Math.atan2(door.parallelLine.secondPoint.y - door.center.y, door.parallelLine.secondPoint.x - door.center.x);
+        let endAngleRight: number = Math.atan2(door.line.firstPoint.y - door.center.y, door.line.firstPoint.x - door.center.x);
         // Draw quarter circle based on door type
         switch (door.doorType) {
             case DoorType.OPEN_LEFT:
-                if (door.direction > 0)
-                    this.drawQuarterCircle(door.center, door.radius, 0, door.direction * Math.PI / 2);
-                else
-                    this.drawQuarterCircle(door.center, door.radius, door.direction * Math.PI / 2, 0);
+                if (door.direction > 0) {
+                    this.drawQuarterCircle(door.center, door.radius, startAngleLeft, endAngleLeft);
+                } else
+                    this.drawQuarterCircle(door.center, door.radius, endAngleLeft, startAngleLeft);
                 this.drawLine(new Line(door.parallelLine.firstPoint, door.line.firstPoint));
                 break;
 
             case DoorType.OPEN_RIGHT:
-                if (door.direction > 0)
-                    this.drawQuarterCircle(door.center, door.radius, door.direction * Math.PI / 2, door.direction * Math.PI);
-                else
-                    this.drawQuarterCircle(door.center, door.radius, door.direction * Math.PI, door.direction * Math.PI / 2);
+                if (door.direction > 0) {
+                    this.drawQuarterCircle(door.center, door.radius, startAngleRight, endAngleRight);
+                } else
+                    this.drawQuarterCircle(door.center, door.radius, endAngleRight, startAngleRight);
                 this.drawLine(new Line(door.parallelLine.secondPoint, door.line.secondPoint));
                 break;
 
             case DoorType.OPEN_TWO_WAY:
+                startAngleLeft = Math.atan2(door.center.y - door.line.firstPoint.y, door.center.x - door.line.firstPoint.x);
+                endAngleLeft = Math.atan2(door.parallelLine.firstPoint.y - door.line.firstPoint.y, door.parallelLine.firstPoint.x - door.line.firstPoint.y);
+                startAngleRight = Math.atan2(door.center.y - door.parallelLine.secondPoint.y, door.center.x - door.parallelLine.secondPoint.x);
+                endAngleRight = Math.atan2(door.line.secondPoint.y - door.parallelLine.secondPoint.y, door.line.secondPoint.x - door.parallelLine.secondPoint.y);
+
                 // Draw two quarter circles for OPEN_TWO_WAY
                 if (door.direction > 0) {
-                    this.drawQuarterCircle(door.line.firstPoint, door.radius, 0, door.direction * Math.PI / 2);
-                    this.drawQuarterCircle(door.line.secondPoint, door.radius, door.direction * Math.PI / 2, door.direction * Math.PI);
+                    this.drawQuarterCircle(door.center, door.radius, startAngleRight, endAngleRight);
+                    this.drawQuarterCircle(door.center, door.radius, startAngleLeft, endAngleLeft);
                 } else {
-                    this.drawQuarterCircle(door.line.firstPoint, door.radius, door.direction * Math.PI / 2, 0);
-                    this.drawQuarterCircle(door.line.secondPoint, door.radius, door.direction * Math.PI, door.direction * Math.PI / 2);
+                    this.drawQuarterCircle(door.center, door.radius, endAngleRight, startAngleRight);
+                    this.drawQuarterCircle(door.center, door.radius, endAngleLeft, startAngleLeft);
                 }
 
                 this.drawLine(new Line(door.parallelLine.firstPoint, door.line.firstPoint));
@@ -100,10 +109,18 @@ export class CanvasService {
     }
 
     private drawQuarterCircle(center: Point, radius: number, startAngle: number, endAngle: number): void {
-        this.context?.beginPath();
-        this.context?.arc(center.x, center.y, radius, startAngle, endAngle);
-        this.context?.stroke(); // Add a stroke (border) to the quarter circle
-        this.context?.closePath();
+        if (this.context == null) {
+            console.error('Context is null.');
+            return;
+        }
+        this.context.beginPath();
+        this.context.arc(center.x, center.y, radius, startAngle, endAngle);
+        this.context.lineTo(center.x, center.y);
+        // Add a fill to the quarter circle with white color
+        this.context.fillStyle = 'white';
+        this.context.fill();
+        this.context.stroke(); // Add a stroke (border) to the quarter circle
+        this.context.closePath();
     }
 
 
@@ -186,7 +203,9 @@ export class CanvasService {
             this.mouse.mouseDown(event);
             this.modesConfiguration.drawing = !this.modesConfiguration;
             this.mouse.moving = false;
-            this.drawAll();
+            this.clear();
+            this.drawLine(door.line);
+            this.drawDoor(door);
         }
     }
 
