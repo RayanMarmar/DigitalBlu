@@ -112,9 +112,21 @@ export class Door {
         return this._doorType.valueOf() + " coordinates: " + this.line.toString();
     }
 
-    private drawQuarterCircle(context: CanvasRenderingContext2D, center: Point, radius: number, startAngle: number, endAngle: number): void {
+    private drawQuarterCircle(
+        context: CanvasRenderingContext2D,
+        center: Point,
+        start: Point,
+        end: Point,
+        radius: number,
+        upwards: boolean
+    ): void {
+        let startAngle: number = Math.atan2(start.y - center.y, start.x - center.x);
+        let endAngle: number = Math.atan2(end.y - center.y, end.x - center.x);
         context.beginPath();
-        context.arc(center.x, center.y, radius, startAngle, endAngle);
+        if (upwards)
+            context.arc(center.x, center.y, radius, endAngle, startAngle);
+        else
+            context.arc(center.x, center.y, radius, startAngle, endAngle);
         context.lineTo(center.x, center.y);
         // Add a fill to the quarter circle with white color
         context.fillStyle = 'white';
@@ -124,50 +136,59 @@ export class Door {
     }
 
     draw(context: CanvasRenderingContext2D): void {
-        let startAngleLeft: number = Math.atan2(this._line.secondPoint.y - this._center.y, this._line.secondPoint.x - this._center.x);
-        let endAngleLeft: number = Math.atan2(this._parallelLine.firstPoint.y - this._center.y, this._parallelLine.firstPoint.x - this._center.x);
-        let startAngleRight: number = Math.atan2(this._parallelLine.secondPoint.y - this._center.y, this._parallelLine.secondPoint.x - this._center.x);
-        let endAngleRight: number = Math.atan2(this._line.firstPoint.y - this._center.y, this._line.firstPoint.x - this._center.x);
         // Draw quarter circle based on door type
         switch (this._doorType) {
             case DoorType.OPEN_LEFT:
-                if (this._direction > 0) {
-                    this.drawQuarterCircle(context, this._center, this._radius, startAngleLeft, endAngleLeft);
-                } else
-                    this.drawQuarterCircle(context, this._center, this._radius, endAngleLeft, startAngleLeft);
-                (new Line(this._parallelLine.firstPoint, this._line.firstPoint)).draw(context);
+                this.drawQuarterCircle(
+                    context,
+                    this._center,
+                    this._line.secondPoint,
+                    this._parallelLine.firstPoint,
+                    this._radius,
+                    this._direction < 0
+                );
+                new Line(this._parallelLine.firstPoint, this._line.firstPoint).draw(context);
                 break;
 
             case DoorType.OPEN_RIGHT:
-                if (this._direction > 0) {
-                    this.drawQuarterCircle(context, this._center, this._radius, startAngleRight, endAngleRight);
-                } else
-                    this.drawQuarterCircle(context, this._center, this._radius, endAngleRight, startAngleRight);
-                (new Line(this._parallelLine.secondPoint, this._line.secondPoint)).draw(context);
+                this.drawQuarterCircle(
+                    context,
+                    this._center,
+                    this._parallelLine.secondPoint,
+                    this._line.firstPoint,
+                    this._radius,
+                    this._direction < 0
+                );
+                new Line(this._parallelLine.secondPoint, this._line.secondPoint).draw(context);
                 break;
 
             case DoorType.OPEN_TWO_WAY:
-                startAngleLeft = Math.atan2(this._center.y - this._line.firstPoint.y, this._center.x - this._line.firstPoint.x);
-                endAngleLeft = Math.atan2(this._parallelLine.firstPoint.y - this._line.firstPoint.y, this._parallelLine.firstPoint.x - this._line.firstPoint.x);
-                startAngleRight = Math.atan2(this._parallelLine.secondPoint.y - this._line.secondPoint.y, this._parallelLine.secondPoint.x - this._line.secondPoint.x);
-                endAngleRight = Math.atan2(this._center.y - this._line.secondPoint.y, this._center.x - this._line.secondPoint.x);
                 // Draw two quarter circles for OPEN_TWO_WAY
-                if (this._direction > 0) {
-                    this.drawQuarterCircle(context, this._line.firstPoint, this._radius, startAngleLeft, endAngleLeft);
-                    this.drawQuarterCircle(context, this._line.secondPoint, this._radius, startAngleRight, endAngleRight);
-                } else {
-                    this.drawQuarterCircle(context, this._line.firstPoint, this._radius, endAngleLeft, startAngleLeft);
-                    this.drawQuarterCircle(context, this._line.secondPoint, this._radius, endAngleRight, startAngleRight);
-                }
+                this.drawQuarterCircle(
+                    context,
+                    this._line.firstPoint,
+                    this._center,
+                    this._parallelLine.firstPoint,
+                    this._radius,
+                    this._direction < 0
+                );
+                this.drawQuarterCircle(
+                    context,
+                    this._line.secondPoint,
+                    this._parallelLine.secondPoint,
+                    this._center,
+                    this._radius,
+                    this._direction < 0
+                );
 
-                (new Line(this._parallelLine.firstPoint, this._line.firstPoint)).draw(context);
-                (new Line(this._parallelLine.secondPoint, this._line.secondPoint)).draw(context);
+                new Line(this._parallelLine.firstPoint, this._line.firstPoint).draw(context);
+                new Line(this._parallelLine.secondPoint, this._line.secondPoint).draw(context);
                 break;
 
             default:
                 // Invalid door type
                 console.error("Invalid door type");
-                break;
+                return;
         }
     }
 }
