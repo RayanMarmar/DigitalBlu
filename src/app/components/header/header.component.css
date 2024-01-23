@@ -1,0 +1,87 @@
+
+.pill-header {
+    box-sizing: border-box;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 20px;
+    border: 2px solid darkgrey;
+    height: 100%;
+    padding: 15px;
+    width: 100%;
+}
+
+.pill-header .left-section {
+    display: flex;
+    align-items: center;
+}
+
+#options-dropdown {
+    margin-top: 10px;
+    border: 2px solid darkgrey;
+    padding: 10px;
+    display: none;
+    position: absolute;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+}
+
+#options-dropdown a {
+    color: black;
+    padding: 10px;
+    text-decoration: none;
+    display: block;
+}
+
+#options-dropdown a:hover {
+    background-color: rgba(169, 169, 169, 0.5);
+    border-radius: 20px;
+}
+
+button {
+    z-index: 1;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border-radius: 30px;
+    padding: 0;
+    border: 0 solid darkgrey;
+    transition: background-color 0.3s ease; /* Add a smooth transition effect */
+
+
+}
+
+button:hover {
+    background-color: rgba(169, 169, 169, 0.3);
+    border: 0 solid darkgrey;
+
+}
+
+.iconoir {
+    font-size: 35px;
+}
+
+
+.button-label {
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease; /* Add a smooth transition effect */
+}
+
+.button-label span {
+
+}
+
+/* Show the label on hover */
+button:hover .button-label {
+    opacity: 1;
+}
+
+.logo-img {
+    margin-left: 10px;
+    height: 47px;
+    width: auto;
+}

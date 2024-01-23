@@ -1,0 +1,10 @@
+#gridCanvas {
+    box-sizing: border-box;
+    margin: 0;
+    border-radius: 20px;
+    border: 2px solid darkgrey;
+    width: 96vw;
+    height: 84vh;
+    position: absolute;
+    z-index: 0;
+}
