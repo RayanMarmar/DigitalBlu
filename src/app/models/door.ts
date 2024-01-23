@@ -1,24 +1,27 @@
 import {DoorType} from "./doorType";
 import {Line} from "./line";
 import {Point} from "./point";
+import {Wall} from "./wall";
 
 export class Door {
     private _line: Line;
+    private _wall: Wall;
     private _parallelLine: Line;
     private _doorType: DoorType;
-    private _radius: number;
+    private _radius: number = 50;
+    private height: number = 50;
     private _center: Point;
-    private height: number = 30;
     private _direction: number = 1;
 
-    constructor(line: Line, doorType: DoorType) {
+    constructor(wall: Wall, point: Point) {
+        this._wall = wall;
+        let line: Line | null = wall.thirdLine.subLine(point, this.radius);
+        if (line == null)
+            throw new Error("No sub line found");
         this._line = line;
-        this._doorType = doorType;
-        this._radius = this._doorType == DoorType.OPEN_TWO_WAY ? line.calculateDistance() / 2 : line.calculateDistance();
-        this.height = this._radius;
-        this._parallelLine = line.calculateParallelLine(this.height, 1, 1, this._direction);
-        this._center = this._doorType == DoorType.OPEN_LEFT ? line.firstPoint :
-            this._doorType == DoorType.OPEN_RIGHT ? line.secondPoint : line.calculateCenter();
+        this._doorType = DoorType.OPEN_LEFT;
+        this._parallelLine = this._line.calculateParallelLine(this.height, wall.xFactor, wall.yFactor, this._direction);
+        this._center = this._line.firstPoint;
     }
 
     // Getter for line
@@ -74,24 +77,114 @@ export class Door {
     }
 
     updateDoorType(doorType: DoorType) {
-        this._doorType = doorType;
-        if (this._doorType == DoorType.OPEN_TWO_WAY) {
-            this._line.firstPoint.x -= this.radius / 2;
-            this._line.secondPoint.x += this.radius / 2;
+        let factor: number = doorType == DoorType.OPEN_TWO_WAY ? 2 : 1;
+        let line: Line | null = this._line;
+        if (this._doorType == DoorType.OPEN_TWO_WAY || doorType == DoorType.OPEN_TWO_WAY)
+            line = this._line.subLine(this._line.calculateCenter(), factor * this._radius);
+
+        if (line != null) {
+            this._doorType = doorType;
+            this._line = line;
+            this._parallelLine = this._line.calculateParallelLine(this.height, this._wall.xFactor, this._wall.yFactor, this._direction);
+            this._center = this._doorType == DoorType.OPEN_LEFT ? this._line.firstPoint :
+                this._doorType == DoorType.OPEN_RIGHT ? this._line.secondPoint : this._line.calculateCenter();
+        } else {
+            this.updateDoorType((doorType + 1) % 3)
         }
-        this._radius = this._doorType == DoorType.OPEN_TWO_WAY ? this._line.calculateDistance() / 2 : this._line.calculateDistance();
-        this._parallelLine = this._line.calculateParallelLine(this.height, 1, 1, this._direction);
-        this._center = this._doorType == DoorType.OPEN_LEFT ? this._line.firstPoint :
-            this._doorType == DoorType.OPEN_RIGHT ? this._line.secondPoint : this._line.calculateCenter();
     }
 
     updateDoorDirection(direction: number) {
         this._direction = direction;
-        this._parallelLine = this._line.calculateParallelLine(this.height, 1, 1, this._direction);
+        let line: Line | null = this._direction > 0 ? this._wall.thirdLine : this._wall.firstLine;
+        let factor: number = this._doorType == DoorType.OPEN_TWO_WAY ? 2 : 1;
+        line = line.subLine(this._line.calculateCenter(), factor * this.radius);
+        if (line == null)
+            throw new Error("No sub line found");
+        this._line = line;
+        this._parallelLine = this._line.calculateParallelLine(this.height, this._wall.xFactor, this._wall.yFactor, this._direction);
+        this._center = this._doorType == DoorType.OPEN_LEFT ? this._line.firstPoint :
+            this._doorType == DoorType.OPEN_RIGHT ? this._line.secondPoint : this._line.calculateCenter();
     }
 
 
     toString(): string {
         return this._doorType.valueOf() + " coordinates: " + this.line.toString();
+    }
+
+    private drawQuarterCircle(
+        context: CanvasRenderingContext2D,
+        center: Point,
+        start: Point,
+        end: Point,
+        radius: number,
+        upwards: boolean
+    ): void {
+        let startAngle: number = Math.atan2(start.y - center.y, start.x - center.x);
+        let endAngle: number = Math.atan2(end.y - center.y, end.x - center.x);
+        context.beginPath();
+        if (upwards)
+            context.arc(center.x, center.y, radius, endAngle, startAngle);
+        else
+            context.arc(center.x, center.y, radius, startAngle, endAngle);
+        context.lineTo(center.x, center.y);
+        context.stroke(); // Add a stroke (border) to the quarter circle
+        context.closePath();
+    }
+
+    draw(context: CanvasRenderingContext2D): void {
+        // Draw quarter circle based on door type
+        switch (this._doorType) {
+            case DoorType.OPEN_LEFT:
+                this.drawQuarterCircle(
+                    context,
+                    this._center,
+                    this._line.secondPoint,
+                    this._parallelLine.firstPoint,
+                    this._radius,
+                    this._direction < 0
+                );
+                new Line(this._parallelLine.firstPoint, this._line.firstPoint).draw(context);
+                break;
+
+            case DoorType.OPEN_RIGHT:
+                this.drawQuarterCircle(
+                    context,
+                    this._center,
+                    this._parallelLine.secondPoint,
+                    this._line.firstPoint,
+                    this._radius,
+                    this._direction < 0
+                );
+                new Line(this._parallelLine.secondPoint, this._line.secondPoint).draw(context);
+                break;
+
+            case DoorType.OPEN_TWO_WAY:
+                // Draw two quarter circles for OPEN_TWO_WAY
+                this.drawQuarterCircle(
+                    context,
+                    this._line.firstPoint,
+                    this._center,
+                    this._parallelLine.firstPoint,
+                    this._radius,
+                    this._direction < 0
+                );
+                this.drawQuarterCircle(
+                    context,
+                    this._line.secondPoint,
+                    this._parallelLine.secondPoint,
+                    this._center,
+                    this._radius,
+                    this._direction < 0
+                );
+
+                new Line(this._parallelLine.firstPoint, this._line.firstPoint).draw(context);
+                new Line(this._parallelLine.secondPoint, this._line.secondPoint).draw(context);
+                break;
+
+            default:
+                // Invalid door type
+                console.error("Invalid door type");
+                return;
+        }
     }
 }

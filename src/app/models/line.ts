@@ -70,4 +70,87 @@ export class Line {
             (this._firstPoint.y + this._secondPoint.y) / 2
         );
     }
+
+    subLine(point: Point, width: number): Line | null {
+        // Calculate the intersection point
+        const intersectionPoint: Point | null = this.intersection(point);
+        // Verify if the point of intersection is on the line
+        if (
+            intersectionPoint == null ||
+            !this.isOnLine(intersectionPoint) ||
+            new Line(intersectionPoint, this._firstPoint).calculateDistance() < width / 2 ||
+            new Line(intersectionPoint, this._secondPoint).calculateDistance() < width / 2
+        ) {
+            return null;
+        }
+
+        // Calculate the coordinates of the points to form a segment with the given width
+        const angle = Math.atan2(this._secondPoint.y - this._firstPoint.y, this._secondPoint.x - this._firstPoint.x);
+        const offsetX = (width / 2) * Math.cos(angle);
+        const offsetY = (width / 2) * Math.sin(angle);
+        const point1 = new Point(intersectionPoint.x + offsetX, intersectionPoint.y + offsetY);
+        const point2 = new Point(intersectionPoint.x - offsetX, intersectionPoint.y - offsetY);
+
+        // Verify if these points are on the line
+        if (!this.isOnLine(point1) || !this.isOnLine(point2)) {
+            return null;
+        }
+
+        // Return the new segment
+        return new Line(point2, point1);
+    }
+
+    intersection(point: Point): Point | null {
+        // Step 1: Calculate the slope of AB
+        const slopeAB: number = (this._secondPoint.y - this._firstPoint.y) / (this._secondPoint.x - this._firstPoint.x);
+
+        // Step 2: Calculate the negative reciprocal of the slope
+        const slopePerpendicular: number = -1 / slopeAB;
+
+        // Calculate the y-intercept of the perpendicular line passing through point C
+        const interceptPerpendicular = point.y - slopePerpendicular * point.x;
+
+        // Solve for x-coordinate of intersection point D
+        const xIntersection = (interceptPerpendicular - this._firstPoint.y + slopeAB * this._firstPoint.x) / (slopeAB - slopePerpendicular);
+
+        // Use x-coordinate to find y-coordinate of intersection point D
+        const yIntersection = slopeAB * (xIntersection - this._firstPoint.x) + this._firstPoint.y;
+        // Step 4: Check if the intersection point is within the line segment AB
+        if (
+            ((this._firstPoint.x <= xIntersection && xIntersection <= this._secondPoint.x) ||
+                (this._secondPoint.x <= xIntersection && xIntersection <= this._firstPoint.x)) &&
+            ((this._firstPoint.y <= yIntersection && yIntersection <= this._secondPoint.y) ||
+                (this._secondPoint.y <= yIntersection && yIntersection <= this._firstPoint.y))
+        ) {
+            // Return the intersection point
+            return new Point(xIntersection, yIntersection);
+        } else {
+            // Return null if the intersection point is outside the line segment
+            return null;
+        }
+    }
+
+    isOnLine(point: Point): boolean {
+        // Check if the point is on the line using the equation of the line
+        const slope = (this._secondPoint.y - this._firstPoint.y) / (this._secondPoint.x - this._firstPoint.x);
+
+        // Avoid division by zero (vertical line)
+        if (isFinite(slope)) {
+            // Calculate the expected y-coordinate on the line for the given x-coordinate
+            const expectedY = this._firstPoint.y + slope * (point.x - this._firstPoint.x);
+
+            // Check if the actual y-coordinate of the point matches the expected y-coordinate
+            return Math.abs(point.y - expectedY) < 0.0001; // You can adjust the epsilon for floating-point comparisons
+        } else {
+            // If the line is vertical, check if the x-coordinates match
+            return Math.abs(point.x - this._firstPoint.x) < 0.0001;
+        }
+    }
+
+    draw(context: CanvasRenderingContext2D): void {
+        context.beginPath();
+        context.moveTo(this._firstPoint.x, this._firstPoint.y);
+        context.lineTo(this._secondPoint.x, this._secondPoint.y);
+        context.stroke();
+    }
 }
