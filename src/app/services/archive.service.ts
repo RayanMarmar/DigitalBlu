@@ -1,21 +1,36 @@
 import {Injectable} from '@angular/core';
 import {Line} from "../models/line";
 import {Point} from "../models/point";
+import {Wall} from "../models/wall";
+import {Command} from "../models/command";
+import {Door} from "../models/door";
 
 @Injectable({
     providedIn: 'root'
 })
 export class ArchiveService {
-    private _linesList: Line[];
-    private _archiveLinesList: Line[];
     private _pointsList: Point[];
     private _archivePointsList: Point[];
+    private _linesList: Line[];
+    private _archiveLinesList: Line[];
+    private _wallsList: Wall[];
+    private _archiveWallsList: Wall[];
+    private _doorsList: Door[];
+    private _archiveDoorsList: Door[];
+    private commandsList: Command[];
+    private archiveCommandsList: Command[];
 
     constructor() {
         this._linesList = [];
         this._archiveLinesList = [];
         this._pointsList = [];
         this._archivePointsList = [];
+        this._wallsList = [];
+        this._archiveWallsList = [];
+        this.commandsList = [];
+        this.archiveCommandsList = [];
+        this._doorsList = [];
+        this._archiveDoorsList = [];
     }
 
     get linesList(): Line[] {
@@ -34,6 +49,22 @@ export class ArchiveService {
         this._pointsList = value;
     }
 
+    get wallsList(): Wall[] {
+        return this._wallsList;
+    }
+
+    set wallsList(value: Wall[]) {
+        this._wallsList = value;
+    }
+
+    get doorsList(): Door[] {
+        return this._doorsList;
+    }
+
+    set doorsList(value: Door[]) {
+        this._doorsList = value;
+    }
+
     pushLine(line: Line): void {
         this._linesList.push(line);
     }
@@ -50,17 +81,78 @@ export class ArchiveService {
         this._pointsList.pop();
     }
 
+    pushWall(wall: Wall): void {
+        this._wallsList.push(wall);
+    }
+
+    popWall(): void {
+        this._wallsList.pop();
+    }
+
+    pushDoor(door: Door): void {
+        this._doorsList.push(door);
+    }
+
+    popDoor(): void {
+        this._doorsList.pop();
+    }
+
     addLine(line: Line): void {
         this._linesList.pop();
         this._linesList.push(line);
+        this.commandsList.push(Command.ADD_LINE);
         this._archiveLinesList = [];
         this._archivePointsList = [];
+        this._archiveWallsList = [];
+        this._archiveDoorsList = [];
+        this.archiveCommandsList = [];
+    }
+
+    addWall(wall: Wall): void {
+        this._wallsList.pop();
+        this._wallsList.push(wall);
+        this.commandsList.push(Command.ADD_WALL);
+        this._archiveLinesList = [];
+        this._archivePointsList = [];
+        this._archiveWallsList = [];
+        this._archiveDoorsList = [];
+        this.archiveCommandsList = [];
+    }
+
+    addDoor(door: Door): void {
+        this._doorsList.push(door);
+        this.commandsList.push(Command.ADD_DOOR);
+        this._archiveLinesList = [];
+        this._archivePointsList = [];
+        this._archiveWallsList = [];
+        this._archiveDoorsList = [];
+        this.archiveCommandsList = [];
     }
 
 
     undo(): void {
         if (!this.containsElements())
             return;
+        let command: Command | undefined = this.commandsList.pop();
+        if (command != undefined) {
+            this.archiveCommandsList.push(command);
+            switch (command) {
+                case Command.ADD_LINE:
+                    this.undoLine();
+                    break;
+                case Command.ADD_WALL:
+                    this.undoWall();
+                    break;
+                case Command.ADD_DOOR:
+                    this.undoDoor();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    undoLine(): void {
         let line: Line | undefined = this._linesList.pop();
         if (line != undefined) {
             this._archiveLinesList.push(line);
@@ -71,9 +163,43 @@ export class ArchiveService {
         }
     }
 
+    undoWall(): void {
+        let wall: Wall | undefined = this._wallsList.pop();
+        if (wall != undefined) {
+            this._archiveWallsList.push(wall);
+        }
+    }
+
+    undoDoor(): void {
+        let door: Door | undefined = this._doorsList.pop();
+        if (door != undefined) {
+            this._archiveDoorsList.push(door);
+        }
+    }
+
     redo(): void {
         if (!this.containsArchivedElements())
             return;
+        let command: Command | undefined = this.archiveCommandsList.pop();
+        if (command != undefined) {
+            this.commandsList.push(command);
+            switch (command) {
+                case Command.ADD_LINE:
+                    this.redoLine();
+                    break;
+                case Command.ADD_WALL:
+                    this.redoWall();
+                    break;
+                case Command.ADD_DOOR:
+                    this.redoDoor();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    redoLine(): void {
         let line: Line | undefined = this._archiveLinesList.pop();
         if (line != undefined) {
             this._linesList.push(line);
@@ -84,12 +210,26 @@ export class ArchiveService {
         }
     }
 
+    redoWall(): void {
+        let wall: Wall | undefined = this._archiveWallsList.pop();
+        if (wall != undefined) {
+            this._wallsList.push(wall);
+        }
+    }
+
+    redoDoor(): void {
+        let door: Door | undefined = this._archiveDoorsList.pop();
+        if (door != undefined) {
+            this._doorsList.push(door);
+        }
+    }
+
     containsArchivedElements(): boolean {
-        return this._archiveLinesList.length > 0;
+        return this.archiveCommandsList.length > 0;
     }
 
     containsElements(): boolean {
-        return this._linesList.length > 0;
+        return this.commandsList.length > 0;
     }
 
     ghostPoint(): boolean {
@@ -120,5 +260,17 @@ export class ArchiveService {
             }
         }
         return -1; // Return -1 if no matching point is found
+    }
+
+
+    deleteLine(): void {
+        this.popLine();
+        if (this.ghostPoint()) {
+            this.popPoint();
+        }
+    }
+
+    deleteWall(): void {
+        this.popWall();
     }
 }
