@@ -188,10 +188,14 @@ export class Wall {
     }
 
     draw(context: CanvasRenderingContext2D) {
-        // Draw a black-outlined rectangle
-        this._firstLine.draw(context);
-        this._secondLine.draw(context);
-        this._thirdLine.draw(context);
-        this._fourthLine.draw(context);
+        // Draw a filled rectangle with the correct coordinates
+        context.beginPath();
+        context.moveTo(this._firstPoint.x, this._firstPoint.y);
+        context.lineTo(this._secondPoint.x, this._secondPoint.y);
+        context.lineTo(this._thirdPoint.x, this._thirdPoint.y);
+        context.lineTo(this._fourthPoint.x, this._fourthPoint.y);
+        context.closePath();
+        context.fill();
+        context.stroke(); // If you want to keep the border, you can include this line
     }
 }
