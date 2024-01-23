@@ -1,0 +1,6 @@
+.body-container {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    margin: 2vh;
+}

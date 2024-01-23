@@ -34,6 +34,7 @@ export class CanvasComponent implements AfterViewInit {
         this.setCanvasSize();
         this.canvasRect = this.canvas.nativeElement.getBoundingClientRect();
         this.mouse.setCanvasRectFromDomRect(this.canvasRect);
+        this.canvasService.updateCanvasRect(this.canvasRect);
         this.canvasService.drawAll();
     }
 
@@ -47,9 +48,11 @@ export class CanvasComponent implements AfterViewInit {
 
     setCanvasSize(): void {
         if (this.context) {
+            const headerElement = document.getElementById('myHeader');
+            const headerHeight = headerElement ? headerElement.clientHeight : 0;
             // Set canvas dimensions to match window size
-            this.canvas.nativeElement.width = window.innerWidth - 75;
-            this.canvas.nativeElement.height = window.innerHeight - (87 + 115);
+            this.canvas.nativeElement.width = window.innerWidth;
+            this.canvas.nativeElement.height = window.innerHeight - headerHeight * 1.5;
         }
     }
 
