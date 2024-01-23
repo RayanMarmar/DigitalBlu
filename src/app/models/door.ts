@@ -1,9 +1,11 @@
 import {DoorType} from "./doorType";
 import {Line} from "./line";
 import {Point} from "./point";
+import {Wall} from "./wall";
 
 export class Door {
     private _line: Line;
+    private _wall: Wall;
     private _parallelLine: Line;
     private _doorType: DoorType;
     private _radius: number;
@@ -11,14 +13,14 @@ export class Door {
     private height: number = 30;
     private _direction: number = 1;
 
-    constructor(line: Line, doorType: DoorType) {
-        this._line = line;
-        this._doorType = doorType;
-        this._radius = this._doorType == DoorType.OPEN_TWO_WAY ? line.calculateDistance() / 2 : line.calculateDistance();
+    constructor(wall: Wall, point: Point) {
+        this._wall = wall;
+        this._line = new Line(new Point(point.x - 50 / 2, point.y), new Point(point.x + 50 / 2, point.y));
+        this._doorType = DoorType.OPEN_LEFT;
+        this._radius = this._line.calculateDistance();
         this.height = this._radius;
-        this._parallelLine = line.calculateParallelLine(this.height, 1, 1, this._direction);
-        this._center = this._doorType == DoorType.OPEN_LEFT ? line.firstPoint :
-            this._doorType == DoorType.OPEN_RIGHT ? line.secondPoint : line.calculateCenter();
+        this._parallelLine = this._line.calculateParallelLine(this.height, 1, 1, this._direction);
+        this._center = this._line.firstPoint;
     }
 
     // Getter for line

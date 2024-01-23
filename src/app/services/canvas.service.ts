@@ -179,13 +179,15 @@ export class CanvasService {
     onMouseDownDoorMode(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
-        let line: Line = new Line(new Point(point.x - 50 / 2, point.y), new Point(point.x + 50 / 2, point.y));
-        let door: Door = new Door(line, DoorType.OPEN_LEFT);
-        this.archiveService.addDoor(door);
-        this.mouse.mouseDown(event);
-        this.modesConfiguration.drawing = !this.modesConfiguration;
-        this.mouse.moving = false;
-        this.drawAll();
+        let wall: Wall | null = this.archiveService.snapDoor(point);
+        if (wall != null) {
+            let door: Door = new Door(wall, point);
+            this.archiveService.addDoor(door);
+            this.mouse.mouseDown(event);
+            this.modesConfiguration.drawing = !this.modesConfiguration;
+            this.mouse.moving = false;
+            this.drawAll();
+        }
     }
 
     onMouseDownWallMode(event: MouseEvent): void {
