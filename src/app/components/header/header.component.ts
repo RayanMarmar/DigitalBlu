@@ -17,7 +17,7 @@ export class HeaderComponent {
 
     constructor(
         private canvasService: CanvasService,
-        private modesConfiguration: ModesConfiguration,
+        public modesConfiguration: ModesConfiguration,
     ) {
         this.optionsDropped = false;
     }
@@ -36,14 +36,14 @@ export class HeaderComponent {
 
     switchWallMode() {
         this.modesConfiguration.changeWallMode();
-        this.optionsDropdown.nativeElement.style.display = 'none';
-        this.optionsDropped = !this.optionsDropped;
+    }
+
+    switchLineMode() {
+        this.modesConfiguration.changeLineMode();
     }
 
     switchDoorMode() {
         this.modesConfiguration.changeDoorMode();
-        this.optionsDropdown.nativeElement.style.display = 'none';
-        this.optionsDropped = !this.optionsDropped;
     }
 
     onOptionsClicked(): void {

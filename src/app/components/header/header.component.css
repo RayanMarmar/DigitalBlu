@@ -60,6 +60,11 @@ button:hover {
 
 }
 
+.active {
+    background-color: rgba(169, 169, 169, 0.3);
+    border: 0 solid darkgrey;
+}
+
 .iconoir {
     font-size: 35px;
 }
@@ -84,4 +89,10 @@ button:hover .button-label {
     margin-left: 10px;
     height: 47px;
     width: auto;
+}
+
+.vertical-line {
+    width: 2px; /* Adjust the width of the line as needed */
+    height: 40px; /* Adjust the height of the line as needed */
+    background-color: rgba(169, 169, 169, 0.3);; /* Adjust the color of the line as needed */
 }

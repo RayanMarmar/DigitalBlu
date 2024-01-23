@@ -10,24 +10,55 @@
         <img class="logo-img" src="assets/logo.png" alt="Digital Blu Logo"/>
     </div>
 
+    <div class="vertical-line"></div>
+
+    <div>
+
+        <button [class.active]="modesConfiguration.lineMode" (click)="switchLineMode()"><i
+                class="iconoir iconoir-design-pencil"></i>
+            <span class="button-label">Line mode</span>
+        </button>
+
+
+        <button [class.active]="modesConfiguration.wallMode" (click)="switchWallMode()"><i
+                class="iconoir iconoir-cube"></i>
+            <span class="button-label">Wall mode</span>
+        </button>
+
+        <button [class.active]="modesConfiguration.doorMode" (click)="switchDoorMode()"><i
+                class="iconoir iconoir-closet"></i>
+            <span class="button-label">Door mode</span>
+        </button>
+
+        <button [class.active]="modesConfiguration.doorMode" (click)="switchDoorMode()"><i
+                class="iconoir iconoir-mirror"></i>
+            <span class="button-label">Window mode</span>
+        </button>
+    </div>
+
+    <div class="vertical-line"></div>
+
     <!-- Middle Section -->
     <div>
-        <button #optionsButton (click)="onOptionsClicked()">
-            <i class="iconoir iconoir-plus-circle"></i>
-        </button>
-        <div #optionsDropdown id="options-dropdown">
-            <a (click)="switchWallMode()">Add a Wall</a>
-            <a (click)="switchDoorMode()">Add a Door</a>
-            <a href="#">Add a Window</a>
-        </div>
-
-        <button (click)="switchSnapMode()">
+        <button [class.active]="modesConfiguration.snapMode" (click)="switchSnapMode()">
             <i class="iconoir iconoir-one-point-circle"></i>
             <span class="button-label">Snap to point</span>
         </button>
 
+        <button [class.active]="modesConfiguration.snapMode" (click)="switchSnapMode()">
+            <i class="iconoir iconoir-precision-tool"></i>
+            <span class="button-label">Snap to grid</span>
+        </button>
+
+        <button [class.active]="modesConfiguration.snapMode" (click)="switchSnapMode()">
+            <i class="iconoir iconoir-orthogonal-view"></i>
+            <span class="button-label">Display grid</span>
+        </button>
+
 
     </div>
+
+    <div class="vertical-line"></div>
 
     <!-- Right Section -->
     <div>
