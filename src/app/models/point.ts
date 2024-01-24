@@ -47,4 +47,8 @@ export class Point {
     private inyRange(y: number): boolean {
         return this._y - this.range <= y && this._y + this.range >= y;
     }
+
+    draw(context: CanvasRenderingContext2D): void {
+        context.fillRect(this._x, this._y, 1, 1);
+    }
 }

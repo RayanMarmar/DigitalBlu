@@ -252,10 +252,25 @@ export class ArchiveService {
         return index == -1 ? point : this._pointsList[index];
     }
 
+    snapDoor(point: Point): Wall | null {
+        let index: number = this.inRangeOfAnExistingWall(point);
+        return index == -1 ? null : this._wallsList[index];
+    }
+
     private inRangeOfAnExistingPoint(point: Point): number {
         for (let i: number = 0; i < this._pointsList.length; i++) {
             const p: Point = this._pointsList[i];
             if (p.inPointRange(point)) {
+                return i; // Return the index if a matching point is found
+            }
+        }
+        return -1; // Return -1 if no matching point is found
+    }
+
+    private inRangeOfAnExistingWall(point: Point): number {
+        for (let i: number = 0; i < this._wallsList.length; i++) {
+            const w: Wall = this._wallsList[i];
+            if (w.containsPoint(point)) {
                 return i; // Return the index if a matching point is found
             }
         }

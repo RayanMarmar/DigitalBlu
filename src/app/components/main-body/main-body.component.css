@@ -1,6 +1,15 @@
+
 .body-container {
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    width: 96vw;
     margin: 2vh;
+}
+
+#canvasContainer {
+    margin-top: 3vh;
+    width: 100%;
+    flex: 1;
+    display: flex;
 }

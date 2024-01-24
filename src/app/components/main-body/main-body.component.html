@@ -1,6 +1,9 @@
 <div class="body-container">
     <app-header></app-header>
-    <app-canvas></app-canvas>
-</div>
 
+    <div id="canvasContainer">
+        <app-canvas></app-canvas>
+        <app-grid [hidden]="!modesConfiguration.gridOn"></app-grid>
+    </div>
+</div>
 

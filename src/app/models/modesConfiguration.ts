@@ -9,6 +9,7 @@ export class ModesConfiguration {
     private _wallMode: boolean;
     private _doorMode: boolean;
     private _drawing: boolean;
+    private _gridOn: boolean;
 
     constructor() {
         this._snapMode = true;
@@ -16,6 +17,7 @@ export class ModesConfiguration {
         this._wallMode = false;
         this._doorMode = false;
         this._drawing = false;
+        this._gridOn = false;
     }
 
     get lineMode(): boolean {
@@ -58,6 +60,14 @@ export class ModesConfiguration {
         this._doorMode = value;
     }
 
+    get gridOn(): boolean {
+        return this._gridOn;
+    }
+
+    set gridOn(value: boolean) {
+        this._gridOn = value;
+    }
+
     changeSnapMode(): void {
         this._snapMode = !this._snapMode;
     }
@@ -78,6 +88,10 @@ export class ModesConfiguration {
         this._doorMode = !this._doorMode;
         this._wallMode = false;
         this._lineMode = false;
+    }
+
+    changeGridMode(): void {
+        this._gridOn = !this._gridOn;
     }
 
 }
