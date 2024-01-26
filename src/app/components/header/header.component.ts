@@ -46,6 +46,11 @@ export class HeaderComponent {
         this.modesConfiguration.changeDoorMode();
     }
 
+    displayGrid() {
+        this.modesConfiguration.changeGridMode();
+    }
+
+
     onOptionsClicked(): void {
         this.optionsDropdown.nativeElement.style.display = this.optionsDropped ? 'none' : 'block';
         this.optionsDropped = !this.optionsDropped;
