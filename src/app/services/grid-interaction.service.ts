@@ -25,4 +25,8 @@ export class GridInteractionService {
     getGridComponent(): GridComponent | null {
         return this.gridComponent;
     }
+
+    updateCanvas(): void {
+        this.gridComponent?.updateCanvas();
+    }
 }

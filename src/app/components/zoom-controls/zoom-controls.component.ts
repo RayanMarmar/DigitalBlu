@@ -1,4 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, HostListener} from '@angular/core';
+import {ModesConfiguration} from "../../models/modesConfiguration";
+import {GridInteractionService} from "../../services/grid-interaction.service";
 
 
 @Component({
@@ -10,16 +12,37 @@ import {Component} from '@angular/core';
 })
 export class ZoomControlsComponent {
     zoomLevel: number = 100;
+    private minZoom: number = 50;
+    private maxZoom: number = 150;
 
+    constructor(private modesConfiguration: ModesConfiguration, private gridInteractionService: GridInteractionService) {
+    }
 
     zoomIn() {
-        this.zoomLevel += 10;
-        // Add logic to update your grid or canvas with the new zoom level
+        if (this.zoomLevel < this.maxZoom) {
+            this.zoomLevel += 10;
+            this.modesConfiguration.zoomLevel = this.zoomLevel;
+            this.gridInteractionService.updateCanvas();
+        }
     }
 
     zoomOut() {
-        this.zoomLevel -= 10;
-        // Add logic to update your grid or canvas with the new zoom level
+        if (this.zoomLevel > this.minZoom) {
+            this.zoomLevel -= 10;
+            this.modesConfiguration.zoomLevel = this.zoomLevel;
+            this.gridInteractionService.updateCanvas();
+        }
     }
 
+    @HostListener('window:keydown', ['$event'])
+    onKeyDown(event: KeyboardEvent): void {
+        if (event.ctrlKey) {
+            if (event.key === '+') {
+                this.zoomIn();
+            } else if (event.key === '-') {
+                this.zoomOut();
+            }
+            event.preventDefault();
+        }
+    }
 }

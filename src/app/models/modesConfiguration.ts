@@ -12,6 +12,7 @@ export class ModesConfiguration {
     private _drawing: boolean;
     private _gridOn: boolean;
     private _defaultThickness: number;
+    private _zoomLevel: number;
 
 
     constructor() {
@@ -21,8 +22,9 @@ export class ModesConfiguration {
         this._doorMode = false;
         this._windowMode = false;
         this._drawing = false;
-        this._gridOn = false;
+        this._gridOn = true;
         this._defaultThickness = 20;
+        this._zoomLevel = 100;
     }
 
     get lineMode(): boolean {
@@ -89,6 +91,14 @@ export class ModesConfiguration {
         this._windowMode = value;
     }
 
+    get zoomLevel(): number {
+        return this._zoomLevel;
+    }
+
+    set zoomLevel(value: number) {
+        this._zoomLevel = value;
+    }
+
     changeSnapMode(): void {
         this._snapMode = !this._snapMode;
     }
@@ -129,5 +139,5 @@ export class ModesConfiguration {
     changeGridMode(): void {
         this._gridOn = !this._gridOn;
     }
-
+    
 }
