@@ -109,7 +109,7 @@ export class ModesConfiguration {
     }
 
     changeWallMode(): void {
-        this._wallMode = !this._wallMode;
+        this._wallMode = true;
         this._doorMode = false;
         this._windowMode = false;
         this._lineMode = false;
@@ -119,18 +119,18 @@ export class ModesConfiguration {
         this._wallMode = false;
         this._windowMode = false;
         this._doorMode = false;
-        this._lineMode = !this._lineMode;
+        this._lineMode = true;
     }
 
     changeDoorMode(): void {
-        this._doorMode = !this._doorMode;
+        this._doorMode = true;
         this._wallMode = false;
         this._lineMode = false;
         this._windowMode = false;
     }
 
     changeWindowMode(): void {
-        this._windowMode = !this._windowMode;
+        this._windowMode = true;
         this._doorMode = false;
         this._wallMode = false;
         this._lineMode = false;
@@ -139,5 +139,5 @@ export class ModesConfiguration {
     changeGridMode(): void {
         this._gridOn = !this._gridOn;
     }
-    
+
 }
