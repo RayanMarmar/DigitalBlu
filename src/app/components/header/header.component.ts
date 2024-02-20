@@ -1,27 +1,29 @@
-import {Component, ElementRef, HostListener, ViewChild} from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {CanvasComponent} from "../canvas/canvas.component";
 import {CanvasService} from "../../services/canvas.service";
 import {ModesConfiguration} from "../../models/modesConfiguration";
-import {GridInteractionService} from "../../services/grid-interaction.service";
+import {NgIf} from "@angular/common";
+import {FormsModule} from "@angular/forms";
 
 @Component({
     selector: 'app-header',
     standalone: true,
-    imports: [],
+    imports: [
+        NgIf,
+        FormsModule
+    ],
     templateUrl: './header.component.html',
     styleUrl: './header.component.css'
 })
 export class HeaderComponent {
     @ViewChild('optionsButton', {static: true}) private optionsButton!: ElementRef;
-    @ViewChild('optionsDropdown', {static: true}) private optionsDropdown!: ElementRef;
-    private optionsDropped: boolean;
+    thickness: number = this.getThickness();
+    lastValidThickness: number = this.modesConfiguration.defaultThickness;
 
     constructor(
         private canvasService: CanvasService,
-        private gridService: GridInteractionService,
-        private modesConfiguration: ModesConfiguration,
+        public modesConfiguration: ModesConfiguration,
     ) {
-        this.optionsDropped = false;
     }
 
     switchSnapMode() {
@@ -38,41 +40,50 @@ export class HeaderComponent {
 
     switchWallMode() {
         this.modesConfiguration.changeWallMode();
-        this.optionsDropdown.nativeElement.style.display = 'none';
-        this.optionsDropped = !this.optionsDropped;
+    }
+
+    switchLineMode() {
+        this.modesConfiguration.changeLineMode();
     }
 
     switchDoorMode() {
         this.modesConfiguration.changeDoorMode();
-        this.optionsDropdown.nativeElement.style.display = 'none';
-        this.optionsDropped = !this.optionsDropped;
     }
+
+    updateThickness(event: Event) {
+        const value = Number((event.target as HTMLInputElement).value);
+        if (value >= 0) {
+            this.lastValidThickness = value;
+            this.modesConfiguration.changeDefaultThickness(value);
+        } else {
+            // If negative value, revert to the last valid thickness
+            this.modesConfiguration.changeDefaultThickness(this.lastValidThickness);
+            this.thickness = this.lastValidThickness;
+        }
+        console.log(this.lastValidThickness);
+    }
+
 
     switchWindowMode() {
         this.modesConfiguration.changeWindowMode();
-        this.optionsDropdown.nativeElement.style.display = 'none';
-        this.optionsDropped = !this.optionsDropped;
     }
 
     switchGridMode() {
         this.modesConfiguration.changeGridMode();
     }
 
-    onOptionsClicked(): void {
-        this.optionsDropdown.nativeElement.style.display = this.optionsDropped ? 'none' : 'block';
-        this.optionsDropped = !this.optionsDropped;
-    }
-
-    @HostListener('window:click', ['$event'])
-    onWindowClick(event: Event): void {
-        if (this.optionsDropped
-            && event.target !== this.optionsButton.nativeElement
-            && event.target !== this.optionsButton.nativeElement.firstChild
-            && !this.optionsDropdown.nativeElement.contains(event.target)) {
-            this.optionsDropdown.nativeElement.style.display = 'none';
-            this.optionsDropped = false;
+    onInput() {
+        if (this.thickness < 1) {
+            this.thickness = this.lastValidThickness;
+        } else {
+            this.lastValidThickness = this.thickness;
         }
     }
+
+    getThickness() {
+        return this.modesConfiguration.defaultThickness;
+    }
+
 
     protected readonly CanvasComponent = CanvasComponent;
 }
