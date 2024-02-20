@@ -314,7 +314,7 @@ export class ArchiveService {
         return index == -1 ? point : this._pointsList[index];
     }
 
-    snapDoor(point: Point): Wall | null {
+    snapWallOpening(point: Point): Wall | null {
         let index: number = this.inRangeOfAnExistingWall(point);
         return index == -1 ? null : this._wallsList[index];
     }
