@@ -2,6 +2,7 @@ import {ElementRef, Injectable} from '@angular/core';
 import {Line} from "../models/line";
 import {Point} from "../models/point";
 import {ArchiveService} from "./archive.service";
+import {GridService} from "./grid.service";
 import {Mouse} from "../models/mouse";
 import {ModesConfiguration} from "../models/modesConfiguration";
 import {Wall} from "../models/wall";
@@ -17,6 +18,7 @@ export class CanvasService {
 
     constructor(
         private archiveService: ArchiveService,
+        private gridService: GridService,
         private mouse: Mouse,
         private modesConfiguration: ModesConfiguration
     ) {
@@ -139,7 +141,8 @@ export class CanvasService {
     onMouseDownLineMode(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
-        let snapped: Point = this.archiveService.snapPoint(point, this.modesConfiguration.snapMode);
+        // let snapped: Point = this.archiveService.snapPoint(point, this.modesConfiguration.snapMode);
+        let snapped: Point = this.gridService.calculateNearestGridIntersection(point)
         if (this.modesConfiguration.drawing)
             this.archiveService.addLine(new Line(this.mouse.clickedCoordinates!!, snapped))
         if (snapped.equals(point)) {

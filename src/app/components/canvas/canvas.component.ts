@@ -44,6 +44,7 @@ export class CanvasComponent implements AfterViewInit {
         this.canvasService.onMouseDown(event);
     }
 
+
     onMouseMove(event: MouseEvent): void {
         const mouseX = event.clientX;
         const mouseY = event.clientY;
