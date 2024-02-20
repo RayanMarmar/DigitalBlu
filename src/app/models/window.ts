@@ -2,7 +2,7 @@ import {Point} from "./point";
 import {Wall} from "./wall";
 import {wallOpening} from "./wallOpening";
 
-export class window extends wallOpening {
+export class Window extends wallOpening {
     constructor(wall: Wall, point: Point) {
         super(wall, point);
     }
