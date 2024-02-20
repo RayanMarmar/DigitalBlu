@@ -2,6 +2,7 @@ import {Component, ElementRef, HostListener, ViewChild} from '@angular/core';
 import {CanvasComponent} from "../canvas/canvas.component";
 import {CanvasService} from "../../services/canvas.service";
 import {ModesConfiguration} from "../../models/modesConfiguration";
+import {GridInteractionService} from "../../services/grid-interaction.service";
 
 @Component({
     selector: 'app-header',
@@ -17,6 +18,7 @@ export class HeaderComponent {
 
     constructor(
         private canvasService: CanvasService,
+        private gridService: GridInteractionService,
         private modesConfiguration: ModesConfiguration,
     ) {
         this.optionsDropped = false;
@@ -46,6 +48,11 @@ export class HeaderComponent {
         this.optionsDropped = !this.optionsDropped;
     }
 
+    switchGridMode() {
+        this.modesConfiguration.changeGridMode();
+        this.gridService.setGridVisible()
+    }
+    
     onOptionsClicked(): void {
         this.optionsDropdown.nativeElement.style.display = this.optionsDropped ? 'none' : 'block';
         this.optionsDropped = !this.optionsDropped;
