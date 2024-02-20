@@ -26,14 +26,8 @@ export class GridInteractionService {
         return this.gridComponent;
     }
 
-    // onMouseDownLineMode(event: MouseEvent): void {
-    //     this.mouse.setCurrentCoordinatesFromEvent(event);
-    //     let point: Point = this.mouse.currentCoordinates!!;
-    //
-    //     // //logic here
-    //     // let snapped: Point = this.archiveService.snapPoint(point, this.modesConfiguration.snapMode);
-    //
-    //
-    // }
+    setGridVisible(gridComponent: GridComponent): void {
+        gridComponent.hideShowGrid();
+    }
 
 }
