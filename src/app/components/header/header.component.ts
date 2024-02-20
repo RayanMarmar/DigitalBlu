@@ -48,6 +48,12 @@ export class HeaderComponent {
         this.optionsDropped = !this.optionsDropped;
     }
 
+    switchWindowMode() {
+        this.modesConfiguration.changeWindowMode();
+        this.optionsDropdown.nativeElement.style.display = 'none';
+        this.optionsDropped = !this.optionsDropped;
+    }
+
     switchGridMode() {
         this.modesConfiguration.changeGridMode();
     }

@@ -4,6 +4,7 @@ import {Point} from "../models/point";
 import {Wall} from "../models/wall";
 import {Command} from "../models/command";
 import {Door} from "../models/door";
+import {Window} from "../models/window";
 
 @Injectable({
     providedIn: 'root'
@@ -17,6 +18,8 @@ export class ArchiveService {
     private _archiveWallsList: Wall[];
     private _doorsList: Door[];
     private _archiveDoorsList: Door[];
+    private _windowsList: Window[];
+    private _archiveWindowsList: Window[];
     private commandsList: Command[];
     private archiveCommandsList: Command[];
 
@@ -31,6 +34,8 @@ export class ArchiveService {
         this.archiveCommandsList = [];
         this._doorsList = [];
         this._archiveDoorsList = [];
+        this._windowsList = [];
+        this._archiveWindowsList = [];
     }
 
     get linesList(): Line[] {
@@ -65,6 +70,22 @@ export class ArchiveService {
         this._doorsList = value;
     }
 
+    get archiveWindowsList(): Window[] {
+        return this._archiveWindowsList;
+    }
+
+    set archiveWindowsList(value: Window[]) {
+        this._archiveWindowsList = value;
+    }
+
+    get windowsList(): Window[] {
+        return this._windowsList;
+    }
+
+    set windowsList(value: Window[]) {
+        this._windowsList = value;
+    }
+
     pushLine(line: Line): void {
         this._linesList.push(line);
     }
@@ -97,6 +118,14 @@ export class ArchiveService {
         this._doorsList.pop();
     }
 
+    pushWindow(window: Window): void {
+        this._windowsList.push(window);
+    }
+
+    popWindow(): void {
+        this._windowsList.pop();
+    }
+
     addLine(line: Line): void {
         this._linesList.pop();
         this._linesList.push(line);
@@ -116,6 +145,7 @@ export class ArchiveService {
         this._archivePointsList = [];
         this._archiveWallsList = [];
         this._archiveDoorsList = [];
+        this._archiveWindowsList = [];
         this.archiveCommandsList = [];
     }
 
@@ -126,6 +156,18 @@ export class ArchiveService {
         this._archivePointsList = [];
         this._archiveWallsList = [];
         this._archiveDoorsList = [];
+        this._archiveWindowsList = [];
+        this.archiveCommandsList = [];
+    }
+
+    addWindow(window: Window): void {
+        this._windowsList.push(window);
+        this.commandsList.push(Command.ADD_WINDOW);
+        this._archiveLinesList = [];
+        this._archivePointsList = [];
+        this._archiveWallsList = [];
+        this._archiveDoorsList = [];
+        this._archiveWindowsList = [];
         this.archiveCommandsList = [];
     }
 
@@ -145,6 +187,9 @@ export class ArchiveService {
                     break;
                 case Command.ADD_DOOR:
                     this.undoDoor();
+                    break;
+                case Command.ADD_WINDOW:
+                    this.undoWindow();
                     break;
                 default:
                     break;
@@ -177,6 +222,13 @@ export class ArchiveService {
         }
     }
 
+    undoWindow(): void {
+        let window: Window | undefined = this._windowsList.pop();
+        if (window != undefined) {
+            this._archiveWindowsList.push(window);
+        }
+    }
+
     redo(): void {
         if (!this.containsArchivedElements())
             return;
@@ -192,6 +244,9 @@ export class ArchiveService {
                     break;
                 case Command.ADD_DOOR:
                     this.redoDoor();
+                    break;
+                case Command.ADD_WINDOW:
+                    this.redoWindow();
                     break;
                 default:
                     break;
@@ -224,6 +279,13 @@ export class ArchiveService {
         }
     }
 
+    redoWindow(): void {
+        let window: Window | undefined = this._archiveWindowsList.pop();
+        if (window != undefined) {
+            this._windowsList.push(window);
+        }
+    }
+
     containsArchivedElements(): boolean {
         return this.archiveCommandsList.length > 0;
     }
@@ -252,7 +314,7 @@ export class ArchiveService {
         return index == -1 ? point : this._pointsList[index];
     }
 
-    snapDoor(point: Point): Wall | null {
+    snapWallOpening(point: Point): Wall | null {
         let index: number = this.inRangeOfAnExistingWall(point);
         return index == -1 ? null : this._wallsList[index];
     }
