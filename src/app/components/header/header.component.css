@@ -71,6 +71,19 @@ button:hover {
     font-size: 35px;
 }
 
+.wall-thickness-container {
+    display: flex;
+    align-items: center;
+    background-color: #3498db; /* Change the background color as needed */
+    border-radius: 20px; /* Adjust the border-radius for a pill shape */
+    padding: 5px 10px; /* Adjust padding as needed */
+    color: #fff; /* Set text color */
+}
+
+.wall-thickness-container i {
+    margin-right: 5px; /* Adjust the spacing between the icon and the input */
+}
+
 
 .button-label {
     white-space: nowrap;

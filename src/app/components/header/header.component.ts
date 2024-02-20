@@ -2,11 +2,14 @@ import {Component, ElementRef, HostListener, ViewChild} from '@angular/core';
 import {CanvasComponent} from "../canvas/canvas.component";
 import {CanvasService} from "../../services/canvas.service";
 import {ModesConfiguration} from "../../models/modesConfiguration";
+import {NgIf} from "@angular/common";
 
 @Component({
     selector: 'app-header',
     standalone: true,
-    imports: [],
+    imports: [
+        NgIf
+    ],
     templateUrl: './header.component.html',
     styleUrl: './header.component.css'
 })
@@ -15,11 +18,14 @@ export class HeaderComponent {
     @ViewChild('optionsDropdown', {static: true}) private optionsDropdown!: ElementRef;
     private optionsDropped: boolean;
 
+
     constructor(
         private canvasService: CanvasService,
         public modesConfiguration: ModesConfiguration,
+        // public wall: Wall,
     ) {
         this.optionsDropped = false;
+        // const initialThickness = this.getThickness();
     }
 
     switchSnapMode() {
@@ -49,6 +55,15 @@ export class HeaderComponent {
     displayGrid() {
         this.modesConfiguration.changeGridMode();
     }
+
+    /*updateThickness(event: Event) {
+        const value = (event.target as HTMLInputElement).value;
+        this.wall.changeWidth(Number(value));
+    }
+
+    getThickness() {
+        return this.wall.width;
+    }*/
 
 
     onOptionsClicked(): void {

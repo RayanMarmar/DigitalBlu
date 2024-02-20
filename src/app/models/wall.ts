@@ -117,6 +117,11 @@ export class Wall {
         return this._width;
     }
 
+    changeWidth(value: number) {
+        this._width = value;
+        return this._width;
+    }
+
     // Getter for width
     get height(): number {
         return this._height;
