@@ -2,7 +2,6 @@ import {Component, ElementRef, ViewChild} from '@angular/core';
 import {CanvasComponent} from "../canvas/canvas.component";
 import {CanvasService} from "../../services/canvas.service";
 import {ModesConfiguration} from "../../models/modesConfiguration";
-import {GridInteractionService} from "../../services/grid-interaction.service";
 import {NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 
@@ -24,7 +23,6 @@ export class HeaderComponent {
     constructor(
         private canvasService: CanvasService,
         public modesConfiguration: ModesConfiguration,
-        private gridService: GridInteractionService,
     ) {
     }
 
@@ -50,10 +48,6 @@ export class HeaderComponent {
 
     switchDoorMode() {
         this.modesConfiguration.changeDoorMode();
-    }
-
-    displayGrid() {
-        this.modesConfiguration.changeGridMode();
     }
 
     updateThickness(event: Event) {
