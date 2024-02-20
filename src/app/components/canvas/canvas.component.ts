@@ -14,7 +14,6 @@ export class CanvasComponent implements AfterViewInit {
     @ViewChild('myCanvas', {static: true}) private canvas!: ElementRef<HTMLCanvasElement>;
     private context: CanvasRenderingContext2D | null = null;
     private canvasRect: DOMRect | null = null;
-    private mouseCoordinates = '';
 
     constructor(
         private canvasService: CanvasService,
