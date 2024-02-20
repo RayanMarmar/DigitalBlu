@@ -1,5 +1,5 @@
 // grid.component.ts
-import {AfterViewInit, Component, ElementRef, HostListener, Renderer2, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, ViewChild} from '@angular/core';
 import {GridInteractionService} from "../../services/grid-interaction.service";
 
 @Component({
@@ -17,7 +17,7 @@ export class GridComponent implements AfterViewInit {
     private readonly minZoom = 0.9;
     private readonly maxZoom = 1.3;
 
-    constructor(private renderer: Renderer2, private gridInteractionService: GridInteractionService) {
+    constructor(private gridInteractionService: GridInteractionService) {
     }
 
     ngAfterViewInit() {
@@ -31,8 +31,8 @@ export class GridComponent implements AfterViewInit {
 
     setGridSize(): void {
         if (this.context) {
-            this.renderer.setAttribute(this.gridCanvas.nativeElement, 'width', (window.innerWidth - 75).toString());
-            this.renderer.setAttribute(this.gridCanvas.nativeElement, 'height', (window.innerHeight - (87 + 115)).toString());
+            this.gridCanvas.nativeElement.width = 0.96 * window.innerWidth;
+            this.gridCanvas.nativeElement.height = 0.84 * window.innerHeight;
         }
     }
 

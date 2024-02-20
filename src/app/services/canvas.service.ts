@@ -6,7 +6,6 @@ import {Mouse} from "../models/mouse";
 import {ModesConfiguration} from "../models/modesConfiguration";
 import {Wall} from "../models/wall";
 import {Door} from "../models/door";
-import {DoorType} from "../models/doorType";
 
 @Injectable({
     providedIn: 'root'
@@ -31,110 +30,33 @@ export class CanvasService {
         this.canvasRect = canvas.nativeElement.getBoundingClientRect();
     }
 
+    private drawAllLines(): void {
+        this.archiveService.linesList.forEach((line: Line): void => {
+            line.draw(this.context!!);
+        });
+    }
+
     updateCanvasRect(newValue: DOMRect): void {
         this.canvasRect = newValue;
     }
 
-    drawPoint(point: Point): void {
-        if (this.context) {
-            this.context.fillRect(point.x, point.y, 1, 1);
-        } else {
-            console.error('Context is null.');
-        }
-    }
-
-    drawLine(line: Line): void {
-        if (this.context) {
-            this.context.beginPath();
-            this.context.moveTo(line.firstPoint.x, line.firstPoint.y);
-            this.context.lineTo(line.secondPoint.x, line.secondPoint.y);
-            this.context.stroke();
-        } else {
-            console.error('Context is null.');
-        }
-    }
-
-    drawWall(wall: Wall) {
-        // Draw a black-outlined rectangle
-        this.drawLine(wall.firstLine);
-        this.drawLine(wall.secondLine);
-        this.drawLine(wall.thirdLine);
-        this.drawLine(wall.fourthLine);
-    }
-
-    drawDoor(door: Door): void {
-        // Draw quarter circle based on door type
-        switch (door.doorType) {
-            case DoorType.OPEN_LEFT:
-                if (door.direction > 0)
-                    this.drawQuarterCircle(door.center, door.radius, 0, door.direction * Math.PI / 2);
-                else
-                    this.drawQuarterCircle(door.center, door.radius, door.direction * Math.PI / 2, 0);
-                this.drawLine(new Line(door.parallelLine.firstPoint, door.line.firstPoint));
-                break;
-
-            case DoorType.OPEN_RIGHT:
-                if (door.direction > 0)
-                    this.drawQuarterCircle(door.center, door.radius, door.direction * Math.PI / 2, door.direction * Math.PI);
-                else
-                    this.drawQuarterCircle(door.center, door.radius, door.direction * Math.PI, door.direction * Math.PI / 2);
-                this.drawLine(new Line(door.parallelLine.secondPoint, door.line.secondPoint));
-                break;
-
-            case DoorType.OPEN_TWO_WAY:
-                // Draw two quarter circles for OPEN_TWO_WAY
-                if (door.direction > 0) {
-                    this.drawQuarterCircle(door.line.firstPoint, door.radius, 0, door.direction * Math.PI / 2);
-                    this.drawQuarterCircle(door.line.secondPoint, door.radius, door.direction * Math.PI / 2, door.direction * Math.PI);
-                } else {
-                    this.drawQuarterCircle(door.line.firstPoint, door.radius, door.direction * Math.PI / 2, 0);
-                    this.drawQuarterCircle(door.line.secondPoint, door.radius, door.direction * Math.PI, door.direction * Math.PI / 2);
-                }
-
-                this.drawLine(new Line(door.parallelLine.firstPoint, door.line.firstPoint));
-                this.drawLine(new Line(door.parallelLine.secondPoint, door.line.secondPoint));
-                break;
-
-            default:
-                // Invalid door type
-                console.error("Invalid door type");
-                break;
-        }
-    }
-
-    private drawQuarterCircle(center: Point, radius: number, startAngle: number, endAngle: number): void {
-        this.context?.beginPath();
-        this.context?.arc(center.x, center.y, radius, startAngle, endAngle);
-        this.context?.stroke(); // Add a stroke (border) to the quarter circle
-        this.context?.closePath();
-    }
-
-
-    drawAllLines(): void {
-        this.archiveService.linesList.forEach((line: Line): void => {
-            this.drawLine(line);
-        });
-    }
-
-    drawAllPoints(): void {
-        this.archiveService.pointsList.forEach((point: Point): void => {
-            this.drawPoint(point);
-        });
-    }
-
-    drawAllWalls(): void {
+    private drawAllWalls(): void {
         this.archiveService.wallsList.forEach((wall: Wall): void => {
-            this.drawWall(wall);
+            wall.draw(this.context!!);
         });
     }
 
-    drawAllDoors(): void {
+    private drawAllDoors(): void {
         this.archiveService.doorsList.forEach((door: Door): void => {
-            this.drawDoor(door);
+            door.draw(this.context!!);
         });
     }
 
     drawAll(): void {
+        if (this.context == null) {
+            console.log("Context is null...")
+            return;
+        }
         this.clear();
         this.drawAllLines();
         this.drawAllWalls();
@@ -182,13 +104,19 @@ export class CanvasService {
     onMouseDownDoorMode(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
-        let line: Line = new Line(new Point(point.x - 50 / 2, point.y), new Point(point.x + 50 / 2, point.y));
-        let door: Door = new Door(line, DoorType.OPEN_LEFT);
-        this.archiveService.addDoor(door);
-        this.mouse.mouseDown(event);
-        this.modesConfiguration.drawing = !this.modesConfiguration;
-        this.mouse.moving = false;
-        this.drawAll();
+        let wall: Wall | null = this.archiveService.snapDoor(point);
+        if (wall != null) {
+            try {
+                let door: Door = new Door(wall, point);
+                this.archiveService.addDoor(door);
+                this.mouse.mouseDown(event);
+                this.modesConfiguration.drawing = !this.modesConfiguration;
+                this.mouse.moving = false;
+                this.drawAll();
+            } catch (e) {
+                console.log("Insufficient distance for door.");
+            }
+        }
     }
 
     onMouseDownWallMode(event: MouseEvent): void {

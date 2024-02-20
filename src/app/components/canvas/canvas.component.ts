@@ -10,7 +10,7 @@ import {CanvasService} from "../../services/canvas.service";
     styleUrl: './canvas.component.css'
 })
 export class CanvasComponent implements AfterViewInit {
-// its important myCanvas matches the variable name in the template
+    // its important myCanvas matches the variable name in the template
     @ViewChild('myCanvas', {static: true}) private canvas!: ElementRef<HTMLCanvasElement>;
     private context: CanvasRenderingContext2D | null = null;
     private canvasRect: DOMRect | null = null;
@@ -35,8 +35,8 @@ export class CanvasComponent implements AfterViewInit {
         this.setCanvasSize();
         this.canvasRect = this.canvas.nativeElement.getBoundingClientRect();
         this.mouse.setCanvasRectFromDomRect(this.canvasRect);
-        this.canvasService.clear();
         this.canvasService.updateCanvasRect(this.canvasRect);
+        this.canvasService.clear();
         this.canvasService.drawAll();
     }
 
@@ -58,11 +58,8 @@ export class CanvasComponent implements AfterViewInit {
 
     setCanvasSize(): void {
         if (this.context) {
-            const headerElement = document.getElementById('myHeader');
-            const headerHeight = headerElement ? headerElement.clientHeight : 0;
-            // Set canvas dimensions to match window size
-            this.canvas.nativeElement.width = window.innerWidth;
-            this.canvas.nativeElement.height = window.innerHeight - headerHeight * 1.5;
+            this.canvas.nativeElement.width = 0.96 * window.innerWidth;
+            this.canvas.nativeElement.height = 0.84 * window.innerHeight;
         }
     }
 
