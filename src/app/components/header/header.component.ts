@@ -46,6 +46,12 @@ export class HeaderComponent {
         this.optionsDropped = !this.optionsDropped;
     }
 
+    switchWindowMode() {
+        this.modesConfiguration.changeWindowMode();
+        this.optionsDropdown.nativeElement.style.display = 'none';
+        this.optionsDropped = !this.optionsDropped;
+    }
+
     onOptionsClicked(): void {
         this.optionsDropdown.nativeElement.style.display = this.optionsDropped ? 'none' : 'block';
         this.optionsDropped = !this.optionsDropped;
