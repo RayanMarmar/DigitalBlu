@@ -119,11 +119,4 @@ export class GridComponent implements AfterViewInit {
             event.preventDefault();
         }
     }
-
-    hideShowGrid() {
-        if (this.gridCanvas.nativeElement.hidden) {
-            this.gridCanvas.nativeElement.hidden = false;
-        }
-        this.gridCanvas.nativeElement.hidden = true;
-    }
 }

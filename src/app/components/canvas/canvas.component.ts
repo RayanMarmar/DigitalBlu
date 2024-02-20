@@ -44,6 +44,10 @@ export class CanvasComponent implements AfterViewInit {
         this.canvasService.onMouseDown(event);
     }
 
+    onMouseMove(event: MouseEvent): void {
+        this.canvasService.onMouseMove(event)
+    }
+
     setCanvasSize(): void {
         if (this.context) {
             this.canvas.nativeElement.width = 0.96 * window.innerWidth;

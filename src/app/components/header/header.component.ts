@@ -50,9 +50,8 @@ export class HeaderComponent {
 
     switchGridMode() {
         this.modesConfiguration.changeGridMode();
-        this.gridService.setGridVisible()
     }
-    
+
     onOptionsClicked(): void {
         this.optionsDropdown.nativeElement.style.display = this.optionsDropped ? 'none' : 'block';
         this.optionsDropped = !this.optionsDropped;

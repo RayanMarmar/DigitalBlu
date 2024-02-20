@@ -25,11 +25,4 @@ export class GridInteractionService {
     getGridComponent(): GridComponent | null {
         return this.gridComponent;
     }
-
-    setGridVisible(): void {
-        if (this.gridComponent instanceof GridComponent) {
-            this.gridComponent.hideShowGrid();
-        }
-    }
-
 }

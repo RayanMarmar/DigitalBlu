@@ -15,7 +15,7 @@ export class ModesConfiguration {
         this._wallMode = false;
         this._doorMode = false;
         this._drawing = false;
-        this._gridOn = true;
+        this._gridOn = false;
     }
 
     get snapMode(): boolean {
