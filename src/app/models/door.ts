@@ -152,9 +152,9 @@ export class Door {
         context.lineTo(this.doorBase[1].secondPoint.x, this.doorBase[1].secondPoint.y);
         context.lineTo(this.doorBase[1].firstPoint.x, this.doorBase[1].firstPoint.y);
         context.closePath();
-        context.fillStyle = "white";
+        context.fillStyle = "#f2f3f8";
         context.fill();
-        context.strokeStyle = "white";
+        context.strokeStyle = "#f2f3f8";
         context.stroke(); // If you want to keep the border, you can include this line
         context.fillStyle = "black";
         context.strokeStyle = "black";

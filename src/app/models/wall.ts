@@ -14,10 +14,9 @@ export class Wall {
     private _height: number;
     private _xFactor: number;
     private _yFactor: number;
-    private defaultThickness: number = 20;
 
-    constructor(firstPoint: Point, secondPoint: Point) {
-        this._height = this.defaultThickness;
+    constructor(firstPoint: Point, secondPoint: Point, height: number) {
+        this._height = height;
         this._yFactor = (firstPoint.y - secondPoint.y) >= 0 ? -1 : 1;
         this._xFactor = (firstPoint.x - secondPoint.x) >= 0 ? -1 : 1;
         this._firstLine = new Line(firstPoint, secondPoint)
@@ -117,10 +116,6 @@ export class Wall {
         return this._width;
     }
 
-    changeWidth(value: number) {
-        this._width = value;
-        return this._width;
-    }
 
     // Getter for width
     get height(): number {

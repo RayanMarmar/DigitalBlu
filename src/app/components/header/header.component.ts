@@ -1,30 +1,28 @@
-import {Component, ElementRef, HostListener, ViewChild} from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {CanvasComponent} from "../canvas/canvas.component";
 import {CanvasService} from "../../services/canvas.service";
 import {ModesConfiguration} from "../../models/modesConfiguration";
 import {NgIf} from "@angular/common";
+import {FormsModule} from "@angular/forms";
 
 @Component({
     selector: 'app-header',
     standalone: true,
     imports: [
-        NgIf
+        NgIf,
+        FormsModule
     ],
     templateUrl: './header.component.html',
     styleUrl: './header.component.css'
 })
 export class HeaderComponent {
     @ViewChild('optionsButton', {static: true}) private optionsButton!: ElementRef;
-    @ViewChild('optionsDropdown', {static: true}) private optionsDropdown!: ElementRef;
-    private optionsDropped: boolean;
-
 
     constructor(
         private canvasService: CanvasService,
         public modesConfiguration: ModesConfiguration,
         // public wall: Wall,
     ) {
-        this.optionsDropped = false;
         // const initialThickness = this.getThickness();
     }
 
@@ -56,31 +54,34 @@ export class HeaderComponent {
         this.modesConfiguration.changeGridMode();
     }
 
-    /*updateThickness(event: Event) {
-        const value = (event.target as HTMLInputElement).value;
-        this.wall.changeWidth(Number(value));
+    thickness: number = this.getThickness();
+    lastValidThickness: number = this.modesConfiguration.defaultThickness;
+
+    updateThickness(event: Event) {
+        const value = Number((event.target as HTMLInputElement).value);
+        if (value >= 0) {
+            this.lastValidThickness = value;
+            this.modesConfiguration.changeDefaultThickness(value);
+        } else {
+            // If negative value, revert to the last valid thickness
+            this.modesConfiguration.changeDefaultThickness(this.lastValidThickness);
+            this.thickness = this.lastValidThickness;
+        }
+        console.log(this.lastValidThickness);
+    }
+
+    onInput() {
+        if (this.thickness < 1) {
+            this.thickness = this.lastValidThickness;
+        } else {
+            this.lastValidThickness = this.thickness;
+        }
     }
 
     getThickness() {
-        return this.wall.width;
-    }*/
-
-
-    onOptionsClicked(): void {
-        this.optionsDropdown.nativeElement.style.display = this.optionsDropped ? 'none' : 'block';
-        this.optionsDropped = !this.optionsDropped;
+        return this.modesConfiguration.defaultThickness;
     }
 
-    @HostListener('window:click', ['$event'])
-    onWindowClick(event: Event): void {
-        if (this.optionsDropped
-            && event.target !== this.optionsButton.nativeElement
-            && event.target !== this.optionsButton.nativeElement.firstChild
-            && !this.optionsDropdown.nativeElement.contains(event.target)) {
-            this.optionsDropdown.nativeElement.style.display = 'none';
-            this.optionsDropped = false;
-        }
-    }
 
     protected readonly CanvasComponent = CanvasComponent;
 }

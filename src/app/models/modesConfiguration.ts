@@ -10,6 +10,8 @@ export class ModesConfiguration {
     private _doorMode: boolean;
     private _drawing: boolean;
     private _gridOn: boolean;
+    private _defaultThickness: number;
+
 
     constructor() {
         this._snapMode = true;
@@ -18,6 +20,7 @@ export class ModesConfiguration {
         this._doorMode = false;
         this._drawing = false;
         this._gridOn = false;
+        this._defaultThickness = 20;
     }
 
     get lineMode(): boolean {
@@ -68,8 +71,21 @@ export class ModesConfiguration {
         this._gridOn = value;
     }
 
+    get defaultThickness(): number {
+        return this._defaultThickness;
+    }
+
+    set defaultThickness(value: number) {
+        this._defaultThickness = value;
+    }
+
     changeSnapMode(): void {
         this._snapMode = !this._snapMode;
+    }
+
+    changeDefaultThickness(value: number) {
+        this._defaultThickness = value;
+        return this._defaultThickness;
     }
 
     changeWallMode(): void {

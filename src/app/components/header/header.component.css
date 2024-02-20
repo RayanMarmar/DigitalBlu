@@ -14,9 +14,17 @@
     width: 100%;
 }
 
+.pill-header .left-section,
+.pill-header .middle-section,
+.pill-header .right-section {
+    display: flex;
+    flex-direction: row;
+}
+
 .pill-header .left-section {
     display: flex;
     align-items: center;
+    flex-direction: row;
 }
 
 #options-dropdown {
@@ -71,17 +79,29 @@ button:hover {
     font-size: 35px;
 }
 
+.display-none {
+    display: none;
+}
+
 .wall-thickness-container {
     display: flex;
     align-items: center;
-    background-color: #3498db; /* Change the background color as needed */
-    border-radius: 20px; /* Adjust the border-radius for a pill shape */
-    padding: 5px 10px; /* Adjust padding as needed */
-    color: #fff; /* Set text color */
+    border-radius: 20px;
+    padding: 5px 10px;
+    color: #000000;
+}
+
+.wall-thickness-container input {
+    background-color: transparent;
+    border-radius: 30px;
+    border: 2px black solid;
+    padding: inherit;
+    font-family: 'Poppins', sans-serif;
+    width: 50px;
 }
 
 .wall-thickness-container i {
-    margin-right: 5px; /* Adjust the spacing between the icon and the input */
+    margin-right: 5px;
 }
 
 

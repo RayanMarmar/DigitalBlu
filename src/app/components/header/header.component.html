@@ -12,7 +12,7 @@
 
     <div class="vertical-line"></div>
 
-    <div>
+    <div class="middle-section">
 
         <button [class.active]="modesConfiguration.lineMode" (click)="switchLineMode()"><i
                 class="iconoir iconoir-design-pencil"></i>
@@ -25,10 +25,19 @@
             <span class="button-label">Wall mode</span>
         </button>
 
+        <div class="wall-thickness-container" *ngIf="modesConfiguration.wallMode">
+            <i class="iconoir iconoir-de-compress"></i>
+            <input type="number" id="wall-thickness-input" [(ngModel)]="lastValidThickness"
+                   (input)="onInput();updateThickness($event)" min="1">
+
+        </div>
+
+
         <button [class.active]="modesConfiguration.doorMode" (click)="switchDoorMode()"><i
                 class="iconoir iconoir-closet"></i>
             <span class="button-label">Door mode</span>
         </button>
+
 
         <button [class.active]="modesConfiguration.doorMode" (click)="switchDoorMode()"><i
                 class="iconoir iconoir-mirror"></i>
@@ -39,16 +48,16 @@
     <div class="vertical-line"></div>
 
     <!-- Middle Section -->
-    <div>
+    <div class="middle-section">
         <button [class.active]="modesConfiguration.snapMode" (click)="switchSnapMode()">
             <i class="iconoir iconoir-one-point-circle"></i>
             <span class="button-label">Snap to point</span>
         </button>
 
-        <button [class.active]="modesConfiguration.snapMode" (click)="switchSnapMode()">
-            <i class="iconoir iconoir-precision-tool"></i>
-            <span class="button-label">Snap to grid</span>
-        </button>
+        <!--        <button [class.active]="modesConfiguration.snapMode" (click)="switchSnapMode()">-->
+        <!--            <i class="iconoir iconoir-precision-tool"></i>-->
+        <!--            <span class="button-label">Snap to grid</span>-->
+        <!--        </button>-->
 
         <button [class.active]="modesConfiguration.gridOn" (click)="displayGrid()">
             <i class="iconoir iconoir-orthogonal-view"></i>
@@ -61,7 +70,7 @@
     <div class="vertical-line"></div>
 
     <!-- Right Section -->
-    <div>
+    <div class="right-section">
 
         <button><i class="iconoir iconoir-brightness"></i>
             <span class="button-label">Dark / Light</span>
@@ -71,13 +80,10 @@
             <span class="button-label">Share</span>
         </button>
     </div>
+
+
 </div>
 
 
-<!--
-<div class="wall-thickness-container" *ngIf="modesConfiguration.wallMode">
-    <i class="iconoir iconoir-de-compress"></i>
-    <input type="number" id="wall-thickness-input" [value]="getThickness()"
-           (input)="updateThickness($event)">
-</div>
--->
+
+
