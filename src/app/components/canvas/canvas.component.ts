@@ -44,18 +44,6 @@ export class CanvasComponent implements AfterViewInit {
         this.canvasService.onMouseDown(event);
     }
 
-    onMouseMove(event: MouseEvent): void {
-        const mouseX = event.clientX;
-        const mouseY = event.clientY;
-
-
-        // Update the displayed coordinates
-        this.mouseCoordinates = `X: ${mouseX.toFixed(2)}, Y: ${mouseY.toFixed(2)}`;
-        console.log("ahahahah");
-        console.log("HERE :  " + this.mouseCoordinates);
-        this.canvasService.onMouseMove(event)
-    }
-
     setCanvasSize(): void {
         if (this.context) {
             this.canvas.nativeElement.width = 0.96 * window.innerWidth;
