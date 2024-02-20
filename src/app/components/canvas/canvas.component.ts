@@ -14,6 +14,7 @@ export class CanvasComponent implements AfterViewInit {
     @ViewChild('myCanvas', {static: true}) private canvas!: ElementRef<HTMLCanvasElement>;
     private context: CanvasRenderingContext2D | null = null;
     private canvasRect: DOMRect | null = null;
+    private mouseCoordinates = '';
 
     constructor(
         private canvasService: CanvasService,
@@ -44,6 +45,14 @@ export class CanvasComponent implements AfterViewInit {
     }
 
     onMouseMove(event: MouseEvent): void {
+        const mouseX = event.clientX;
+        const mouseY = event.clientY;
+
+
+        // Update the displayed coordinates
+        this.mouseCoordinates = `X: ${mouseX.toFixed(2)}, Y: ${mouseY.toFixed(2)}`;
+        console.log("ahahahah");
+        console.log("HERE :  " + this.mouseCoordinates);
         this.canvasService.onMouseMove(event)
     }
 
