@@ -2,6 +2,7 @@ import {Component, ElementRef, ViewChild} from '@angular/core';
 import {CanvasComponent} from "../canvas/canvas.component";
 import {CanvasService} from "../../services/canvas.service";
 import {ModesConfiguration} from "../../models/modesConfiguration";
+import {GridInteractionService} from "../../services/grid-interaction.service";
 import {NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 
@@ -17,13 +18,14 @@ import {FormsModule} from "@angular/forms";
 })
 export class HeaderComponent {
     @ViewChild('optionsButton', {static: true}) private optionsButton!: ElementRef;
+    thickness: number = this.getThickness();
+    lastValidThickness: number = this.modesConfiguration.defaultThickness;
 
     constructor(
         private canvasService: CanvasService,
         public modesConfiguration: ModesConfiguration,
-        // public wall: Wall,
+        private gridService: GridInteractionService,
     ) {
-        // const initialThickness = this.getThickness();
     }
 
     switchSnapMode() {
@@ -54,9 +56,6 @@ export class HeaderComponent {
         this.modesConfiguration.changeGridMode();
     }
 
-    thickness: number = this.getThickness();
-    lastValidThickness: number = this.modesConfiguration.defaultThickness;
-
     updateThickness(event: Event) {
         const value = Number((event.target as HTMLInputElement).value);
         if (value >= 0) {
@@ -68,6 +67,15 @@ export class HeaderComponent {
             this.thickness = this.lastValidThickness;
         }
         console.log(this.lastValidThickness);
+    }
+
+
+    switchWindowMode() {
+        this.modesConfiguration.changeWindowMode();
+    }
+
+    switchGridMode() {
+        this.modesConfiguration.changeGridMode();
     }
 
     onInput() {

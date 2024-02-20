@@ -8,6 +8,7 @@ export class ModesConfiguration {
     private _lineMode: boolean;
     private _wallMode: boolean;
     private _doorMode: boolean;
+    private _windowMode: boolean;
     private _drawing: boolean;
     private _gridOn: boolean;
     private _defaultThickness: number;
@@ -18,6 +19,7 @@ export class ModesConfiguration {
         this._lineMode = true;
         this._wallMode = false;
         this._doorMode = false;
+        this._windowMode = false;
         this._drawing = false;
         this._gridOn = false;
         this._defaultThickness = 20;
@@ -79,6 +81,14 @@ export class ModesConfiguration {
         this._defaultThickness = value;
     }
 
+    get windowMode(): boolean {
+        return this._windowMode;
+    }
+
+    set windowMode(value: boolean) {
+        this._windowMode = value;
+    }
+
     changeSnapMode(): void {
         this._snapMode = !this._snapMode;
     }
@@ -91,17 +101,27 @@ export class ModesConfiguration {
     changeWallMode(): void {
         this._wallMode = !this._wallMode;
         this._doorMode = false;
+        this._windowMode = false;
         this._lineMode = false;
     }
 
     changeLineMode(): void {
         this._wallMode = false;
+        this._windowMode = false;
         this._doorMode = false;
         this._lineMode = !this._lineMode;
     }
 
     changeDoorMode(): void {
         this._doorMode = !this._doorMode;
+        this._wallMode = false;
+        this._lineMode = false;
+        this._windowMode = false;
+    }
+
+    changeWindowMode(): void {
+        this._windowMode = !this._windowMode;
+        this._doorMode = false;
         this._wallMode = false;
         this._lineMode = false;
     }
