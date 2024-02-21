@@ -73,10 +73,6 @@ export class GridComponent implements AfterViewInit {
         }
     }
 
-    getSnapPoint(): void {
-
-    }
-
     updateCanvas(): void {
         this.setGridSize();
         this.canvasRect = this.gridCanvas.nativeElement.getBoundingClientRect();

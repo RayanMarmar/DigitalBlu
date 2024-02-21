@@ -94,7 +94,7 @@ export class CanvasService {
                 this.mouse.moving = false;
                 if (this.modesConfiguration.wallMode) {
                     this.archiveService.deleteWall();
-                } else {
+                } else if (this.modesConfiguration.lineMode) {
                     this.archiveService.deleteLine();
                 }
             }
@@ -108,7 +108,7 @@ export class CanvasService {
         else if (this.modesConfiguration.doorMode)
             this.onMouseDownDoorMode(event);
         else if (this.modesConfiguration.windowMode)
-            this.onMouseWindowDoorMode(event);
+            this.onMouseWindowMode(event);
         else
             this.onMouseDownLineMode(event);
     }
@@ -131,7 +131,7 @@ export class CanvasService {
         }
     }
 
-    onMouseWindowDoorMode(event: MouseEvent): void {
+    onMouseWindowMode(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
         let wall: Wall | null = this.archiveService.snapWallOpening(point);
@@ -172,7 +172,6 @@ export class CanvasService {
         let snapped: Point = this.snapPoint(point);
         if (this.modesConfiguration.drawing)
             this.archiveService.addLine(new Line(this.mouse.clickedCoordinates!!, snapped))
-        console.log(snapped.equals(point))
         if (snapped.equals(point)) {
             this.mouse.mouseDown(event);
             this.archiveService.pushPoint(point);

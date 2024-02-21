@@ -134,6 +134,7 @@ export class ArchiveService {
         this._archivePointsList = [];
         this._archiveWallsList = [];
         this._archiveDoorsList = [];
+        this._archiveWindowsList = [];
         this.archiveCommandsList = [];
     }
 
