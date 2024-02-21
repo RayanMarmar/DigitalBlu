@@ -43,6 +43,7 @@ export class CanvasComponent implements AfterViewInit {
         this.canvasService.onMouseDown(event);
     }
 
+
     onMouseMove(event: MouseEvent): void {
         this.canvasService.onMouseMove(event)
     }

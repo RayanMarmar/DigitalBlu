@@ -2,6 +2,7 @@ import {ElementRef, Injectable} from '@angular/core';
 import {Line} from "../models/line";
 import {Point} from "../models/point";
 import {ArchiveService} from "./archive.service";
+import {GridService} from "./grid.service";
 import {Mouse} from "../models/mouse";
 import {ModesConfiguration} from "../models/modesConfiguration";
 import {Wall} from "../models/wall";
@@ -18,6 +19,7 @@ export class CanvasService {
 
     constructor(
         private archiveService: ArchiveService,
+        private gridService: GridService,
         private mouse: Mouse,
         private modesConfiguration: ModesConfiguration
     ) {
@@ -92,7 +94,7 @@ export class CanvasService {
                 this.mouse.moving = false;
                 if (this.modesConfiguration.wallMode) {
                     this.archiveService.deleteWall();
-                } else {
+                } else if (this.modesConfiguration.lineMode) {
                     this.archiveService.deleteLine();
                 }
             }
@@ -106,7 +108,7 @@ export class CanvasService {
         else if (this.modesConfiguration.doorMode)
             this.onMouseDownDoorMode(event);
         else if (this.modesConfiguration.windowMode)
-            this.onMouseWindowDoorMode(event);
+            this.onMouseWindowMode(event);
         else
             this.onMouseDownLineMode(event);
     }
@@ -129,7 +131,7 @@ export class CanvasService {
         }
     }
 
-    onMouseWindowDoorMode(event: MouseEvent): void {
+    onMouseWindowMode(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
         let wall: Wall | null = this.archiveService.snapWallOpening(point);
@@ -150,7 +152,7 @@ export class CanvasService {
     onMouseDownWallMode(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
-        let snapped: Point = this.archiveService.snapPoint(point, this.modesConfiguration.snapMode);
+        let snapped: Point = this.snapPoint(point);
         if (this.modesConfiguration.drawing)
             this.archiveService.addWall(new Wall(this.mouse.clickedCoordinates!!, snapped, this.modesConfiguration.defaultThickness));
         if (snapped.equals(point)) {
@@ -167,7 +169,7 @@ export class CanvasService {
     onMouseDownLineMode(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
-        let snapped: Point = this.archiveService.snapPoint(point, this.modesConfiguration.snapMode);
+        let snapped: Point = this.snapPoint(point);
         if (this.modesConfiguration.drawing)
             this.archiveService.addLine(new Line(this.mouse.clickedCoordinates!!, snapped))
         if (snapped.equals(point)) {
@@ -233,5 +235,20 @@ export class CanvasService {
                 this.drawAll();
             }
         }
+    }
+
+    private snapPoint(point: Point): Point {
+        let snapped: Point = point;
+
+        if (this.modesConfiguration.snapMode) {
+            snapped = this.archiveService.snapPoint(point, true);
+            if (!snapped.equals(point)) {
+                return snapped;
+            }
+        }
+        if (this.modesConfiguration.gridOn) {
+            snapped = this.gridService.calculateNearestGridIntersection(point);
+        }
+        return snapped;
     }
 }
