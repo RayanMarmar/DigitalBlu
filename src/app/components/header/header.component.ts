@@ -75,6 +75,7 @@ export class HeaderComponent {
     switchDarkMode() {
         this.modesConfiguration.changeDarkMode();
         this.themeService.toggleDarkMode(this.modesConfiguration.darkMode)
+        this.canvasService.drawAll();
     }
 
     onInput() {

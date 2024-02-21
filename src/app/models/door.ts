@@ -91,7 +91,8 @@ export class Door extends wallOpening {
         start: Point,
         end: Point,
         radius: number,
-        upwards: boolean
+        upwards: boolean,
+        color: string
     ): void {
         let startAngle: number = Math.atan2(start.y - center.y, start.x - center.x);
         let endAngle: number = Math.atan2(end.y - center.y, end.x - center.x);
@@ -101,11 +102,12 @@ export class Door extends wallOpening {
         else
             context.arc(center.x, center.y, radius, startAngle, endAngle);
         context.lineTo(center.x, center.y);
+        context.strokeStyle = color; // Add a stroke (border) to the quarter circle
         context.stroke(); // Add a stroke (border) to the quarter circle
         context.closePath();
     }
 
-    draw(context: CanvasRenderingContext2D): void {
+    draw(context: CanvasRenderingContext2D, bgColor: string, wallColor: string): void {
         // Draw quarter circle based on door type
         switch (this._doorType) {
             case DoorType.OPEN_LEFT:
@@ -115,7 +117,8 @@ export class Door extends wallOpening {
                     this.base[0].secondPoint,
                     this._parallelLine.firstPoint,
                     this._radius,
-                    this._direction < 0
+                    this._direction < 0,
+                    wallColor
                 );
                 new Line(this._parallelLine.firstPoint, this.base[0].firstPoint).draw(context);
                 break;
@@ -127,7 +130,8 @@ export class Door extends wallOpening {
                     this._parallelLine.secondPoint,
                     this.base[0].firstPoint,
                     this._radius,
-                    this._direction < 0
+                    this._direction < 0,
+                    wallColor
                 );
                 new Line(this._parallelLine.secondPoint, this.base[0].secondPoint).draw(context);
                 break;
@@ -140,7 +144,8 @@ export class Door extends wallOpening {
                     this._center,
                     this._parallelLine.firstPoint,
                     this._radius,
-                    this._direction < 0
+                    this._direction < 0,
+                    wallColor
                 );
                 this.drawQuarterCircle(
                     context,
@@ -148,7 +153,8 @@ export class Door extends wallOpening {
                     this._parallelLine.secondPoint,
                     this._center,
                     this._radius,
-                    this._direction < 0
+                    this._direction < 0,
+                    wallColor
                 );
 
                 new Line(this._parallelLine.firstPoint, this.base[0].firstPoint).draw(context);
@@ -160,6 +166,6 @@ export class Door extends wallOpening {
                 console.error("Invalid door type");
                 return;
         }
-        this.drawOpening(context);
+        this.drawOpening(context, bgColor, wallColor);
     }
 }

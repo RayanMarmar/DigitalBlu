@@ -48,7 +48,7 @@ export class wallOpening {
         this._parallelLine = value;
     }
 
-    protected drawOpening(context: CanvasRenderingContext2D) {
+    protected drawOpening(context: CanvasRenderingContext2D, bgColor: string, wallColor: string) {
         // Draw a filled rectangle with the correct coordinates
         context.beginPath();
         context.moveTo(this.base[0].firstPoint.x, this.base[0].firstPoint.y);
@@ -56,11 +56,11 @@ export class wallOpening {
         context.lineTo(this.base[1].secondPoint.x, this.base[1].secondPoint.y);
         context.lineTo(this.base[1].firstPoint.x, this.base[1].firstPoint.y);
         context.closePath();
-        context.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--main-bg-color');
+        context.fillStyle = bgColor;
         context.fill();
-        context.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--main-bg-color');
+        context.strokeStyle = bgColor;
         context.stroke(); // If you want to keep the border, you can include this line
-        context.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--wall-color');
-        context.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--wall-color');
+        context.fillStyle = wallColor;
+        context.strokeStyle = wallColor;
     }
 }
