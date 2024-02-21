@@ -48,6 +48,15 @@ export class HeaderComponent {
         this.modesConfiguration.changeDoorMode();
     }
 
+    switchCursorMode(): void {
+        this.modesConfiguration.changeCursorMode();
+    }
+
+    switchGrabMode(): void {
+        this.modesConfiguration.changeGrabMode();
+    }
+
+
     updateThickness(event: Event) {
         const value = Number((event.target as HTMLInputElement).value);
         if (value >= 0) {

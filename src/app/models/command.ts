@@ -4,4 +4,5 @@ export enum Command {
     ADD_WALL = "ADD_WALL",
     ADD_DOOR = "ADD_DOOR",
     ADD_WINDOW = "ADD_WINDOW",
+    DELETE_LINE = "DELETE_LINE",
 }

@@ -9,6 +9,8 @@ export class ModesConfiguration {
     private _wallMode: boolean;
     private _doorMode: boolean;
     private _windowMode: boolean;
+    private _cursorMode: boolean;
+    private _grabMode: boolean;
     private _drawing: boolean;
     private _gridOn: boolean;
     private _defaultThickness: number;
@@ -17,10 +19,12 @@ export class ModesConfiguration {
 
     constructor() {
         this._snapMode = true;
-        this._lineMode = true;
-        this._wallMode = false;
+        this._lineMode = false;
+        this._wallMode = true;
         this._doorMode = false;
         this._windowMode = false;
+        this._cursorMode = false;
+        this._grabMode = false;
         this._drawing = false;
         this._gridOn = true;
         this._defaultThickness = 20;
@@ -91,6 +95,22 @@ export class ModesConfiguration {
         this._windowMode = value;
     }
 
+    get cursorMode(): boolean {
+        return this._cursorMode;
+    }
+
+    set cursorMode(value: boolean) {
+        this._cursorMode = value;
+    }
+
+    get grabMode(): boolean {
+        return this._grabMode;
+    }
+
+    set grabMode(value: boolean) {
+        this._grabMode = value;
+    }
+
     get zoomLevel(): number {
         return this._zoomLevel;
     }
@@ -113,6 +133,8 @@ export class ModesConfiguration {
         this._doorMode = false;
         this._windowMode = false;
         this._lineMode = false;
+        this._cursorMode = false;
+        this._grabMode = false;
     }
 
     changeLineMode(): void {
@@ -120,6 +142,8 @@ export class ModesConfiguration {
         this._windowMode = false;
         this._doorMode = false;
         this._lineMode = true;
+        this._cursorMode = false;
+        this._grabMode = false;
     }
 
     changeDoorMode(): void {
@@ -127,6 +151,8 @@ export class ModesConfiguration {
         this._wallMode = false;
         this._lineMode = false;
         this._windowMode = false;
+        this._cursorMode = false;
+        this._grabMode = false;
     }
 
     changeWindowMode(): void {
@@ -134,6 +160,26 @@ export class ModesConfiguration {
         this._doorMode = false;
         this._wallMode = false;
         this._lineMode = false;
+        this._cursorMode = false;
+        this._grabMode = false;
+    }
+
+    changeCursorMode(): void {
+        this._windowMode = false;
+        this._doorMode = false;
+        this._wallMode = false;
+        this._lineMode = false;
+        this._cursorMode = true;
+        this._grabMode = false;
+    }
+
+    changeGrabMode(): void {
+        this._grabMode = true;
+        this._windowMode = false;
+        this._doorMode = false;
+        this._wallMode = false;
+        this._lineMode = false;
+        this._cursorMode = false;
     }
 
     changeGridMode(): void {
