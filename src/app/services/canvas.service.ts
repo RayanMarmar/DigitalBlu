@@ -7,6 +7,7 @@ import {Mouse} from "../models/mouse";
 import {ModesConfiguration} from "../models/modesConfiguration";
 import {Wall} from "../models/wall";
 import {Door} from "../models/door";
+import {Window} from "../models/window";
 
 @Injectable({
     providedIn: 'root'
@@ -54,6 +55,12 @@ export class CanvasService {
         });
     }
 
+    private drawAllWindows(): void {
+        this.archiveService.windowsList.forEach((window: Window): void => {
+            window.draw(this.context!!);
+        });
+    }
+
     drawAll(): void {
         if (this.context == null) {
             console.log("Context is null...")
@@ -63,6 +70,7 @@ export class CanvasService {
         this.drawAllLines();
         this.drawAllWalls();
         this.drawAllDoors();
+        this.drawAllWindows();
     }
 
     undo(): void {
@@ -99,6 +107,8 @@ export class CanvasService {
             this.onMouseDownWallMode(event);
         else if (this.modesConfiguration.doorMode)
             this.onMouseDownDoorMode(event);
+        else if (this.modesConfiguration.windowMode)
+            this.onMouseWindowDoorMode(event);
         else
             this.onMouseDownLineMode(event);
     }
@@ -106,7 +116,7 @@ export class CanvasService {
     onMouseDownDoorMode(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
-        let wall: Wall | null = this.archiveService.snapDoor(point);
+        let wall: Wall | null = this.archiveService.snapWallOpening(point);
         if (wall != null) {
             try {
                 let door: Door = new Door(wall, point);
@@ -121,12 +131,30 @@ export class CanvasService {
         }
     }
 
+    onMouseWindowDoorMode(event: MouseEvent): void {
+        this.mouse.setCurrentCoordinatesFromEvent(event);
+        let point: Point = this.mouse.currentCoordinates!!;
+        let wall: Wall | null = this.archiveService.snapWallOpening(point);
+        if (wall != null) {
+            try {
+                let window: Window = new Window(wall, point);
+                this.archiveService.addWindow(window);
+                this.mouse.mouseDown(event);
+                this.modesConfiguration.drawing = !this.modesConfiguration;
+                this.mouse.moving = false;
+                this.drawAll();
+            } catch (e) {
+                console.log("Insufficient distance for wall.");
+            }
+        }
+    }
+
     onMouseDownWallMode(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
         let snapped: Point = this.archiveService.snapPoint(point, this.modesConfiguration.snapMode);
         if (this.modesConfiguration.drawing)
-            this.archiveService.addWall(new Wall(this.mouse.clickedCoordinates!!, snapped));
+            this.archiveService.addWall(new Wall(this.mouse.clickedCoordinates!!, snapped, this.modesConfiguration.defaultThickness));
         if (snapped.equals(point)) {
             this.mouse.mouseDown(event);
             this.archiveService.pushPoint(point);
@@ -189,7 +217,7 @@ export class CanvasService {
             this.archiveService.popWall();
         else
             this.mouse.notFirstMouseMoveEvent = true;
-        this.archiveService.pushWall(new Wall(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!));
+        this.archiveService.pushWall(new Wall(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!, this.modesConfiguration.defaultThickness));
         this.drawAll();
     }
 

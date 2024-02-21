@@ -5,17 +5,34 @@ import {Injectable} from "@angular/core";
 })
 export class ModesConfiguration {
     private _snapMode: boolean;
+    private _lineMode: boolean;
     private _wallMode: boolean;
     private _doorMode: boolean;
+    private _windowMode: boolean;
     private _drawing: boolean;
     private _gridOn: boolean;
+    private _defaultThickness: number;
+    private _zoomLevel: number;
+
 
     constructor() {
-        this._snapMode = false;
+        this._snapMode = true;
+        this._lineMode = true;
         this._wallMode = false;
         this._doorMode = false;
+        this._windowMode = false;
         this._drawing = false;
         this._gridOn = true;
+        this._defaultThickness = 20;
+        this._zoomLevel = 100;
+    }
+
+    get lineMode(): boolean {
+        return this._lineMode;
+    }
+
+    set lineMode(value: boolean) {
+        this._lineMode = value;
     }
 
     get snapMode(): boolean {
@@ -30,7 +47,7 @@ export class ModesConfiguration {
         return this._wallMode;
     }
 
-    set eallMode(value: boolean) {
+    set wallMode(value: boolean) {
         this._wallMode = value;
     }
 
@@ -58,18 +75,65 @@ export class ModesConfiguration {
         this._gridOn = value;
     }
 
+    get defaultThickness(): number {
+        return this._defaultThickness;
+    }
+
+    set defaultThickness(value: number) {
+        this._defaultThickness = value;
+    }
+
+    get windowMode(): boolean {
+        return this._windowMode;
+    }
+
+    set windowMode(value: boolean) {
+        this._windowMode = value;
+    }
+
+    get zoomLevel(): number {
+        return this._zoomLevel;
+    }
+
+    set zoomLevel(value: number) {
+        this._zoomLevel = value;
+    }
+
     changeSnapMode(): void {
         this._snapMode = !this._snapMode;
     }
 
+    changeDefaultThickness(value: number) {
+        this._defaultThickness = value;
+        return this._defaultThickness;
+    }
+
     changeWallMode(): void {
-        this._wallMode = !this._wallMode;
+        this._wallMode = true;
         this._doorMode = false;
+        this._windowMode = false;
+        this._lineMode = false;
+    }
+
+    changeLineMode(): void {
+        this._wallMode = false;
+        this._windowMode = false;
+        this._doorMode = false;
+        this._lineMode = true;
     }
 
     changeDoorMode(): void {
-        this._doorMode = !this._doorMode;
+        this._doorMode = true;
         this._wallMode = false;
+        this._lineMode = false;
+        this._windowMode = false;
+    }
+
+    changeWindowMode(): void {
+        this._windowMode = true;
+        this._doorMode = false;
+        this._wallMode = false;
+        this._lineMode = false;
     }
 
     changeGridMode(): void {

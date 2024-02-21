@@ -2,7 +2,7 @@
 import {AfterViewInit, Component, ElementRef, HostListener, ViewChild} from '@angular/core';
 import {GridService} from "../../services/grid.service";
 import {Event} from "@angular/router";
-
+import {ModesConfiguration} from "../../models/modesConfiguration";
 
 @Component({
     selector: 'app-grid',
@@ -14,22 +14,15 @@ export class GridComponent implements AfterViewInit {
     @ViewChild('gridCanvas', {static: true}) private gridCanvas!: ElementRef<HTMLCanvasElement>;
     private context: CanvasRenderingContext2D | null = null;
     private canvasRect: DOMRect | null = null;
-
-    private _zoomLevel = 1;
-    private readonly minZoom = 0.9;
-    private readonly maxZoom = 1.3;
     private readonly _squareSize: number = 30;
 
-    get zoomLevel(): number {
-        return this._zoomLevel;
+    constructor(private gridInteractionService: GridService, private modeConfiguration: ModesConfiguration) {
     }
 
     get squareSize(): number {
         return this._squareSize;
     }
 
-    constructor(private gridInteractionService: GridService) {
-    }
 
     ngAfterViewInit() {
         // Replace direct access to the DOM with Renderer2
@@ -52,7 +45,7 @@ export class GridComponent implements AfterViewInit {
     drawGrid() {
         if (this.context) {
             this.canvasRect = this.gridCanvas.nativeElement.getBoundingClientRect();
-            const gridSize = this._squareSize * this._zoomLevel; // Adjust grid size based on zoom level
+            const gridSize = this._squareSize * this.modeConfiguration.zoomLevel / 100; // Adjust grid size based on zoom level
             this.context.strokeStyle = 'black';
 
             if (this.canvasRect != null) {
@@ -80,32 +73,12 @@ export class GridComponent implements AfterViewInit {
         }
     }
 
-
-    // Inside GridComponent class
-    zoomIn(): void {
-        if (this._zoomLevel < this.maxZoom) {
-            this._zoomLevel += 0.1;
-            this.updateCanvas();
-        }
-    }
-
-    zoomOut(): void {
-        if (this._zoomLevel > this.minZoom) {
-            this._zoomLevel -= 0.1;
-            this.updateCanvas();
-        }
-    }
-
-    private updateCanvas(): void {
+    updateCanvas(): void {
         this.setGridSize();
         this.canvasRect = this.gridCanvas.nativeElement.getBoundingClientRect();
         this.clear();
         this.drawGrid();
     }
-
-    // ngOnDestroy() {
-    //     window.removeEventListener('resize', this.onResize);
-    // }
 
     clear(): void {
         this.context!.clearRect(0, 0, this.canvasRect!.width, this.canvasRect!.height);
@@ -116,25 +89,5 @@ export class GridComponent implements AfterViewInit {
     @HostListener('window:resize', ['$event'])
     onResize(event: Event): void {
         this.updateCanvas();
-    }
-
-
-    @HostListener('window:keydown', ['$event'])
-    onKeyDown(event: KeyboardEvent): void {
-        if (event.ctrlKey) {
-            if (event.key === '+') {
-                this.zoomIn();
-            } else if (event.key === '-') {
-                this.zoomOut();
-            }
-            event.preventDefault();
-        }
-    }
-
-    hideShowGrid() {
-        if (this.gridCanvas.nativeElement.hidden) {
-            this.gridCanvas.nativeElement.hidden = false;
-        }
-        this.gridCanvas.nativeElement.hidden = true;
     }
 }
