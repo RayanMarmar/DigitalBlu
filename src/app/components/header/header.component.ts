@@ -1,6 +1,4 @@
-import {Component, ElementRef, HostListener, ViewChild} from '@angular/core';
-import {Component} from '@angular/core';
-import {CanvasComponent} from "../canvas/canvas.component";
+import {Component, HostListener} from '@angular/core';
 import {CanvasService} from "../../services/canvas.service";
 import {ModesConfiguration} from "../../models/modesConfiguration";
 import {NgIf} from "@angular/common";
