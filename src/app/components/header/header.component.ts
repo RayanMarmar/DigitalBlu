@@ -1,4 +1,4 @@
-import {Component, ElementRef, HostListener, ViewChild} from '@angular/core';
+import {Component, HostListener} from '@angular/core';
 import {CanvasService} from "../../services/canvas.service";
 import {ModesConfiguration} from "../../models/modesConfiguration";
 import {NgIf} from "@angular/common";
@@ -15,7 +15,6 @@ import {FormsModule} from "@angular/forms";
     styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-    @ViewChild('optionsButton', {static: true}) private optionsButton!: ElementRef;
     thickness: number = this.getThickness();
     lastValidThickness: number = this.modesConfiguration.defaultThickness;
 

@@ -1,6 +1,6 @@
 import {Component, HostListener} from '@angular/core';
 import {ModesConfiguration} from "../../models/modesConfiguration";
-import {GridInteractionService} from "../../services/grid-interaction.service";
+import {GridService} from "../../services/grid.service";
 
 
 @Component({
@@ -15,7 +15,7 @@ export class ZoomControlsComponent {
     private minZoom: number = 50;
     private maxZoom: number = 150;
 
-    constructor(private modesConfiguration: ModesConfiguration, private gridInteractionService: GridInteractionService) {
+    constructor(private modesConfiguration: ModesConfiguration, private gridInteractionService: GridService) {
     }
 
     zoomIn() {

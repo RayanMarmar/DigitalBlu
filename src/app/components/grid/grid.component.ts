@@ -1,6 +1,7 @@
 // grid.component.ts
 import {AfterViewInit, Component, ElementRef, HostListener, ViewChild} from '@angular/core';
-import {GridInteractionService} from "../../services/grid-interaction.service";
+import {GridService} from "../../services/grid.service";
+import {Event} from "@angular/router";
 import {ModesConfiguration} from "../../models/modesConfiguration";
 
 @Component({
@@ -13,13 +14,19 @@ export class GridComponent implements AfterViewInit {
     @ViewChild('gridCanvas', {static: true}) private gridCanvas!: ElementRef<HTMLCanvasElement>;
     private context: CanvasRenderingContext2D | null = null;
     private canvasRect: DOMRect | null = null;
+    private readonly _squareSize: number = 30;
 
-    constructor(private gridInteractionService: GridInteractionService, private modeConfiguration: ModesConfiguration) {
+    constructor(private gridInteractionService: GridService, private modeConfiguration: ModesConfiguration) {
     }
+
+    get squareSize(): number {
+        return this._squareSize;
+    }
+
 
     ngAfterViewInit() {
         // Replace direct access to the DOM with Renderer2
-        this.gridInteractionService.setGridComponent(this);
+        this.gridInteractionService.gridComponent = this;
         this.context = this.gridCanvas.nativeElement.getContext('2d');
         this.setGridSize();
         this.canvasRect = this.gridCanvas.nativeElement.getBoundingClientRect();
@@ -38,7 +45,7 @@ export class GridComponent implements AfterViewInit {
     drawGrid() {
         if (this.context) {
             this.canvasRect = this.gridCanvas.nativeElement.getBoundingClientRect();
-            const gridSize = 30 * this.modeConfiguration.zoomLevel / 100; // Adjust grid size based on zoom level
+            const gridSize = this._squareSize * this.modeConfiguration.zoomLevel / 100; // Adjust grid size based on zoom level
             this.context.strokeStyle = 'black';
 
             if (this.canvasRect != null) {
@@ -71,10 +78,6 @@ export class GridComponent implements AfterViewInit {
         this.canvasRect = this.gridCanvas.nativeElement.getBoundingClientRect();
         this.clear();
         this.drawGrid();
-    }
-
-    ngOnDestroy() {
-        window.removeEventListener('resize', this.onResize);
     }
 
     clear(): void {
