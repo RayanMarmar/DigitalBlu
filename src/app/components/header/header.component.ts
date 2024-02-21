@@ -71,6 +71,10 @@ export class HeaderComponent {
         this.modesConfiguration.changeGridMode();
     }
 
+    switchDarkMode() {
+        this.modesConfiguration.changeDarkMode();
+    }
+    
     onInput() {
         if (this.thickness < 1) {
             this.thickness = this.lastValidThickness;

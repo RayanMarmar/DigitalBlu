@@ -73,7 +73,8 @@
     <!-- Right Section -->
     <div class="right-section">
 
-        <button><i class="iconoir iconoir-brightness"></i>
+        <button [class.active]="modesConfiguration.darkMode" (click)="switchDarkMode() ">
+            <i class="iconoir iconoir-brightness"></i>
             <span class="button-label">Dark / Light</span>
         </button>
 
