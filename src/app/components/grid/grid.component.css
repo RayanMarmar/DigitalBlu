@@ -2,8 +2,8 @@
     box-sizing: border-box;
     margin: 0;
     border-radius: 20px;
-    border: 2px solid darkgrey;
-    background-color: white;
+    border: 2px solid var(--borders-color);
+    background-color: var(--transparent);
     width: 96vw;
     height: 84vh;
     position: absolute;

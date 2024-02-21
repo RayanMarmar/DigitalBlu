@@ -39,7 +39,7 @@ export class GridComponent implements AfterViewInit {
         if (this.context) {
             this.canvasRect = this.gridCanvas.nativeElement.getBoundingClientRect();
             const gridSize = 30 * this.modeConfiguration.zoomLevel / 100; // Adjust grid size based on zoom level
-            this.context.strokeStyle = 'black';
+            this.context.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--grid-color');
 
             if (this.canvasRect != null) {
                 this.context.beginPath();

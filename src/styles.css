@@ -1,7 +1,34 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+    --main-bg-color: #f2f3f8;
+    --icon-color: #000000;
+    --labels-color: #3d3d3d;
+    --borders-color: darkgrey;
+    --button-hover-color: rgba(169, 169, 169, 0.4);
+    --font-color: #000000;
+    --logo-filter: none;
+    --transparent: transparent;
+    --grid-color: rgba(152, 152, 152, 0.55);
+    --wall-color: black;
+}
+
+.dark-mode {
+    --main-bg-color: #f2f3f8;
+    --icon-color: #000000;
+    --labels-color: #3d3d3d;
+    --borders-color: darkgrey;
+    --button-hover-color: rgba(169, 169, 169, 0.4);
+    --font-color: #000000;
+    --logo-filter: invert(01) hue-rotate(179deg) hue-rotate(8deg) saturate(2.5);
+    --transparent: transparent;
+    --grid-color: rgba(208, 208, 208, 0.55);
+
+}
 
 
 html {
-    background-color: #f2f3f8;
+    background-color: var(--main-bg-color);
 }
+
+
 

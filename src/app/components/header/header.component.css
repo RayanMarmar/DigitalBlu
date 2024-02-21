@@ -3,12 +3,11 @@
 
 .pill-header {
     box-sizing: border-box;
-    color: #fff;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-radius: 20px;
-    border: 2px solid darkgrey;
+    border: 2px solid var(--borders-color);
     height: 100%;
     padding: 15px;
     width: 100%;
@@ -27,56 +26,33 @@
     flex-direction: row;
 }
 
-#options-dropdown {
-    margin-top: 10px;
-    border: 2px solid darkgrey;
-    padding: 10px;
-    display: none;
-    position: absolute;
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 2;
-}
-
-#options-dropdown a {
-    color: black;
-    padding: 10px;
-    text-decoration: none;
-    display: block;
-}
-
-#options-dropdown a:hover {
-    background-color: rgba(169, 169, 169, 0.5);
-    border-radius: 20px;
-}
-
 button {
     z-index: 1;
-    width: 40px;
-    height: 40px;
-    background-color: transparent;
+    width: 35px;
+    height: 35px;
+    background-color: var(--transparent);
     border-radius: 30px;
     padding: 0;
-    border: 0 solid darkgrey;
+    border: 0 solid var(--borders-color);
     transition: background-color 0.3s ease; /* Add a smooth transition effect */
 
 
 }
 
 button:hover {
-    background-color: rgba(169, 169, 169, 0.3);
-    border: 0 solid darkgrey;
+    background-color: var(--button-hover-color);
+    border: 0 solid var(--borders-color);
 
 }
 
 .active {
-    background-color: rgba(169, 169, 169, 0.3);
-    border: 0 solid darkgrey;
+    background-color: var(--button-hover-color);
+    border: 0 solid var(--borders-color);
 }
 
 .iconoir {
     font-size: 35px;
+    color: var(--icon-color);
 }
 
 .display-none {
@@ -88,13 +64,13 @@ button:hover {
     align-items: center;
     border-radius: 20px;
     padding: 5px 10px;
-    color: #000000;
+    color: var(--font-color);
 }
 
 .wall-thickness-container input {
-    background-color: transparent;
+    background-color: var(--transparent);
     border-radius: 30px;
-    border: 2px black solid;
+    border: 2px solid var(--borders-color);
     padding: inherit;
     font-family: 'Poppins', sans-serif;
     width: 50px;
@@ -111,7 +87,7 @@ button:hover {
     transition: opacity 0.3s ease; /* Add a smooth transition effect */
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
-    color: #3d3d3d;
+    color: var(--labels-color);
     font-size: smaller;
 }
 
@@ -122,13 +98,14 @@ button:hover .button-label {
 }
 
 .logo-img {
+    filter: var(--logo-filter);
     margin-left: 10px;
     height: 47px;
     width: auto;
 }
 
 .vertical-line {
-    width: 2px; /* Adjust the width of the line as needed */
-    height: 40px; /* Adjust the height of the line as needed */
-    background-color: rgba(169, 169, 169, 0.3);; /* Adjust the color of the line as needed */
+    width: 2px;
+    height: 40px;
+    background-color: var(--button-hover-color);
 }
