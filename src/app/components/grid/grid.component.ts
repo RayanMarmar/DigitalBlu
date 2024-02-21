@@ -26,7 +26,7 @@ export class GridComponent implements AfterViewInit {
 
     ngAfterViewInit() {
         // Replace direct access to the DOM with Renderer2
-        this.gridInteractionService.setGridComponent(this);
+        this.gridInteractionService.gridComponent = this;
         this.context = this.gridCanvas.nativeElement.getContext('2d');
         this.setGridSize();
         this.canvasRect = this.gridCanvas.nativeElement.getBoundingClientRect();
@@ -71,6 +71,10 @@ export class GridComponent implements AfterViewInit {
                 this.context.stroke();
             }
         }
+    }
+
+    getSnapPoint(): void {
+
     }
 
     updateCanvas(): void {

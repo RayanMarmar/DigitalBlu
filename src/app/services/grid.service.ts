@@ -9,34 +9,26 @@ import {Point} from "../models/point";
 })
 export class GridService {
 
-    private gridComponent: GridComponent | null = null;
+    #gridComponent: GridComponent | null = null;
 
     constructor(
         private mouse: Mouse,
         private modesConfiguration: ModesConfiguration
     ) {
-        this.mouse = mouse;
-        this.modesConfiguration = modesConfiguration;
     }
 
-    setGridComponent(gridComponent: GridComponent): void {
-        this.gridComponent = gridComponent;
+    set gridComponent(gridComponent: GridComponent) {
+        this.#gridComponent = gridComponent;
     }
 
-    getGridComponent(): GridComponent | null {
-        return this.gridComponent;
-    }
-
-    setGridVisible(): void {
-        if (this.gridComponent instanceof GridComponent) {
-            this.gridComponent.hideShowGrid();
-        }
+    get gridComponent(): GridComponent | null {
+        return this.#gridComponent;
     }
 
     //Method Used to get nearest intersection for snapping point to grid
     calculateNearestGridIntersection(point: Point): Point {
         if (this.gridComponent != null) {
-            const gridSize = this.gridComponent.squareSize * this.gridComponent.zoomLevel; // Adjust grid size based on zoom level
+            const gridSize = this.gridComponent.squareSize * this.modesConfiguration.zoomLevel / 100; // Adjust grid size based on zoom level
 
             // Calculate the nearest intersection coordinates
             let x = Math.round(point.x / gridSize) * gridSize;
@@ -48,4 +40,7 @@ export class GridService {
         return point;
     }
 
+    updateCanvas() {
+        this.gridComponent?.updateCanvas()
+    }
 }
