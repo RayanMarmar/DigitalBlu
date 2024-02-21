@@ -39,10 +39,11 @@ export class GridService {
             const gridSize = this.gridComponent.squareSize * this.gridComponent.zoomLevel; // Adjust grid size based on zoom level
 
             // Calculate the nearest intersection coordinates
-            point.x = Math.round(point.x / gridSize) * gridSize;
-            point.y = Math.round(point.y / gridSize) * gridSize;
+            let x = Math.round(point.x / gridSize) * gridSize;
+            let y = Math.round(point.y / gridSize) * gridSize;
 
-            return point;
+
+            return new Point(x, y);
         }
         return point;
     }

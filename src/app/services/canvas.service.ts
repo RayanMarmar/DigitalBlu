@@ -141,10 +141,14 @@ export class CanvasService {
     onMouseDownLineMode(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
-        // let snapped: Point = this.archiveService.snapPoint(point, this.modesConfiguration.snapMode);
+        console.log("Point is : ", point.toString())
+        //let snapped: Point = this.archiveService.snapPoint(point, this.modesConfiguration.snapMode);
         let snapped: Point = this.gridService.calculateNearestGridIntersection(point)
+        // console.log("Point is : ", point.toString())
+        // console.log("snapped is : ", snapped.toString())
         if (this.modesConfiguration.drawing)
             this.archiveService.addLine(new Line(this.mouse.clickedCoordinates!!, snapped))
+        console.log(snapped.equals(point))
         if (snapped.equals(point)) {
             this.mouse.mouseDown(event);
             this.archiveService.pushPoint(point);
@@ -154,6 +158,7 @@ export class CanvasService {
             this.mouse.notFirstMouseMoveEvent = false;
         }
         this.modesConfiguration.drawing = true;
+        console.log("Mouse coo is : ", this.mouse.clickedCoordinates?.toString())
     }
 
 

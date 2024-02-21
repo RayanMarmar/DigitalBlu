@@ -52,8 +52,8 @@ export class CanvasComponent implements AfterViewInit {
 
         // Update the displayed coordinates
         this.mouseCoordinates = `X: ${mouseX.toFixed(2)}, Y: ${mouseY.toFixed(2)}`;
-        console.log("ahahahah");
-        console.log("HERE :  " + this.mouseCoordinates);
+        /*        console.log("ahahahah");
+                console.log("HERE :  " + this.mouseCoordinates);*/
         this.canvasService.onMouseMove(event)
     }
 
