@@ -31,7 +31,7 @@ export class ZoomControlsComponent {
             this.modesConfiguration.zoomLevel = this.zoomLevel;
             this.transformationService.scale(this.zoomLevel)
             this.gridInteractionService.updateCanvas();
-            this.canvasService.drawAll(true)
+            this.canvasService.drawAll()
         }
     }
 
@@ -41,7 +41,7 @@ export class ZoomControlsComponent {
             this.modesConfiguration.zoomLevel = this.zoomLevel;
             this.transformationService.scale(this.zoomLevel)
             this.gridInteractionService.updateCanvas();
-            this.canvasService.drawAll(true)
+            this.canvasService.drawAll()
         }
     }
 

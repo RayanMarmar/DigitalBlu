@@ -49,8 +49,8 @@ export class Point {
     }
 
     // Method to scale a vec2
-    scale(scale: number): Point {
-        return new Point(this.x * scale, this.y * scale);
+    transform(transformationMatrix: number[][]): Point {
+        return new Point(this.x * transformationMatrix[0][0], this.y * transformationMatrix[0][0]);
     }
 
     draw(context: CanvasRenderingContext2D): void {

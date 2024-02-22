@@ -40,4 +40,11 @@ export class TransformationService {
         return this._transformationMatrix;
     }
 
+    get reverseTransformationMatrix(): number[][] {
+        return [
+            [1 / this.transformationMatrix[0][0], 1 / this.transformationMatrix[0][1],],
+            [1 / this.transformationMatrix[1][0], 1 / this.transformationMatrix[1][1],],
+        ];
+    }
+
 }

@@ -35,11 +35,10 @@ export class CanvasService {
         this.canvasRect = canvas.nativeElement.getBoundingClientRect();
     }
 
-    private drawAllLines(scaleMode = false): void {
+    private drawAllLines(): void {
         this.archiveService.linesList.forEach((line: Line): void => {
             line.draw(this.context!!,
-                this.transformationService.transformationMatrix,
-                scaleMode);
+                this.transformationService.transformationMatrix);
         });
     }
 
@@ -65,13 +64,13 @@ export class CanvasService {
         });
     }
 
-    drawAll(scaleMode = false): void {
+    drawAll(): void {
         if (this.context == null) {
             console.log("Context is null...")
             return;
         }
         this.clear();
-        this.drawAllLines(scaleMode);
+        this.drawAllLines();
         this.drawAllWalls();
         this.drawAllDoors();
         this.drawAllWindows();
@@ -158,7 +157,9 @@ export class CanvasService {
         let point: Point = this.mouse.currentCoordinates!!;
         let snapped: Point = this.snapPoint(point);
         if (this.modesConfiguration.drawing)
-            this.archiveService.addWall(new Wall(this.mouse.clickedCoordinates!!, snapped, this.modesConfiguration.defaultThickness));
+            this.archiveService.addWall(
+                new Wall(this.mouse.clickedCoordinates!!, snapped, this.modesConfiguration.defaultThickness)
+            );
         if (snapped.equals(point)) {
             this.mouse.mouseDown(event);
         } else {
@@ -175,7 +176,9 @@ export class CanvasService {
         let point: Point = this.mouse.currentCoordinates!!;
         let snapped: Point = this.snapPoint(point);
         if (this.modesConfiguration.drawing)
-            this.archiveService.addLine(new Line(this.mouse.clickedCoordinates!!, snapped))
+            this.archiveService.addLine(
+                new Line(this.mouse.clickedCoordinates!!, snapped, this.transformationService.reverseTransformationMatrix)
+            )
         if (snapped.equals(point)) {
             this.mouse.mouseDown(event);
         } else {
@@ -203,7 +206,13 @@ export class CanvasService {
             this.archiveService.popLine();
         else
             this.mouse.notFirstMouseMoveEvent = true;
-        this.archiveService.pushLine(new Line(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!));
+        this.archiveService.pushLine(
+            new Line(
+                this.mouse.clickedCoordinates!!,
+                this.mouse.currentCoordinates!!,
+                this.transformationService.reverseTransformationMatrix
+            )
+        );
         this.drawAll();
     }
 
@@ -215,7 +224,9 @@ export class CanvasService {
             this.archiveService.popWall();
         else
             this.mouse.notFirstMouseMoveEvent = true;
-        this.archiveService.pushWall(new Wall(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!, this.modesConfiguration.defaultThickness));
+        this.archiveService.pushWall(new Wall(
+            this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!, this.modesConfiguration.defaultThickness)
+        );
         this.drawAll();
     }
 
