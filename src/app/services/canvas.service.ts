@@ -48,7 +48,7 @@ export class CanvasService {
 
     private drawAllWalls(): void {
         this.archiveService.wallsList.forEach((wall: Wall): void => {
-            wall.draw(this.context!!);
+            wall.draw(this.context!!, this.transformationService.transformationMatrix);
         });
     }
 
@@ -158,7 +158,12 @@ export class CanvasService {
         let snapped: Point = this.snapPoint(point);
         if (this.modesConfiguration.drawing)
             this.archiveService.addWall(
-                new Wall(this.mouse.clickedCoordinates!!, snapped, this.modesConfiguration.defaultThickness)
+                new Wall(
+                    this.mouse.clickedCoordinates!!,
+                    snapped,
+                    this.modesConfiguration.defaultThickness,
+                    this.transformationService.reverseTransformationMatrix
+                )
             );
         if (snapped.equals(point)) {
             this.mouse.mouseDown(event);
@@ -225,7 +230,11 @@ export class CanvasService {
         else
             this.mouse.notFirstMouseMoveEvent = true;
         this.archiveService.pushWall(new Wall(
-            this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!, this.modesConfiguration.defaultThickness)
+                this.mouse.clickedCoordinates!!,
+                this.mouse.currentCoordinates!!,
+                this.modesConfiguration.defaultThickness,
+                this.transformationService.reverseTransformationMatrix
+            )
         );
         this.drawAll();
     }
