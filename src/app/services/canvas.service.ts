@@ -109,6 +109,8 @@ export class CanvasService {
             this.onMouseDownDoorMode(event);
         else if (this.modesConfiguration.windowMode)
             this.onMouseWindowMode(event);
+        else if (this.modesConfiguration.cursorMode)
+            this.onMouseDownCursorMode(event);
         else
             this.onMouseDownLineMode(event);
     }
@@ -129,6 +131,17 @@ export class CanvasService {
                 console.log("Insufficient distance for door.");
             }
         }
+    }
+
+    onMouseDownCursorMode(event: MouseEvent): void {
+        this.mouse.setCurrentCoordinatesFromEvent(event);
+        let point: Point = this.mouse.currentCoordinates!!;
+        if (!this.archiveService.inRangeOfAnExistingWall(point)) {
+            this.archiveService.deleteSelectedWall(this.archiveService.getClickedWall(point))
+            this.drawAll()
+
+        }
+
     }
 
     onMouseWindowMode(event: MouseEvent): void {

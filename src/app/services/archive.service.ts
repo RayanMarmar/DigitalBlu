@@ -330,7 +330,7 @@ export class ArchiveService {
         return -1; // Return -1 if no matching point is found
     }
 
-    private inRangeOfAnExistingWall(point: Point): number {
+    inRangeOfAnExistingWall(point: Point): number {
         for (let i: number = 0; i < this._wallsList.length; i++) {
             const w: Wall = this._wallsList[i];
             if (w.containsPoint(point)) {
@@ -350,5 +350,22 @@ export class ArchiveService {
 
     deleteWall(): void {
         this.popWall();
+    }
+
+    getClickedWall(point: Point): Wall | null {
+        console.log("in get clicked wall")
+        for (let i: number = 0; i < this._wallsList.length; i++) {
+            const w: Wall = this._wallsList[i];
+            if (w.containsPoint(point)) {
+                return w;
+            }
+        }
+        return null;
+    }
+
+
+    deleteSelectedWall(wall: Wall | null): void {
+        console.log("in get delete wall")
+        this._wallsList = this._wallsList.filter(item => item !== wall);
     }
 }
