@@ -1,6 +1,7 @@
 import {Component, HostListener} from '@angular/core';
 import {ModesConfiguration} from "../../models/modesConfiguration";
 import {GridService} from "../../services/grid.service";
+import {CanvasService} from "../../services/canvas.service";
 
 
 @Component({
@@ -15,7 +16,9 @@ export class ZoomControlsComponent {
     private minZoom: number = 50;
     private maxZoom: number = 150;
 
-    constructor(private modesConfiguration: ModesConfiguration, private gridInteractionService: GridService) {
+    constructor(private modesConfiguration: ModesConfiguration,
+                private gridInteractionService: GridService,
+                private canvasService: CanvasService) {
     }
 
     zoomIn() {
@@ -23,6 +26,7 @@ export class ZoomControlsComponent {
             this.zoomLevel += 10;
             this.modesConfiguration.zoomLevel = this.zoomLevel;
             this.gridInteractionService.updateCanvas();
+            this.canvasService.drawAll(true)
         }
     }
 
@@ -31,6 +35,7 @@ export class ZoomControlsComponent {
             this.zoomLevel -= 10;
             this.modesConfiguration.zoomLevel = this.zoomLevel;
             this.gridInteractionService.updateCanvas();
+            this.canvasService.drawAll(true)
         }
     }
 

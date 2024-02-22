@@ -33,9 +33,9 @@ export class CanvasService {
         this.canvasRect = canvas.nativeElement.getBoundingClientRect();
     }
 
-    private drawAllLines(): void {
+    private drawAllLines(scaleMode = false): void {
         this.archiveService.linesList.forEach((line: Line): void => {
-            line.draw(this.context!!);
+            line.draw(this.context!!, this.modesConfiguration.zoomLevel / 100, scaleMode);
         });
     }
 
@@ -61,13 +61,13 @@ export class CanvasService {
         });
     }
 
-    drawAll(): void {
+    drawAll(scaleMode = false): void {
         if (this.context == null) {
             console.log("Context is null...")
             return;
         }
         this.clear();
-        this.drawAllLines();
+        this.drawAllLines(scaleMode);
         this.drawAllWalls();
         this.drawAllDoors();
         this.drawAllWindows();

@@ -48,6 +48,11 @@ export class Point {
         return this._y - this.range <= y && this._y + this.range >= y;
     }
 
+    // Method to scale a vec2
+    scale(scale: number): Point {
+        return new Point(this.x * scale, this.y * scale);
+    }
+
     draw(context: CanvasRenderingContext2D): void {
         context.fillRect(this._x, this._y, 1, 1);
     }
