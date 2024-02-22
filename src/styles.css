@@ -13,11 +13,11 @@
 }
 
 .dark-mode {
-    --main-bg-color: #0a1342;
+    --main-bg-color: #1c1c1c;
     --icon-color: #ffffff;
     --labels-color: #e0e0e0;
-    --borders-color: darkgrey;
-    --button-hover-color: rgba(255, 255, 255, 0.2);
+    --borders-color: #808080;
+    --button-hover-color: rgba(128, 128, 128, 0.42);
     --font-color: #ffffff;
     --logo-filter: invert(01) hue-rotate(179deg) hue-rotate(8deg) saturate(2.5);
     --transparent: transparent;
