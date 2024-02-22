@@ -15,6 +15,10 @@
     font-family: 'Poppins', sans-serif;
 }
 
+.zoom-indicator {
+    color: var(--font-color);
+}
+
 .iconoir {
     font-size: 35px;
     color: var(--icon-color);
