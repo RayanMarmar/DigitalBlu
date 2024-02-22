@@ -163,8 +163,7 @@ export class Line {
     draw(context: CanvasRenderingContext2D,
          transformationMatrix: number[][] = [[1, 0], [0, 1]]
     ): void {
-        let line: Line = this;
-        line = this.transformLine(transformationMatrix)
+        let line = this.transformLine(transformationMatrix)
         context.beginPath();
         context.moveTo(line.firstPoint.x, line.firstPoint.y);
         context.lineTo(line.secondPoint.x, line.secondPoint.y);
