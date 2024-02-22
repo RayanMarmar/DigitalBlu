@@ -187,7 +187,7 @@ export class Wall {
         return ((end.x - start.x) * (y - start.y)) - ((x - start.x) * (end.y - start.y));
     }
 
-    draw(context: CanvasRenderingContext2D) {
+    draw(context: CanvasRenderingContext2D, color: string) {
         // Draw a filled rectangle with the correct coordinates
         context.beginPath();
         context.moveTo(this._firstPoint.x, this._firstPoint.y);
@@ -195,6 +195,8 @@ export class Wall {
         context.lineTo(this._thirdPoint.x, this._thirdPoint.y);
         context.lineTo(this._fourthPoint.x, this._fourthPoint.y);
         context.closePath();
+        context.fillStyle = color;
+        context.strokeStyle = color;
         context.fill();
         context.stroke(); // If you want to keep the border, you can include this line
     }

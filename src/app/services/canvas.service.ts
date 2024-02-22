@@ -45,7 +45,7 @@ export class CanvasService {
 
     private drawAllWalls(): void {
         this.archiveService.wallsList.forEach((wall: Wall): void => {
-            wall.draw(this.context!!);
+            wall.draw(this.context!!, this.themeService.getWallColor());
         });
     }
 
