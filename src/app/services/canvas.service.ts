@@ -35,7 +35,7 @@ export class CanvasService {
 
     private drawAllLines(): void {
         this.archiveService.linesList.forEach((line: Line): void => {
-            line.draw(this.context!!);
+            line.draw(this.context!!, this.themeService.getWallColor());
         });
     }
 

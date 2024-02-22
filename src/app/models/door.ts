@@ -120,7 +120,7 @@ export class Door extends wallOpening {
                     this._direction < 0,
                     wallColor
                 );
-                new Line(this._parallelLine.firstPoint, this.base[0].firstPoint).draw(context);
+                new Line(this._parallelLine.firstPoint, this.base[0].firstPoint).draw(context, wallColor);
                 break;
 
             case DoorType.OPEN_RIGHT:
@@ -133,7 +133,7 @@ export class Door extends wallOpening {
                     this._direction < 0,
                     wallColor
                 );
-                new Line(this._parallelLine.secondPoint, this.base[0].secondPoint).draw(context);
+                new Line(this._parallelLine.secondPoint, this.base[0].secondPoint).draw(context, wallColor);
                 break;
 
             case DoorType.OPEN_TWO_WAY:
@@ -157,8 +157,8 @@ export class Door extends wallOpening {
                     wallColor
                 );
 
-                new Line(this._parallelLine.firstPoint, this.base[0].firstPoint).draw(context);
-                new Line(this._parallelLine.secondPoint, this.base[0].secondPoint).draw(context);
+                new Line(this._parallelLine.firstPoint, this.base[0].firstPoint).draw(context, wallColor);
+                new Line(this._parallelLine.secondPoint, this.base[0].secondPoint).draw(context, wallColor);
                 break;
 
             default:

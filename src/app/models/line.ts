@@ -160,10 +160,12 @@ export class Line {
         return this.firstPoint.y == this.secondPoint.y;
     }
 
-    draw(context: CanvasRenderingContext2D): void {
+    draw(context: CanvasRenderingContext2D, wallColor: string): void {
         context.beginPath();
         context.moveTo(this._firstPoint.x, this._firstPoint.y);
         context.lineTo(this._secondPoint.x, this._secondPoint.y);
         context.stroke();
+        context.fillStyle = wallColor;
+        context.strokeStyle = wallColor;
     }
 }
