@@ -160,10 +160,12 @@ export class Line {
         return this.firstPoint.y == this.secondPoint.y;
     }
 
-    draw(context: CanvasRenderingContext2D, scale = 1, shouldScale = false): void {
+    draw(context: CanvasRenderingContext2D,
+         transformationMatrix: number[][] = [[1, 0], [0, 1]],
+         shouldScale = false): void {
         let line: Line = this;
         if (shouldScale) {
-            line = this.scaleLine(scale)
+            line = this.transformLine(transformationMatrix)
         }
         context.beginPath();
         context.moveTo(line.firstPoint.x, line.firstPoint.y);
@@ -171,7 +173,7 @@ export class Line {
         context.stroke();
     }
 
-    scaleLine(scale: number): Line {
-        return new Line(this._firstPoint.scale(scale), this._secondPoint.scale(scale));
+    transformLine(transformationMatrix: number[][]): Line {
+        return new Line(this._firstPoint.scale(transformationMatrix[0][0]), this._secondPoint.scale(transformationMatrix[0][0]));
     }
 }

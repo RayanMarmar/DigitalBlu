@@ -8,6 +8,7 @@ import {ModesConfiguration} from "../models/modesConfiguration";
 import {Wall} from "../models/wall";
 import {Door} from "../models/door";
 import {Window} from "../models/window";
+import {TransformationService} from "./transformation.service";
 
 @Injectable({
     providedIn: 'root'
@@ -21,7 +22,8 @@ export class CanvasService {
         private archiveService: ArchiveService,
         private gridService: GridService,
         private mouse: Mouse,
-        private modesConfiguration: ModesConfiguration
+        private readonly modesConfiguration: ModesConfiguration,
+        private transformationService: TransformationService
     ) {
         this.mouse = mouse;
         this.modesConfiguration = modesConfiguration;
@@ -35,7 +37,9 @@ export class CanvasService {
 
     private drawAllLines(scaleMode = false): void {
         this.archiveService.linesList.forEach((line: Line): void => {
-            line.draw(this.context!!, this.modesConfiguration.zoomLevel / 100, scaleMode);
+            line.draw(this.context!!,
+                this.transformationService.transformationMatrix,
+                scaleMode);
         });
     }
 

@@ -4,19 +4,40 @@ import {Injectable} from '@angular/core';
     providedIn: 'root'
 })
 export class TransformationService {
+    private initialMatrix: number[][];
+    private scaleValue: number;
+    private translationMatrix: number[][];
+    private _transformationMatrix: number[][];
 
     constructor() {
+        this.initialMatrix = [
+            [1, 0],
+            [0, 1]
+        ];
+        this._transformationMatrix = [
+            [1, 0],
+            [0, 1]
+        ];
+        this.translationMatrix = [
+            [1, 1],
+            [1, 1]
+        ];
+        this.scaleValue = 1;
     }
 
-    getScalingMatrix(percentageScale: number): number[][] {
-        // Convert percentage scale to decimal scale
-        const scale = percentageScale / 100;
+    scale(percentageScale: number) {
+        this.scaleValue = percentageScale / 100;
+        this.recomputeTransformationMatrix();
+    }
 
-        // Formulate the scaling matrix
-        return [
-            [scale, 0],
-            [0, scale]
-        ];
+    recomputeTransformationMatrix() {
+        this._transformationMatrix[0][0] = this.initialMatrix[0][0] * this.scaleValue;
+        this._transformationMatrix[1][1] = this.initialMatrix[1][1] * this.scaleValue;
+    }
+
+    get transformationMatrix(): number[][] {
+        console.log(this._transformationMatrix[0][0])
+        return this._transformationMatrix;
     }
 
 }
