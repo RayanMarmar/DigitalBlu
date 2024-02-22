@@ -49,6 +49,6 @@ export class Point {
     }
 
     draw(context: CanvasRenderingContext2D): void {
-        context.fillRect(this._x, this._y, 1, 1);
+        context.fillRect(this._x, this._y, 2, 2);
     }
 }
