@@ -157,12 +157,12 @@ export class CanvasService {
             this.archiveService.addWall(new Wall(this.mouse.clickedCoordinates!!, snapped, this.modesConfiguration.defaultThickness));
         if (snapped.equals(point)) {
             this.mouse.mouseDown(event);
-            this.archiveService.pushPoint(point);
         } else {
             this.mouse.moving = false;
             this.mouse.clickedCoordinates = snapped;
             this.mouse.notFirstMouseMoveEvent = false;
         }
+        this.archiveService.pushPoint(snapped);
         this.modesConfiguration.drawing = true;
     }
 
@@ -174,12 +174,12 @@ export class CanvasService {
             this.archiveService.addLine(new Line(this.mouse.clickedCoordinates!!, snapped))
         if (snapped.equals(point)) {
             this.mouse.mouseDown(event);
-            this.archiveService.pushPoint(point);
         } else {
             this.mouse.moving = false;
             this.mouse.clickedCoordinates = snapped;
             this.mouse.notFirstMouseMoveEvent = false;
         }
+        this.archiveService.pushPoint(snapped);
         this.modesConfiguration.drawing = true;
     }
 
