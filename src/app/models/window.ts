@@ -1,14 +1,14 @@
 import {Point} from "./point";
 import {Wall} from "./wall";
-import {wallOpening} from "./wallOpening";
+import {WallOpening} from "./wallOpening";
 
-export class Window extends wallOpening {
-    constructor(wall: Wall, point: Point) {
-        super(wall, point);
+export class Window extends WallOpening {
+    constructor(wall: Wall, point: Point, height: number = 50) {
+        super(wall, point, height);
     }
 
     override toString(): string {
-        return "window : {firstLine : " + this.base[0].toString() + " secondLine : " + this.base[1].toString() + "}";
+        return "window : {firstLine : " + this._base[0].toString() + " secondLine : " + this._base[1].toString() + "}";
     }
 
     draw(context: CanvasRenderingContext2D): void {

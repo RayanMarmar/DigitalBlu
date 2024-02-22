@@ -54,7 +54,7 @@ export class CanvasService {
 
     private drawAllDoors(): void {
         this.archiveService.doorsList.forEach((door: Door): void => {
-            door.draw(this.context!!);
+            door.draw(this.context!!, this.transformationService.transformationMatrix);
         });
     }
 
