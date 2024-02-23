@@ -10,6 +10,7 @@
     --transparent: transparent;
     --grid-color: rgba(152, 152, 152, 0.55);
     --wall-color: black;
+    --cursor-filter: none;
 }
 
 .dark-mode {
@@ -23,6 +24,7 @@
     --transparent: transparent;
     --grid-color: rgba(208, 208, 208, 0.55);
     --wall-color: #ffffff;
+    --cursor-filter: invert(100%);
 
 }
 
@@ -32,5 +34,20 @@ html {
     transition: all 0.5s ease-in-out;
 }
 
+.grab {
+    cursor: url("/assets/grab-cursor.svg"), auto;
+}
+
+.dark-mode .grab {
+    cursor: url("/assets/grab-cursor-white.svg"), auto;
+}
+
+.cursor {
+    cursor: url("/assets/cursor-cursor.svg"), auto;
+}
+
+.dark-mode .cursor {
+    cursor: url("/assets/cursor-cursor-white.svg"), auto;
+}
 
 
