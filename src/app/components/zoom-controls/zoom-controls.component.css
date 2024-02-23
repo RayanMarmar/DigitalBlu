@@ -13,15 +13,18 @@
     flex-direction: column;
     padding: 10px;
     font-family: 'Poppins', sans-serif;
+    transition: all 0.5s ease-in-out;
 }
 
 .zoom-indicator {
     color: var(--font-color);
+    transition: all 0.5s ease-in-out;
 }
 
 .iconoir {
     font-size: 35px;
     color: var(--icon-color);
+    transition: all 0.5s ease-in-out;
 }
 
 .default-button {

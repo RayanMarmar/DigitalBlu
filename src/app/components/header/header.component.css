@@ -11,6 +11,7 @@
     height: 100%;
     padding: 15px;
     width: 100%;
+    transition: all 0.5s ease-in-out;
 }
 
 .pill-header .left-section,
@@ -27,6 +28,9 @@
 }
 
 button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     z-index: 1;
     width: 35px;
     height: 35px;
@@ -35,7 +39,6 @@ button {
     padding: 0;
     border: 0 solid var(--borders-color);
     transition: background-color 0.3s ease; /* Add a smooth transition effect */
-
 
 }
 
@@ -53,6 +56,7 @@ button:hover {
 .iconoir {
     font-size: 35px;
     color: var(--icon-color);
+    transition: all 0.5s ease-in-out;
 }
 
 .display-none {
@@ -61,10 +65,18 @@ button:hover {
 
 .wall-thickness-container {
     display: flex;
+    justify-content: center;
     align-items: center;
-    border-radius: 20px;
+    border-radius: 65px;
     padding: 5px 10px;
     color: var(--font-color);
+    background-color: var(--button-hover-color);
+    margin: 0 5px;
+}
+
+.wall-thickness-container i {
+    font-size: 25px;
+    transition: all 0.5s ease-in-out;
 }
 
 .wall-thickness-container input {
@@ -75,6 +87,7 @@ button:hover {
     font-family: 'Poppins', sans-serif;
     width: 50px;
     color: var(--font-color);
+    transition: all 0.5s ease-in-out;
 }
 
 .wall-thickness-container i {
@@ -103,6 +116,7 @@ button:hover .button-label {
     margin-left: 10px;
     height: 47px;
     width: auto;
+    transition: all 0.5s ease-in-out;
 }
 
 .vertical-line {
