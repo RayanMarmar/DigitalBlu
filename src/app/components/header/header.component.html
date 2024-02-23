@@ -12,6 +12,21 @@
 
     <div class="vertical-line"></div>
 
+    <div class="middle-section">
+        <button [class.active]="modesConfiguration.grabMode" (click)="switchGrabMode()"><i
+                class="iconoir iconoir-drag-hand-gesture"></i>
+            <span class="button-label">Drag mode</span>
+        </button>
+
+        <button [class.active]="modesConfiguration.cursorMode" (click)="switchCursorMode()"><i
+                class="iconoir iconoir-cursor-pointer"></i>
+            <span class="button-label">Cursor mode</span>
+        </button>
+
+    </div>
+
+    <div class="vertical-line"></div>
+
 
     <div class="middle-section">
 

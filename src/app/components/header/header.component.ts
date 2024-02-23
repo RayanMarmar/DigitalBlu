@@ -95,6 +95,14 @@ export class HeaderComponent {
         return !this.archiveService.containsElements();
     }
 
+    switchCursorMode(): void {
+        this.modesConfiguration.changeCursorMode();
+    }
+
+    switchGrabMode(): void {
+        this.modesConfiguration.changeGrabMode();
+    }
+
     getThickness() {
         return this.modesConfiguration.defaultThickness;
     }
