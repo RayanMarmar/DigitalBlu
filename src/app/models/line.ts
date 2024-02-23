@@ -164,7 +164,6 @@ export class Line {
         context.beginPath();
         context.moveTo(this._firstPoint.x, this._firstPoint.y);
         context.lineTo(this._secondPoint.x, this._secondPoint.y);
-        context.fillStyle = color;
         context.strokeStyle = color;
         context.stroke();
     }
