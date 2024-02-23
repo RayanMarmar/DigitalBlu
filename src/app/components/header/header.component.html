@@ -1,10 +1,10 @@
 <div id="myHeader" class="pill-header">
     <!-- Left Section -->
     <div class="left-section">
-        <button (click)="undo()"><i class="iconoir iconoir-undo-circle"></i>
+        <button (click)="undo()" [class.disabled]="undoDisabled()"><i class="iconoir iconoir-undo-circle"></i>
             <span class="button-label">Undo</span>
         </button>
-        <button (click)="redo()"><i class="iconoir iconoir-redo-circle"></i>
+        <button (click)="redo()" [class.disabled]="redoDisabled()"><i class="iconoir iconoir-redo-circle"></i>
             <span class="button-label">Redo</span>
         </button>
         <img class="logo-img" src="assets/logo.png" alt="Digital Blu Logo"/>
