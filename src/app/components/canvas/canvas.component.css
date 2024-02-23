@@ -8,3 +8,11 @@
     margin: 0;
     z-index: 1;
 }
+
+.grab {
+    cursor: url("/assets/grab-cursor.svg"), auto;
+}
+
+.cursor {
+    cursor: url("/assets/cursor-cursor.svg"), auto;
+}
