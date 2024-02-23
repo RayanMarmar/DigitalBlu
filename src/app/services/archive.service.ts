@@ -366,6 +366,9 @@ export class ArchiveService {
 
     deleteSelectedWall(wall: Wall | null): void {
         console.log("in get delete wall")
+        if (wall instanceof Wall) {
+            this._archiveWallsList.push(wall)
+        }
         this._wallsList = this._wallsList.filter(item => item !== wall);
     }
 }

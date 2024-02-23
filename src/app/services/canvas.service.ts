@@ -136,8 +136,10 @@ export class CanvasService {
     onMouseDownCursorMode(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
-        if (!this.archiveService.inRangeOfAnExistingWall(point)) {
+        if (this.archiveService.inRangeOfAnExistingWall(point) != -1) {
+            console.log("wall detected")
             this.archiveService.deleteSelectedWall(this.archiveService.getClickedWall(point))
+            
             this.drawAll()
 
         }
