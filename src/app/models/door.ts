@@ -101,7 +101,8 @@ export class Door extends WallOpening {
         start: Point,
         end: Point,
         radius: number,
-        upwards: boolean
+        upwards: boolean,
+        color: string
     ): void {
         let startAngle: number = Math.atan2(start.y - center.y, start.x - center.x);
         let endAngle: number = Math.atan2(end.y - center.y, end.x - center.x);
@@ -111,11 +112,12 @@ export class Door extends WallOpening {
         else
             context.arc(center.x, center.y, radius, startAngle, endAngle);
         context.lineTo(center.x, center.y);
+        context.strokeStyle = color; // Add a stroke (border) to the quarter circle
         context.stroke(); // Add a stroke (border) to the quarter circle
         context.closePath();
     }
 
-    draw(context: CanvasRenderingContext2D, transformationMatrix: number[][]): void {
+    draw(context: CanvasRenderingContext2D, transformationMatrix: number[][], bgColor: string, wallColor: string): void {
         let door: Door = this.transform(transformationMatrix);
         // Draw quarter circle based on door type
         switch (door.doorType) {
@@ -126,9 +128,10 @@ export class Door extends WallOpening {
                     door.base[0].secondPoint,
                     door.parallelLine.firstPoint,
                     door.radius,
-                    door.direction < 0
+                    door.direction < 0,
+                    wallColor
                 );
-                new Line(door.parallelLine.firstPoint, door.base[0].firstPoint).draw(context);
+                new Line(door.parallelLine.firstPoint, door.base[0].firstPoint).draw(context, wallColor);
                 break;
 
             case DoorType.OPEN_RIGHT:
@@ -138,9 +141,10 @@ export class Door extends WallOpening {
                     door.parallelLine.secondPoint,
                     door.base[0].firstPoint,
                     door.radius,
-                    door.direction < 0
+                    door.direction < 0,
+                    wallColor
                 );
-                new Line(door.parallelLine.secondPoint, door.base[0].secondPoint).draw(context);
+                new Line(door.parallelLine.secondPoint, door.base[0].secondPoint).draw(context, wallColor);
                 break;
 
             case DoorType.OPEN_TWO_WAY:
@@ -151,7 +155,8 @@ export class Door extends WallOpening {
                     door.center,
                     door.parallelLine.firstPoint,
                     door.radius,
-                    door.direction < 0
+                    door.direction < 0,
+                    wallColor
                 );
                 this.drawQuarterCircle(
                     context,
@@ -159,11 +164,12 @@ export class Door extends WallOpening {
                     door.parallelLine.secondPoint,
                     door.center,
                     door.radius,
-                    door.direction < 0
+                    door.direction < 0,
+                    wallColor
                 );
 
-                new Line(door.parallelLine.firstPoint, door.base[0].firstPoint).draw(context);
-                new Line(door.parallelLine.secondPoint, door.base[0].secondPoint).draw(context);
+                new Line(door.parallelLine.firstPoint, door.base[0].firstPoint).draw(context, wallColor);
+                new Line(door.parallelLine.secondPoint, door.base[0].secondPoint).draw(context, wallColor);
                 break;
 
             default:
@@ -171,7 +177,7 @@ export class Door extends WallOpening {
                 console.error("Invalid door type");
                 return;
         }
-        door.drawOpening(context);
+        door.drawOpening(context, bgColor, wallColor);
     }
 
     transform(transformationMatrix: number[][]): Door {

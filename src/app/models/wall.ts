@@ -189,7 +189,7 @@ export class Wall {
         return ((end.x - start.x) * (y - start.y)) - ((x - start.x) * (end.y - start.y));
     }
 
-    draw(context: CanvasRenderingContext2D, transformationMatrix: number[][]) {
+    draw(context: CanvasRenderingContext2D, transformationMatrix: number[][], color: string) {
         let wall: Wall = this.transform(transformationMatrix);
         // Draw a filled rectangle with the correct coordinates
         context.beginPath();
@@ -198,6 +198,8 @@ export class Wall {
         context.lineTo(wall.thirdPoint.x, wall.thirdPoint.y);
         context.lineTo(wall.fourthPoint.x, wall.fourthPoint.y);
         context.closePath();
+        context.fillStyle = color;
+        context.strokeStyle = color;
         context.fill();
         context.stroke(); // If you want to keep the border, you can include this line
     }

@@ -13,6 +13,7 @@ export class ModesConfiguration {
     private _gridOn: boolean;
     private _defaultThickness: number;
     private _zoomLevel: number;
+    private _darkMode: boolean;
 
 
     constructor() {
@@ -25,6 +26,7 @@ export class ModesConfiguration {
         this._gridOn = true;
         this._defaultThickness = 20;
         this._zoomLevel = 100;
+        this._darkMode = false;
     }
 
     get lineMode(): boolean {
@@ -99,10 +101,22 @@ export class ModesConfiguration {
         this._zoomLevel = value;
     }
 
+    get darkMode(): boolean {
+        return this._darkMode;
+    }
+
+    set darkMode(value: boolean) {
+        this._darkMode = value;
+    }
+
     changeSnapMode(): void {
         this._snapMode = !this._snapMode;
     }
 
+    changeDarkMode(): void {
+        this._darkMode = !this._darkMode;
+    }
+    
     changeDefaultThickness(value: number) {
         this._defaultThickness = value;
         return this._defaultThickness;

@@ -9,6 +9,7 @@ import {Wall} from "../models/wall";
 import {Door} from "../models/door";
 import {Window} from "../models/window";
 import {TransformationService} from "./transformation.service";
+import {ThemeService} from "./theme.service";
 
 @Injectable({
     providedIn: 'root'
@@ -23,10 +24,9 @@ export class CanvasService {
         private gridService: GridService,
         private mouse: Mouse,
         private readonly modesConfiguration: ModesConfiguration,
-        private transformationService: TransformationService
+        private transformationService: TransformationService,
+        private themeService: ThemeService
     ) {
-        this.mouse = mouse;
-        this.modesConfiguration = modesConfiguration;
     }
 
     setCanvas(canvas: ElementRef<HTMLCanvasElement>): void {
@@ -38,7 +38,8 @@ export class CanvasService {
     private drawAllLines(): void {
         this.archiveService.linesList.forEach((line: Line): void => {
             line.draw(this.context!!,
-                this.transformationService.transformationMatrix);
+                this.transformationService.transformationMatrix,
+                this.themeService.getWallColor());
         });
     }
 
@@ -48,19 +49,27 @@ export class CanvasService {
 
     private drawAllWalls(): void {
         this.archiveService.wallsList.forEach((wall: Wall): void => {
-            wall.draw(this.context!!, this.transformationService.transformationMatrix);
+            wall.draw(this.context!!,
+                this.transformationService.transformationMatrix,
+                this.themeService.getWallColor());
         });
     }
 
     private drawAllDoors(): void {
         this.archiveService.doorsList.forEach((door: Door): void => {
-            door.draw(this.context!!, this.transformationService.transformationMatrix);
+            door.draw(this.context!!,
+                this.transformationService.transformationMatrix,
+                this.themeService.getBackgroundColor(),
+                this.themeService.getWallColor());
         });
     }
 
     private drawAllWindows(): void {
         this.archiveService.windowsList.forEach((window: Window): void => {
-            window.draw(this.context!!, this.transformationService.transformationMatrix);
+            window.draw(this.context!!,
+                this.transformationService.transformationMatrix,
+                this.themeService.getBackgroundColor(),
+                this.themeService.getWallColor());
         });
     }
 

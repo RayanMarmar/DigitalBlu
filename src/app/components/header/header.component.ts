@@ -3,6 +3,7 @@ import {CanvasService} from "../../services/canvas.service";
 import {ModesConfiguration} from "../../models/modesConfiguration";
 import {NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
+import {ThemeService} from "../../services/theme.service";
 
 @Component({
     selector: 'app-header',
@@ -21,6 +22,7 @@ export class HeaderComponent {
     constructor(
         private canvasService: CanvasService,
         public modesConfiguration: ModesConfiguration,
+        private themeService: ThemeService
     ) {
     }
 
@@ -67,6 +69,12 @@ export class HeaderComponent {
 
     switchGridMode() {
         this.modesConfiguration.changeGridMode();
+    }
+
+    switchDarkMode() {
+        this.modesConfiguration.changeDarkMode();
+        this.themeService.toggleDarkMode(this.modesConfiguration.darkMode)
+        this.canvasService.drawAll();
     }
 
     onInput() {
