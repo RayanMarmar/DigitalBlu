@@ -53,6 +53,10 @@ button:hover {
     border: 0 solid var(--borders-color);
 }
 
+.disabled i {
+    color: var(--borders-color);
+}
+
 .iconoir {
     font-size: 35px;
     color: var(--icon-color);

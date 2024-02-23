@@ -287,11 +287,11 @@ export class ArchiveService {
         }
     }
 
-    containsArchivedElements(): boolean {
+    containsArchivedElements(): boolean { //redo
         return this.archiveCommandsList.length > 0;
     }
 
-    containsElements(): boolean {
+    containsElements(): boolean { //undo
         return this.commandsList.length > 0;
     }
 
