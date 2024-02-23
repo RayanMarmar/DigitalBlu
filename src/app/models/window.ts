@@ -11,7 +11,7 @@ export class Window extends wallOpening {
         return "window : {firstLine : " + this.base[0].toString() + " secondLine : " + this.base[1].toString() + "}";
     }
 
-    draw(context: CanvasRenderingContext2D): void {
-        this.drawOpening(context);
+    draw(context: CanvasRenderingContext2D, bgColor: string, wallColor: string): void {
+        this.drawOpening(context, bgColor, wallColor);
     }
 }
