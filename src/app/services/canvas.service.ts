@@ -60,7 +60,7 @@ export class CanvasService {
 
     private drawAllWindows(): void {
         this.archiveService.windowsList.forEach((window: Window): void => {
-            window.draw(this.context!!);
+            window.draw(this.context!!, this.transformationService.transformationMatrix);
         });
     }
 
@@ -136,7 +136,7 @@ export class CanvasService {
 
     onMouseWindowMode(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
-        let point: Point = this.mouse.currentCoordinates!!;
+        let point: Point = this.mouse.currentCoordinates!!.transform(this.transformationService.reverseTransformationMatrix);
         let wall: Wall | null = this.archiveService.snapWallOpening(point);
         if (wall != null) {
             try {

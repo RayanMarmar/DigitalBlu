@@ -36,7 +36,6 @@ export class TransformationService {
     }
 
     get transformationMatrix(): number[][] {
-        console.log(this._transformationMatrix[0][0])
         return this._transformationMatrix;
     }
 
