@@ -192,6 +192,9 @@ export class ArchiveService {
                 case Command.ADD_WINDOW:
                     this.undoWindow();
                     break;
+                case Command.DELETE_WALL:
+                    this.redoWall();
+                    break;
                 default:
                     break;
             }
@@ -248,6 +251,9 @@ export class ArchiveService {
                     break;
                 case Command.ADD_WINDOW:
                     this.redoWindow();
+                    break;
+                case Command.DELETE_WALL:
+                    this.undoWall();
                     break;
                 default:
                     break;
@@ -353,7 +359,6 @@ export class ArchiveService {
     }
 
     getClickedWall(point: Point): Wall | null {
-        console.log("in get clicked wall")
         for (let i: number = 0; i < this._wallsList.length; i++) {
             const w: Wall = this._wallsList[i];
             if (w.containsPoint(point)) {
@@ -365,9 +370,9 @@ export class ArchiveService {
 
 
     deleteSelectedWall(wall: Wall | null): void {
-        console.log("in get delete wall")
         if (wall instanceof Wall) {
             this._archiveWallsList.push(wall)
+            this.commandsList.push(Command.DELETE_WALL);
         }
         this._wallsList = this._wallsList.filter(item => item !== wall);
     }
