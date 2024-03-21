@@ -8,6 +8,7 @@ import {ModesConfiguration} from "../models/modesConfiguration";
 import {Wall} from "../models/wall";
 import {Door} from "../models/door";
 import {Window} from "../models/window";
+import {ThemeService} from "./theme.service";
 
 @Injectable({
     providedIn: 'root'
@@ -21,10 +22,9 @@ export class CanvasService {
         private archiveService: ArchiveService,
         private gridService: GridService,
         private mouse: Mouse,
-        private modesConfiguration: ModesConfiguration
+        private modesConfiguration: ModesConfiguration,
+        private themeService: ThemeService
     ) {
-        this.mouse = mouse;
-        this.modesConfiguration = modesConfiguration;
     }
 
     setCanvas(canvas: ElementRef<HTMLCanvasElement>): void {
@@ -35,7 +35,7 @@ export class CanvasService {
 
     private drawAllLines(): void {
         this.archiveService.linesList.forEach((line: Line): void => {
-            line.draw(this.context!!);
+            line.draw(this.context!!, this.themeService.getWallColor());
         });
     }
 
@@ -45,19 +45,19 @@ export class CanvasService {
 
     private drawAllWalls(): void {
         this.archiveService.wallsList.forEach((wall: Wall): void => {
-            wall.draw(this.context!!);
+            wall.draw(this.context!!, this.themeService.getWallColor());
         });
     }
 
     private drawAllDoors(): void {
         this.archiveService.doorsList.forEach((door: Door): void => {
-            door.draw(this.context!!);
+            door.draw(this.context!!, this.themeService.getBackgroundColor(), this.themeService.getWallColor());
         });
     }
 
     private drawAllWindows(): void {
         this.archiveService.windowsList.forEach((window: Window): void => {
-            window.draw(this.context!!);
+            window.draw(this.context!!, this.themeService.getBackgroundColor(), this.themeService.getWallColor());
         });
     }
 
@@ -171,12 +171,12 @@ export class CanvasService {
             this.archiveService.addWall(new Wall(this.mouse.clickedCoordinates!!, snapped, this.modesConfiguration.defaultThickness));
         if (snapped.equals(point)) {
             this.mouse.mouseDown(event);
-            this.archiveService.pushPoint(point);
         } else {
             this.mouse.moving = false;
             this.mouse.clickedCoordinates = snapped;
             this.mouse.notFirstMouseMoveEvent = false;
         }
+        this.archiveService.pushPoint(snapped);
         this.modesConfiguration.drawing = true;
     }
 
@@ -188,12 +188,12 @@ export class CanvasService {
             this.archiveService.addLine(new Line(this.mouse.clickedCoordinates!!, snapped))
         if (snapped.equals(point)) {
             this.mouse.mouseDown(event);
-            this.archiveService.pushPoint(point);
         } else {
             this.mouse.moving = false;
             this.mouse.clickedCoordinates = snapped;
             this.mouse.notFirstMouseMoveEvent = false;
         }
+        this.archiveService.pushPoint(snapped);
         this.modesConfiguration.drawing = true;
     }
 

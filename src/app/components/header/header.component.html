@@ -1,16 +1,32 @@
 <div id="myHeader" class="pill-header">
     <!-- Left Section -->
     <div class="left-section">
-        <button (click)="undo()"><i class="iconoir iconoir-undo-circle"></i>
+        <button (click)="undo()" [class.disabled]="undoDisabled()"><i class="iconoir iconoir-undo-circle"></i>
             <span class="button-label">Undo</span>
         </button>
-        <button (click)="redo()"><i class="iconoir iconoir-redo-circle"></i>
+        <button (click)="redo()" [class.disabled]="redoDisabled()"><i class="iconoir iconoir-redo-circle"></i>
             <span class="button-label">Redo</span>
         </button>
         <img class="logo-img" src="assets/logo.png" alt="Digital Blu Logo"/>
     </div>
 
     <div class="vertical-line"></div>
+
+    <div class="middle-section">
+        <button [class.active]="modesConfiguration.grabMode" (click)="switchGrabMode()"><i
+                class="iconoir iconoir-drag-hand-gesture"></i>
+            <span class="button-label">Drag mode</span>
+        </button>
+
+        <button [class.active]="modesConfiguration.cursorMode" (click)="switchCursorMode()"><i
+                class="iconoir iconoir-cursor-pointer"></i>
+            <span class="button-label">Cursor mode</span>
+        </button>
+
+    </div>
+
+    <div class="vertical-line"></div>
+
 
     <div class="middle-section">
 
@@ -88,7 +104,8 @@
     <!-- Right Section -->
     <div class="right-section">
 
-        <button><i class="iconoir iconoir-brightness"></i>
+        <button [class.active]="modesConfiguration.darkMode" (click)="switchDarkMode() ">
+            <i class="iconoir iconoir-brightness"></i>
             <span class="button-label">Dark / Light</span>
         </button>
 

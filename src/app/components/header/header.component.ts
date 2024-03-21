@@ -3,6 +3,8 @@ import {CanvasService} from "../../services/canvas.service";
 import {ModesConfiguration} from "../../models/modesConfiguration";
 import {NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
+import {ThemeService} from "../../services/theme.service";
+import {ArchiveService} from "../../services/archive.service";
 
 @Component({
     selector: 'app-header',
@@ -21,6 +23,8 @@ export class HeaderComponent {
     constructor(
         private canvasService: CanvasService,
         public modesConfiguration: ModesConfiguration,
+        private themeService: ThemeService,
+        private archiveService: ArchiveService
     ) {
     }
 
@@ -79,12 +83,34 @@ export class HeaderComponent {
         this.modesConfiguration.changeGridMode();
     }
 
+    switchDarkMode() {
+        this.modesConfiguration.changeDarkMode();
+        this.themeService.toggleDarkMode(this.modesConfiguration.darkMode)
+        this.canvasService.drawAll();
+    }
+
     onInput() {
         if (this.thickness < 1) {
             this.thickness = this.lastValidThickness;
         } else {
             this.lastValidThickness = this.thickness;
         }
+    }
+
+    redoDisabled(): boolean {
+        return !this.archiveService.containsArchivedElements();
+    }
+
+    undoDisabled(): boolean {
+        return !this.archiveService.containsElements();
+    }
+
+    switchCursorMode(): void {
+        this.modesConfiguration.changeCursorMode();
+    }
+
+    switchGrabMode(): void {
+        this.modesConfiguration.changeGrabMode();
     }
 
     getThickness() {

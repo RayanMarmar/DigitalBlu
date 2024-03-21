@@ -101,9 +101,14 @@ export class Line {
     }
 
     intersection(point: Point): Point | null {
+        if (this.isVertical()) {
+            return new Point(this._firstPoint.x, point.y);
+        } else if (this.isHorizontal()) {
+            return new Point(point.x, this._firstPoint.y);
+        }
+
         // Step 1: Calculate the slope of AB
         const slopeAB: number = (this._secondPoint.y - this._firstPoint.y) / (this._secondPoint.x - this._firstPoint.x);
-
         // Step 2: Calculate the negative reciprocal of the slope
         const slopePerpendicular: number = -1 / slopeAB;
 
@@ -147,10 +152,19 @@ export class Line {
         }
     }
 
-    draw(context: CanvasRenderingContext2D): void {
+    private isVertical(): boolean {
+        return this.firstPoint.x == this.secondPoint.x;
+    }
+
+    private isHorizontal(): boolean {
+        return this.firstPoint.y == this.secondPoint.y;
+    }
+
+    draw(context: CanvasRenderingContext2D, color: string): void {
         context.beginPath();
         context.moveTo(this._firstPoint.x, this._firstPoint.y);
         context.lineTo(this._secondPoint.x, this._secondPoint.y);
+        context.strokeStyle = color;
         context.stroke();
     }
 }

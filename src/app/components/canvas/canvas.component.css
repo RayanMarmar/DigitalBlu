@@ -1,10 +1,11 @@
 #drawing-canvas {
     box-sizing: border-box;
     border-radius: 20px;
-    border: 2px solid darkgrey;
+    border: 2px solid var(--borders-color);
     width: 96vw;
     height: 84vh;
     position: absolute;
     margin: 0;
     z-index: 1;
 }
+

@@ -1,6 +1,7 @@
 import {AfterViewInit, Component, ElementRef, HostListener, ViewChild} from '@angular/core';
 import {Mouse} from "../../models/mouse";
 import {CanvasService} from "../../services/canvas.service";
+import {ModesConfiguration} from "../../models/modesConfiguration";
 
 @Component({
     selector: 'app-canvas',
@@ -17,7 +18,8 @@ export class CanvasComponent implements AfterViewInit {
 
     constructor(
         private canvasService: CanvasService,
-        private mouse: Mouse
+        private mouse: Mouse,
+        private modesConfiguration: ModesConfiguration,
     ) {
     }
 
@@ -54,6 +56,15 @@ export class CanvasComponent implements AfterViewInit {
             this.canvas.nativeElement.height = 0.84 * window.innerHeight;
         }
     }
+
+    cursorMode() {
+        return this.modesConfiguration.cursorMode;
+    }
+
+    grabMode() {
+        return this.modesConfiguration.grabMode;
+    }
+
 
     @HostListener('document:keydown', ['$event'])
     private handleKeyDown(event: KeyboardEvent): void {
