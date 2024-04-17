@@ -4,9 +4,9 @@ export class Line {
     private _firstPoint: Point;
     private _secondPoint: Point;
 
-    constructor(firstPoint: Point, secondPoint: Point) {
-        this._firstPoint = firstPoint;
-        this._secondPoint = secondPoint;
+    constructor(firstPoint: Point, secondPoint: Point, reverseTransformationMatrix: number[][] = [[1, 1], [1, 1]]) {
+        this._firstPoint = firstPoint.transform(reverseTransformationMatrix);
+        this._secondPoint = secondPoint.transform(reverseTransformationMatrix);
     }
 
     // Getter for firstPoint
@@ -160,11 +160,19 @@ export class Line {
         return this.firstPoint.y == this.secondPoint.y;
     }
 
-    draw(context: CanvasRenderingContext2D, color: string): void {
+    draw(context: CanvasRenderingContext2D,
+        color: string,
+         transformationMatrix: number[][] = [[1, 0], [0, 1]]
+    ): void {
+        let line: Line = this.transform(transformationMatrix);
         context.beginPath();
-        context.moveTo(this._firstPoint.x, this._firstPoint.y);
-        context.lineTo(this._secondPoint.x, this._secondPoint.y);
+        context.moveTo(line.firstPoint.x, line.firstPoint.y);
+        context.lineTo(line.secondPoint.x, line.secondPoint.y);
         context.strokeStyle = color;
         context.stroke();
+    }
+
+    transform(transformationMatrix: number[][]): Line {
+        return new Line(this._firstPoint.transform(transformationMatrix), this._secondPoint.transform(transformationMatrix));
     }
 }

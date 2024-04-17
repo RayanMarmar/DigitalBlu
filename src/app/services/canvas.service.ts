@@ -8,6 +8,7 @@ import {ModesConfiguration} from "../models/modesConfiguration";
 import {Wall} from "../models/wall";
 import {Door} from "../models/door";
 import {Window} from "../models/window";
+import {TransformationService} from "./transformation.service";
 import {ThemeService} from "./theme.service";
 import {ComponentSelectorService} from "./component-selector.service";
 
@@ -24,7 +25,8 @@ export class CanvasService {
         private gridService: GridService,
         private componentSelector: ComponentSelectorService,
         private mouse: Mouse,
-        private modesConfiguration: ModesConfiguration,
+        private readonly modesConfiguration: ModesConfiguration,
+        private transformationService: TransformationService,
         private themeService: ThemeService
     ) {
     }
@@ -37,7 +39,10 @@ export class CanvasService {
 
     private drawAllLines(): void {
         this.archiveService.linesList.forEach((line: Line): void => {
-            line.draw(this.context!!, this.themeService.getWallColor());
+            line.draw(this.context!!,
+                this.themeService.getWallColor(),
+                this.transformationService.transformationMatrix,
+            );
         });
     }
 
@@ -47,19 +52,27 @@ export class CanvasService {
 
     private drawAllWalls(): void {
         this.archiveService.wallsList.forEach((wall: Wall): void => {
-            wall.draw(this.context!!, this.themeService.getWallColor());
+            wall.draw(this.context!!,
+                this.transformationService.transformationMatrix,
+                this.themeService.getWallColor());
         });
     }
 
     private drawAllDoors(): void {
         this.archiveService.doorsList.forEach((door: Door): void => {
-            door.draw(this.context!!, this.themeService.getBackgroundColor(), this.themeService.getWallColor());
+            door.draw(this.context!!,
+                this.transformationService.transformationMatrix,
+                this.themeService.getBackgroundColor(),
+                this.themeService.getWallColor());
         });
     }
 
     private drawAllWindows(): void {
         this.archiveService.windowsList.forEach((window: Window): void => {
-            window.draw(this.context!!, this.themeService.getBackgroundColor(), this.themeService.getWallColor());
+            window.draw(this.context!!,
+                this.transformationService.transformationMatrix,
+                this.themeService.getBackgroundColor(),
+                this.themeService.getWallColor());
         });
     }
 
@@ -119,7 +132,7 @@ export class CanvasService {
 
     onMouseDownDoorMode(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
-        let point: Point = this.mouse.currentCoordinates!!;
+        let point: Point = this.mouse.currentCoordinates!!.transform(this.transformationService.reverseTransformationMatrix);
         let wall: Wall | null = this.archiveService.snapWallOpening(point);
         if (wall != null) {
             try {
@@ -169,7 +182,7 @@ export class CanvasService {
 
     onMouseWindowMode(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
-        let point: Point = this.mouse.currentCoordinates!!;
+        let point: Point = this.mouse.currentCoordinates!!.transform(this.transformationService.reverseTransformationMatrix);
         let wall: Wall | null = this.archiveService.snapWallOpening(point);
         if (wall != null) {
             try {
@@ -190,7 +203,14 @@ export class CanvasService {
         let point: Point = this.mouse.currentCoordinates!!;
         let snapped: Point = this.snapPoint(point);
         if (this.modesConfiguration.drawing)
-            this.archiveService.addWall(new Wall(this.mouse.clickedCoordinates!!, snapped, this.modesConfiguration.defaultThickness));
+            this.archiveService.addWall(
+                new Wall(
+                    this.mouse.clickedCoordinates!!,
+                    snapped,
+                    this.modesConfiguration.defaultThickness,
+                    this.transformationService.reverseTransformationMatrix
+                )
+            );
         if (snapped.equals(point)) {
             this.mouse.mouseDown(event);
         } else {
@@ -207,7 +227,9 @@ export class CanvasService {
         let point: Point = this.mouse.currentCoordinates!!;
         let snapped: Point = this.snapPoint(point);
         if (this.modesConfiguration.drawing)
-            this.archiveService.addLine(new Line(this.mouse.clickedCoordinates!!, snapped))
+            this.archiveService.addLine(
+                new Line(this.mouse.clickedCoordinates!!, snapped, this.transformationService.reverseTransformationMatrix)
+            )
         if (snapped.equals(point)) {
             this.mouse.mouseDown(event);
         } else {
@@ -235,7 +257,13 @@ export class CanvasService {
             this.archiveService.popLine();
         else
             this.mouse.notFirstMouseMoveEvent = true;
-        this.archiveService.pushLine(new Line(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!));
+        this.archiveService.pushLine(
+            new Line(
+                this.mouse.clickedCoordinates!!,
+                this.mouse.currentCoordinates!!,
+                this.transformationService.reverseTransformationMatrix
+            )
+        );
         this.drawAll();
     }
 
@@ -247,7 +275,13 @@ export class CanvasService {
             this.archiveService.popWall();
         else
             this.mouse.notFirstMouseMoveEvent = true;
-        this.archiveService.pushWall(new Wall(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!, this.modesConfiguration.defaultThickness));
+        this.archiveService.pushWall(new Wall(
+                this.mouse.clickedCoordinates!!,
+                this.mouse.currentCoordinates!!,
+                this.modesConfiguration.defaultThickness,
+                this.transformationService.reverseTransformationMatrix
+            )
+        );
         this.drawAll();
     }
 

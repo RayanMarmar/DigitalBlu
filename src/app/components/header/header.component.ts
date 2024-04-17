@@ -71,7 +71,6 @@ export class HeaderComponent {
             this.modesConfiguration.changeDefaultThickness(this.lastValidThickness);
             this.thickness = this.lastValidThickness;
         }
-        console.log(this.lastValidThickness);
     }
 
 
