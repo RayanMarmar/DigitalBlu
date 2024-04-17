@@ -22,6 +22,10 @@ export class wallOpening {
         this._center = this.base[0].firstPoint;
     }
 
+    inRange(point: Point): boolean {
+        return this._wall.containsPoint(point)
+    }
+
     // Getter for line
     get line(): Line {
         return this.base[0];

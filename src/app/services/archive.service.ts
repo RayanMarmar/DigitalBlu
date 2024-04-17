@@ -346,6 +346,35 @@ export class ArchiveService {
         return -1; // Return -1 if no matching point is found
     }
 
+    inRangeOfAnExistingWindow(point: Point): number {
+        for (let i: number = 0; i < this._windowsList.length; i++) {
+            const w: Window = this._windowsList[i];
+            if (w.inRange(point)) {
+                return i; // Return the index if a matching point is found
+            }
+        }
+        return -1; // Return -1 if no matching point is found
+    }
+
+    inRangeOfAnExistingDoor(point: Point): number {
+        for (let i: number = 0; i < this._doorsList.length; i++) {
+            const w: Door = this._doorsList[i];
+            if (w.inRange(point)) {
+                return i; // Return the index if a matching point is found
+            }
+        }
+        return -1; // Return -1 if no matching point is found
+    }
+
+    inRangeOfAnExistingLine(point: Point): number {
+        for (let i: number = 0; i < this._linesList.length; i++) {
+            const l: Line = this._linesList[i];
+            if (l.isOnLine(point)) {
+                return i; // Return the index if a matching point is found
+            }
+        }
+        return -1; // Return -1 if no matching point is found
+    }
 
     deleteLine(): void {
         this.popLine();
@@ -375,5 +404,29 @@ export class ArchiveService {
             this.commandsList.push(Command.DELETE_WALL);
         }
         this._wallsList = this._wallsList.filter(item => item !== wall);
+
     }
+
+    //TODO ELement class for delete, implements wall line etcc,(interface)
+    // all implement delete
+    deleteElement(x: Wall | Line | Door | Window | null) {
+        switch (true) {
+            case x instanceof Wall:
+                // this.deleteSelectedWall(x as Wall);
+                break;
+            case x instanceof Line:
+                //TODO
+                break;
+            case x instanceof Door:
+
+                break;
+            case x instanceof Window:
+
+                break;
+            default:
+                // Handle the case where x is of unexpected type
+                break;
+        }
+    }
+
 }

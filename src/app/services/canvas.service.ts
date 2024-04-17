@@ -9,6 +9,7 @@ import {Wall} from "../models/wall";
 import {Door} from "../models/door";
 import {Window} from "../models/window";
 import {ThemeService} from "./theme.service";
+import {ComponentSelectorService} from "./component-selector.service";
 
 @Injectable({
     providedIn: 'root'
@@ -21,6 +22,7 @@ export class CanvasService {
     constructor(
         private archiveService: ArchiveService,
         private gridService: GridService,
+        private componentSelector: ComponentSelectorService,
         private mouse: Mouse,
         private modesConfiguration: ModesConfiguration,
         private themeService: ThemeService
@@ -136,13 +138,33 @@ export class CanvasService {
     onMouseDownCursorMode(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
-        if (this.archiveService.inRangeOfAnExistingWall(point) != -1) {
-            this.archiveService.deleteSelectedWall(this.archiveService.getClickedWall(point))
-
-            this.drawAll()
-
+        let x;
+        try {
+            if (this.archiveService.inRangeOfAnExistingWall(point) != -1) {
+                x = this.componentSelector.getNearestComponent(point)
+                // this.archiveService.deleteSelectedWall(this.archiveService.getClickedWall(point))
+                this.archiveService.deleteElement(this.archiveService.getClickedWall(point))
+                this.drawAll();
+            }
+        } catch (e) {
+            console.log("Problem on down cursor mode")
         }
 
+    }
+
+    OnMouseHoverCursorMode(event: MouseEvent): void {
+        this.mouse.setCurrentCoordinatesFromEvent(event);
+        let point: Point = this.mouse.currentCoordinates!!;
+        let x;
+        try {
+            if (this.archiveService.inRangeOfAnExistingWall(point) != -1) {
+                x = this.componentSelector.getNearestComponent(point)
+                //TODO Highlight element
+                this.drawAll();
+            }
+        } catch (e) {
+            console.log("Problem on hover cursor mode")
+        }
     }
 
     onMouseWindowMode(event: MouseEvent): void {
