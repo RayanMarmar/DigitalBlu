@@ -217,7 +217,7 @@ export class ModesConfiguration {
         this._windowMode = false;
         this._doorMode = false;
         this._wallMode = false;
-        this._lineMode = false;
+        this._lineMode = !this._eraseMode;
         this._grabMode = false;
         this._cursorMode = false;
     }
