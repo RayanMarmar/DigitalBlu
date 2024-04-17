@@ -61,6 +61,10 @@ export class CanvasComponent implements AfterViewInit {
         return this.modesConfiguration.cursorMode;
     }
 
+    eraseMode() {
+        return this.modesConfiguration.eraseMode;
+    }
+
     grabMode() {
         return this.modesConfiguration.grabMode;
     }
