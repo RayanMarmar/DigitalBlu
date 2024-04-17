@@ -88,6 +88,19 @@
     <!-- Right Section -->
     <div class="right-section">
 
+        <button [class.active]="modesConfiguration.eraseMode" (click)="switchEraseMode() ">
+            <i class="iconoir iconoir-erase"></i>
+            <span class="button-label">Erase</span>
+        </button>
+
+
+    </div>
+
+    <div class="vertical-line"></div>
+
+    <!-- Right Section -->
+    <div class="right-section">
+
         <button [class.active]="modesConfiguration.darkMode" (click)="switchDarkMode() ">
             <i class="iconoir iconoir-brightness"></i>
             <span class="button-label">Dark / Light</span>

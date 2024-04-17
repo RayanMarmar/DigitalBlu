@@ -36,6 +36,7 @@ html {
 
 .grab {
     cursor: url("/assets/grab-cursor.svg"), auto;
+
 }
 
 .dark-mode .grab {
@@ -48,6 +49,14 @@ html {
 
 .dark-mode .cursor {
     cursor: url("/assets/cursor-cursor-white.svg"), auto;
+}
+
+.erase {
+    cursor: url("/assets/erase-cursor.svg"), auto;
+}
+
+.dark-mode .erase {
+    cursor: url("/assets/erase-cursor-white.svg"), auto;
 }
 
 

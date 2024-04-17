@@ -16,6 +16,7 @@ export class ModesConfiguration {
     private _defaultThickness: number;
     private _zoomLevel: number;
     private _darkMode: boolean;
+    private _eraseMode: boolean;
 
 
     constructor() {
@@ -31,6 +32,7 @@ export class ModesConfiguration {
         this._darkMode = false;
         this._grabMode = false;
         this._cursorMode = false;
+        this._eraseMode = false;
     }
 
     get lineMode(): boolean {
@@ -130,6 +132,14 @@ export class ModesConfiguration {
         this._cursorMode = value;
     }
 
+    get eraseMode(): boolean {
+        return this._eraseMode;
+    }
+
+    set eraseMode(value: boolean) {
+        this._eraseMode = value;
+    }
+
 
     changeCursorMode(): void {
         this._cursorMode = true;
@@ -200,6 +210,16 @@ export class ModesConfiguration {
 
     changeGridMode(): void {
         this._gridOn = !this._gridOn;
+    }
+
+    changeEraseMode(): void {
+        this._eraseMode = !this._eraseMode;
+        this._windowMode = false;
+        this._doorMode = false;
+        this._wallMode = false;
+        this._lineMode = !this._eraseMode;
+        this._grabMode = false;
+        this._cursorMode = false;
     }
 
 }

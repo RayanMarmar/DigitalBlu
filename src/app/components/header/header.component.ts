@@ -79,6 +79,10 @@ export class HeaderComponent {
         this.canvasService.drawAll();
     }
 
+    switchEraseMode(): void {
+        this.modesConfiguration.changeEraseMode();
+    }
+
     onInput() {
         if (this.thickness < 1) {
             this.thickness = this.lastValidThickness;
