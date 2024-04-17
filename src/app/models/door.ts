@@ -22,6 +22,8 @@ export class Door extends WallOpening {
         this._radius = radius
         this._doorType = doorType;
         this._direction = direction;
+        this.updateDoorType(doorType);
+        this.updateDoorDirection(direction);
     }
 
     // Getter for doorType
@@ -86,13 +88,16 @@ export class Door extends WallOpening {
         this._parallelLine = this._base[0].calculateParallelLine(
             this.height, this._wall.xFactor, this._wall.yFactor, this._direction
         );
+        this.resetCenter();
+    }
+
+    resetCenter(): void {
         this._center = this._doorType == DoorType.OPEN_LEFT ? this._base[0].firstPoint :
             this._doorType == DoorType.OPEN_RIGHT ? this._base[0].secondPoint : this._base[0].calculateCenter();
     }
 
-
     override toString(): string {
-        return this._doorType.valueOf() + " coordinates: " + this._base[0].toString();
+        return this._doorType + " coordinates: " + this._base[0].toString();
     }
 
     private drawQuarterCircle(
