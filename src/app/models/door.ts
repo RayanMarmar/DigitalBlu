@@ -16,7 +16,6 @@ export class Door extends WallOpening {
         direction: number = 1,
         height: number = 50,
         radius: number = 50,
-        reverseTransformationMatrix: number[][] = [],
     ) {
         super(wall, point, height);
         this._radius = radius

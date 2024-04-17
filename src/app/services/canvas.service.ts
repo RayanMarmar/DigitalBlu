@@ -128,7 +128,7 @@ export class CanvasService {
 
     onMouseDownDoorMode(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
-        let point: Point = this.mouse.currentCoordinates!!;
+        let point: Point = this.mouse.currentCoordinates!!.transform(this.transformationService.reverseTransformationMatrix);
         let wall: Wall | null = this.archiveService.snapWallOpening(point);
         if (wall != null) {
             try {
