@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {Point} from "../models/point";
 
 @Injectable({
     providedIn: 'root'
@@ -6,22 +7,19 @@ import {Injectable} from '@angular/core';
 export class TransformationService {
     private initialMatrix: number[][];
     private scaleValue: number;
-    private translationMatrix: number[][];
+    private translationMatrix: number[];
     private _transformationMatrix: number[][];
 
     constructor() {
         this.initialMatrix = [
-            [1, 0],
-            [0, 1]
+            [1, 0, 0],
+            [0, 1, 0]
         ];
         this._transformationMatrix = [
-            [1, 0],
-            [0, 1]
+            [1, 0, 0],
+            [0, 1, 0]
         ];
-        this.translationMatrix = [
-            [1, 1],
-            [1, 1]
-        ];
+        this.translationMatrix = [0, 0];
         this.scaleValue = 1;
     }
 
@@ -33,6 +31,8 @@ export class TransformationService {
     recomputeTransformationMatrix() {
         this._transformationMatrix[0][0] = this.initialMatrix[0][0] * this.scaleValue;
         this._transformationMatrix[1][1] = this.initialMatrix[1][1] * this.scaleValue;
+        this._transformationMatrix[0][2] = this.translationMatrix[0];
+        this._transformationMatrix[1][2] = this.translationMatrix[1];
     }
 
     get transformationMatrix(): number[][] {
@@ -41,9 +41,18 @@ export class TransformationService {
 
     get reverseTransformationMatrix(): number[][] {
         return [
-            [1 / this.transformationMatrix[0][0], 1 / this.transformationMatrix[0][1],],
-            [1 / this.transformationMatrix[1][0], 1 / this.transformationMatrix[1][1],],
+            [1 / this.transformationMatrix[0][0], 1 / this.transformationMatrix[0][1], -this.transformationMatrix[0][2]],
+            [1 / this.transformationMatrix[1][0], 1 / this.transformationMatrix[1][1], -this.transformationMatrix[1][2]],
         ];
     }
 
+    setTranslationMatrix(initialCursorPos: Point, currentCursorPos: Point) {
+        const deltaX = currentCursorPos.x - initialCursorPos.x;
+        const deltaY = currentCursorPos.y - initialCursorPos.y;
+
+        // Update translation matrix
+        this.translationMatrix[0] += deltaX;
+        this.translationMatrix[1] += deltaY;
+        this.recomputeTransformationMatrix();
+    }
 }

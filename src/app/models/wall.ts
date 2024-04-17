@@ -208,6 +208,6 @@ export class Wall {
         let firstPoint: Point = this._fourthLine.calculateCenter().transform(transformationMatrix);
         let secondPoint: Point = this._secondLine.calculateCenter().transform(transformationMatrix);
         let height: number = this._height * transformationMatrix[0][0];
-        return new Wall(firstPoint, secondPoint, height, [[1, 1], [1, 1]]);
+        return new Wall(firstPoint, secondPoint, height, [[1, 1, 0], [1, 1, 0]]);
     }
 }

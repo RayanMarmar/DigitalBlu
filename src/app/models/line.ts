@@ -4,7 +4,7 @@ export class Line {
     private _firstPoint: Point;
     private _secondPoint: Point;
 
-    constructor(firstPoint: Point, secondPoint: Point, reverseTransformationMatrix: number[][] = [[1, 1], [1, 1]]) {
+    constructor(firstPoint: Point, secondPoint: Point, reverseTransformationMatrix: number[][] = [[1, 1, 0], [1, 1, 0]]) {
         this._firstPoint = firstPoint.transform(reverseTransformationMatrix);
         this._secondPoint = secondPoint.transform(reverseTransformationMatrix);
     }
@@ -161,8 +161,8 @@ export class Line {
     }
 
     draw(context: CanvasRenderingContext2D,
-        color: string,
-         transformationMatrix: number[][] = [[1, 0], [0, 1]]
+         color: string,
+         transformationMatrix: number[][] = [[1, 0, 0], [0, 1, 0]]
     ): void {
         let line: Line = this.transform(transformationMatrix);
         context.beginPath();
