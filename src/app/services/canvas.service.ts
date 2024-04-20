@@ -37,8 +37,10 @@ export class CanvasService {
 
     private drawAllLines(): void {
         this.archiveService.linesList.forEach((line: Line): void => {
-            line.draw(this.context!!,
-                this.themeService.getWallColor(),
+            line.draw(
+                this.context!!,
+                this.themeService.getCanvasColor(),
+                this.themeService.getDrawableColor(),
                 this.transformationService.transformationMatrix,
             );
         });
@@ -50,27 +52,34 @@ export class CanvasService {
 
     private drawAllWalls(): void {
         this.archiveService.wallsList.forEach((wall: Wall): void => {
-            wall.draw(this.context!!,
+            wall.draw(
+                this.context!!,
+                this.themeService.getCanvasColor(),
+                this.themeService.getDrawableColor(),
                 this.transformationService.transformationMatrix,
-                this.themeService.getWallColor());
+            );
         });
     }
 
     private drawAllDoors(): void {
         this.archiveService.doorsList.forEach((door: Door): void => {
-            door.draw(this.context!!,
-                this.transformationService.transformationMatrix,
-                this.themeService.getBackgroundColor(),
-                this.themeService.getWallColor());
+            door.draw(
+                this.context!!,
+                this.themeService.getCanvasColor(),
+                this.themeService.getDrawableColor(),
+                this.transformationService.transformationMatrix
+            );
         });
     }
 
     private drawAllWindows(): void {
         this.archiveService.windowsList.forEach((window: Window): void => {
-            window.draw(this.context!!,
+            window.draw(
+                this.context!!,
+                this.themeService.getCanvasColor(),
+                this.themeService.getDrawableColor(),
                 this.transformationService.transformationMatrix,
-                this.themeService.getBackgroundColor(),
-                this.themeService.getWallColor());
+            );
         });
     }
 

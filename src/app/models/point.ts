@@ -1,4 +1,6 @@
-export class Point {
+import "./drawable";
+
+export class Point implements Drawable {
     private _x: number;
     private _y: number;
     private range: number = 5;
@@ -56,7 +58,9 @@ export class Point {
         );
     }
 
-    draw(context: CanvasRenderingContext2D): void {
+    draw(context: CanvasRenderingContext2D,
+         color: string,
+         transformationMatrix: number[][] = [[1, 0, 0], [0, 1, 0]]): void {
         context.fillRect(this._x, this._y, 1, 1);
     }
 }

@@ -1,6 +1,7 @@
 import {Point} from "./point";
+import "./drawable";
 
-export class Line {
+export class Line implements Drawable {
     private _firstPoint: Point;
     private _secondPoint: Point;
 
@@ -160,15 +161,17 @@ export class Line {
         return this.firstPoint.y == this.secondPoint.y;
     }
 
-    draw(context: CanvasRenderingContext2D,
-         color: string,
-         transformationMatrix: number[][] = [[1, 0, 0], [0, 1, 0]]
+    draw(
+        context: CanvasRenderingContext2D,
+        canvasColor: string,
+        lineColor: string,
+        transformationMatrix: number[][] = [[1, 0, 0], [0, 1, 0]],
     ): void {
         let line: Line = this.transform(transformationMatrix);
         context.beginPath();
         context.moveTo(line.firstPoint.x, line.firstPoint.y);
         context.lineTo(line.secondPoint.x, line.secondPoint.y);
-        context.strokeStyle = color;
+        context.strokeStyle = lineColor;
         context.stroke();
     }
 
