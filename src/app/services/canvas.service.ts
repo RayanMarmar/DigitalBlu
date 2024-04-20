@@ -225,6 +225,7 @@ export class CanvasService {
             this.mouse.mouseMove(event);
             this.transformationService.setTranslationMatrix(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!);
             this.drawAll();
+            this.gridService.updateCanvas();
         } else if (this.modesConfiguration.wallMode)
             this.onMouseMoveWallMode(event);
         else if (this.modesConfiguration.lineMode)
