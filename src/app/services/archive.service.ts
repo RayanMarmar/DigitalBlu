@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
-import {Line} from "../models/line";
-import {Point} from "../models/point";
-import {Wall} from "../models/wall";
+import {Line} from "../drawables/line";
+import {Point} from "../drawables/point";
+import {Wall} from "../drawables/wall";
 import {CommandType} from "../commands/commandType";
-import {Door} from "../models/door";
-import {Window} from "../models/window";
+import {Door} from "../drawables/door";
+import {Window} from "../drawables/window";
 
 @Injectable({
     providedIn: 'root'

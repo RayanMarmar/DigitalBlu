@@ -1,13 +1,13 @@
 import {ElementRef, Injectable} from '@angular/core';
-import {Line} from "../models/line";
-import {Point} from "../models/point";
+import {Line} from "../drawables/line";
+import {Point} from "../drawables/point";
 import {ArchiveService} from "./archive.service";
 import {GridService} from "./grid.service";
 import {Mouse} from "../models/mouse";
 import {ModesConfiguration} from "../models/modesConfiguration";
-import {Wall} from "../models/wall";
-import {Door} from "../models/door";
-import {Window} from "../models/window";
+import {Wall} from "../drawables/wall";
+import {Door} from "../drawables/door";
+import {Window} from "../drawables/window";
 import {TransformationService} from "./transformation.service";
 import {ThemeService} from "./theme.service";
 

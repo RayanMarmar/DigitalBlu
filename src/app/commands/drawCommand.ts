@@ -1,5 +1,5 @@
-import {Point} from "../models/point";
-import {Line} from "../models/line";
+import {Point} from "../drawables/point";
+import {Line} from "../drawables/line";
 
 class DrawCommand implements Command {
 

@@ -1,4 +1,4 @@
-import {Point} from "./point";
+import {Point} from "../drawables/point";
 import {Injectable} from "@angular/core";
 
 @Injectable({
