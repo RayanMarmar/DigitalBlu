@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Line} from "../models/line";
 import {Point} from "../models/point";
 import {Wall} from "../models/wall";
-import {Command} from "../models/command";
+import {CommandType} from "../commands/commandType";
 import {Door} from "../models/door";
 import {Window} from "../models/window";
 
@@ -20,8 +20,8 @@ export class ArchiveService {
     private _archiveDoorsList: Door[];
     private _windowsList: Window[];
     private _archiveWindowsList: Window[];
-    private commandsList: Command[];
-    private archiveCommandsList: Command[];
+    private commandsList: CommandType[];
+    private archiveCommandsList: CommandType[];
 
     constructor() {
         this._linesList = [];
@@ -129,7 +129,7 @@ export class ArchiveService {
     addLine(line: Line): void {
         this._linesList.pop();
         this._linesList.push(line);
-        this.commandsList.push(Command.ADD_LINE);
+        this.commandsList.push(CommandType.ADD_LINE);
         this._archiveLinesList = [];
         this._archivePointsList = [];
         this._archiveWallsList = [];
@@ -141,7 +141,7 @@ export class ArchiveService {
     addWall(wall: Wall): void {
         this._wallsList.pop();
         this._wallsList.push(wall);
-        this.commandsList.push(Command.ADD_WALL);
+        this.commandsList.push(CommandType.ADD_WALL);
         this._archiveLinesList = [];
         this._archivePointsList = [];
         this._archiveWallsList = [];
@@ -152,7 +152,7 @@ export class ArchiveService {
 
     addDoor(door: Door): void {
         this._doorsList.push(door);
-        this.commandsList.push(Command.ADD_DOOR);
+        this.commandsList.push(CommandType.ADD_DOOR);
         this._archiveLinesList = [];
         this._archivePointsList = [];
         this._archiveWallsList = [];
@@ -163,7 +163,7 @@ export class ArchiveService {
 
     addWindow(window: Window): void {
         this._windowsList.push(window);
-        this.commandsList.push(Command.ADD_WINDOW);
+        this.commandsList.push(CommandType.ADD_WINDOW);
         this._archiveLinesList = [];
         this._archivePointsList = [];
         this._archiveWallsList = [];
@@ -176,20 +176,20 @@ export class ArchiveService {
     undo(): void {
         if (!this.containsElements())
             return;
-        let command: Command | undefined = this.commandsList.pop();
+        let command: CommandType | undefined = this.commandsList.pop();
         if (command != undefined) {
             this.archiveCommandsList.push(command);
             switch (command) {
-                case Command.ADD_LINE:
+                case CommandType.ADD_LINE:
                     this.undoLine();
                     break;
-                case Command.ADD_WALL:
+                case CommandType.ADD_WALL:
                     this.undoWall();
                     break;
-                case Command.ADD_DOOR:
+                case CommandType.ADD_DOOR:
                     this.undoDoor();
                     break;
-                case Command.ADD_WINDOW:
+                case CommandType.ADD_WINDOW:
                     this.undoWindow();
                     break;
                 default:
@@ -233,20 +233,20 @@ export class ArchiveService {
     redo(): void {
         if (!this.containsArchivedElements())
             return;
-        let command: Command | undefined = this.archiveCommandsList.pop();
+        let command: CommandType | undefined = this.archiveCommandsList.pop();
         if (command != undefined) {
             this.commandsList.push(command);
             switch (command) {
-                case Command.ADD_LINE:
+                case CommandType.ADD_LINE:
                     this.redoLine();
                     break;
-                case Command.ADD_WALL:
+                case CommandType.ADD_WALL:
                     this.redoWall();
                     break;
-                case Command.ADD_DOOR:
+                case CommandType.ADD_DOOR:
                     this.redoDoor();
                     break;
-                case Command.ADD_WINDOW:
+                case CommandType.ADD_WINDOW:
                     this.redoWindow();
                     break;
                 default:
