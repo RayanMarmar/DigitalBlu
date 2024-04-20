@@ -50,7 +50,10 @@ export class Point {
 
     // Method to scale a vec2
     transform(transformationMatrix: number[][]): Point {
-        return new Point(this.x * transformationMatrix[0][0], this.y * transformationMatrix[0][0]);
+        return new Point(
+            this.x * transformationMatrix[0][0] + transformationMatrix[0][2],
+            this.y * transformationMatrix[1][1] + transformationMatrix[1][2]
+        );
     }
 
     draw(context: CanvasRenderingContext2D): void {
