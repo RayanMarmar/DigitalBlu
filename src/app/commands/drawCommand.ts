@@ -1,7 +1,7 @@
 import {Point} from "../drawables/point";
 import {Line} from "../drawables/line";
 
-class DrawCommand implements Command {
+export class DrawCommand implements Command {
 
     constructor(
         private pointsList: Point[],
