@@ -115,12 +115,6 @@ export class CanvasService {
         }
     }
 
-    onMouseDown(event: MouseEvent): void {
-        if (this.modesConfiguration.grabMode) {
-            this.mouse.mouseDown(event, true);
-        }
-    }
-
     onMouseUp(event: MouseEvent): void {
         if (this.modesConfiguration.grabMode) {
             this.transformationService.setTranslationMatrix(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!, true);
@@ -129,8 +123,10 @@ export class CanvasService {
         }
     }
 
-    onMouseClick(event: MouseEvent): void {
-        if (this.modesConfiguration.wallMode)
+    onMouseDown(event: MouseEvent): void {
+        if (this.modesConfiguration.grabMode) {
+            this.mouse.mouseDown(event, true);
+        } else if (this.modesConfiguration.wallMode)
             this.onMouseDownWallMode(event);
         else if (this.modesConfiguration.doorMode)
             this.onMouseDownDoorMode(event);
