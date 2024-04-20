@@ -3,8 +3,9 @@ import {Line} from "./line";
 import {Point} from "./point";
 import {Wall} from "./wall";
 import {WallOpening} from "./wallOpening";
+import "./drawable";
 
-export class Door extends WallOpening {
+export class Door extends WallOpening implements Drawable {
     private _doorType: DoorType;
     private _radius: number;
     private _direction: number;
@@ -121,7 +122,12 @@ export class Door extends WallOpening {
         context.closePath();
     }
 
-    draw(context: CanvasRenderingContext2D, transformationMatrix: number[][], bgColor: string, wallColor: string): void {
+    draw(
+        context: CanvasRenderingContext2D,
+        canvasColor: string,
+        wallColor: string,
+        transformationMatrix: number[][],
+    ): void {
         let door: Door = this.transform(transformationMatrix);
         // Draw quarter circle based on door type
         switch (door.doorType) {
@@ -135,7 +141,7 @@ export class Door extends WallOpening {
                     door.direction < 0,
                     wallColor
                 );
-                new Line(door.parallelLine.firstPoint, door.base[0].firstPoint).draw(context, wallColor);
+                new Line(door.parallelLine.firstPoint, door.base[0].firstPoint).draw(context, canvasColor, wallColor);
                 break;
 
             case DoorType.OPEN_RIGHT:
@@ -148,7 +154,7 @@ export class Door extends WallOpening {
                     door.direction < 0,
                     wallColor
                 );
-                new Line(door.parallelLine.secondPoint, door.base[0].secondPoint).draw(context, wallColor);
+                new Line(door.parallelLine.secondPoint, door.base[0].secondPoint).draw(context, canvasColor, wallColor);
                 break;
 
             case DoorType.OPEN_TWO_WAY:
@@ -172,8 +178,8 @@ export class Door extends WallOpening {
                     wallColor
                 );
 
-                new Line(door.parallelLine.firstPoint, door.base[0].firstPoint).draw(context, wallColor);
-                new Line(door.parallelLine.secondPoint, door.base[0].secondPoint).draw(context, wallColor);
+                new Line(door.parallelLine.firstPoint, door.base[0].firstPoint).draw(context, canvasColor, wallColor);
+                new Line(door.parallelLine.secondPoint, door.base[0].secondPoint).draw(context, canvasColor, wallColor);
                 break;
 
             default:
@@ -181,7 +187,7 @@ export class Door extends WallOpening {
                 console.error("Invalid door type");
                 return;
         }
-        door.drawOpening(context, bgColor, wallColor);
+        door.drawOpening(context, canvasColor, wallColor);
     }
 
     transform(transformationMatrix: number[][]): Door {
