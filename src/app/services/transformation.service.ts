@@ -46,13 +46,17 @@ export class TransformationService {
         ];
     }
 
-    setTranslationMatrix(initialCursorPos: Point, currentCursorPos: Point) {
+    setTranslationMatrix(initialCursorPos: Point, currentCursorPos: Point, save: boolean = false) {
         const deltaX = currentCursorPos.x - initialCursorPos.x;
         const deltaY = currentCursorPos.y - initialCursorPos.y;
 
         // Update translation matrix
-        this.translationMatrix[0] += deltaX;
-        this.translationMatrix[1] += deltaY;
+        this.translationMatrix[0] = this.initialMatrix[0][2] + deltaX;
+        this.translationMatrix[1] = this.initialMatrix[1][2] + deltaY;
+        if (save) {
+            this.initialMatrix[0][2] = this.translationMatrix[0];
+            this.initialMatrix[1][2] = this.translationMatrix[1];
+        }
         this.recomputeTransformationMatrix();
     }
 }
