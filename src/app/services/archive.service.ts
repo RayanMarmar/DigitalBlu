@@ -193,6 +193,7 @@ export class ArchiveService {
         let command: Command | undefined = this.commandsList.pop();
         if (command != undefined) {
             command.undo();
+            this.archiveCommandsList.push(command);
         }
     }
 
@@ -213,6 +214,7 @@ export class ArchiveService {
         let command: Command | undefined = this.archiveCommandsList.pop();
         if (command != undefined) {
             command.redo();
+            this.commandsList.push(command);
         }
     }
 
@@ -231,7 +233,7 @@ export class ArchiveService {
 
         return !lastLine.isLineExtremity(lastPoint);
     }
-    
+
     snapPoint(point: Point, snapMode: boolean): Point {
         if (!snapMode) return point;
         let index: number = this.inRangeOfAnExistingPoint(point);
