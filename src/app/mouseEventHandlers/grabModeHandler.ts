@@ -3,7 +3,7 @@ import {Mouse} from "../models/mouse";
 import {TransformationService} from "../services/transformation.service";
 import {GridService} from "../services/grid.service";
 
-class LineModeHandler implements MouseEventHandler {
+export class GrabModeHandler implements MouseEventHandler {
     constructor(
         private mouse: Mouse,
         private transformationService: TransformationService,

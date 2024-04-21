@@ -27,43 +27,38 @@ export class ModeService {
     get lineMode(): LineModeHandler {
         return new LineModeHandler(
             this.mouse,
+            this.modesConfiguration,
             this.transformationService,
             this.archiveService,
             this.gridService,
-            this.modesConfiguration.drawing,
-            this.modesConfiguration.snapMode,
-            this.modesConfiguration.gridOn,
         );
     }
 
     get wallMode(): WallModeHandler {
         return new WallModeHandler(
             this.mouse,
+            this.modesConfiguration,
             this.transformationService,
             this.archiveService,
             this.gridService,
-            this.modesConfiguration.drawing,
-            this.modesConfiguration.snapMode,
-            this.modesConfiguration.gridOn,
-            this.modesConfiguration.defaultThickness,
         );
     }
 
     get doorMode(): DoorModeHandler {
         return new DoorModeHandler(
             this.mouse,
+            this.modesConfiguration,
             this.transformationService,
             this.archiveService,
-            this.modesConfiguration.drawing,
         );
     }
 
     get windowMode(): WindowModeHandler {
         return new WindowModeHandler(
             this.mouse,
+            this.modesConfiguration,
             this.transformationService,
             this.archiveService,
-            this.modesConfiguration.drawing,
         );
     }
 

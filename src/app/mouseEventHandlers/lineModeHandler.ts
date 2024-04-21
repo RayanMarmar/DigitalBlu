@@ -7,7 +7,7 @@ import {ArchiveService} from "../services/archive.service";
 import {Point} from "../drawables/point";
 import {GridService} from "../services/grid.service";
 
-class LineModeHandler implements MouseEventHandler {
+export class LineModeHandler implements MouseEventHandler {
     constructor(
         private mouse: Mouse,
         private readonly modesConfiguration: ModesConfiguration,

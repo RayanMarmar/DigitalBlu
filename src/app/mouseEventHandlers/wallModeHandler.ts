@@ -7,7 +7,7 @@ import {Point} from "../drawables/point";
 import {GridService} from "../services/grid.service";
 import {Wall} from "../drawables/wall";
 
-class LineModeHandler implements MouseEventHandler {
+export class WallModeHandler implements MouseEventHandler {
     constructor(
         private mouse: Mouse,
         private readonly modesConfiguration: ModesConfiguration,

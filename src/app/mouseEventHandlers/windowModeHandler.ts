@@ -7,7 +7,7 @@ import {Point} from "../drawables/point";
 import {Wall} from "../drawables/wall";
 import {Window} from "../drawables/window";
 
-class LineModeHandler implements MouseEventHandler {
+export class WindowModeHandler implements MouseEventHandler {
     constructor(
         private mouse: Mouse,
         private readonly modesConfiguration: ModesConfiguration,
