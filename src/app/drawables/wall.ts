@@ -1,7 +1,8 @@
 import {Point} from "./point";
 import {Line} from "./line";
+import "./drawable";
 
-export class Wall {
+export class Wall implements Drawable {
     private _firstPoint: Point;
     private _secondPoint: Point;
     private _thirdPoint: Point;
@@ -189,7 +190,12 @@ export class Wall {
         return ((end.x - start.x) * (y - start.y)) - ((x - start.x) * (end.y - start.y));
     }
 
-    draw(context: CanvasRenderingContext2D, transformationMatrix: number[][], color: string) {
+    draw(
+        context: CanvasRenderingContext2D,
+        canvasColor: string,
+        wallColor: string,
+        transformationMatrix: number[][],
+    ) {
         let wall: Wall = this.transform(transformationMatrix);
         // Draw a filled rectangle with the correct coordinates
         context.beginPath();
@@ -198,8 +204,8 @@ export class Wall {
         context.lineTo(wall.thirdPoint.x, wall.thirdPoint.y);
         context.lineTo(wall.fourthPoint.x, wall.fourthPoint.y);
         context.closePath();
-        context.fillStyle = color;
-        context.strokeStyle = color;
+        context.fillStyle = wallColor;
+        context.strokeStyle = wallColor;
         context.fill();
         context.stroke(); // If you want to keep the border, you can include this line
     }
@@ -208,6 +214,6 @@ export class Wall {
         let firstPoint: Point = this._fourthLine.calculateCenter().transform(transformationMatrix);
         let secondPoint: Point = this._secondLine.calculateCenter().transform(transformationMatrix);
         let height: number = this._height * transformationMatrix[0][0];
-        return new Wall(firstPoint, secondPoint, height, [[1, 1], [1, 1]]);
+        return new Wall(firstPoint, secondPoint, height, [[1, 1, 0], [1, 1, 0]]);
     }
 }

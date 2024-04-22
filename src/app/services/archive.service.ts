@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
-import {Line} from "../models/line";
-import {Point} from "../models/point";
-import {Wall} from "../models/wall";
-import {Command} from "../models/command";
-import {Door} from "../models/door";
-import {Window} from "../models/window";
+import {Line} from "../drawables/line";
+import {Point} from "../drawables/point";
+import {Wall} from "../drawables/wall";
+import "../commands/command";
+import {DrawCommand} from "../commands/drawCommand";
+import {Door} from "../drawables/door";
+import {Window} from "../drawables/window";
 
 @Injectable({
     providedIn: 'root'
@@ -126,50 +127,63 @@ export class ArchiveService {
         this._windowsList.pop();
     }
 
-    addLine(line: Line): void {
-        this._linesList.pop();
-        this._linesList.push(line);
-        this.commandsList.push(Command.ADD_LINE);
+    private clearArchive(): void {
         this._archiveLinesList = [];
         this._archivePointsList = [];
         this._archiveWallsList = [];
         this._archiveDoorsList = [];
         this._archiveWindowsList = [];
         this.archiveCommandsList = [];
+    }
+
+    addLine(line: Line): void {
+        this._linesList.pop();
+        this._linesList.push(line);
+        let command = new DrawCommand(
+            this._pointsList,
+            this._archivePointsList,
+            this._linesList,
+            this._archiveLinesList,
+        );
+        this.commandsList.push(command);
+        this.clearArchive();
     }
 
     addWall(wall: Wall): void {
         this._wallsList.pop();
         this._wallsList.push(wall);
-        this.commandsList.push(Command.ADD_WALL);
-        this._archiveLinesList = [];
-        this._archivePointsList = [];
-        this._archiveWallsList = [];
-        this._archiveDoorsList = [];
-        this._archiveWindowsList = [];
-        this.archiveCommandsList = [];
+        let command = new DrawCommand(
+            this._pointsList,
+            this._archivePointsList,
+            this._wallsList,
+            this._archiveWallsList,
+        );
+        this.commandsList.push(command);
+        this.clearArchive();
     }
 
     addDoor(door: Door): void {
         this._doorsList.push(door);
-        this.commandsList.push(Command.ADD_DOOR);
-        this._archiveLinesList = [];
-        this._archivePointsList = [];
-        this._archiveWallsList = [];
-        this._archiveDoorsList = [];
-        this._archiveWindowsList = [];
-        this.archiveCommandsList = [];
+        let command = new DrawCommand(
+            this._pointsList,
+            this._archivePointsList,
+            this._doorsList,
+            this._archiveDoorsList,
+        );
+        this.commandsList.push(command);
+        this.clearArchive();
     }
 
     addWindow(window: Window): void {
         this._windowsList.push(window);
-        this.commandsList.push(Command.ADD_WINDOW);
-        this._archiveLinesList = [];
-        this._archivePointsList = [];
-        this._archiveWallsList = [];
-        this._archiveDoorsList = [];
-        this._archiveWindowsList = [];
-        this.archiveCommandsList = [];
+        let command = new DrawCommand(
+            this._pointsList,
+            this._archivePointsList,
+            this._windowsList,
+            this._archiveWindowsList,
+        );
+        this.commandsList.push(command);
+        this.clearArchive();
     }
 
 
@@ -178,26 +192,8 @@ export class ArchiveService {
             return;
         let command: Command | undefined = this.commandsList.pop();
         if (command != undefined) {
+            command.undo();
             this.archiveCommandsList.push(command);
-            switch (command) {
-                case Command.ADD_LINE:
-                    this.undoLine();
-                    break;
-                case Command.ADD_WALL:
-                    this.undoWall();
-                    break;
-                case Command.ADD_DOOR:
-                    this.undoDoor();
-                    break;
-                case Command.ADD_WINDOW:
-                    this.undoWindow();
-                    break;
-                case Command.DELETE_WALL:
-                    this.redoWall();
-                    break;
-                default:
-                    break;
-            }
         }
     }
 
@@ -212,32 +208,12 @@ export class ArchiveService {
         }
     }
 
-    undoWall(): void {
-        let wall: Wall | undefined = this._wallsList.pop();
-        if (wall != undefined) {
-            this._archiveWallsList.push(wall);
-        }
-    }
-
-    undoDoor(): void {
-        let door: Door | undefined = this._doorsList.pop();
-        if (door != undefined) {
-            this._archiveDoorsList.push(door);
-        }
-    }
-
-    undoWindow(): void {
-        let window: Window | undefined = this._windowsList.pop();
-        if (window != undefined) {
-            this._archiveWindowsList.push(window);
-        }
-    }
-
     redo(): void {
         if (!this.containsArchivedElements())
             return;
         let command: Command | undefined = this.archiveCommandsList.pop();
         if (command != undefined) {
+            command.redo();
             this.commandsList.push(command);
             switch (command) {
                 case Command.ADD_LINE:
@@ -307,12 +283,6 @@ export class ArchiveService {
         let lastPoint: Point = this._pointsList[this._pointsList.length - 1];
 
         return !lastLine.isLineExtremity(lastPoint);
-    }
-
-    private shouldAddPoint(line: Line): boolean {
-        let lastPoint: Point = this._archivePointsList[this._archivePointsList.length - 1];
-
-        return lastPoint != undefined && line.isLineExtremity(lastPoint);
     }
 
     snapPoint(point: Point, snapMode: boolean): Point {

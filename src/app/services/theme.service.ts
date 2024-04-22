@@ -9,11 +9,11 @@ export class ThemeService {
     constructor(@Inject(DOCUMENT) private document: Document) {
     }
 
-    getBackgroundColor(): string {
+    getCanvasColor(): string {
         return getComputedStyle(this.document.documentElement).getPropertyValue('--main-bg-color');
     }
 
-    getWallColor(): string {
+    getDrawableColor(): string {
         return getComputedStyle(this.document.documentElement).getPropertyValue('--wall-color');
     }
 

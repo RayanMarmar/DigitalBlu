@@ -3,6 +3,7 @@ import {AfterViewInit, Component, ElementRef, HostListener, ViewChild} from '@an
 import {GridService} from "../../services/grid.service";
 import {Event} from "@angular/router";
 import {ModesConfiguration} from "../../models/modesConfiguration";
+import {TransformationService} from "../../services/transformation.service";
 
 @Component({
     selector: 'app-grid',
@@ -16,7 +17,11 @@ export class GridComponent implements AfterViewInit {
     private canvasRect: DOMRect | null = null;
     private readonly _squareSize: number = 30;
 
-    constructor(private gridInteractionService: GridService, private modeConfiguration: ModesConfiguration) {
+    constructor(
+        private transformationService: TransformationService,
+        private gridInteractionService: GridService,
+        private modeConfiguration: ModesConfiguration
+    ) {
     }
 
     get squareSize(): number {
@@ -46,6 +51,8 @@ export class GridComponent implements AfterViewInit {
         if (this.context) {
             this.canvasRect = this.gridCanvas.nativeElement.getBoundingClientRect();
             const gridSize = this._squareSize * this.modeConfiguration.zoomLevel / 100; // Adjust grid size based on zoom level
+            let xDelta = (this.transformationService.transformationMatrix[0][2]) % gridSize;
+            let yDelta = (this.transformationService.transformationMatrix[1][2]) % gridSize;
             this.context.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--grid-color');
 
             if (this.canvasRect != null) {
@@ -57,16 +64,19 @@ export class GridComponent implements AfterViewInit {
 
                 // Draw vertical lines
                 for (let x = 0; x <= numVerticalLines; x++) {
-                    this.context.moveTo(x * gridSize, 0);
-                    this.context.lineTo(x * gridSize, this.canvasRect.height);
+                    // Adjust the starting point of each line based on xDelta
+                    const xOffset = x * gridSize + xDelta;
+                    this.context.moveTo(xOffset, 0);
+                    this.context.lineTo(xOffset, this.canvasRect.height);
                 }
 
                 // Draw horizontal lines
                 for (let y = 0; y <= numHorizontalLines; y++) {
-                    this.context.moveTo(0, y * gridSize);
-                    this.context.lineTo(this.canvasRect.width, y * gridSize);
+                    // Adjust the starting point of each line based on yDelta
+                    const yOffset = y * gridSize + yDelta;
+                    this.context.moveTo(0, yOffset);
+                    this.context.lineTo(this.canvasRect.width, yOffset);
                 }
-
 
                 this.context.stroke();
             }
