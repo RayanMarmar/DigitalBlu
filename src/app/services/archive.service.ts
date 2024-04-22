@@ -197,16 +197,6 @@ export class ArchiveService {
         }
     }
 
-    undoLine(): void {
-        let line: Line | undefined = this._linesList.pop();
-        if (line != undefined) {
-            this._archiveLinesList.push(line);
-            this._archivePointsList.push(this._pointsList.pop()!!);
-            if (this.ghostPoint()) {
-                this._archivePointsList.push(this._pointsList.pop()!!);
-            }
-        }
-    }
 
     redo(): void {
         if (!this.containsArchivedElements())
@@ -215,59 +205,9 @@ export class ArchiveService {
         if (command != undefined) {
             command.redo();
             this.commandsList.push(command);
-            switch (command) {
-                case Command.ADD_LINE:
-                    this.redoLine();
-                    break;
-                case Command.ADD_WALL:
-                    this.redoWall();
-                    break;
-                case Command.ADD_DOOR:
-                    this.redoDoor();
-                    break;
-                case Command.ADD_WINDOW:
-                    this.redoWindow();
-                    break;
-                case Command.DELETE_WALL:
-                    this.undoWall();
-                    break;
-                default:
-                    break;
-            }
         }
     }
 
-    redoLine(): void {
-        let line: Line | undefined = this._archiveLinesList.pop();
-        if (line != undefined) {
-            this._linesList.push(line);
-            this._pointsList.push(this._archivePointsList.pop()!!);
-            if (this.shouldAddPoint(line)) {
-                this._pointsList.push(this._archivePointsList.pop()!!);
-            }
-        }
-    }
-
-    redoWall(): void {
-        let wall: Wall | undefined = this._archiveWallsList.pop();
-        if (wall != undefined) {
-            this._wallsList.push(wall);
-        }
-    }
-
-    redoDoor(): void {
-        let door: Door | undefined = this._archiveDoorsList.pop();
-        if (door != undefined) {
-            this._doorsList.push(door);
-        }
-    }
-
-    redoWindow(): void {
-        let window: Window | undefined = this._archiveWindowsList.pop();
-        if (window != undefined) {
-            this._windowsList.push(window);
-        }
-    }
 
     containsArchivedElements(): boolean { //redo
         return this.archiveCommandsList.length > 0;
@@ -371,7 +311,7 @@ export class ArchiveService {
     deleteSelectedWall(wall: Wall | null): void {
         if (wall instanceof Wall) {
             this._archiveWallsList.push(wall)
-            this.commandsList.push(Command.DELETE_WALL);
+            // this.commandsList.push(Command.DELETE_WALL);
         }
         this._wallsList = this._wallsList.filter(item => item !== wall);
 

@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {ArchiveService} from "./archive.service";
-import {Point} from "../models/point";
-import {Wall} from "../models/wall";
-import {Door} from "../models/door";
-import {Line} from "../models/line";
-import {Window} from "../models/window";
+import {Point} from "../drawables/point"
+import {Wall} from "../drawables/wall";
+import {Door} from "../drawables/door";
+import {Line} from "../drawables/line";
+import {Window} from "../drawables/window";
 
 @Injectable({
     providedIn: 'root'
