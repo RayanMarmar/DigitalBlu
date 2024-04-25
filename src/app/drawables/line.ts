@@ -5,7 +5,9 @@ export class Line implements Drawable {
     private _firstPoint: Point;
     private _secondPoint: Point;
 
-    constructor(firstPoint: Point, secondPoint: Point, reverseTransformationMatrix: number[][] = [[1, 1, 0], [1, 1, 0]]) {
+    constructor(firstPoint: Point, secondPoint: Point,
+                reverseTransformationMatrix: number[][] = [[1, 1, 0], [1, 1, 0]],
+    ) {
         this._firstPoint = firstPoint.transform(reverseTransformationMatrix);
         this._secondPoint = secondPoint.transform(reverseTransformationMatrix);
     }

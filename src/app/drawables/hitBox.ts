@@ -16,6 +16,7 @@ export class HitBox implements Drawable {
     private _height: number;
     private _xFactor: number;
     private _yFactor: number;
+    private _transformationMatrix: number[][];
 
     // the constructor arguments should be the same as the element arguments
     constructor(firstPoint: Point, secondPoint: Point, height: number, reverseTransformationMatrix: number[][]) {
@@ -29,13 +30,9 @@ export class HitBox implements Drawable {
         firstPoint = firstPoint.transform(reverseTransformationMatrix);
         secondPoint = secondPoint.transform(reverseTransformationMatrix);
 
-        if (line.isVertical()) {
-            firstPoint.y = firstPoint.y - deltaX;
-            secondPoint.y = secondPoint.y + deltaX;
-        } else {
-            firstPoint.x = firstPoint.x - deltaX;
-            secondPoint.x = secondPoint.x + deltaX;
-        }
+
+        firstPoint.x = firstPoint.x - deltaX;
+        secondPoint.x = secondPoint.x + deltaX;
 
 
         this._height = height;
@@ -52,6 +49,7 @@ export class HitBox implements Drawable {
         this._fourthPoint = this._thirdLine.firstPoint;
         this._secondLine = new Line(this._secondPoint, this._thirdPoint);
         this._fourthLine = new Line(this._fourthPoint, this._firstPoint);
+        this._transformationMatrix = reverseTransformationMatrix;
 
     }
 
@@ -161,13 +159,20 @@ export class HitBox implements Drawable {
     }
 
 
+    get transformationMatrix(): number[][] {
+        return this._transformationMatrix;
+    }
+
+    set transformationMatrix(value: number[][]) {
+        this._transformationMatrix = value;
+    }
+
     draw(
         context: CanvasRenderingContext2D,
         canvasColor: string,
         wallColor: string,
-        transformationMatrix: number[][],
     ) {
-        let hitBox: HitBox = this.transform(transformationMatrix);
+        let hitBox: HitBox = this.transform(this._transformationMatrix);
         // Draw a filled rectangle with the correct coordinates
         context.beginPath();
         context.moveTo(hitBox.firstPoint.x, hitBox.firstPoint.y);

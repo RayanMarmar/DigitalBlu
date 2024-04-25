@@ -1,6 +1,7 @@
 import {Line} from "./line";
 import {Point} from "./point";
 import {Wall} from "./wall";
+import {HitBox} from "./hitBox";
 
 export class WallOpening {
     protected _wall: Wall;
@@ -9,18 +10,29 @@ export class WallOpening {
     protected _center: Point;
     protected _base: Line[];
 
+    private _hitBox: HitBox;
+
     constructor(wall: Wall, point: Point, height: number) {
+
         this.height = height;
         this._wall = wall;
         let line: Line | null = wall.thirdLine.subLine(point, this.height);
         let secondLine: Line | null = wall.firstLine.subLine(point, this.height);
+
+
         if (line == null || secondLine == null)
             throw new Error("No sub line found");
         this._base = [line, secondLine];
         this._parallelLine = this._base[0].calculateParallelLine(
             this.height, wall.xFactor, wall.yFactor, 1
         );
+        this._hitBox = new HitBox(point,
+            this._parallelLine.secondPoint
+            , height,
+            [[1, 1, 0], [1, 1, 0]],
+        )
         this._center = this._base[0].firstPoint;
+
     }
 
     inRange(point: Point): boolean {
@@ -63,6 +75,12 @@ export class WallOpening {
 
     protected drawOpening(context: CanvasRenderingContext2D, bgColor: string, wallColor: string) {
         // Draw a filled rectangle with the correct coordinates
+        this._hitBox.draw(
+            context,
+            bgColor,
+            wallColor
+        )
+        ;
         context.beginPath();
         context.moveTo(this._base[0].firstPoint.x, this._base[0].firstPoint.y);
         context.lineTo(this._base[0].secondPoint.x, this._base[0].secondPoint.y);
