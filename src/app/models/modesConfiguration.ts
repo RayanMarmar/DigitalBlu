@@ -27,7 +27,7 @@ export class ModesConfiguration {
         this._windowMode = false;
         this._drawing = false;
         this._gridOn = true;
-        this._defaultThickness = 20;
+        this._defaultThickness = 10;
         this._zoomLevel = 100;
         this._darkMode = false;
         this._grabMode = false;

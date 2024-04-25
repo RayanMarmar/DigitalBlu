@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ElementRef, HostListener, ViewChild} from '@an
 import {Mouse} from "../../models/mouse";
 import {CanvasService} from "../../services/canvas.service";
 import {ModesConfiguration} from "../../models/modesConfiguration";
+import {EventHandlerConfiguration} from "../../models/eventHandlerConfiguration";
 
 @Component({
     selector: 'app-canvas',
@@ -20,6 +21,7 @@ export class CanvasComponent implements AfterViewInit {
         private canvasService: CanvasService,
         private mouse: Mouse,
         private modesConfiguration: ModesConfiguration,
+        public eventHandlerConfiguration: EventHandlerConfiguration,
     ) {
     }
 
@@ -42,16 +44,19 @@ export class CanvasComponent implements AfterViewInit {
     }
 
     onMouseDown(event: MouseEvent): void {
-        this.canvasService.onMouseDown(event);
+        this.eventHandlerConfiguration.onMouseDown(event);
+        this.canvasService.drawAll();
     }
 
     onMouseUp(event: MouseEvent): void {
-        this.canvasService.onMouseUp(event);
+        this.eventHandlerConfiguration.onMouseUp(event);
+        this.canvasService.drawAll();
     }
 
 
     onMouseMove(event: MouseEvent): void {
-        this.canvasService.onMouseMove(event)
+        this.eventHandlerConfiguration.onMouseMove(event)
+        this.canvasService.drawAll();
     }
 
     setCanvasSize(): void {

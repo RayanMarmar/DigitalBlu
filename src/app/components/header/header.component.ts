@@ -5,6 +5,7 @@ import {NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {ThemeService} from "../../services/theme.service";
 import {ArchiveService} from "../../services/archive.service";
+import {EventHandlerConfiguration} from "../../models/eventHandlerConfiguration";
 
 @Component({
     selector: 'app-header',
@@ -23,6 +24,7 @@ export class HeaderComponent {
     constructor(
         private canvasService: CanvasService,
         public modesConfiguration: ModesConfiguration,
+        public eventHandlerConfiguration: EventHandlerConfiguration,
         private themeService: ThemeService,
         private archiveService: ArchiveService
     ) {
@@ -41,15 +43,15 @@ export class HeaderComponent {
     }
 
     switchWallMode() {
-        this.modesConfiguration.changeWallMode();
+        this.eventHandlerConfiguration.setWallMode();
     }
 
     switchLineMode() {
-        this.modesConfiguration.changeLineMode();
+        this.eventHandlerConfiguration.setLineMode();
     }
 
     switchDoorMode() {
-        this.modesConfiguration.changeDoorMode();
+        this.eventHandlerConfiguration.setDoorMode();
     }
 
     updateThickness(event: Event) {
@@ -66,7 +68,7 @@ export class HeaderComponent {
 
 
     switchWindowMode() {
-        this.modesConfiguration.changeWindowMode();
+        this.eventHandlerConfiguration.setWindowMode();
     }
 
     switchGridMode() {

@@ -21,7 +21,7 @@ export class WallModeHandler implements MouseEventHandler {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
         let snapped: Point = this.snapPoint(point);
-        if (this.modesConfiguration.drawing)
+        if (this.modesConfiguration.drawing) {
             this.archiveService.addWall(
                 new Wall(
                     this.mouse.clickedCoordinates!!,
@@ -30,6 +30,7 @@ export class WallModeHandler implements MouseEventHandler {
                     this.transformationService.reverseTransformationMatrix
                 )
             );
+        }
         if (snapped.equals(point)) {
             this.mouse.mouseDown(event);
         } else {

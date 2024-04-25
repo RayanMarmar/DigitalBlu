@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {GridComponent} from "../components/grid/grid.component";
-import {Mouse} from "../models/mouse";
 import {ModesConfiguration} from "../models/modesConfiguration";
 import {Point} from "../drawables/point";
 
@@ -12,7 +11,6 @@ export class GridService {
     #gridComponent: GridComponent | null = null;
 
     constructor(
-        private mouse: Mouse,
         private modesConfiguration: ModesConfiguration
     ) {
     }
