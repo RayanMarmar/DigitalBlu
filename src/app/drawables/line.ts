@@ -153,11 +153,11 @@ export class Line implements Drawable {
         }
     }
 
-    private isVertical(): boolean {
+    isVertical(): boolean {
         return this.firstPoint.x == this.secondPoint.x;
     }
 
-    private isHorizontal(): boolean {
+    isHorizontal(): boolean {
         return this.firstPoint.y == this.secondPoint.y;
     }
 

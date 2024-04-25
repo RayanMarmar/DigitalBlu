@@ -19,58 +19,40 @@ export class HitBox implements Drawable {
 
     // the constructor arguments should be the same as the element arguments
     constructor(firstPoint: Point, secondPoint: Point, height: number, reverseTransformationMatrix: number[][]) {
-        // Transform the points using the reverse transformation matrix
-        const transformedFirstPoint = firstPoint.transform(reverseTransformationMatrix);
-        const transformedSecondPoint = secondPoint.transform(reverseTransformationMatrix);
+// Calculate the extension factors to make the hitbox slightly larger
+        const extensionFactorX = 1.01; // Adjust these factors as needed
+        const extensionFactorY = 1.1;
 
+        // Calculate the dimensions of the hitbox
+        const deltaX = (firstPoint.x - secondPoint.x) * extensionFactorX;
+        let line = new Line(firstPoint, secondPoint)
+        firstPoint = firstPoint.transform(reverseTransformationMatrix);
+        secondPoint = secondPoint.transform(reverseTransformationMatrix);
 
-        // Calculate the points of the hitbox
-        let firstPointHitbox, secondPointHitbox, thirdPointHitbox, fourthPointHitbox;
-
-        if (Math.abs(firstPoint.x - secondPoint.x) < 0.01) { // Check if line is almost vertical
-            // Calculate the extension factors to make the hitbox slightly larger
-            const extensionFactorX = 1.1;// Adjust these factors as needed
-            const extensionFactorY = 1.01;
-
-            // Calculate the dimensions of the hitbox
-            const deltaX = (height * extensionFactorY);
-            const deltaY = (firstPoint.x - secondPoint.x) * extensionFactorX;
-
-            firstPointHitbox = new Point(transformedFirstPoint.x - deltaX, transformedFirstPoint.y - deltaY);
-            secondPointHitbox = new Point(transformedSecondPoint.x + deltaX, transformedSecondPoint.y - deltaY);
-            thirdPointHitbox = new Point(transformedSecondPoint.x + deltaX, transformedSecondPoint.y + deltaY);
-            fourthPointHitbox = new Point(transformedFirstPoint.x - deltaX, transformedFirstPoint.y + deltaY);
-        } else { // Line is almost horizontal
-            // Calculate the extension factors to make the hitbox slightly larger
-            const extensionFactorX = 1.01; // Adjust these factors as needed
-            const extensionFactorY = 1.1;
-
-            // Calculate the dimensions of the hitbox
-            const deltaX = (firstPoint.x - secondPoint.x) * extensionFactorX;
-            const deltaY = height * (extensionFactorY);
-            firstPointHitbox = new Point(transformedFirstPoint.x - deltaX, transformedFirstPoint.y - deltaY);
-            secondPointHitbox = new Point(transformedSecondPoint.x + deltaX, transformedSecondPoint.y - deltaY);
-            thirdPointHitbox = new Point(transformedSecondPoint.x + deltaX, transformedSecondPoint.y + deltaY);
-            fourthPointHitbox = new Point(transformedFirstPoint.x - deltaX, transformedFirstPoint.y + deltaY);
+        if (line.isVertical()) {
+            firstPoint.y = firstPoint.y - deltaX;
+            secondPoint.y = secondPoint.y + deltaX;
+        } else {
+            firstPoint.x = firstPoint.x - deltaX;
+            secondPoint.x = secondPoint.x + deltaX;
         }
 
-        // Create the lines defining the hitbox
-        this._firstLine = new Line(firstPointHitbox, secondPointHitbox);
-        this._secondLine = new Line(secondPointHitbox, thirdPointHitbox);
-        this._thirdLine = new Line(thirdPointHitbox, fourthPointHitbox);
-        this._fourthLine = new Line(fourthPointHitbox, firstPointHitbox);
 
-        // Assign other properties
-        this._height = height; // Update height to include the extension on both sides
-        this._width = this._firstLine.calculateDistance(); // Update width to include the extension on both sides
-        this._xFactor = (transformedFirstPoint.x - transformedSecondPoint.x) >= 0 ? -1 : 1;
-        this._yFactor = (transformedFirstPoint.y - transformedSecondPoint.y) >= 0 ? -1 : 1;
+        this._height = height;
+        this._yFactor = (firstPoint.y - secondPoint.y) >= 0 ? -1 : 1;
+        this._xFactor = (firstPoint.x - secondPoint.x) >= 0 ? -1 : 1;
 
-        // Assign points of the hitbox
-        this._firstPoint = firstPointHitbox;
-        this._secondPoint = secondPointHitbox;
-        this._thirdPoint = thirdPointHitbox;
-        this._fourthPoint = fourthPointHitbox;
+        this._firstLine = new Line(firstPoint, secondPoint)
+            .calculateParallelLine(this._height, this._xFactor, this._yFactor, -1);
+        this._width = this._firstLine.calculateDistance();
+        this._thirdLine = this._firstLine.calculateParallelLine(-2 * this._height, this._xFactor, this._yFactor);
+        this._firstPoint = this._firstLine.firstPoint;
+        this._secondPoint = this._firstLine.secondPoint;
+        this._thirdPoint = this._thirdLine.secondPoint;
+        this._fourthPoint = this._thirdLine.firstPoint;
+        this._secondLine = new Line(this._secondPoint, this._thirdPoint);
+        this._fourthLine = new Line(this._fourthPoint, this._firstPoint);
+
     }
 
 
