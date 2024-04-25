@@ -18,8 +18,7 @@ export class Wall implements Drawable {
     private _yFactor: number;
     private _hitBox: HitBox;
 
-    constructor(firstPoint: Point, secondPoint: Point, height: number, reverseTransformationMatrix: number[][],
-                hitBox: HitBox) {
+    constructor(firstPoint: Point, secondPoint: Point, height: number, reverseTransformationMatrix: number[][]) {
         firstPoint = firstPoint.transform(reverseTransformationMatrix);
         secondPoint = secondPoint.transform(reverseTransformationMatrix);
         this._height = height;
@@ -35,7 +34,7 @@ export class Wall implements Drawable {
         this._secondLine = new Line(this._secondPoint, this._thirdPoint);
         this._fourthLine = new Line(this._fourthPoint, this._firstPoint);
         this._width = this._firstLine.calculateDistance();
-        this._hitBox = hitBox
+        this._hitBox = new HitBox(firstPoint, secondPoint, height, reverseTransformationMatrix)
     }
 
     // Getter fo hitBox
@@ -236,8 +235,6 @@ export class Wall implements Drawable {
         let height: number = this._height * transformationMatrix[0][0];
         return new Wall(firstPoint, secondPoint, height,
             [[1, 1, 0], [1, 1, 0]],
-            new HitBox(firstPoint, secondPoint, height,
-                [[1, 1, 0], [1, 1, 0]]
-            ));
+        );
     }
 }
