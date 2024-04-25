@@ -4,6 +4,9 @@ import {LineModeHandler} from "../mouseEventHandlers/lineModeHandler";
 import {WallModeHandler} from "../mouseEventHandlers/wallModeHandler";
 import {DoorModeHandler} from "../mouseEventHandlers/doorModeHandler";
 import {WindowModeHandler} from "../mouseEventHandlers/windowModeHandler";
+import {GrabModeHandler} from "../mouseEventHandlers/grabModeHandler";
+import {EraseModeHandler} from "../mouseEventHandlers/eraseModeHandler";
+import {CursorModeHandler} from "../mouseEventHandlers/cursorModeHandler";
 
 @Injectable({
     providedIn: 'root',
@@ -50,6 +53,31 @@ export class EventHandlerConfiguration {
     }
 
 
+    setGrabMode(): void {
+        this.eventHandler = this.modeService.grabMode;
+    }
+
+    get grabMode(): boolean {
+        return this.eventHandler instanceof GrabModeHandler;
+    }
+
+    setCursorMode(): void {
+        this.eventHandler = this.modeService.cursorMode;
+    }
+
+    get cursorMode(): boolean {
+        return this.eventHandler instanceof CursorModeHandler;
+    }
+
+    setEraseMode(): void {
+        this.eventHandler = this.eraseMode ? this.modeService.wallMode : this.modeService.eraseMode;
+    }
+
+    get eraseMode(): boolean {
+        return this.eventHandler instanceof EraseModeHandler;
+    }
+
+
     onMouseUp(event: MouseEvent): void {
         this.eventHandler.onMouseUp(event);
     }
@@ -57,7 +85,6 @@ export class EventHandlerConfiguration {
     onMouseDown(event: MouseEvent): void {
         this.eventHandler.onMouseDown(event);
     }
-
 
     onMouseMove(event: MouseEvent): void {
         this.eventHandler.onMouseMove(event);

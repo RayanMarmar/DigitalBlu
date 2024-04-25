@@ -13,12 +13,12 @@
     <div class="vertical-line"></div>
 
     <div class="middle-section">
-        <button [class.active]="modesConfiguration.grabMode" (click)="switchGrabMode()"><i
+        <button [class.active]="eventHandlerConfiguration.grabMode" (click)="switchGrabMode()"><i
                 class="iconoir iconoir-drag-hand-gesture"></i>
             <span class="button-label">Drag mode</span>
         </button>
 
-        <button [class.active]="modesConfiguration.cursorMode" (click)="switchCursorMode()"><i
+        <button [class.active]="eventHandlerConfiguration.cursorMode" (click)="switchCursorMode()"><i
                 class="iconoir iconoir-cursor-pointer"></i>
             <span class="button-label">Cursor mode</span>
         </button>
@@ -88,7 +88,7 @@
     <!-- Right Section -->
     <div class="right-section">
 
-        <button [class.active]="modesConfiguration.eraseMode" (click)="switchEraseMode() ">
+        <button [class.active]="eventHandlerConfiguration.eraseMode" (click)="switchEraseMode() ">
             <i class="iconoir iconoir-erase"></i>
             <span class="button-label">Erase</span>
         </button>

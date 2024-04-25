@@ -9,6 +9,8 @@ import {WallModeHandler} from "../mouseEventHandlers/wallModeHandler";
 import {DoorModeHandler} from "../mouseEventHandlers/doorModeHandler";
 import {WindowModeHandler} from "../mouseEventHandlers/windowModeHandler";
 import {GrabModeHandler} from "../mouseEventHandlers/grabModeHandler";
+import {EraseModeHandler} from "../mouseEventHandlers/eraseModeHandler";
+import {CursorModeHandler} from "../mouseEventHandlers/cursorModeHandler";
 
 @Injectable({
     providedIn: 'root'
@@ -67,6 +69,16 @@ export class ModeService {
             this.mouse,
             this.transformationService,
             this.gridService,
+        );
+    }
+
+    get eraseMode(): EraseModeHandler {
+        return new EraseModeHandler(
+        );
+    }
+
+    get cursorMode(): CursorModeHandler {
+        return new CursorModeHandler(
         );
     }
 }

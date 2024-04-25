@@ -82,7 +82,7 @@ export class HeaderComponent {
     }
 
     switchEraseMode(): void {
-        this.modesConfiguration.changeEraseMode();
+        this.eventHandlerConfiguration.setEraseMode();
     }
 
     onInput() {
@@ -102,11 +102,11 @@ export class HeaderComponent {
     }
 
     switchCursorMode(): void {
-        this.modesConfiguration.changeCursorMode();
+        this.eventHandlerConfiguration.setCursorMode();
     }
 
     switchGrabMode(): void {
-        this.modesConfiguration.changeGrabMode();
+        this.eventHandlerConfiguration.setGrabMode();
     }
 
     getThickness() {
