@@ -11,6 +11,7 @@ import {Window} from "../drawables/window";
 import {TransformationService} from "./transformation.service";
 import {ThemeService} from "./theme.service";
 import {ComponentSelectorService} from "./component-selector.service";
+import {HitBox} from "../drawables/hitBox";
 
 @Injectable({
     providedIn: 'root'
@@ -227,7 +228,13 @@ export class CanvasService {
                     this.mouse.clickedCoordinates!!,
                     snapped,
                     this.modesConfiguration.defaultThickness,
-                    this.transformationService.reverseTransformationMatrix
+                    this.transformationService.reverseTransformationMatrix,
+                    new HitBox(
+                        this.mouse.clickedCoordinates!!,
+                        snapped,
+                        this.modesConfiguration.defaultThickness,
+                        this.transformationService.reverseTransformationMatrix
+                    )
                 )
             );
 
@@ -305,7 +312,13 @@ export class CanvasService {
                 this.mouse.clickedCoordinates!!,
                 this.mouse.currentCoordinates!!,
                 this.modesConfiguration.defaultThickness,
-                this.transformationService.reverseTransformationMatrix
+                this.transformationService.reverseTransformationMatrix,
+                new HitBox(
+                    this.mouse.clickedCoordinates!!,
+                    this.mouse.currentCoordinates!!,
+                    this.modesConfiguration.defaultThickness,
+                    this.transformationService.reverseTransformationMatrix,
+                )
             )
         );
         this.drawAll();
