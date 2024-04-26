@@ -1,7 +1,6 @@
 import {Point} from "./point";
 import {Line} from "./line";
 import "./drawable";
-import {HitBox} from "./hitBox";
 
 export class Wall implements Drawable {
     private _firstPoint: Point;
@@ -16,12 +15,8 @@ export class Wall implements Drawable {
     private _height: number;
     private _xFactor: number;
     private _yFactor: number;
-    private _hitBox: HitBox;
 
     constructor(firstPoint: Point, secondPoint: Point, height: number, reverseTransformationMatrix: number[][]) {
-        this._hitBox = new HitBox(firstPoint, secondPoint, height,
-            reverseTransformationMatrix
-        )
         firstPoint = firstPoint.transform(reverseTransformationMatrix);
         secondPoint = secondPoint.transform(reverseTransformationMatrix);
         this._height = height;
@@ -37,16 +32,6 @@ export class Wall implements Drawable {
         this._secondLine = new Line(this._secondPoint, this._thirdPoint);
         this._fourthLine = new Line(this._fourthPoint, this._firstPoint);
         this._width = this._firstLine.calculateDistance();
-    }
-
-    // Getter fo hitBox
-    get hitBox(): HitBox {
-        return this._hitBox
-    }
-
-    // Setter for hitBox
-    set hitBox(value: HitBox) {
-        this._hitBox = value;
     }
 
     // Getter for firstPoint
@@ -212,11 +197,6 @@ export class Wall implements Drawable {
         transformationMatrix: number[][],
     ) {
         let wall: Wall = this.transform(transformationMatrix);
-        wall.hitBox.draw(
-            context,
-            canvasColor,
-            wallColor)
-        ;
         // Draw a filled rectangle with the correct coordinates
         context.beginPath();
         context.moveTo(wall.firstPoint.x, wall.firstPoint.y);
