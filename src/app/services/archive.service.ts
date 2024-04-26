@@ -6,6 +6,7 @@ import "../commands/command";
 import {DrawCommand} from "../commands/drawCommand";
 import {Door} from "../drawables/door";
 import {Window} from "../drawables/window";
+import {WallOpening} from "../drawables/wallOpening";
 
 @Injectable({
     providedIn: 'root'
@@ -256,6 +257,60 @@ export class ArchiveService {
         return -1; // Return -1 if no matching point is found
     }
 
+    getNearestWall(point: Point): { min: number, minElement: Wall } {
+        let min = Infinity;
+        let minElement: Wall | null = null;
+
+        for (const wall of this._wallsList) {
+            const distance = wall.calculateNearestPointDistance(point);
+            if (distance < min) {
+                min = distance;
+                minElement = wall;
+            }
+        }
+
+        return {min: min, minElement: minElement!};
+    }
+
+    getNearestLine(point: Point): { min: number, minElement: Line } {
+        let min = Infinity;
+        let minElement: Line | null = null;
+
+        for (const line of this._linesList) {
+            const distance = line.calculateNearestPointDistance(point);
+            if (distance < min) {
+                min = distance;
+                minElement = line;
+            }
+        }
+
+        return {min: min, minElement: minElement!};
+    }
+
+    getNearestWallOpening(point: Point): { min: number, minElement: WallOpening } {
+        let min = Infinity;
+        let minElement: WallOpening | null = null;
+
+        for (const door of this._doorsList) {
+            const distance = door.calculateNearestPointDistance(point);
+            if (distance < min) {
+                min = distance;
+                minElement = door;
+            }
+        }
+
+        for (const window of this._windowsList) {
+            const distance = window.calculateNearestPointDistance(point);
+            if (distance < min) {
+                min = distance;
+                minElement = window;
+            }
+        }
+
+        return {min: min, minElement: minElement!};
+    }
+
+
     inRangeOfAnExistingWindow(point: Point): number {
         for (let i: number = 0; i < this._windowsList.length; i++) {
             const w: Window = this._windowsList[i];
@@ -276,22 +331,6 @@ export class ArchiveService {
         return -1; // Return -1 if no matching point is found
     }
 
-    inRangeOfAnExistingLine(point: Point): { min: number, minLine: Line } {
-        //TODO Change
-        let min = 999999999999;
-        const point1 = new Point(0, 0)
-        const point2 = new Point(0, 0)
-        let minLine = new Line(point1, point2);
-        for (let i: number = 0; i < this._linesList.length; i++) {
-            const l: Line = this._linesList[i];
-            const distance = l.calculateNearestPointDistance(point);
-            if (distance < min) {
-                min = distance;
-                minLine = l
-            }
-        }
-        return {min, minLine};
-    }
 
     deleteLine(): void {
         this.popLine();

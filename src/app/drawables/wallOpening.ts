@@ -62,6 +62,11 @@ export class WallOpening {
         return this._base;
     }
 
+    calculateNearestPointDistance(point: Point): number {
+        console.log("distance", this._base[0].calculateNearestPointDistance(point))
+        return this._base[0].calculateNearestPointDistance(point)
+    }
+
     set base(value: Line[]) {
         this._base = value;
     }

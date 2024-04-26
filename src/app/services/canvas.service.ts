@@ -174,7 +174,7 @@ export class CanvasService {
         try {
             x = this.componentSelector.getNearestComponent(point)
         } catch (e) {
-            console.log("Problem on down cursor mode")
+            console.log("Problem on down cursor mode", e)
         }
 
     }

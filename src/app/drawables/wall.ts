@@ -190,6 +190,26 @@ export class Wall implements Drawable {
         return ((end.x - start.x) * (y - start.y)) - ((x - start.x) * (end.y - start.y));
     }
 
+    calculateNearestPointDistance(point: Point): number {
+
+        let minDistance = this.firstLine.calculateNearestPointDistance(point)
+        let tmpDistance = this.secondLine.calculateNearestPointDistance(point)
+        if (tmpDistance < minDistance) {
+            minDistance = tmpDistance
+        }
+
+        tmpDistance = this.thirdLine.calculateNearestPointDistance(point)
+        if (tmpDistance < minDistance) {
+            minDistance = tmpDistance
+        }
+        tmpDistance = this.fourthLine.calculateNearestPointDistance(point)
+        if (tmpDistance < minDistance) {
+            minDistance = tmpDistance
+        }
+        return minDistance;
+    }
+
+
     draw(
         context: CanvasRenderingContext2D,
         canvasColor: string,
