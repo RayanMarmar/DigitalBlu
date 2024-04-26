@@ -18,28 +18,9 @@ export class ComponentSelectorService {
     }
 
     getNearestComponent(point: Point): Wall | Line | Door | Window | void {
-        //Check highest prio first: wall openings and windows.
-        let i: number = this.archiveService.inRangeOfAnExistingDoor(point)
-        let x: number = this.archiveService.inRangeOfAnExistingWindow(point)
-        if ((i == -1) && (x != -1)) {
-            console.log("Window")
-            return this.archiveService.windowsList[x]
 
-        } else if ((i != -1) && (x == -1)) {
-            console.log("Door")
-            return this.archiveService.doorsList[i]
-        } else {
-            let i: number = this.archiveService.inRangeOfAnExistingWall(point)
-            if (i != -1) {
-                console.log("Wall")
-                return this.archiveService.wallsList[i]
-            } else {
-                let i: number = this.archiveService.inRangeOfAnExistingLine(point)
-                if (i != -1) {
-                    console.log("Line")
-                    return this.archiveService.linesList[i]
-                }
-            }
-        }
+        let {min, minLine} = this.archiveService.inRangeOfAnExistingLine(point)
+        console.log("nearest wall at", min, minLine);
+        return minLine;
     }
 }

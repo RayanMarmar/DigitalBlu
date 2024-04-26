@@ -172,12 +172,7 @@ export class CanvasService {
         let point: Point = this.mouse.currentCoordinates!!;
         let x;
         try {
-            if (this.archiveService.inRangeOfAnExistingWall(point) != -1) {
-                x = this.componentSelector.getNearestComponent(point)
-                // this.archiveService.deleteSelectedWall(this.archiveService.getClickedWall(point))
-                this.archiveService.deleteElement(this.archiveService.getClickedWall(point))
-                this.drawAll();
-            }
+            x = this.componentSelector.getNearestComponent(point)
         } catch (e) {
             console.log("Problem on down cursor mode")
         }

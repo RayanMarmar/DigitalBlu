@@ -276,14 +276,21 @@ export class ArchiveService {
         return -1; // Return -1 if no matching point is found
     }
 
-    inRangeOfAnExistingLine(point: Point): number {
+    inRangeOfAnExistingLine(point: Point): { min: number, minLine: Line } {
+        //TODO Change
+        let min = 999999999999;
+        const point1 = new Point(0, 0)
+        const point2 = new Point(0, 0)
+        let minLine = new Line(point1, point2);
         for (let i: number = 0; i < this._linesList.length; i++) {
             const l: Line = this._linesList[i];
-            if (l.isOnLine(point)) {
-                return i; // Return the index if a matching point is found
+            const distance = l.calculateNearestPointDistance(point);
+            if (distance < min) {
+                min = distance;
+                minLine = l
             }
         }
-        return -1; // Return -1 if no matching point is found
+        return {min, minLine};
     }
 
     deleteLine(): void {
