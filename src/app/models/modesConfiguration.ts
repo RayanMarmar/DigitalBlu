@@ -17,6 +17,7 @@ export class ModesConfiguration {
     private _zoomLevel: number;
     private _darkMode: boolean;
     private _eraseMode: boolean;
+    private _helperDisplayed: boolean;
 
 
     constructor() {
@@ -33,6 +34,7 @@ export class ModesConfiguration {
         this._grabMode = false;
         this._cursorMode = false;
         this._eraseMode = false;
+        this._helperDisplayed = false;
     }
 
     get lineMode(): boolean {
@@ -222,4 +224,7 @@ export class ModesConfiguration {
         this._cursorMode = false;
     }
 
+    helperOn(): void {
+        this._helperDisplayed = !this._helperDisplayed;
+    }
 }

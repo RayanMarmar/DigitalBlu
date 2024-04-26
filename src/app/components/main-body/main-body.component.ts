@@ -4,11 +4,12 @@ import {CanvasComponent} from "../canvas/canvas.component";
 import {GridComponent} from "../grid/grid.component";
 import {ModesConfiguration} from "../../models/modesConfiguration";
 import {ZoomControlsComponent} from "../zoom-controls/zoom-controls.component";
+import {HelperComponent} from "../helper/helper.component";
 
 @Component({
     selector: 'app-main-body',
     standalone: true,
-    imports: [HeaderComponent, CanvasComponent, GridComponent, ZoomControlsComponent],
+    imports: [HeaderComponent, CanvasComponent, GridComponent, ZoomControlsComponent, HelperComponent],
     templateUrl: './main-body.component.html',
     styleUrls: ['./main-body.component.css']
 })

@@ -111,6 +111,10 @@ export class HeaderComponent {
         return this.modesConfiguration.defaultThickness;
     }
 
+    displayHelper(): void {
+        this.modesConfiguration.helperOn();
+    }
+
     @HostListener('window:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {
         if (event.ctrlKey) {
