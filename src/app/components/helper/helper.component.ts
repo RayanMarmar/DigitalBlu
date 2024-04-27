@@ -1,4 +1,4 @@
-import {AfterViewInit, Component} from '@angular/core';
+import {Component} from '@angular/core';
 import {ModesConfiguration} from "../../models/modesConfiguration";
 
 
@@ -10,21 +10,13 @@ import {ModesConfiguration} from "../../models/modesConfiguration";
     styleUrl: './helper.component.css'
 })
 
-export class HelperComponent implements AfterViewInit {
+export class HelperComponent {
     // its important myCanvas matches the variable name in the template
 
     constructor(
-        private modesConfiguration: ModesConfiguration,
+        public modesConfiguration: ModesConfiguration,
     ) {
 
-    }
-
-    ngAfterViewInit(): void {
-        throw new Error('Method not implemented.');
-    }
-
-    displayHelper() {
-        this.modesConfiguration.helperOn();
     }
 
 }

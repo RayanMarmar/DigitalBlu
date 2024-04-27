@@ -37,6 +37,14 @@ export class ModesConfiguration {
         this._helperDisplayed = false;
     }
 
+    get helperDisplayed(): boolean {
+        return this._helperDisplayed;
+    }
+
+    set helperDisplayed(value: boolean) {
+        this._helperDisplayed = value;
+    }
+
     get lineMode(): boolean {
         return this._lineMode;
     }
