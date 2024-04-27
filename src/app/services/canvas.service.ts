@@ -184,11 +184,11 @@ export class CanvasService {
         let point: Point = this.mouse.currentCoordinates!!;
         let x;
         try {
-            if (this.archiveService.inRangeOfAnExistingWall(point) != -1) {
-                x = this.componentSelector.getNearestComponent(point)
-                //TODO Highlight element
-                this.drawAll();
-            }
+
+            x = this.componentSelector.getNearestComponent(point)
+            //TODO Highlight element
+            this.drawAll();
+
         } catch (e) {
             console.log("Problem on hover cursor mode")
         }

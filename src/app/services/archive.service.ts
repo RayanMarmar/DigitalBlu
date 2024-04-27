@@ -6,7 +6,6 @@ import "../commands/command";
 import {DrawCommand} from "../commands/drawCommand";
 import {Door} from "../drawables/door";
 import {Window} from "../drawables/window";
-import {WallOpening} from "../drawables/wallOpening";
 
 @Injectable({
     providedIn: 'root'
@@ -287,9 +286,9 @@ export class ArchiveService {
         return {min: min, minElement: minElement!};
     }
 
-    getNearestWallOpening(point: Point): { min: number, minElement: WallOpening } {
+    getNearestWallOpening(point: Point): { min: number, minElement: Door | Window | null } {
         let min = Infinity;
-        let minElement: WallOpening | null = null;
+        let minElement: Door | Window | null = null;
 
         for (const door of this._doorsList) {
             const distance = door.calculateNearestPointDistance(point);

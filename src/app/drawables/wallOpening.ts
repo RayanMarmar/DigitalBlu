@@ -73,7 +73,12 @@ export class WallOpening {
     }
 
     calculateNearestPointDistance(point: Point): number {
-        return this._base[0].calculateNearestPointDistance(point)
+        let line = this.base[0]
+        return Math.min(this.base[0].calculateNearestPointDistance(point),
+            this.base[1].calculateParallelLine(this.height, this.wall.xFactor,
+                this.wall.yFactor, 1).calculateNearestPointDistance(point),
+            this.base[1].calculateNearestPointDistance(point))
+
     }
 
     set base(value: Line[]) {
@@ -92,7 +97,7 @@ export class WallOpening {
         context.fill();
         context.strokeStyle = bgColor;
         context.stroke(); // If you want to keep the border, you can include this line
-        context.fillStyle = wallColor;
+        context.fillStyle = "red";
         context.strokeStyle = wallColor;
     }
 }
