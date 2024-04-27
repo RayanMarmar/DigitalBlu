@@ -351,35 +351,46 @@ export class ArchiveService {
     }
 
 
-    deleteSelectedWall(wall: Wall | null): void {
-        if (wall instanceof Wall) {
-            this._archiveWallsList.push(wall)
-            // this.commandsList.push(Command.DELETE_WALL);
-        }
+    deleteSelectedWall(wall: Wall): void {
         this._wallsList = this._wallsList.filter(item => item !== wall);
+    }
 
+    deleteSelectedLine(line: Line): void {
+        this._linesList = this._linesList.filter(item => item !== line);
+    }
+
+    deleteSelectedDoor(door: Door): void {
+        this._doorsList = this._doorsList.filter(item => item !== door);
+    }
+
+    deleteSelectedWindow(window: Window): void {
+        this._windowsList = this._windowsList.filter(item => item !== window);
     }
 
     //TODO ELement class for delete, implements wall line etcc,(interface)
     // all implement delete
-    deleteElement(x: Wall | Line | Door | Window | null) {
-        switch (true) {
-            case x instanceof Wall:
-                // this.deleteSelectedWall(x as Wall);
-                break;
-            case x instanceof Line:
-                //TODO
-                break;
-            case x instanceof Door:
+    deleteElement(x: Drawable | null) {
+        if (x === null) {
+            // Handle case where x is null
+            return;
+        }
 
+        switch (x.constructor) {
+            case Wall:
+                this.deleteSelectedWall(x as Wall)
                 break;
-            case x instanceof Window:
-
+            case Line:
+                this.deleteSelectedLine(x as Line)
+                break;
+            case Door:
+                this.deleteSelectedDoor(x as Door)
+                break;
+            case Window:
+                this.deleteSelectedWindow(x as Window)
                 break;
             default:
                 // Handle the case where x is of unexpected type
                 break;
         }
     }
-
 }

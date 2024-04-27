@@ -6,7 +6,6 @@ import {Door} from "../drawables/door";
 import {Window} from "../drawables/window";
 import {TransformationService} from "./transformation.service";
 import {ThemeService} from "./theme.service";
-import {ComponentSelectorService} from "./component-selector.service";
 
 @Injectable({
     providedIn: 'root'
@@ -15,13 +14,22 @@ export class CanvasService {
     private canvas: ElementRef<HTMLCanvasElement> | null = null;
     private context: CanvasRenderingContext2D | null = null;
     private canvasRect: DOMRect | null = null;
-    private selectedElement: Drawable | null = null;
+    private _selectedElement: Drawable | null = null;
 
     constructor(
         private archiveService: ArchiveService,
         private transformationService: TransformationService,
         private themeService: ThemeService
     ) {
+    }
+
+
+    get selectedElement(): Drawable | null {
+        return this._selectedElement;
+    }
+
+    set selectedElement(value: Drawable | null) {
+        this._selectedElement = value;
     }
 
     setCanvas(canvas: ElementRef<HTMLCanvasElement>): void {
@@ -79,11 +87,11 @@ export class CanvasService {
     }
 
     private drawSelectedElement(): void {
-        if (this.selectedElement == null) {
+        if (this._selectedElement == null) {
             return;
         } else {
             //TODO Change colour
-            this.selectedElement.draw(
+            this._selectedElement.draw(
                 this.context!!,
                 "#FF0000",
                 "#FF0000",

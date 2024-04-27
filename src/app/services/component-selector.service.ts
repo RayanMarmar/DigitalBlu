@@ -17,7 +17,7 @@ export class ComponentSelectorService {
         const {min: minOpeningDistance, minElement: minOpening} = this.archiveService.getNearestWallOpening(point);
         const {min: minWallDistance, minElement: minWall} = this.archiveService.getNearestWall(point);
         const {min: minLineDistance, minElement: minLine} = this.archiveService.getNearestLine(point);
-        let maxAllowedDistance = 100;
+        let maxAllowedDistance = 30;
 
         if (minOpening !== null && minOpeningDistance <= minWallDistance && minOpeningDistance < minLineDistance && minOpeningDistance <= maxAllowedDistance) {
             console.log("returning opening", minOpeningDistance);
