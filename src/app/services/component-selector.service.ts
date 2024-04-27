@@ -1,9 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ArchiveService} from "./archive.service";
 import {Point} from "../drawables/point"
-import {Wall} from "../drawables/wall";
-import {Line} from "../drawables/line";
-import {Door} from "../drawables/door";
 
 @Injectable({
     providedIn: 'root'
@@ -16,7 +13,7 @@ export class ComponentSelectorService {
 
     }
 
-    getNearestComponent(point: Point): Wall | Line | Door | Window | null {
+    getNearestComponent(point: Point): Drawable | null {
         const {min: minOpeningDistance, minElement: minOpening} = this.archiveService.getNearestWallOpening(point);
         const {min: minWallDistance, minElement: minWall} = this.archiveService.getNearestWall(point);
         const {min: minLineDistance, minElement: minLine} = this.archiveService.getNearestLine(point);
@@ -24,7 +21,7 @@ export class ComponentSelectorService {
 
         if (minOpening !== null && minOpeningDistance <= minWallDistance && minOpeningDistance < minLineDistance && minOpeningDistance <= maxAllowedDistance) {
             console.log("returning opening", minOpeningDistance);
-            return minOpening as | Door | Window;
+            return minOpening as null | Drawable;
         }
         if (minWallDistance !== Infinity && minWallDistance < minOpeningDistance && minWallDistance < minLineDistance && minWallDistance <= maxAllowedDistance) {
             console.log("returning wall", minWallDistance);

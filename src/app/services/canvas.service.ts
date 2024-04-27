@@ -19,6 +19,7 @@ export class CanvasService {
     private canvas: ElementRef<HTMLCanvasElement> | null = null;
     private context: CanvasRenderingContext2D | null = null;
     private canvasRect: DOMRect | null = null;
+    private selectedElement: Drawable | null = null;
 
     constructor(
         private archiveService: ArchiveService,
@@ -85,16 +86,33 @@ export class CanvasService {
         });
     }
 
+    private drawSelectedElement(): void {
+        if (this.selectedElement == null) {
+            return;
+        } else {
+            //TODO Change colour
+            this.selectedElement.draw(
+                this.context!!,
+                "#FF0000",
+                "#FF0000",
+                this.transformationService.transformationMatrix,
+            )
+        }
+    }
+
     drawAll(): void {
         if (this.context == null) {
             console.log("Context is null...")
             return;
         }
+
         this.clear();
         this.drawAllLines();
         this.drawAllWalls();
         this.drawAllDoors();
         this.drawAllWindows();
+        this.drawSelectedElement();
+
     }
 
     undo(): void {
@@ -132,6 +150,8 @@ export class CanvasService {
             this.mouse.mouseDown(event, true);
             this.drawAll();
         }
+
+
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -173,21 +193,22 @@ export class CanvasService {
         let x;
         try {
             x = this.componentSelector.getNearestComponent(point)
+            this.selectedElement = x;
+            this.drawAll()
         } catch (e) {
             console.log("Problem on down cursor mode", e)
         }
 
     }
 
-    OnMouseHoverCursorMode(event: MouseEvent): void {
+    OnMouseMoveCursorMode(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
         let x;
         try {
-
             x = this.componentSelector.getNearestComponent(point)
-            //TODO Highlight element
-            this.drawAll();
+            this.selectedElement = x;
+            this.drawAll()
 
         } catch (e) {
             console.log("Problem on hover cursor mode")
@@ -268,6 +289,9 @@ export class CanvasService {
             this.onMouseMoveWallMode(event);
         else if (this.modesConfiguration.lineMode)
             this.onMouseMoveLineMode(event);
+        else if (this.modesConfiguration.cursorMode) {
+            this.OnMouseMoveCursorMode(event);
+        }
     }
 
     onMouseMoveLineMode(event: MouseEvent): void {
