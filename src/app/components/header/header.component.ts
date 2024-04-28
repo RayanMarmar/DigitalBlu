@@ -1,4 +1,4 @@
-import {Component, HostListener} from '@angular/core';
+import {Component} from '@angular/core';
 import {CanvasService} from "../../services/canvas.service";
 import {ModesConfiguration} from "../../models/modesConfiguration";
 import {NgIf} from "@angular/common";
@@ -111,17 +111,5 @@ export class HeaderComponent {
 
     getThickness() {
         return this.modesConfiguration.defaultThickness;
-    }
-
-    @HostListener('window:keydown', ['$event'])
-    onKeyDown(event: KeyboardEvent): void {
-        if (event.ctrlKey) {
-            if (event.key === 'z') {
-                this.undo();
-            } else if (event.key === 'y') {
-                this.redo();
-            }
-            event.preventDefault();
-        }
     }
 }

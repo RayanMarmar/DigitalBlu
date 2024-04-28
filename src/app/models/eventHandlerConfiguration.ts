@@ -1,23 +1,26 @@
 import {Injectable} from "@angular/core";
 import {ModeManagerService} from "../services/mode-manager.service";
-import {LineModeHandler} from "../drawingModeHandlers/lineModeHandler";
-import {WallModeHandler} from "../drawingModeHandlers/wallModeHandler";
-import {DoorModeHandler} from "../drawingModeHandlers/doorModeHandler";
-import {WindowModeHandler} from "../drawingModeHandlers/windowModeHandler";
-import {GrabModeHandler} from "../drawingModeHandlers/grabModeHandler";
-import {EraseModeHandler} from "../drawingModeHandlers/eraseModeHandler";
-import {CursorModeHandler} from "../drawingModeHandlers/cursorModeHandler";
+import {LineModeHandler} from "../modeHandlers/lineModeHandler";
+import {WallModeHandler} from "../modeHandlers/wallModeHandler";
+import {DoorModeHandler} from "../modeHandlers/doorModeHandler";
+import {WindowModeHandler} from "../modeHandlers/windowModeHandler";
+import {GrabModeHandler} from "../modeHandlers/grabModeHandler";
+import {EraseModeHandler} from "../modeHandlers/eraseModeHandler";
+import {CursorModeHandler} from "../modeHandlers/cursorModeHandler";
+import {GlobalHandler} from "../modeHandlers/globalHandler";
 
 @Injectable({
     providedIn: 'root',
 })
 export class EventHandlerConfiguration {
     private eventHandler: ModeHandler;
+    private globalHandler: GlobalHandler;
 
     constructor(
         private modeService: ModeManagerService
     ) {
         this.eventHandler = modeService.wallMode;
+        this.globalHandler = modeService.globalHandler;
     }
 
     setLineMode(): void {
@@ -92,6 +95,7 @@ export class EventHandlerConfiguration {
 
     onKeyDown(event: KeyboardEvent): void {
         this.eventHandler.onKeyDown(event);
+        this.globalHandler.onKeyDown(event);
     }
 
 }

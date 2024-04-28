@@ -10,7 +10,8 @@ export class ModesConfiguration {
     private _defaultThickness: number;
     private _zoomLevel: number;
     private _darkMode: boolean;
-
+    private readonly _minZoom: number = 50;
+    private readonly _maxZoom: number = 150;
 
     constructor() {
         this._snapMode = true;
@@ -19,6 +20,14 @@ export class ModesConfiguration {
         this._defaultThickness = 10;
         this._zoomLevel = 100;
         this._darkMode = false;
+    }
+
+    get minZoom(): number {
+        return this._minZoom;
+    }
+
+    get maxZoom(): number {
+        return this._maxZoom;
     }
 
     get snapMode(): boolean {
