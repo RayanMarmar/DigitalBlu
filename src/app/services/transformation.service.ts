@@ -6,7 +6,7 @@ import {Point} from "../drawables/point";
 })
 export class TransformationService {
     private initialMatrix: number[][];
-    private scaleValue: number;
+    private _scaleValue: number;
     private translationMatrix: number[];
     private _transformationMatrix: number[][];
 
@@ -20,17 +20,21 @@ export class TransformationService {
             [0, 1, 0]
         ];
         this.translationMatrix = [0, 0];
-        this.scaleValue = 1;
+        this._scaleValue = 1;
     }
 
-    scale(percentageScale: number) {
-        this.scaleValue = percentageScale / 100;
+    set scaleValue(percentageScale: number) {
+        this._scaleValue = percentageScale / 100;
         this.recomputeTransformationMatrix();
     }
 
+    get scaleValue(): number {
+        return this._scaleValue;
+    }
+
     recomputeTransformationMatrix() {
-        this._transformationMatrix[0][0] = this.initialMatrix[0][0] * this.scaleValue;
-        this._transformationMatrix[1][1] = this.initialMatrix[1][1] * this.scaleValue;
+        this._transformationMatrix[0][0] = this.initialMatrix[0][0] * this._scaleValue;
+        this._transformationMatrix[1][1] = this.initialMatrix[1][1] * this._scaleValue;
         this._transformationMatrix[0][2] = this.translationMatrix[0];
         this._transformationMatrix[1][2] = this.translationMatrix[1];
     }

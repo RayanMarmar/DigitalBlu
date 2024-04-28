@@ -29,7 +29,7 @@ export class ZoomControlsComponent {
         if (this.zoomLevel < this.maxZoom) {
             this.zoomLevel += 10;
             this.modesConfiguration.zoomLevel = this.zoomLevel;
-            this.transformationService.scale(this.zoomLevel)
+            this.transformationService.scaleValue = this.zoomLevel;
             this.gridInteractionService.updateCanvas();
             this.canvasService.drawAll()
         }
@@ -39,7 +39,7 @@ export class ZoomControlsComponent {
         if (this.zoomLevel > this.minZoom) {
             this.zoomLevel -= 10;
             this.modesConfiguration.zoomLevel = this.zoomLevel;
-            this.transformationService.scale(this.zoomLevel)
+            this.transformationService.scaleValue = this.zoomLevel;
             this.gridInteractionService.updateCanvas();
             this.canvasService.drawAll()
         }

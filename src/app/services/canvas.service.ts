@@ -1,9 +1,6 @@
 import {ElementRef, Injectable} from '@angular/core';
 import {Line} from "../drawables/line";
 import {ArchiveService} from "./archive.service";
-import {GridService} from "./grid.service";
-import {Mouse} from "../models/mouse";
-import {ModesConfiguration} from "../models/modesConfiguration";
 import {Wall} from "../drawables/wall";
 import {Door} from "../drawables/door";
 import {Window} from "../drawables/window";
@@ -20,9 +17,6 @@ export class CanvasService {
 
     constructor(
         private archiveService: ArchiveService,
-        private gridService: GridService,
-        private mouse: Mouse,
-        private readonly modesConfiguration: ModesConfiguration,
         private transformationService: TransformationService,
         private themeService: ThemeService
     ) {
