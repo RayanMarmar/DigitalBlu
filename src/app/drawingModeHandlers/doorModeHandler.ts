@@ -1,4 +1,4 @@
-import './drawingModeHandler';
+import './modeHandler';
 import {Mouse} from "../models/mouse";
 import {ModesConfiguration} from "../models/modesConfiguration";
 import {TransformationService} from "../services/transformation.service";
@@ -7,7 +7,7 @@ import {Point} from "../drawables/point";
 import {Wall} from "../drawables/wall";
 import {Door} from "../drawables/door";
 
-export class DoorModeHandler implements DrawingModeHandler {
+export class DoorModeHandler implements ModeHandler {
     constructor(
         private mouse: Mouse,
         private readonly modesConfiguration: ModesConfiguration,
@@ -37,5 +37,32 @@ export class DoorModeHandler implements DrawingModeHandler {
     }
 
     onMouseUp(event: MouseEvent): void {
+    }
+
+    onKeyDown(event: KeyboardEvent): void {
+        if (event.key === ' ') {
+            this.changeDoorOrientation();
+        } else if (event.key === 'ArrowUp') {
+            this.changeDoorDirection(true);
+        } else if (event.key === 'ArrowDown') {
+            this.changeDoorDirection(false);
+        }
+    }
+
+
+    private changeDoorOrientation(): void {
+        let door: Door | undefined = this.archiveService.doorsList.pop();
+        if (door != undefined) {
+            door.updateDoorType((door.doorType + 1) % 3);
+            this.archiveService.doorsList.push(door);
+        }
+    }
+
+    private changeDoorDirection(up: boolean): void {
+        let door: Door | undefined = this.archiveService.doorsList.pop();
+        if (door != undefined) {
+            door.updateDoorDirection(up ? -1 : 1);
+            this.archiveService.doorsList.push(door);
+        }
     }
 }

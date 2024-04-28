@@ -1,7 +1,6 @@
 import {AfterViewInit, Component, ElementRef, HostListener, ViewChild} from '@angular/core';
 import {Mouse} from "../../models/mouse";
 import {CanvasService} from "../../services/canvas.service";
-import {ModesConfiguration} from "../../models/modesConfiguration";
 import {EventHandlerConfiguration} from "../../models/eventHandlerConfiguration";
 
 @Component({
@@ -20,7 +19,6 @@ export class CanvasComponent implements AfterViewInit {
     constructor(
         private canvasService: CanvasService,
         private mouse: Mouse,
-        private modesConfiguration: ModesConfiguration,
         public eventHandlerConfiguration: EventHandlerConfiguration,
     ) {
     }
@@ -76,19 +74,5 @@ export class CanvasComponent implements AfterViewInit {
 
     grabMode() {
         return this.eventHandlerConfiguration.grabMode;
-    }
-
-
-    @HostListener('document:keydown', ['$event'])
-    private handleKeyDown(event: KeyboardEvent): void {
-        if (event.key === 'Escape') {
-            this.canvasService.handleEscape();
-        } else if (event.key === ' ') {
-            this.canvasService.changeDoorOrientation();
-        } else if (event.key === 'ArrowUp') {
-            this.canvasService.changeDoorDirection(true);
-        } else if (event.key === 'ArrowDown') {
-            this.canvasService.changeDoorDirection(false);
-        }
     }
 }

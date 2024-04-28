@@ -1,4 +1,4 @@
-import './drawingModeHandler';
+import './modeHandler';
 import {Line} from "../drawables/line";
 import {Mouse} from "../models/mouse";
 import {ModesConfiguration} from "../models/modesConfiguration";
@@ -7,7 +7,7 @@ import {ArchiveService} from "../services/archive.service";
 import {Point} from "../drawables/point";
 import {GridService} from "../services/grid.service";
 
-export class LineModeHandler implements DrawingModeHandler {
+export class LineModeHandler implements ModeHandler {
     constructor(
         private mouse: Mouse,
         private readonly modesConfiguration: ModesConfiguration,
@@ -75,5 +75,22 @@ export class LineModeHandler implements DrawingModeHandler {
             snapped = this.gridService.calculateNearestGridIntersection(point);
         }
         return snapped;
+    }
+
+    onKeyDown(event: KeyboardEvent): void {
+        if (event.key === 'Escape') {
+            this.handleEscape();
+        }
+    }
+
+
+    private handleEscape(): void {
+        if (this.modesConfiguration.drawing) {
+            this.modesConfiguration.drawing = false;
+            if (this.mouse.moving) {
+                this.mouse.moving = false;
+                this.archiveService.deleteLine();
+            }
+        }
     }
 }

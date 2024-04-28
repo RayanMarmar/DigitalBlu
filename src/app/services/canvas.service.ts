@@ -101,41 +101,4 @@ export class CanvasService {
     clear(): void {
         this.context!.clearRect(0, 0, this.canvasRect!.width, this.canvasRect!.height);
     }
-
-    handleEscape(): void {
-        // if (this.modesConfiguration.drawing) {
-        //     this.modesConfiguration.drawing = false;
-        //     if (this.mouse.moving) {
-        //         this.mouse.moving = false;
-        //         if (this.modesConfiguration.wallMode) {
-        //             this.archiveService.deleteWall();
-        //         } else if (this.modesConfiguration.lineMode) {
-        //             this.archiveService.deleteLine();
-        //         }
-        //     }
-        //     this.drawAll();
-        // }
-    }
-
-    changeDoorOrientation(): void {
-        // if (this.modesConfiguration.doorMode) {
-        //     let door: Door | undefined = this.archiveService.doorsList.pop();
-        //     if (door != undefined) {
-        //         door.updateDoorType((door.doorType + 1) % 3);
-        //         this.archiveService.doorsList.push(door);
-        //         this.drawAll();
-        //     }
-        // }
-    }
-
-    changeDoorDirection(up: boolean): void {
-        // if (this.modesConfiguration.doorMode) {
-        //     let door: Door | undefined = this.archiveService.doorsList.pop();
-        //     if (door != undefined) {
-        //         door.updateDoorDirection(up ? -1 : 1);
-        //         this.archiveService.doorsList.push(door);
-        //         this.drawAll();
-        //     }
-        // }
-    }
 }

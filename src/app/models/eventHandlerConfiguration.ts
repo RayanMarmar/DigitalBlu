@@ -12,7 +12,7 @@ import {CursorModeHandler} from "../drawingModeHandlers/cursorModeHandler";
     providedIn: 'root',
 })
 export class EventHandlerConfiguration {
-    private eventHandler: DrawingModeHandler;
+    private eventHandler: ModeHandler;
 
     constructor(
         private modeService: ModeManagerService
@@ -88,6 +88,10 @@ export class EventHandlerConfiguration {
 
     onMouseMove(event: MouseEvent): void {
         this.eventHandler.onMouseMove(event);
+    }
+
+    onKeyDown(event: KeyboardEvent): void {
+        this.eventHandler.onKeyDown(event);
     }
 
 }

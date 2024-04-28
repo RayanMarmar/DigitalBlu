@@ -1,6 +1,6 @@
-import './drawingModeHandler';
+import './modeHandler';
 
-export class CursorModeHandler implements DrawingModeHandler {
+export class CursorModeHandler implements ModeHandler {
     constructor() {
     }
 
@@ -11,5 +11,8 @@ export class CursorModeHandler implements DrawingModeHandler {
     }
 
     onMouseUp(event: MouseEvent): void {
+    }
+
+    onKeyDown(event: KeyboardEvent): void {
     }
 }

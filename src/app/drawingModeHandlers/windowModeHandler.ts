@@ -1,4 +1,4 @@
-import './drawingModeHandler';
+import './modeHandler';
 import {Mouse} from "../models/mouse";
 import {ModesConfiguration} from "../models/modesConfiguration";
 import {TransformationService} from "../services/transformation.service";
@@ -7,7 +7,7 @@ import {Point} from "../drawables/point";
 import {Wall} from "../drawables/wall";
 import {Window} from "../drawables/window";
 
-export class WindowModeHandler implements DrawingModeHandler {
+export class WindowModeHandler implements ModeHandler {
     constructor(
         private mouse: Mouse,
         private readonly modesConfiguration: ModesConfiguration,
@@ -37,5 +37,8 @@ export class WindowModeHandler implements DrawingModeHandler {
     }
 
     onMouseUp(event: MouseEvent): void {
+    }
+
+    onKeyDown(event: KeyboardEvent): void {
     }
 }

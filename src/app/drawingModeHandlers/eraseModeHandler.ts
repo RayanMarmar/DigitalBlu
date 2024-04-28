@@ -1,6 +1,6 @@
-import './drawingModeHandler';
+import './modeHandler';
 
-export class EraseModeHandler implements DrawingModeHandler {
+export class EraseModeHandler implements ModeHandler {
     constructor() {
     }
 
@@ -11,5 +11,8 @@ export class EraseModeHandler implements DrawingModeHandler {
     }
 
     onMouseUp(event: MouseEvent): void {
+    }
+
+    onKeyDown(event: KeyboardEvent): void {
     }
 }
