@@ -1,4 +1,4 @@
-import {Component, HostListener} from '@angular/core';
+import {Component} from '@angular/core';
 import {ModesConfiguration} from "../../models/modesConfiguration";
 import {GridService} from "../../services/grid.service";
 import {CanvasService} from "../../services/canvas.service";
@@ -13,47 +13,29 @@ import {TransformationService} from "../../services/transformation.service";
     styleUrl: './zoom-controls.component.css'
 })
 export class ZoomControlsComponent {
-    zoomLevel: number = 100;
-    private minZoom: number = 50;
-    private maxZoom: number = 150;
-
     constructor(
-        private modesConfiguration: ModesConfiguration,
-        private gridInteractionService: GridService,
+        public modesConfiguration: ModesConfiguration,
+        private gridService: GridService,
         private canvasService: CanvasService,
         private transformationService: TransformationService,
     ) {
     }
 
     zoomIn() {
-        if (this.zoomLevel < this.maxZoom) {
-            this.zoomLevel += 10;
-            this.modesConfiguration.zoomLevel = this.zoomLevel;
-            this.transformationService.scale(this.zoomLevel)
-            this.gridInteractionService.updateCanvas();
+        if (this.modesConfiguration.zoomLevel < this.modesConfiguration.maxZoom) {
+            this.modesConfiguration.zoomLevel += 10;
+            this.transformationService.scaleValue = this.modesConfiguration.zoomLevel;
+            this.gridService.updateCanvas();
             this.canvasService.drawAll()
         }
     }
 
     zoomOut() {
-        if (this.zoomLevel > this.minZoom) {
-            this.zoomLevel -= 10;
-            this.modesConfiguration.zoomLevel = this.zoomLevel;
-            this.transformationService.scale(this.zoomLevel)
-            this.gridInteractionService.updateCanvas();
+        if (this.modesConfiguration.zoomLevel > this.modesConfiguration.minZoom) {
+            this.modesConfiguration.zoomLevel -= 10;
+            this.transformationService.scaleValue = this.modesConfiguration.zoomLevel;
+            this.gridService.updateCanvas();
             this.canvasService.drawAll()
-        }
-    }
-
-    @HostListener('window:keydown', ['$event'])
-    onKeyDown(event: KeyboardEvent): void {
-        if (event.ctrlKey) {
-            if (event.key === '+') {
-                this.zoomIn();
-            } else if (event.key === '-') {
-                this.zoomOut();
-            }
-            event.preventDefault();
         }
     }
 }

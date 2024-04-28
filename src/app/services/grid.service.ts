@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
 import {GridComponent} from "../components/grid/grid.component";
-import {Mouse} from "../models/mouse";
-import {ModesConfiguration} from "../models/modesConfiguration";
 import {Point} from "../drawables/point";
+import {TransformationService} from "./transformation.service";
 
 @Injectable({
     providedIn: 'root'
@@ -12,8 +11,7 @@ export class GridService {
     #gridComponent: GridComponent | null = null;
 
     constructor(
-        private mouse: Mouse,
-        private modesConfiguration: ModesConfiguration
+        private transformationService: TransformationService
     ) {
     }
 
@@ -28,11 +26,13 @@ export class GridService {
     //Method Used to get nearest intersection for snapping point to grid
     calculateNearestGridIntersection(point: Point): Point {
         if (this.gridComponent != null) {
-            const gridSize = this.gridComponent.squareSize * this.modesConfiguration.zoomLevel / 100; // Adjust grid size based on zoom level
+            const gridSize = this.gridComponent.squareSize * this.transformationService.scaleValue; // Adjust grid size based on zoom level
+            let xDelta = (this.transformationService.transformationMatrix[0][2]) % gridSize;
+            let yDelta = (this.transformationService.transformationMatrix[1][2]) % gridSize;
 
             // Calculate the nearest intersection coordinates
-            let x = Math.round(point.x / gridSize) * gridSize;
-            let y = Math.round(point.y / gridSize) * gridSize;
+            let x = Math.round(point.x / gridSize) * gridSize + xDelta;
+            let y = Math.round(point.y / gridSize) * gridSize + yDelta;
 
 
             return new Point(x, y);

@@ -13,12 +13,12 @@
     <div class="vertical-line"></div>
 
     <div class="middle-section">
-        <button [class.active]="modesConfiguration.grabMode" (click)="switchGrabMode()"><i
+        <button [class.active]="eventHandlerConfiguration.grabMode" (click)="switchGrabMode()"><i
                 class="iconoir iconoir-drag-hand-gesture"></i>
             <span class="button-label">Drag mode</span>
         </button>
 
-        <button [class.active]="modesConfiguration.cursorMode" (click)="switchCursorMode()"><i
+        <button [class.active]="eventHandlerConfiguration.cursorMode" (click)="switchCursorMode()"><i
                 class="iconoir iconoir-cursor-pointer"></i>
             <span class="button-label">Cursor mode</span>
         </button>
@@ -30,18 +30,18 @@
 
     <div class="middle-section">
 
-        <button [class.active]="modesConfiguration.lineMode" (click)="switchLineMode()"><i
+        <button [class.active]="eventHandlerConfiguration.lineMode" (click)="switchLineMode()"><i
                 class="iconoir iconoir-design-pencil"></i>
             <span class="button-label">Line mode</span>
         </button>
 
 
-        <button [class.active]="modesConfiguration.wallMode" (click)="switchWallMode()"><i
+        <button [class.active]="eventHandlerConfiguration.wallMode" (click)="switchWallMode()"><i
                 class="iconoir iconoir-cube"></i>
             <span class="button-label">Wall mode</span>
         </button>
 
-        <div class="wall-thickness-container" *ngIf="modesConfiguration.wallMode">
+        <div class="wall-thickness-container" *ngIf="eventHandlerConfiguration.wallMode">
             <i class="iconoir iconoir-de-compress"></i>
             <input type="number" id="wall-thickness-input" [(ngModel)]="lastValidThickness"
                    (input)="onInput();updateThickness($event)" min="1">
@@ -49,13 +49,13 @@
         </div>
 
 
-        <button [class.active]="modesConfiguration.doorMode" (click)="switchDoorMode()"><i
+        <button [class.active]="eventHandlerConfiguration.doorMode" (click)="switchDoorMode()"><i
                 class="iconoir iconoir-closet"></i>
             <span class="button-label">Door mode</span>
         </button>
 
 
-        <button [class.active]="modesConfiguration.windowMode" (click)="switchWindowMode()"><i
+        <button [class.active]="eventHandlerConfiguration.windowMode" (click)="switchWindowMode()"><i
                 class="iconoir iconoir-mirror"></i>
             <span class="button-label">Window mode</span>
         </button>
@@ -88,7 +88,7 @@
     <!-- Right Section -->
     <div class="right-section">
 
-        <button [class.active]="modesConfiguration.eraseMode" (click)="switchEraseMode() ">
+        <button [class.active]="eventHandlerConfiguration.eraseMode" (click)="switchEraseMode() ">
             <i class="iconoir iconoir-erase"></i>
             <span class="button-label">Erase</span>
         </button>

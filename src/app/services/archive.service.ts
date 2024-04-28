@@ -197,17 +197,6 @@ export class ArchiveService {
         }
     }
 
-    undoLine(): void {
-        let line: Line | undefined = this._linesList.pop();
-        if (line != undefined) {
-            this._archiveLinesList.push(line);
-            this._archivePointsList.push(this._pointsList.pop()!!);
-            if (this.ghostPoint()) {
-                this._archivePointsList.push(this._pointsList.pop()!!);
-            }
-        }
-    }
-
     redo(): void {
         if (!this.containsArchivedElements())
             return;
