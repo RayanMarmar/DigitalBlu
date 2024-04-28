@@ -1,13 +1,13 @@
-import './mouseEventHandler';
+import './drawingModeHandler';
 import {Mouse} from "../models/mouse";
 import {ModesConfiguration} from "../models/modesConfiguration";
 import {TransformationService} from "../services/transformation.service";
 import {ArchiveService} from "../services/archive.service";
 import {Point} from "../drawables/point";
 import {Wall} from "../drawables/wall";
-import {Window} from "../drawables/window";
+import {Door} from "../drawables/door";
 
-export class WindowModeHandler implements MouseEventHandler {
+export class DoorModeHandler implements DrawingModeHandler {
     constructor(
         private mouse: Mouse,
         private readonly modesConfiguration: ModesConfiguration,
@@ -22,13 +22,13 @@ export class WindowModeHandler implements MouseEventHandler {
         let wall: Wall | null = this.archiveService.snapWallOpening(point);
         if (wall != null) {
             try {
-                let window: Window = new Window(wall, point);
-                this.archiveService.addWindow(window);
+                let door: Door = new Door(wall, point);
+                this.archiveService.addDoor(door);
                 this.mouse.mouseDown(event);
                 this.modesConfiguration.drawing = !this.modesConfiguration;
                 this.mouse.moving = false;
             } catch (e) {
-                console.log("Insufficient distance for wall.");
+                console.log("Insufficient distance for door.");
             }
         }
     }

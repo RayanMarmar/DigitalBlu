@@ -1,9 +1,9 @@
-import './mouseEventHandler';
+import './drawingModeHandler';
 import {Mouse} from "../models/mouse";
 import {TransformationService} from "../services/transformation.service";
 import {GridService} from "../services/grid.service";
 
-export class GrabModeHandler implements MouseEventHandler {
+export class GrabModeHandler implements DrawingModeHandler {
     constructor(
         private mouse: Mouse,
         private transformationService: TransformationService,

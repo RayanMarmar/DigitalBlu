@@ -1,6 +1,6 @@
-import './mouseEventHandler';
+import './drawingModeHandler';
 
-export class CursorModeHandler implements MouseEventHandler {
+export class CursorModeHandler implements DrawingModeHandler {
     constructor() {
     }
 

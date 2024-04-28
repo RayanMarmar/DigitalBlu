@@ -1,13 +1,13 @@
-import './mouseEventHandler';
-import {Line} from "../drawables/line";
+import './drawingModeHandler';
 import {Mouse} from "../models/mouse";
 import {ModesConfiguration} from "../models/modesConfiguration";
 import {TransformationService} from "../services/transformation.service";
 import {ArchiveService} from "../services/archive.service";
 import {Point} from "../drawables/point";
 import {GridService} from "../services/grid.service";
+import {Wall} from "../drawables/wall";
 
-export class LineModeHandler implements MouseEventHandler {
+export class WallModeHandler implements DrawingModeHandler {
     constructor(
         private mouse: Mouse,
         private readonly modesConfiguration: ModesConfiguration,
@@ -18,12 +18,19 @@ export class LineModeHandler implements MouseEventHandler {
     }
 
     onMouseDown(event: MouseEvent): void {
+        this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
         let snapped: Point = this.snapPoint(point);
-        if (this.modesConfiguration.drawing)
-            this.archiveService.addLine(
-                new Line(this.mouse.clickedCoordinates!!, snapped, this.transformationService.reverseTransformationMatrix)
-            )
+        if (this.modesConfiguration.drawing) {
+            this.archiveService.addWall(
+                new Wall(
+                    this.mouse.clickedCoordinates!!,
+                    snapped,
+                    this.modesConfiguration.defaultThickness,
+                    this.transformationService.reverseTransformationMatrix
+                )
+            );
+        }
         if (snapped.equals(point)) {
             this.mouse.mouseDown(event);
         } else {
@@ -36,24 +43,17 @@ export class LineModeHandler implements MouseEventHandler {
     }
 
     onMouseMove(event: MouseEvent): void {
-        // Verify if the user is in drawing mode
         if (!this.modesConfiguration.drawing)
             return;
-
-        // Update the current mouse coordinates
         this.mouse.mouseMove(event);
-
-        // Delete old line when needed
         if (this.mouse.notFirstMouseMoveEvent)
-            this.archiveService.popLine();
+            this.archiveService.popWall();
         else
             this.mouse.notFirstMouseMoveEvent = true;
-
-        // Add new line with the new coordinates
-        this.archiveService.pushLine(
-            new Line(
+        this.archiveService.pushWall(new Wall(
                 this.mouse.clickedCoordinates!!,
                 this.mouse.currentCoordinates!!,
+                this.modesConfiguration.defaultThickness,
                 this.transformationService.reverseTransformationMatrix
             )
         );

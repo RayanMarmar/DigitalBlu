@@ -1,6 +1,6 @@
-import './mouseEventHandler';
+import './drawingModeHandler';
 
-export class EraseModeHandler implements MouseEventHandler {
+export class EraseModeHandler implements DrawingModeHandler {
     constructor() {
     }
 

@@ -4,13 +4,13 @@ import {GridService} from "./grid.service";
 import {Mouse} from "../models/mouse";
 import {ModesConfiguration} from "../models/modesConfiguration";
 import {TransformationService} from "./transformation.service";
-import {LineModeHandler} from "../mouseEventHandlers/lineModeHandler";
-import {WallModeHandler} from "../mouseEventHandlers/wallModeHandler";
-import {DoorModeHandler} from "../mouseEventHandlers/doorModeHandler";
-import {WindowModeHandler} from "../mouseEventHandlers/windowModeHandler";
-import {GrabModeHandler} from "../mouseEventHandlers/grabModeHandler";
-import {EraseModeHandler} from "../mouseEventHandlers/eraseModeHandler";
-import {CursorModeHandler} from "../mouseEventHandlers/cursorModeHandler";
+import {LineModeHandler} from "../drawingModeHandlers/lineModeHandler";
+import {WallModeHandler} from "../drawingModeHandlers/wallModeHandler";
+import {DoorModeHandler} from "../drawingModeHandlers/doorModeHandler";
+import {WindowModeHandler} from "../drawingModeHandlers/windowModeHandler";
+import {GrabModeHandler} from "../drawingModeHandlers/grabModeHandler";
+import {EraseModeHandler} from "../drawingModeHandlers/eraseModeHandler";
+import {CursorModeHandler} from "../drawingModeHandlers/cursorModeHandler";
 
 @Injectable({
     providedIn: 'root'
