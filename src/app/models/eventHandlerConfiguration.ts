@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {ModeService} from "../services/mode.service";
+import {ModeManagerService} from "../services/mode-manager.service";
 import {LineModeHandler} from "../drawingModeHandlers/lineModeHandler";
 import {WallModeHandler} from "../drawingModeHandlers/wallModeHandler";
 import {DoorModeHandler} from "../drawingModeHandlers/doorModeHandler";
@@ -15,7 +15,7 @@ export class EventHandlerConfiguration {
     private eventHandler: DrawingModeHandler;
 
     constructor(
-        private modeService: ModeService
+        private modeService: ModeManagerService
     ) {
         this.eventHandler = modeService.wallMode;
     }

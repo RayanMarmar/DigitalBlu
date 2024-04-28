@@ -15,7 +15,7 @@ import {CursorModeHandler} from "../drawingModeHandlers/cursorModeHandler";
 @Injectable({
     providedIn: 'root'
 })
-export class ModeService {
+export class ModeManagerService {
 
     constructor(
         private archiveService: ArchiveService,
