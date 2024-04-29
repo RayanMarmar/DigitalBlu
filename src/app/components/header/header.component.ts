@@ -112,4 +112,8 @@ export class HeaderComponent {
     getThickness() {
         return this.modesConfiguration.defaultThickness;
     }
+
+    displayHelper(): void {
+        this.modesConfiguration.helperOn();
+    }
 }

@@ -12,6 +12,8 @@ export class ModesConfiguration {
     private _darkMode: boolean;
     private readonly _minZoom: number = 50;
     private readonly _maxZoom: number = 150;
+    private _helperDisplayed: boolean;
+
 
     constructor() {
         this._snapMode = true;
@@ -20,6 +22,15 @@ export class ModesConfiguration {
         this._defaultThickness = 10;
         this._zoomLevel = 100;
         this._darkMode = false;
+        this._helperDisplayed = false;
+    }
+
+    get helperDisplayed(): boolean {
+        return this._helperDisplayed;
+    }
+
+    set helperDisplayed(value: boolean) {
+        this._helperDisplayed = value;
     }
 
     get minZoom(): number {
@@ -93,5 +104,9 @@ export class ModesConfiguration {
 
     changeGridMode(): void {
         this._gridOn = !this._gridOn;
+    }
+
+    helperOn(): void {
+        this._helperDisplayed = !this._helperDisplayed;
     }
 }
