@@ -11,8 +11,6 @@ import {ModesConfiguration} from "../../models/modesConfiguration";
 })
 
 export class HelperComponent {
-    // its important myCanvas matches the variable name in the template
-
     constructor(
         public modesConfiguration: ModesConfiguration,
     ) {
