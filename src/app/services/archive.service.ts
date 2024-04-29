@@ -197,7 +197,6 @@ export class ArchiveService {
         }
     }
 
-
     redo(): void {
         if (!this.containsArchivedElements())
             return;
@@ -207,7 +206,6 @@ export class ArchiveService {
             this.commandsList.push(command);
         }
     }
-
 
     containsArchivedElements(): boolean { //redo
         return this.archiveCommandsList.length > 0;

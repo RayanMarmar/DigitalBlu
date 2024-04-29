@@ -1,10 +1,11 @@
-import {Component, HostListener} from '@angular/core';
+import {Component} from '@angular/core';
 import {CanvasService} from "../../services/canvas.service";
 import {ModesConfiguration} from "../../models/modesConfiguration";
 import {NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {ThemeService} from "../../services/theme.service";
 import {ArchiveService} from "../../services/archive.service";
+import {EventHandlerConfiguration} from "../../models/eventHandlerConfiguration";
 
 @Component({
     selector: 'app-header',
@@ -23,6 +24,7 @@ export class HeaderComponent {
     constructor(
         private canvasService: CanvasService,
         public modesConfiguration: ModesConfiguration,
+        public eventHandlerConfiguration: EventHandlerConfiguration,
         private themeService: ThemeService,
         private archiveService: ArchiveService
     ) {
@@ -41,25 +43,16 @@ export class HeaderComponent {
     }
 
     switchWallMode() {
-        this.modesConfiguration.changeWallMode();
+        this.eventHandlerConfiguration.setWallMode();
     }
 
     switchLineMode() {
-        this.modesConfiguration.changeLineMode();
+        this.eventHandlerConfiguration.setLineMode();
     }
 
     switchDoorMode() {
-        this.modesConfiguration.changeDoorMode();
+        this.eventHandlerConfiguration.setDoorMode();
     }
-
-    switchCursorMode(): void {
-        this.modesConfiguration.changeCursorMode();
-    }
-
-    switchGrabMode(): void {
-        this.modesConfiguration.changeGrabMode();
-    }
-
 
     updateThickness(event: Event) {
         const value = Number((event.target as HTMLInputElement).value);
@@ -75,7 +68,7 @@ export class HeaderComponent {
 
 
     switchWindowMode() {
-        this.modesConfiguration.changeWindowMode();
+        this.eventHandlerConfiguration.setWindowMode();
     }
 
     switchGridMode() {
@@ -89,7 +82,7 @@ export class HeaderComponent {
     }
 
     switchEraseMode(): void {
-        this.modesConfiguration.changeEraseMode();
+        this.eventHandlerConfiguration.setEraseMode();
     }
 
     onInput() {
@@ -108,20 +101,15 @@ export class HeaderComponent {
         return !this.archiveService.containsElements();
     }
 
+    switchCursorMode(): void {
+        this.eventHandlerConfiguration.setCursorMode();
+    }
+
+    switchGrabMode(): void {
+        this.eventHandlerConfiguration.setGrabMode();
+    }
 
     getThickness() {
         return this.modesConfiguration.defaultThickness;
-    }
-
-    @HostListener('window:keydown', ['$event'])
-    onKeyDown(event: KeyboardEvent): void {
-        if (event.ctrlKey) {
-            if (event.key === 'z') {
-                this.undo();
-            } else if (event.key === 'y') {
-                this.redo();
-            }
-            event.preventDefault();
-        }
     }
 }
