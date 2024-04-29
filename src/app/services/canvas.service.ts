@@ -6,6 +6,8 @@ import {Door} from "../drawables/door";
 import {Window} from "../drawables/window";
 import {TransformationService} from "./transformation.service";
 import {ThemeService} from "./theme.service";
+import {ExportService} from "./export.service";
+
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +20,8 @@ export class CanvasService {
     constructor(
         private archiveService: ArchiveService,
         private transformationService: TransformationService,
-        private themeService: ThemeService
+        private themeService: ThemeService,
+        private exportService: ExportService
     ) {
     }
 
@@ -100,5 +103,11 @@ export class CanvasService {
 
     clear(): void {
         this.context!.clearRect(0, 0, this.canvasRect!.width, this.canvasRect!.height);
+    }
+
+
+    exportCanvas(): void {
+        const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+        this.exportService.exportCanvasAsSVG(canvas, 'drawing');
     }
 }

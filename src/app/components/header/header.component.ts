@@ -7,6 +7,7 @@ import {ThemeService} from "../../services/theme.service";
 import {ArchiveService} from "../../services/archive.service";
 import {EventHandlerConfiguration} from "../../models/eventHandlerConfiguration";
 
+
 @Component({
     selector: 'app-header',
     standalone: true,
@@ -22,7 +23,7 @@ export class HeaderComponent {
     lastValidThickness: number = this.modesConfiguration.defaultThickness;
 
     constructor(
-        private canvasService: CanvasService,
+        protected canvasService: CanvasService,
         public modesConfiguration: ModesConfiguration,
         public eventHandlerConfiguration: EventHandlerConfiguration,
         private themeService: ThemeService,
