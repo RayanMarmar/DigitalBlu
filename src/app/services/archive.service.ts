@@ -366,9 +366,7 @@ export class ArchiveService {
     deleteSelectedWindow(window: Window): void {
         this._windowsList = this._windowsList.filter(item => item !== window);
     }
-
-    //TODO ELement class for delete, implements wall line etcc,(interface)
-    // all implement delete
+    
     deleteElement(x: Drawable | null) {
         if (x === null) {
             // Handle case where x is null

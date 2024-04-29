@@ -174,12 +174,22 @@ export class Line implements Drawable {
         const scalarProjection = (lineVector.x * pointVector.x + lineVector.y * pointVector.y) / Math.pow(this.calculateDistance(), 2);
 
         // Step 4: Calculate the nearest point on the line
-        const nearestPoint = new Point(
-            this._firstPoint.x + scalarProjection * lineVector.x,
-            this._firstPoint.y + scalarProjection * lineVector.y
-        );
-        let line = new Line(point, nearestPoint)
-        return line.calculateDistance();
+        let nearestPoint: Point;
+
+        if (scalarProjection <= 0) {
+            nearestPoint = this._firstPoint; // Nearest point is the first endpoint
+        } else if (scalarProjection >= 1) {
+            nearestPoint = this._secondPoint; // Nearest point is the second endpoint
+        } else {
+            nearestPoint = new Point(
+                this._firstPoint.x + scalarProjection * lineVector.x,
+                this._firstPoint.y + scalarProjection * lineVector.y
+            );
+        }
+        let line = new Line(nearestPoint, point)
+
+        // Step 5: Calculate the distance between the given point and the nearest point on the line
+        return line.calculateDistance()
     }
 
 
