@@ -1,6 +1,7 @@
-* {
+.helper-div {
     display: none;
 }
+
 
 .helperOn {
     display: block;
@@ -8,23 +9,23 @@
 
 
 .shortcut-overlay {
+    transition: 1s ease-in-out;
+    z-index: 200;
     position: fixed;
-    top: 20px;
-    right: 20px;
-    background-color: var(--main-bg-color);
+    top: 140px;
+    right: 3%;
+    color: var(--font-color);
     border: 1px solid var(--borders-color);
-    border-radius: 5px;
+    border-radius: 10px;
     padding: 10px 30px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-family: 'Poppins', sans-serif;
+    backdrop-filter: blur(5px);
 }
 
 .shortcut-header {
     text-align: left;
     margin-bottom: 10px;
-}
-
-.shortcut-content {
-    overflow-y: auto;
 }
 
 
@@ -57,6 +58,7 @@
 .shortcut-allkeys {
     display: flex;
     flex-direction: row;
+
 }
 
 .shortcut-key {
@@ -64,7 +66,7 @@
     padding: 10px 15px;
     margin-left: 5px;
     border-radius: 10px;
-    display: inline-flex;
+    box-shadow: 2px 2px 0px var(--borders-color);
 }
 
 .shortcut-title {
