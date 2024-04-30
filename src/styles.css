@@ -10,6 +10,7 @@
     --transparent: transparent;
     --grid-color: rgba(152, 152, 152, 0.55);
     --wall-color: black;
+    --delete-wall-color: #FF0000;
     --cursor-filter: none;
 }
 
@@ -24,6 +25,7 @@
     --transparent: transparent;
     --grid-color: rgba(208, 208, 208, 0.55);
     --wall-color: #ffffff;
+    --delete-wall-color: #FF0000;
     --cursor-filter: invert(100%);
 
 }

@@ -86,15 +86,14 @@ export class CanvasService {
         });
     }
 
-    private drawSelectedElement(): void {
-        if (this._selectedElement == null) {
+    private highlightSelectedElement(): void {
+        if (this.archiveService.selectedElement == null) {
             return;
         } else {
-            //TODO Change colour
-            this._selectedElement.draw(
+            this.archiveService.selectedElement.draw(
                 this.context!!,
-                "#FF0000",
-                "#FF0000",
+                this.themeService.getDeleteDrawableColor(),
+                this.themeService.getDeleteDrawableColor(),
                 this.transformationService.transformationMatrix,
             )
         }
@@ -110,7 +109,7 @@ export class CanvasService {
         this.drawAllWalls();
         this.drawAllDoors();
         this.drawAllWindows();
-        this.drawSelectedElement();
+        this.highlightSelectedElement();
 
     }
 

@@ -29,12 +29,9 @@ export class EraseModeHandler implements ModeHandler {
     onMouseDown(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
-        let x;
         try {
-            x = this.componentSelector.getNearestComponent(point)
-            this.canvasService.selectedElement = x;
-            this.archiveService.deleteElement(this.canvasService.selectedElement)
-            this.canvasService.drawAll()
+            this.archiveService.selectedElement = this.componentSelector.getNearestComponent(point);
+            this.archiveService.deleteElement(this.archiveService.selectedElement)
         } catch (e) {
             console.log("Problem on down cursor mode", e)
         }
@@ -44,10 +41,8 @@ export class EraseModeHandler implements ModeHandler {
     onMouseMove(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;
-        let x;
         try {
-            x = this.componentSelector.getNearestComponent(point)
-            this.canvasService.selectedElement = x;
+            this.archiveService.selectedElement = this.componentSelector.getNearestComponent(point);
             this.canvasService.drawAll()
 
         } catch (e) {
