@@ -39,6 +39,39 @@ export class ArchiveService {
         this._archiveWindowsList = [];
     }
 
+
+    get archivePointsList(): Point[] {
+        return this._archivePointsList;
+    }
+
+    set archivePointsList(value: Point[]) {
+        this._archivePointsList = value;
+    }
+
+    get archiveLinesList(): Line[] {
+        return this._archiveLinesList;
+    }
+
+    set archiveLinesList(value: Line[]) {
+        this._archiveLinesList = value;
+    }
+
+    get archiveWallsList(): Wall[] {
+        return this._archiveWallsList;
+    }
+
+    set archiveWallsList(value: Wall[]) {
+        this._archiveWallsList = value;
+    }
+
+    get archiveDoorsList(): Door[] {
+        return this._archiveDoorsList;
+    }
+
+    set archiveDoorsList(value: Door[]) {
+        this._archiveDoorsList = value;
+    }
+
     get linesList(): Line[] {
         return this._linesList;
     }
@@ -366,7 +399,7 @@ export class ArchiveService {
     deleteSelectedWindow(window: Window): void {
         this._windowsList = this._windowsList.filter(item => item !== window);
     }
-    
+
     deleteElement(x: Drawable | null) {
         if (x === null) {
             // Handle case where x is null

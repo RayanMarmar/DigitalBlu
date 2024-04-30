@@ -6,6 +6,7 @@ import {FormsModule} from "@angular/forms";
 import {ThemeService} from "../../services/theme.service";
 import {ArchiveService} from "../../services/archive.service";
 import {EventHandlerConfiguration} from "../../models/eventHandlerConfiguration";
+import {SaveService} from "../../services/save.service.service";
 
 @Component({
     selector: 'app-header',
@@ -26,7 +27,8 @@ export class HeaderComponent {
         public modesConfiguration: ModesConfiguration,
         public eventHandlerConfiguration: EventHandlerConfiguration,
         private themeService: ThemeService,
-        private archiveService: ArchiveService
+        private archiveService: ArchiveService,
+        private saveService: SaveService
     ) {
     }
 
@@ -85,6 +87,10 @@ export class HeaderComponent {
         this.eventHandlerConfiguration.setEraseMode();
     }
 
+    switchSAveMode(): void {
+        this.eventHandlerConfiguration.setEraseMode();
+    }
+
     onInput() {
         if (this.thickness < 1) {
             this.thickness = this.lastValidThickness;
@@ -111,5 +117,9 @@ export class HeaderComponent {
 
     getThickness() {
         return this.modesConfiguration.defaultThickness;
+    }
+
+    saveState(): void {
+        return this.saveService.saveState(this.archiveService)
     }
 }

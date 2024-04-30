@@ -6,6 +6,7 @@ import {Door} from "../drawables/door";
 import {Window} from "../drawables/window";
 import {TransformationService} from "./transformation.service";
 import {ThemeService} from "./theme.service";
+import {SaveService} from "./save.service.service";
 
 @Injectable({
     providedIn: 'root'
@@ -15,12 +16,14 @@ export class CanvasService {
     private context: CanvasRenderingContext2D | null = null;
     private canvasRect: DOMRect | null = null;
     private _selectedElement: Drawable | null = null;
+    private _saveService: SaveService;
 
     constructor(
         private archiveService: ArchiveService,
         private transformationService: TransformationService,
         private themeService: ThemeService
     ) {
+        this._saveService = new SaveService(transformationService);
     }
 
 
@@ -36,6 +39,8 @@ export class CanvasService {
         this.canvas = canvas;
         this.context = this.canvas.nativeElement.getContext("2d");
         this.canvasRect = canvas.nativeElement.getBoundingClientRect();
+        this.archiveService = this._saveService.getState();
+        this.drawAll();
     }
 
     private drawAllLines(): void {
