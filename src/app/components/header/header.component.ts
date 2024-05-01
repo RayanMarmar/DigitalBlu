@@ -122,4 +122,8 @@ export class HeaderComponent {
     saveState(): void {
         return this.saveService.saveState(this.archiveService)
     }
+
+    displayHelper(): void {
+        this.modesConfiguration.helperOn();
+    }
 }

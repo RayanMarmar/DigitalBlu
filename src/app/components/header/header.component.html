@@ -122,6 +122,11 @@
         <button><i class="iconoir iconoir-share-ios"></i>
             <span class="button-label">Share</span>
         </button>
+
+        <button [class.active]="modesConfiguration.helperDisplayed" (click)="displayHelper()"><i
+                class="iconoir iconoir-help-circle"></i>
+            <span class="button-label">Help</span>
+        </button>
     </div>
 
 
