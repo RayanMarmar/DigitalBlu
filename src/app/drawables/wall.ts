@@ -3,6 +3,8 @@ import {Line} from "./line";
 import "./drawable";
 
 export class Wall implements Drawable {
+    private static _wallCount = 0;
+
     private _firstPoint: Point;
     private _secondPoint: Point;
     private _thirdPoint: Point;
@@ -15,8 +17,10 @@ export class Wall implements Drawable {
     private _height: number;
     private _xFactor: number;
     private _yFactor: number;
+    private _index: number;
 
-    constructor(firstPoint: Point, secondPoint: Point, height: number, reverseTransformationMatrix: number[][]) {
+    constructor(firstPoint: Point, secondPoint: Point, height: number, reverseTransformationMatrix: number[][],
+                index?: number) {
         firstPoint = firstPoint.transform(reverseTransformationMatrix);
         secondPoint = secondPoint.transform(reverseTransformationMatrix);
         this._height = height;
@@ -32,6 +36,15 @@ export class Wall implements Drawable {
         this._secondLine = new Line(this._secondPoint, this._thirdPoint);
         this._fourthLine = new Line(this._fourthPoint, this._firstPoint);
         this._width = this._firstLine.calculateDistance();
+        if (index !== undefined) {
+            this._index = index;
+        } else {
+            this._index = Wall._wallCount++;
+        }
+    }
+
+    get index(): number {
+        return this._index;
     }
 
     // Getter for firstPoint

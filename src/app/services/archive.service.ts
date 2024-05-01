@@ -424,4 +424,9 @@ export class ArchiveService {
                 break;
         }
     }
+
+    getWallbyIndex(index: number): Wall | null {
+        const wall = this.archiveWallsList.find(w => w.index === index);
+        return wall ? wall : null;
+    }
 }
