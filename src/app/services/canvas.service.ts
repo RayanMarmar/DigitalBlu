@@ -39,7 +39,7 @@ export class CanvasService {
         this.canvas = canvas;
         this.context = this.canvas.nativeElement.getContext("2d");
         this.canvasRect = canvas.nativeElement.getBoundingClientRect();
-        this.archiveService = this._saveService.getState();
+        this.archiveService = this._saveService.getState(this.archiveService);
         this.drawAll();
     }
 
