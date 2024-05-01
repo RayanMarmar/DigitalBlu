@@ -23,6 +23,7 @@ export class ArchiveService {
     private _archiveWindowsList: Window[];
     private commandsList: Command[];
     private archiveCommandsList: Command[];
+    private _selectedElement: Drawable | null = null;
 
     constructor() {
         this._linesList = [];
@@ -70,6 +71,14 @@ export class ArchiveService {
 
     set archiveDoorsList(value: Door[]) {
         this._archiveDoorsList = value;
+    }
+
+    get selectedElement(): Drawable | null {
+        return this._selectedElement;
+    }
+
+    set selectedElement(value: Drawable | null) {
+        this._selectedElement = value;
     }
 
     get linesList(): Line[] {
@@ -277,7 +286,7 @@ export class ArchiveService {
         return -1; // Return -1 if no matching point is found
     }
 
-    inRangeOfAnExistingWall(point: Point): number {
+    private inRangeOfAnExistingWall(point: Point): number {
         for (let i: number = 0; i < this._wallsList.length; i++) {
             const w: Wall = this._wallsList[i];
             if (w.containsPoint(point)) {
@@ -340,28 +349,6 @@ export class ArchiveService {
         return {min: min, minElement: minElement!};
     }
 
-
-    inRangeOfAnExistingWindow(point: Point): number {
-        for (let i: number = 0; i < this._windowsList.length; i++) {
-            const w: Window = this._windowsList[i];
-            if (w.inRange(point)) {
-                return i; // Return the index if a matching point is found
-            }
-        }
-        return -1; // Return -1 if no matching point is found
-    }
-
-    inRangeOfAnExistingDoor(point: Point): number {
-        for (let i: number = 0; i < this._doorsList.length; i++) {
-            const w: Door = this._doorsList[i];
-            if (w.inRange(point)) {
-                return i; // Return the index if a matching point is found
-            }
-        }
-        return -1; // Return -1 if no matching point is found
-    }
-
-
     deleteLine(): void {
         this.popLine();
         if (this.ghostPoint()) {
@@ -373,30 +360,19 @@ export class ArchiveService {
         this.popWall();
     }
 
-    getClickedWall(point: Point): Wall | null {
-        for (let i: number = 0; i < this._wallsList.length; i++) {
-            const w: Wall = this._wallsList[i];
-            if (w.containsPoint(point)) {
-                return w;
-            }
-        }
-        return null;
-    }
-
-
-    deleteSelectedWall(wall: Wall): void {
+    private deleteSelectedWall(wall: Wall): void {
         this._wallsList = this._wallsList.filter(item => item !== wall);
     }
 
-    deleteSelectedLine(line: Line): void {
+    private deleteSelectedLine(line: Line): void {
         this._linesList = this._linesList.filter(item => item !== line);
     }
 
-    deleteSelectedDoor(door: Door): void {
+    private deleteSelectedDoor(door: Door): void {
         this._doorsList = this._doorsList.filter(item => item !== door);
     }
 
-    deleteSelectedWindow(window: Window): void {
+    private deleteSelectedWindow(window: Window): void {
         this._windowsList = this._windowsList.filter(item => item !== window);
     }
 

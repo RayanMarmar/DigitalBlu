@@ -205,21 +205,10 @@ export class Wall implements Drawable {
 
     calculateNearestPointDistance(point: Point): number {
 
-        let minDistance = this.firstLine.calculateNearestPointDistance(point)
-        let tmpDistance = this.secondLine.calculateNearestPointDistance(point)
-        if (tmpDistance < minDistance) {
-            minDistance = tmpDistance
-        }
-
-        tmpDistance = this.thirdLine.calculateNearestPointDistance(point)
-        if (tmpDistance < minDistance) {
-            minDistance = tmpDistance
-        }
-        tmpDistance = this.fourthLine.calculateNearestPointDistance(point)
-        if (tmpDistance < minDistance) {
-            minDistance = tmpDistance
-        }
-        return minDistance;
+        return Math.min(this.firstLine.calculateNearestPointDistance(point),
+            this.secondLine.calculateNearestPointDistance(point),
+            this.thirdLine.calculateNearestPointDistance(point),
+            this.fourthLine.calculateNearestPointDistance(point));
     }
 
 
