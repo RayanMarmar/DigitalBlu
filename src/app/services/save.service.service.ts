@@ -11,10 +11,9 @@ import {Window} from "../drawables/window";
     providedIn: 'root'
 })
 export class SaveService {
-    private _transformationService: TransformationService;
-
-    constructor(transformationService: TransformationService) {
-        this._transformationService = transformationService
+    constructor(
+            private transformationService: TransformationService,
+    ) {
     }
 
 
