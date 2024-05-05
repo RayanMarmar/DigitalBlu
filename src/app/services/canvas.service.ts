@@ -21,9 +21,9 @@ export class CanvasService {
     constructor(
         private archiveService: ArchiveService,
         private transformationService: TransformationService,
-        private themeService: ThemeService
+        private themeService: ThemeService,
+        private _saveService : SaveService
     ) {
-        this._saveService = new SaveService(transformationService);
     }
 
 
