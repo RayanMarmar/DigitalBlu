@@ -17,13 +17,6 @@ export class SaveService {
     }
 
 
-    get transformationService(): TransformationService {
-        return this._transformationService;
-    }
-
-    set transformationService(value: TransformationService) {
-        this._transformationService = value;
-    }
 
     saveState(archive: ArchiveService): void {
 
