@@ -12,25 +12,25 @@ import {Window} from "../drawables/window";
 })
 export class SaveService {
     constructor(
-            private transformationService: TransformationService,
+        private transformationService: TransformationService,
+        private archiveService: ArchiveService,
     ) {
     }
 
 
-
-    saveState(archive: ArchiveService): void {
+    saveState(): void {
 
         const state = {
-            linesList: archive.linesList.map(line => ({
+            linesList: this.archiveService.linesList.map(line => ({
                 _firstPoint: {_x: line.firstPoint.x, _y: line.firstPoint.y},
                 _secondPoint: {_x: line.secondPoint.x, _y: line.secondPoint.y}
             })),
 
-            pointsList: archive.pointsList.map(point => ({
+            pointsList: this.archiveService.pointsList.map(point => ({
                 _x: point.x,
                 _y: point.y
             })),
-            wallsList: archive.wallsList.map((wall) => ({
+            wallsList: this.archiveService.wallsList.map((wall) => ({
                 _firstPoint: {_x: wall.firstPoint.x, _y: wall.firstPoint.y},
                 _secondPoint: {_x: wall.secondPoint.x, _y: wall.secondPoint.y},
                 _height: wall.height,
@@ -38,7 +38,7 @@ export class SaveService {
                 _index: wall.index
             })),
 
-            doorsList: archive.doorsList.map((door) => ({
+            doorsList: this.archiveService.doorsList.map((door) => ({
                 _index: door.wall.index,
                 _point: {_x: door.center.x, _y: door.center.y},
                 _doorType: door.doorType,
@@ -46,7 +46,7 @@ export class SaveService {
                 _height: door.height,
                 _radius: door.radius
             })),
-            windowsList: archive.windowsList.map(window => ({
+            windowsList: this.archiveService.windowsList.map(window => ({
                 _index: window.wall.index,
                 _point: {_x: window.center.x, _y: window.center.y},
                 _radius: window.height
@@ -57,6 +57,7 @@ export class SaveService {
     }
 
     getState(archive: ArchiveService): ArchiveService {
+
         const stateString = localStorage.getItem('appState');
         const stateStringParsed = stateString ? JSON.parse(stateString) : null;
 

@@ -87,7 +87,7 @@ export class HeaderComponent {
         this.eventHandlerConfiguration.setEraseMode();
     }
 
-    switchSAveMode(): void {
+    setSaveMode(): void {
         this.eventHandlerConfiguration.setEraseMode();
     }
 
@@ -120,7 +120,7 @@ export class HeaderComponent {
     }
 
     saveState(): void {
-        return this.saveService.saveState(this.archiveService)
+        return this.saveService.saveState()
     }
 
     displayHelper(): void {
