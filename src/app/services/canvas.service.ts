@@ -16,7 +16,6 @@ export class CanvasService {
     private context: CanvasRenderingContext2D | null = null;
     private canvasRect: DOMRect | null = null;
     private _selectedElement: Drawable | null = null;
-    private _saveService: SaveService;
 
     constructor(
         private archiveService: ArchiveService,
