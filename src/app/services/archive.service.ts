@@ -368,6 +368,10 @@ export class ArchiveService {
             let command = new DeleteCommand(
                 this._pointsList,
                 this._archivePointsList,
+                this._windowsList,
+                this._archiveWindowsList,
+                this._doorsList,
+                this._archiveDoorsList,
                 list,
                 archiveList,
                 this._selectedElement!
