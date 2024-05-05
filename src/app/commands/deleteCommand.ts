@@ -8,42 +8,27 @@ export class DeleteCommand implements Command {
         private archivePointsList: Point[],
         private drawableList: Drawable[],
         private archiveDrawableList: Drawable[],
-        private selectedElement: Drawable | null = null,
+        private selectedElement: Drawable,
     ) {
         this.selectedElement = selectedElement;
     }
 
-    redo(): void {
-        let drawable: Drawable | undefined = this.drawableList.pop();
-        if (drawable != undefined) {
-            this.archiveDrawableList.push(drawable);
-            if (drawable instanceof Line) {
-                this.removePoints();
+    execute(): void {
+        if (this.selectedElement != null) {
+            const index = this.drawableList.indexOf(this.selectedElement);
+            if (index > -1) {
+                this.archiveDrawableList.push(this.selectedElement);
+                this.drawableList.splice(index, 1);
             }
         }
     }
 
     undo(): void {
-        let drawable: Drawable | undefined = this.archiveDrawableList.pop();
-        if (drawable != undefined) {
+        const index = this.archiveDrawableList.indexOf(this.selectedElement);
+        if (index > -1) {
+            let drawable = this.archiveDrawableList[index]
             this.drawableList.push(drawable);
-            this.pointsList.push(this.archivePointsList.pop()!!);
-            if (drawable instanceof Line && this.shouldAddPoint(drawable)) {
-                this.pointsList.push(this.archivePointsList.pop()!!);
-            }
-        }
-    }
-
-    delete(): void {
-        if (this.selectedElement != null) {
-            const index = this.drawableList.indexOf(this.selectedElement);
-            if (index > -1) {
-                this.drawableList.splice(index, 1);
-                if (this.selectedElement instanceof Line) {
-                    this.removePoints();
-                }
-            }
-            this.archiveDrawableList.push(this.selectedElement);
+            this.archiveDrawableList.splice(index, 1);
         }
     }
 

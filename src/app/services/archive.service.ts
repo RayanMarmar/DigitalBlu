@@ -245,7 +245,7 @@ export class ArchiveService {
             return;
         let command: Command | undefined = this.archiveCommandsList.pop();
         if (command != undefined) {
-            command.redo();
+            command.execute();
             this.commandsList.push(command);
         }
     }
@@ -360,7 +360,7 @@ export class ArchiveService {
     deleteWall(): void {
         this.popWall();
     }
-    
+
     deleteElement(list: Drawable[] | null, archiveList: Drawable[] | null): void {
         if (this.selectedElement === null || list === null || archiveList === null) {
             // Handle case where x is null
@@ -370,12 +370,10 @@ export class ArchiveService {
                 this._archivePointsList,
                 list,
                 archiveList,
-                this._selectedElement
+                this._selectedElement!
             );
-            command.delete()
-            this.commandsList.push(command);
             this.archiveCommandsList.push(command);
-            this.clearArchive();
+            this.redo()
         }
     }
 }
