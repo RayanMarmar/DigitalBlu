@@ -81,11 +81,8 @@ export class ModeManagerService {
     get eraseMode(): EraseModeHandler {
         return new EraseModeHandler(
             this.mouse,
-            this.modesConfiguration,
-            this.transformationService,
             this.archiveService,
             this.componentSelector,
-            this.canvasService,
         );
     }
 

@@ -6,6 +6,8 @@ import "../commands/command";
 import {DrawCommand} from "../commands/drawCommand";
 import {Door} from "../drawables/door";
 import {Window} from "../drawables/window";
+import {DeleteCommand} from "../commands/deleteCommand";
+
 
 @Injectable({
     providedIn: 'root'
@@ -39,7 +41,6 @@ export class ArchiveService {
         this._windowsList = [];
         this._archiveWindowsList = [];
     }
-
 
     get archivePointsList(): Point[] {
         return this._archivePointsList;
@@ -244,7 +245,7 @@ export class ArchiveService {
             return;
         let command: Command | undefined = this.archiveCommandsList.pop();
         if (command != undefined) {
-            command.redo();
+            command.execute();
             this.commandsList.push(command);
         }
     }
@@ -360,49 +361,23 @@ export class ArchiveService {
         this.popWall();
     }
 
-    private deleteSelectedWall(wall: Wall): void {
-        this._wallsList = this._wallsList.filter(item => item !== wall);
-    }
-
-    private deleteSelectedLine(line: Line): void {
-        this._linesList = this._linesList.filter(item => item !== line);
-    }
-
-    private deleteSelectedDoor(door: Door): void {
-        this._doorsList = this._doorsList.filter(item => item !== door);
-    }
-
-    private deleteSelectedWindow(window: Window): void {
-        this._windowsList = this._windowsList.filter(item => item !== window);
-    }
-
-    deleteElement(x: Drawable | null) {
-        if (x === null) {
+    deleteElement(list: Drawable[] | null, archiveList: Drawable[] | null): void {
+        if (this.selectedElement === null || list === null || archiveList === null) {
             // Handle case where x is null
-            return;
+        } else {
+            let command = new DeleteCommand(
+                this._pointsList,
+                this._archivePointsList,
+                this._windowsList,
+                this._archiveWindowsList,
+                this._doorsList,
+                this._archiveDoorsList,
+                list,
+                archiveList,
+                this._selectedElement!
+            );
+            this.archiveCommandsList.push(command);
+            this.redo()
         }
-
-        switch (x.constructor) {
-            case Wall:
-                this.deleteSelectedWall(x as Wall)
-                break;
-            case Line:
-                this.deleteSelectedLine(x as Line)
-                break;
-            case Door:
-                this.deleteSelectedDoor(x as Door)
-                break;
-            case Window:
-                this.deleteSelectedWindow(x as Window)
-                break;
-            default:
-                // Handle the case where x is of unexpected type
-                break;
-        }
-    }
-
-    getWallbyIndex(index: number): Wall | null {
-        const wall = this.archiveWallsList.find(w => w.index === index);
-        return wall ? wall : null;
     }
 }
