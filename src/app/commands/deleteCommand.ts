@@ -19,7 +19,6 @@ export class DeleteCommand implements Command {
         private nbDeletedDoors: number = 0,
         private nbDeletedWindows: number = 0
     ) {
-        this.selectedElement = selectedElement;
     }
 
     execute(): void {
@@ -44,6 +43,7 @@ export class DeleteCommand implements Command {
             let drawable = this.archiveDrawableList[index]
             this.drawableList.push(drawable);
             this.archiveDrawableList.splice(index, 1);
+            this.pointsList.push(this.archivePointsList.pop()!!)
             if (drawable instanceof Line && this.shouldAddPoint(drawable)) {
                 this.pointsList.push(this.archivePointsList.pop()!!);
             }
@@ -57,17 +57,17 @@ export class DeleteCommand implements Command {
         const line = this.selectedElement as Line;
 
         // Iterate over the archivePointsList
-        for (let i = 0; i < this.pointsList.length; i++) {
+        for (let i = 0, x = 0; i < this.pointsList.length && x < 2; i++) {
             const point = this.pointsList[i];
 
             // Check if the point is equal to the firstPoint or secondPoint of the Line
             if (point.equals(line.firstPoint) || point.equals(line.secondPoint)) {
                 // Remove the point from the archivePointsList
-                this.archivePointsList.push(point);
                 if (this.ghostPoint(point)) {
                     this.archivePointsList.push(point);
                     this.pointsList.splice(i, 1);
                     i--; // Adjust the loop index since we removed an element
+                    x++;
                 }
 
             }

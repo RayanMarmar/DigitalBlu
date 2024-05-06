@@ -8,6 +8,8 @@ import {Door} from "../drawables/door";
 })
 export class ComponentSelectorService {
 
+    maxAllowedDistance: number = 30;
+
     constructor(
         private archiveService: ArchiveService,
     ) {
@@ -22,9 +24,8 @@ export class ComponentSelectorService {
         const {min: minOpeningDistance, minElement: minOpening} = this.archiveService.getNearestWallOpening(point);
         const {min: minWallDistance, minElement: minWall} = this.archiveService.getNearestWall(point);
         const {min: minLineDistance, minElement: minLine} = this.archiveService.getNearestLine(point);
-        let maxAllowedDistance = 30;
 
-        if (minOpening !== null && minOpeningDistance <= minWallDistance && minOpeningDistance <= minLineDistance && minOpeningDistance <= maxAllowedDistance) {
+        if (this.isOpeningMin(minOpening, minOpeningDistance, this.maxAllowedDistance, minWallDistance, minLineDistance)) {
             if (minOpening instanceof Door) {
                 return {
                     component: minOpening,
@@ -39,14 +40,15 @@ export class ComponentSelectorService {
             };
 
         }
-        if (minWallDistance !== Infinity && minWallDistance < minOpeningDistance && minWallDistance < minLineDistance && minWallDistance <= maxAllowedDistance) {
+
+        if (this.isOpeningMin(minWall, minWallDistance, this.maxAllowedDistance, minLineDistance, minLineDistance)) {
             return {
                 component: minWall,
                 list: this.archiveService.wallsList,
                 archiveList: this.archiveService.archiveWallsList
             };
         }
-        if (minLineDistance !== Infinity && minLineDistance < minWallDistance && minLineDistance < minOpeningDistance && minLineDistance <= maxAllowedDistance) {
+        if (this.isOpeningMin(minLine, minLineDistance, this.maxAllowedDistance, minWallDistance, minOpeningDistance)) {
             return {
                 component: minLine,
                 list: this.archiveService.linesList,
@@ -54,6 +56,10 @@ export class ComponentSelectorService {
             };
         }
         return {component: null, list: null, archiveList: null};
+    }
+
+    isOpeningMin(component: Drawable | null, distance: number, maxAllowedDistance: number, minDistance1: number, minDistance2: number): boolean {
+        return component !== null && distance <= minDistance1 && distance <= minDistance2 && distance <= maxAllowedDistance;
     }
 
 }

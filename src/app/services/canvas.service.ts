@@ -15,7 +15,6 @@ export class CanvasService {
     private canvas: ElementRef<HTMLCanvasElement> | null = null;
     private context: CanvasRenderingContext2D | null = null;
     private canvasRect: DOMRect | null = null;
-    private _selectedElement: Drawable | null = null;
 
     constructor(
         private archiveService: ArchiveService,
@@ -23,15 +22,6 @@ export class CanvasService {
         private themeService: ThemeService,
         private _saveService : SaveService
     ) {
-    }
-
-
-    get selectedElement(): Drawable | null {
-        return this._selectedElement;
-    }
-
-    set selectedElement(value: Drawable | null) {
-        this._selectedElement = value;
     }
 
     setCanvas(canvas: ElementRef<HTMLCanvasElement>): void {
@@ -91,12 +81,10 @@ export class CanvasService {
     }
 
     private highlightSelectedElement(): void {
-        if (this.archiveService.selectedElement == null) {
-            return;
-        } else {
+        if (this.archiveService.selectedElement !== null) {
             this.archiveService.selectedElement.draw(
                 this.context!!,
-                this.themeService.getDeleteDrawableColor(),
+                this.themeService.getCanvasColor(),
                 this.themeService.getDeleteDrawableColor(),
                 this.transformationService.transformationMatrix,
             )
