@@ -73,10 +73,10 @@ export class WallOpening {
     }
 
     calculateNearestPointDistance(point: Point): number {
-        return Math.min(this.base[0].calculateNearestPointDistance(point),
-            this.base[1].calculateParallelLine(this.height, this.wall.xFactor,
-                this.wall.yFactor, 1).calculateNearestPointDistance(point),
-            this.base[1].calculateNearestPointDistance(point))
+        return Math.min(
+            this.base[0].calculateNearestPointDistance(point),
+            this.base[1].calculateNearestPointDistance(point)
+        );
     }
 
     set base(value: Line[]) {
