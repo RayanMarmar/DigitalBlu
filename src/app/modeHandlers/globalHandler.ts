@@ -35,6 +35,15 @@ export class GlobalHandler implements ModeHandler {
             }
             event.preventDefault();
         }
+        if (event.key === 'Shift') {
+            this.modesConfiguration.straightLineMode = true;
+        }
+    }
+
+    onKeyUp(event: KeyboardEvent): void {
+        if (event.key === 'Shift') {
+            this.modesConfiguration.straightLineMode = false;
+        }
     }
 
     undo() {

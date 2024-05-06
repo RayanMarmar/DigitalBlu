@@ -83,9 +83,9 @@ export class Mouse {
         this._canvasRect = new Point(rect.left, rect.top);
     }
 
-    mouseDown = (event: MouseEvent, grabMode = false): void => {
+    mouseDown = (event: MouseEvent, grabMode = false, snappedPosition: Point | null = null): void => {
         this._moving = false;
-        this._clickedCoordinates = new Point(
+        this._clickedCoordinates = snappedPosition ?? new Point(
             event.clientX - this._canvasRect!.x, event.clientY - this._canvasRect!.y
         );
         this._notFirstMouseMoveEvent = false;

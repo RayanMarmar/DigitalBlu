@@ -178,4 +178,13 @@ export class Line implements Drawable {
     transform(transformationMatrix: number[][]): Line {
         return new Line(this._firstPoint.transform(transformationMatrix), this._secondPoint.transform(transformationMatrix));
     }
+
+    getAngleWithXVector(): number {
+        // Calculate the difference in x and y coordinates
+        const deltaX = this._secondPoint.x - this._firstPoint.x;
+        const deltaY = this._secondPoint.y - this._firstPoint.y;
+
+        // Calculate the angle in radians using Math.atan2
+        return Math.atan2(deltaY, deltaX);
+    }
 }
