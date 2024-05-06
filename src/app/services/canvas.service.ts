@@ -87,12 +87,10 @@ export class CanvasService {
     }
 
     private highlightSelectedElement(): void {
-        if (this.archiveService.selectedElement == null) {
-            return;
-        } else {
+        if (this.archiveService.selectedElement !== null) {
             this.archiveService.selectedElement.draw(
                 this.context!!,
-                this.themeService.getDeleteDrawableColor(),
+                this.themeService.getCanvasColor(),
                 this.themeService.getDeleteDrawableColor(),
                 this.transformationService.transformationMatrix,
             )
