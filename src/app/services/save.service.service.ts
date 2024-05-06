@@ -100,7 +100,7 @@ export class SaveService {
             archive.doorsList = doorsList.map((doorData: any) => {
                 // Find the existing wall associated with the door
 
-                let wall = archive.getWallbyIndex(doorData._index)
+                let wall = archive.getWallByIndex(doorData._index)
                 if (wall) {
                     return new Door(
                         wall, // Pass the existing wall
@@ -122,7 +122,7 @@ export class SaveService {
             ///SETTING WINDOWS//////
             archive.windowsList = stateStringParsed.windowsList.map((windowData: any) => {
 
-                let wall = archive.getWallbyIndex(windowData._index)
+                let wall = archive.getWallByIndex(windowData._index)
                 if (wall) {
                     return new Window(
                         wall, // Get wall reference from archive

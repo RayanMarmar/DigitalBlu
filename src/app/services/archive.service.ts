@@ -360,6 +360,10 @@ export class ArchiveService {
     deleteWall(): void {
         this.popWall();
     }
+    getWallByIndex(index: number): Wall | null {
+        const wall = this.archiveWallsList.find(w => w.index === index);
+        return wall ? wall : null;
+    }
 
     deleteElement(list: Drawable[] | null, archiveList: Drawable[] | null): void {
         if (this.selectedElement === null || list === null || archiveList === null) {
