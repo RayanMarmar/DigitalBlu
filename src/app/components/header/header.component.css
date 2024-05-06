@@ -128,3 +128,19 @@ button:hover .button-label {
     height: 40px;
     background-color: var(--button-hover-color);
 }
+
+.angle-snap-container {
+    font-family: 'Poppins', sans-serif;
+    border-radius: 50px;
+    display: inline-flex;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.angle-snap-container select {
+    padding: 0px 5px;
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--button-hover-color);
+    border-radius: 50px;
+    border: 0px;
+}

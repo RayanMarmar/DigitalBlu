@@ -4,6 +4,7 @@ import {Injectable} from "@angular/core";
     providedIn: 'root',
 })
 export class ModesConfiguration {
+
     private _snapMode: boolean;
     private _drawing: boolean;
     private _gridOn: boolean;
@@ -13,6 +14,7 @@ export class ModesConfiguration {
     private readonly _minZoom: number = 50;
     private readonly _maxZoom: number = 150;
     private _helperDisplayed: boolean;
+    private _angleSnapOn: boolean;
 
 
     constructor() {
@@ -23,6 +25,7 @@ export class ModesConfiguration {
         this._zoomLevel = 100;
         this._darkMode = false;
         this._helperDisplayed = false;
+        this._angleSnapOn = false;
     }
 
     get helperDisplayed(): boolean {
@@ -63,6 +66,14 @@ export class ModesConfiguration {
 
     set gridOn(value: boolean) {
         this._gridOn = value;
+    }
+
+    get angleSnapOn(): boolean {
+        return this._angleSnapOn;
+    }
+
+    set angleSnapOn(value: boolean) {
+        this._angleSnapOn = value;
     }
 
     get defaultThickness(): number {
@@ -108,5 +119,9 @@ export class ModesConfiguration {
 
     helperOn(): void {
         this._helperDisplayed = !this._helperDisplayed;
+    }
+
+    changeSnapAngleMode(): void {
+        this._angleSnapOn = !this._angleSnapOn;
     }
 }
