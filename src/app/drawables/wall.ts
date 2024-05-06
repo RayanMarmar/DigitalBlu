@@ -1,9 +1,9 @@
 import {Point} from "./point";
 import {Line} from "./line";
 import "./drawable";
+import {v4 as uuidv4} from 'uuid';
 
 export class Wall implements Drawable {
-    private static _wallCount = 0;
 
     private _firstPoint: Point;
     private _secondPoint: Point;
@@ -17,10 +17,10 @@ export class Wall implements Drawable {
     private _height: number;
     private _xFactor: number;
     private _yFactor: number;
-    private _index: number;
+    private _index: string;
 
     constructor(firstPoint: Point, secondPoint: Point, height: number, reverseTransformationMatrix: number[][],
-                index?: number) {
+                index?: string) {
         firstPoint = firstPoint.transform(reverseTransformationMatrix);
         secondPoint = secondPoint.transform(reverseTransformationMatrix);
         this._height = height;
@@ -39,11 +39,11 @@ export class Wall implements Drawable {
         if (index !== undefined) {
             this._index = index;
         } else {
-            this._index = Wall._wallCount++;
+            this._index = uuidv4();
         }
     }
 
-    get index(): number {
+    get index(): string {
         return this._index;
     }
 
