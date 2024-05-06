@@ -20,7 +20,7 @@ export class ModesConfiguration {
     constructor() {
         this._snapMode = true;
         this._straightLineMode = false;
-        this._snapAngle = Math.PI / 6;
+        this._snapAngle = null;
         this._drawing = false;
         this._gridOn = true;
         this._defaultThickness = 10;
