@@ -8,6 +8,8 @@ import {Door} from "../drawables/door";
 })
 export class ComponentSelectorService {
 
+    maxAllowedDistance: number = 30;
+
     constructor(
         private archiveService: ArchiveService,
     ) {
@@ -22,9 +24,8 @@ export class ComponentSelectorService {
         const {min: minOpeningDistance, minElement: minOpening} = this.archiveService.getNearestWallOpening(point);
         const {min: minWallDistance, minElement: minWall} = this.archiveService.getNearestWall(point);
         const {min: minLineDistance, minElement: minLine} = this.archiveService.getNearestLine(point);
-        let maxAllowedDistance = 30;
 
-        if (this.isOpeningMin(minOpening, minOpeningDistance, maxAllowedDistance, minWallDistance, minLineDistance)) {
+        if (this.isOpeningMin(minOpening, minOpeningDistance, this.maxAllowedDistance, minWallDistance, minLineDistance)) {
             if (minOpening instanceof Door) {
                 return {
                     component: minOpening,
@@ -40,14 +41,14 @@ export class ComponentSelectorService {
 
         }
 
-        if (this.isOpeningMin(minWall, minWallDistance, maxAllowedDistance, minLineDistance, minLineDistance)) {
+        if (this.isOpeningMin(minWall, minWallDistance, this.maxAllowedDistance, minLineDistance, minLineDistance)) {
             return {
                 component: minWall,
                 list: this.archiveService.wallsList,
                 archiveList: this.archiveService.archiveWallsList
             };
         }
-        if (this.isOpeningMin(minLine, minLineDistance, maxAllowedDistance, minWallDistance, minOpeningDistance)) {
+        if (this.isOpeningMin(minLine, minLineDistance, this.maxAllowedDistance, minWallDistance, minOpeningDistance)) {
             return {
                 component: minLine,
                 list: this.archiveService.linesList,
