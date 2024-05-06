@@ -19,7 +19,6 @@ export class DeleteCommand implements Command {
         private nbDeletedDoors: number = 0,
         private nbDeletedWindows: number = 0
     ) {
-        this.selectedElement = selectedElement;
     }
 
     execute(): void {
