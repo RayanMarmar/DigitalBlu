@@ -6,7 +6,6 @@ import {ArchiveService} from "../services/archive.service";
 import {Point} from "../drawables/point";
 import {GridService} from "../services/grid.service";
 import {Wall} from "../drawables/wall";
-import {Line} from "../drawables/line";
 
 export class WallModeHandler implements ModeHandler {
     constructor(
@@ -20,26 +19,19 @@ export class WallModeHandler implements ModeHandler {
 
     onMouseDown(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
-        let point: Point = this.mouse.currentCoordinates!!;
-        let snapped: Point = this.snapPoint(point);
+        let snappedPoint: Point = this.snapPoint();
         if (this.modesConfiguration.drawing) {
             this.archiveService.addWall(
                 new Wall(
                     this.mouse.clickedCoordinates!!,
-                    snapped,
+                    snappedPoint,
                     this.modesConfiguration.defaultThickness,
                     this.transformationService.reverseTransformationMatrix
                 )
             );
         }
-        if (snapped.equals(point)) {
-            this.mouse.mouseDown(event);
-        } else {
-            this.mouse.moving = false;
-            this.mouse.clickedCoordinates = snapped;
-            this.mouse.notFirstMouseMoveEvent = false;
-        }
-        this.archiveService.pushPoint(snapped);
+        this.mouse.mouseDown(event, false, snappedPoint);
+        this.archiveService.pushPoint(snappedPoint);
         this.modesConfiguration.drawing = true;
     }
 
@@ -47,9 +39,10 @@ export class WallModeHandler implements ModeHandler {
         if (!this.modesConfiguration.drawing)
             return;
         this.mouse.mouseMove(event);
+        let snappedPoint = this.snapPoint();
         let wall: Wall = new Wall(
             this.mouse.clickedCoordinates!!,
-            this.snapAngle(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!, Math.PI / 6),
+            snappedPoint,
             this.modesConfiguration.defaultThickness,
             this.transformationService.reverseTransformationMatrix
         );
@@ -62,9 +55,16 @@ export class WallModeHandler implements ModeHandler {
     onMouseUp(event: MouseEvent): void {
     }
 
-    private snapPoint(point: Point): Point {
+    private snapPoint(): Point {
+        let point: Point = this.mouse.currentCoordinates!!;
         let snapped: Point = point;
-
+        if (this.modesConfiguration.drawing && this.modesConfiguration.snapAngleMode) {
+            return this.archiveService.snapAngle(
+                this.mouse.clickedCoordinates!!,
+                this.mouse.currentCoordinates!!,
+                this.modesConfiguration.snapAngle!!
+            )
+        }
         if (this.modesConfiguration.snapMode) {
             snapped = this.archiveService.snapPoint(point, true);
             if (!snapped.equals(point)) {
@@ -92,20 +92,5 @@ export class WallModeHandler implements ModeHandler {
                 this.archiveService.deleteWall();
             }
         }
-    }
-
-    snapAngle(referencePoint: Point, currentPoint: Point, requestedAngle: number): Point {
-        let line: Line = new Line(
-            referencePoint,
-            currentPoint
-        );
-
-        // Calculate the closest number of requested radian intervals
-        const intervals: number = Math.round(line.getAngleWithXVector() / requestedAngle);
-
-        // Calculate the nearest angle divisible by the requested angle degrees
-        const closestAngle: number = intervals * requestedAngle;
-
-        return line.firstPoint.projectCursorToAngleVector(closestAngle, line.secondPoint);
     }
 }
