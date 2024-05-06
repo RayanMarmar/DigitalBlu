@@ -23,15 +23,6 @@ export class CanvasService {
     ) {
     }
 
-
-    get selectedElement(): Drawable | null {
-        return this._selectedElement;
-    }
-
-    set selectedElement(value: Drawable | null) {
-        this._selectedElement = value;
-    }
-
     setCanvas(canvas: ElementRef<HTMLCanvasElement>): void {
         this.canvas = canvas;
         this.context = this.canvas.nativeElement.getContext("2d");
