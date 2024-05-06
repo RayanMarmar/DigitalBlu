@@ -20,7 +20,6 @@ import {EventHandlerConfiguration} from "../../models/eventHandlerConfiguration"
 export class HeaderComponent {
     thickness: number = this.getThickness();
     lastValidThickness: number = this.modesConfiguration.defaultThickness;
-    selectedAngleSnapValue: number = 1;
 
     constructor(
         private canvasService: CanvasService,

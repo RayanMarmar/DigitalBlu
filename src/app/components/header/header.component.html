@@ -71,25 +71,20 @@
         </button>
 
 
-        <button [class.active]="modesConfiguration.angleSnapOn" (click)="changeAngleSnapMode()">
+        <button [class.active]="modesConfiguration.snapAngleMode" (click)="changeAngleSnapMode()">
             <i class="iconoir iconoir-angle-tool"></i>
             <span class="button-label">Snap to angle</span>
         </button>
 
-        <div class="angle-snap-container" *ngIf="modesConfiguration.angleSnapOn">
-            <select [(ngModel)]="selectedAngleSnapValue">
-                <option value="value1">90, 180, 270, 360...</option>
-                <option value="value2">45, 90, 135, 180...</option>
-                <option value="value3">30, 60, 90, 120...</option>
-                <option value="value4">15, 30, 45, 60...</option>
+        <div class="angle-snap-container" *ngIf="modesConfiguration.snapAngleMode">
+            <select [(ngModel)]="modesConfiguration.snapRadiantFactor">
+                <option value="2">90, 180, 270, 360...</option>
+                <option value="4">45, 90, 135, 180...</option>
+                <option value="6">30, 60, 90, 120...</option>
+                <option value="12">15, 30, 45, 60...</option>
             </select>
 
         </div>
-
-        <!--        <button [class.active]="modesConfiguration.snapMode" (click)="switchSnapMode()">-->
-        <!--            <i class="iconoir iconoir-precision-tool"></i>-->
-        <!--            <span class="button-label">Snap to grid</span>-->
-        <!--        </button>-->
 
         <button [class.active]="modesConfiguration.gridOn" (click)="switchGridMode()">
             <i class="iconoir iconoir-orthogonal-view"></i>

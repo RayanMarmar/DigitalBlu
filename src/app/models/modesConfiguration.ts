@@ -4,11 +4,10 @@ import {Injectable} from "@angular/core";
     providedIn: 'root',
 })
 export class ModesConfiguration {
-
     private _snapMode: boolean;
     private _straightLineMode: boolean;
     private _snapAngleMode: boolean;
-    private _snapAngle: number | null;
+    private _snapRadiantFactor: number;
     private _drawing: boolean;
     private _gridOn: boolean;
     private _defaultThickness: number;
@@ -17,21 +16,19 @@ export class ModesConfiguration {
     private readonly _minZoom: number = 50;
     private readonly _maxZoom: number = 150;
     private _helperDisplayed: boolean;
-    private _angleSnapOn: boolean;
 
 
     constructor() {
         this._snapMode = true;
         this._straightLineMode = false;
         this._snapAngleMode = false;
-        this._snapAngle = Math.PI / 6;
+        this._snapRadiantFactor = 6;
         this._drawing = false;
         this._gridOn = true;
         this._defaultThickness = 10;
         this._zoomLevel = 100;
         this._darkMode = false;
         this._helperDisplayed = false;
-        this._angleSnapOn = false;
     }
 
     get helperDisplayed(): boolean {
@@ -58,8 +55,8 @@ export class ModesConfiguration {
         this._snapMode = value;
     }
 
-    get snapAngle(): number | null {
-        return this.straightLineMode ? Math.PI / 2 : this._snapAngle;
+    get snapAngle(): number {
+        return this.straightLineMode ? Math.PI / 2 : Math.PI / this._snapRadiantFactor;
     }
 
     get snapAngleMode(): boolean {
@@ -68,10 +65,6 @@ export class ModesConfiguration {
 
     set snapAngleMode(value: boolean) {
         this._snapAngleMode = value;
-    }
-
-    set snapAngle(value: number | null) {
-        this._snapAngle = value;
     }
 
     get straightLineMode(): boolean {
@@ -98,13 +91,14 @@ export class ModesConfiguration {
         this._gridOn = value;
     }
 
-    get angleSnapOn(): boolean {
-        return this._angleSnapOn;
+    get snapRadiantFactor(): number {
+        return this._snapRadiantFactor;
     }
 
-    set angleSnapOn(value: boolean) {
-        this._angleSnapOn = value;
+    set snapRadiantFactor(value: number) {
+        this._snapRadiantFactor = value;
     }
+
 
     get defaultThickness(): number {
         return this._defaultThickness;
@@ -152,6 +146,6 @@ export class ModesConfiguration {
     }
 
     changeSnapAngleMode(): void {
-        this._angleSnapOn = !this._angleSnapOn;
+        this._snapAngleMode = !this._snapAngleMode;
     }
 }
