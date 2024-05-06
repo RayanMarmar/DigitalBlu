@@ -27,11 +27,12 @@ export class SnapService {
                 return snapped;
             }
         }
-        if (this.modesConfiguration.drawing && this.modesConfiguration.snapAngle !== null) {
+        if (this.modesConfiguration.drawing &&
+            (this.modesConfiguration.snapAngleMode || this.modesConfiguration.straightLineMode)) {
             return this.archiveService.snapAngle(
                 this.mouse.clickedCoordinates!!,
                 this.mouse.currentCoordinates!!,
-                this.modesConfiguration.snapAngle
+                this.modesConfiguration.snapAngle!!
             )
         }
         if (this.modesConfiguration.gridOn) {

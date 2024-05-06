@@ -6,6 +6,7 @@ import {Injectable} from "@angular/core";
 export class ModesConfiguration {
     private _snapMode: boolean;
     private _straightLineMode: boolean;
+    private _snapAngleMode: boolean;
     private _snapAngle: number | null;
     private _drawing: boolean;
     private _gridOn: boolean;
@@ -20,7 +21,8 @@ export class ModesConfiguration {
     constructor() {
         this._snapMode = true;
         this._straightLineMode = false;
-        this._snapAngle = null;
+        this._snapAngleMode = false;
+        this._snapAngle = Math.PI / 6;
         this._drawing = false;
         this._gridOn = true;
         this._defaultThickness = 10;
@@ -58,7 +60,11 @@ export class ModesConfiguration {
     }
 
     get snapAngleMode(): boolean {
-        return this._snapAngle !== null;
+        return this._snapAngleMode;
+    }
+
+    set snapAngleMode(value: boolean) {
+        this._snapAngleMode = value;
     }
 
     set snapAngle(value: number | null) {
