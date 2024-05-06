@@ -62,7 +62,6 @@ export class DeleteCommand implements Command {
             // Check if the point is equal to the firstPoint or secondPoint of the Line
             if (point.equals(line.firstPoint) || point.equals(line.secondPoint)) {
                 // Remove the point from the archivePointsList
-                this.archivePointsList.push(point);
                 if (this.ghostPoint(point)) {
                     this.archivePointsList.push(point);
                     this.pointsList.splice(i, 1);
