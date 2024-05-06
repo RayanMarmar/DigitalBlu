@@ -15,4 +15,7 @@ export class CursorModeHandler implements ModeHandler {
 
     onKeyDown(event: KeyboardEvent): void {
     }
+
+    onKeyUp(event: KeyboardEvent): void {
+    }
 }

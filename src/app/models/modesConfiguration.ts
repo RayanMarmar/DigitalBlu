@@ -19,7 +19,7 @@ export class ModesConfiguration {
 
     constructor() {
         this._snapMode = true;
-        this._straightLineMode = true;
+        this._straightLineMode = false;
         this._snapAngle = Math.PI / 6;
         this._drawing = false;
         this._gridOn = true;
@@ -54,7 +54,7 @@ export class ModesConfiguration {
     }
 
     get snapAngle(): number | null {
-        return this._snapAngle;
+        return this.straightLineMode ? Math.PI / 2 : this._snapAngle;
     }
 
     get snapAngleMode(): boolean {

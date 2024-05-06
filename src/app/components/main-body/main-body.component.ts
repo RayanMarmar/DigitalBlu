@@ -30,4 +30,10 @@ export class MainBodyComponent {
         this.eventHandlerConfiguration.onKeyDown(event);
         this.canvasService.drawAll();
     }
+
+    @HostListener('document:keyup', ['$event'])
+    private handleKeyUp(event: KeyboardEvent): void {
+        this.eventHandlerConfiguration.onKeyUp(event);
+        this.canvasService.drawAll();
+    }
 }

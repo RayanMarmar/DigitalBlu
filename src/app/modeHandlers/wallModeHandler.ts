@@ -58,11 +58,11 @@ export class WallModeHandler implements ModeHandler {
     private snapPoint(): Point {
         let point: Point = this.mouse.currentCoordinates!!;
         let snapped: Point = point;
-        if (this.modesConfiguration.drawing && this.modesConfiguration.snapAngleMode) {
+        if (this.modesConfiguration.drawing && this.modesConfiguration.snapAngle !== null) {
             return this.archiveService.snapAngle(
                 this.mouse.clickedCoordinates!!,
                 this.mouse.currentCoordinates!!,
-                this.modesConfiguration.snapAngle!!
+                this.modesConfiguration.snapAngle
             )
         }
         if (this.modesConfiguration.snapMode) {
@@ -81,6 +81,9 @@ export class WallModeHandler implements ModeHandler {
         if (event.key === 'Escape') {
             this.handleEscape();
         }
+    }
+
+    onKeyUp(event: KeyboardEvent): void {
     }
 
 
