@@ -4,8 +4,8 @@ import {ModesConfiguration} from "../models/modesConfiguration";
 import {TransformationService} from "../services/transformation.service";
 import {ArchiveService} from "../services/archive.service";
 import {Point} from "../drawables/point";
-import {GridService} from "../services/grid.service";
 import {Wall} from "../drawables/wall";
+import {SnapService} from "../services/snap.service";
 
 export class WallModeHandler implements ModeHandler {
     constructor(
@@ -13,13 +13,13 @@ export class WallModeHandler implements ModeHandler {
         private readonly modesConfiguration: ModesConfiguration,
         private transformationService: TransformationService,
         private archiveService: ArchiveService,
-        private gridService: GridService
+        private snapService: SnapService
     ) {
     }
 
     onMouseDown(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
-        let snappedPoint: Point = this.snapPoint();
+        let snappedPoint: Point = this.snapService.snapPoint();
         if (this.modesConfiguration.drawing) {
             this.archiveService.addWall(
                 new Wall(
@@ -39,7 +39,7 @@ export class WallModeHandler implements ModeHandler {
         if (!this.modesConfiguration.drawing)
             return;
         this.mouse.mouseMove(event);
-        let snappedPoint = this.snapPoint();
+        let snappedPoint = this.snapService.snapPoint();
         let wall: Wall = new Wall(
             this.mouse.clickedCoordinates!!,
             snappedPoint,
@@ -53,28 +53,6 @@ export class WallModeHandler implements ModeHandler {
     }
 
     onMouseUp(event: MouseEvent): void {
-    }
-
-    private snapPoint(): Point {
-        let point: Point = this.mouse.currentCoordinates!!;
-        let snapped: Point = point;
-        if (this.modesConfiguration.drawing && this.modesConfiguration.snapAngle !== null) {
-            return this.archiveService.snapAngle(
-                this.mouse.clickedCoordinates!!,
-                this.mouse.currentCoordinates!!,
-                this.modesConfiguration.snapAngle
-            )
-        }
-        if (this.modesConfiguration.snapMode) {
-            snapped = this.archiveService.snapPoint(point, true);
-            if (!snapped.equals(point)) {
-                return snapped;
-            }
-        }
-        if (this.modesConfiguration.gridOn) {
-            snapped = this.gridService.calculateNearestGridIntersection(point);
-        }
-        return snapped;
     }
 
     onKeyDown(event: KeyboardEvent): void {
