@@ -64,4 +64,8 @@ export class Point implements Drawable {
          transformationMatrix: number[][] = [[1, 0, 0], [0, 1, 0]]): void {
         context.fillRect(this._x, this._y, 1, 1);
     }
+
+    getAngleWithXVector(): number {
+        return 0;
+    }
 }

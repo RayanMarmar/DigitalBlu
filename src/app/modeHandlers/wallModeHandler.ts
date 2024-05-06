@@ -43,20 +43,22 @@ export class WallModeHandler implements ModeHandler {
     }
 
     onMouseMove(event: MouseEvent): void {
+        let wall: Wall = new Wall(
+            this.mouse.clickedCoordinates!!,
+            this.mouse.currentCoordinates!!,
+            this.modesConfiguration.defaultThickness,
+            this.transformationService.reverseTransformationMatrix
+        );
+
         if (!this.modesConfiguration.drawing)
             return;
         this.mouse.mouseMove(event);
-        if (this.mouse.notFirstMouseMoveEvent)
+        console.log(wall.getAngleWithXVector());
+        if (wall.getAngleWithXVector() % 45 === 0) {
             this.archiveService.popWall();
-        else
-            this.mouse.notFirstMouseMoveEvent = true;
-        this.archiveService.pushWall(new Wall(
-                this.mouse.clickedCoordinates!!,
-                this.mouse.currentCoordinates!!,
-                this.modesConfiguration.defaultThickness,
-                this.transformationService.reverseTransformationMatrix
-            )
-        );
+            this.archiveService.pushWall(wall);
+        }
+        this.mouse.notFirstMouseMoveEvent = true;
     }
 
     onMouseUp(event: MouseEvent): void {

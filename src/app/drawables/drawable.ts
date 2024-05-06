@@ -7,4 +7,6 @@ interface Drawable {
     ): void;
 
     toString(): String;
+
+    getAngleWithXVector(): number;
 }

@@ -216,4 +216,8 @@ export class Wall implements Drawable {
         let height: number = this._height * transformationMatrix[0][0];
         return new Wall(firstPoint, secondPoint, height, [[1, 1, 0], [1, 1, 0]]);
     }
+
+    getAngleWithXVector(): number {
+        return this._firstLine.getAngleWithXVector();
+    }
 }
