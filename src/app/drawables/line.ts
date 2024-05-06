@@ -184,10 +184,7 @@ export class Line implements Drawable {
         const deltaX = this._secondPoint.x - this._firstPoint.x;
         const deltaY = this._secondPoint.y - this._firstPoint.y;
 
-        // Calculate the angle using Math.atan2
-        const angleInRadians = Math.atan2(deltaY, deltaX);
-
-        // Convert the angle from radians to degrees (optional)
-        return angleInRadians * (180 / Math.PI);
+        // Calculate the angle in radians using Math.atan2
+        return Math.atan2(deltaY, deltaX);
     }
 }

@@ -6,6 +6,7 @@ import {ArchiveService} from "../services/archive.service";
 import {Point} from "../drawables/point";
 import {GridService} from "../services/grid.service";
 import {Wall} from "../drawables/wall";
+import {Line} from "../drawables/line";
 
 export class WallModeHandler implements ModeHandler {
     constructor(
@@ -43,21 +44,18 @@ export class WallModeHandler implements ModeHandler {
     }
 
     onMouseMove(event: MouseEvent): void {
-        let wall: Wall = new Wall(
-            this.mouse.clickedCoordinates!!,
-            this.mouse.currentCoordinates!!,
-            this.modesConfiguration.defaultThickness,
-            this.transformationService.reverseTransformationMatrix
-        );
-
         if (!this.modesConfiguration.drawing)
             return;
         this.mouse.mouseMove(event);
-        console.log(wall.getAngleWithXVector());
-        if (wall.getAngleWithXVector() % 45 === 0) {
+        let wall: Wall = new Wall(
+            this.mouse.clickedCoordinates!!,
+            this.snapAngle(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!, Math.PI / 6),
+            this.modesConfiguration.defaultThickness,
+            this.transformationService.reverseTransformationMatrix
+        );
+        if (this.mouse.notFirstMouseMoveEvent)
             this.archiveService.popWall();
-            this.archiveService.pushWall(wall);
-        }
+        this.archiveService.pushWall(wall);
         this.mouse.notFirstMouseMoveEvent = true;
     }
 
@@ -94,5 +92,20 @@ export class WallModeHandler implements ModeHandler {
                 this.archiveService.deleteWall();
             }
         }
+    }
+
+    snapAngle(referencePoint: Point, currentPoint: Point, requestedAngle: number): Point {
+        let line: Line = new Line(
+            referencePoint,
+            currentPoint
+        );
+
+        // Calculate the closest number of requested radian intervals
+        const intervals: number = Math.round(line.getAngleWithXVector() / requestedAngle);
+
+        // Calculate the nearest angle divisible by the requested angle degrees
+        const closestAngle: number = intervals * requestedAngle;
+
+        return line.firstPoint.projectCursorToAngleVector(closestAngle, line.secondPoint);
     }
 }

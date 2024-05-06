@@ -72,8 +72,4 @@ export class WallOpening {
         context.fillStyle = wallColor;
         context.strokeStyle = wallColor;
     }
-
-    getAngleWithXVector(): number {
-        return 0;
-    }
 }
