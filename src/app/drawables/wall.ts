@@ -20,7 +20,7 @@ export class Wall implements Drawable {
     private _uid: string;
 
     constructor(firstPoint: Point, secondPoint: Point, height: number, reverseTransformationMatrix: number[][],
-                index: string | null) {
+                uid: string | null) {
         firstPoint = firstPoint.transform(reverseTransformationMatrix);
         secondPoint = secondPoint.transform(reverseTransformationMatrix);
         this._height = height;
@@ -36,11 +36,11 @@ export class Wall implements Drawable {
         this._secondLine = new Line(this._secondPoint, this._thirdPoint);
         this._fourthLine = new Line(this._fourthPoint, this._firstPoint);
         this._width = this._firstLine.calculateDistance();
-        this._index = index ?? uuidv4();
+        this._uid = uid ?? uuidv4();
     }
 
-    get index(): string {
-        return this._index;
+    get uid(): string {
+        return this._uid;
     }
 
     // Getter for firstPoint
@@ -233,7 +233,7 @@ export class Wall implements Drawable {
         let secondPoint: Point = this._secondLine.calculateCenter().transform(transformationMatrix);
         let height: number = this._height * transformationMatrix[0][0];
         return new Wall(firstPoint, secondPoint, height,
-            [[1, 1, 0], [1, 1, 0]],
+            [[1, 1, 0], [1, 1, 0]],null
         );
     }
 }

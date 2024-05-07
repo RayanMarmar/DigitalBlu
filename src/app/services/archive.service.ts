@@ -396,7 +396,7 @@ export class ArchiveService {
         }
     }
     getWallByUid(uid: string): Wall | null {
-        const wall = this.archiveWallsList.find(w => w.index === index);
+        const wall = this.archiveWallsList.find(w => w.uid === uid);
         return wall ? wall : null;
     }
 }

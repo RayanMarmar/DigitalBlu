@@ -31,15 +31,15 @@ export class SaveService {
                 _y: point.y
             })),
             wallsList: this.archiveService.wallsList.map((wall) => ({
-                _firstPoint: {_x: wall.firstPoint.x, _y: wall.firstPoint.y},
-                _secondPoint: {_x: wall.secondPoint.x, _y: wall.secondPoint.y},
+                _firstPoint: wall.secondLine.calculateCenter(),
+                _secondPoint: wall.fourthLine.calculateCenter(),
                 _height: wall.height,
                 _matrix: {_reverseTransformationMatrix: this.transformationService.reverseTransformationMatrix},
-                _index: wall.index
+                _uid: wall.uid
             })),
 
             doorsList: this.archiveService.doorsList.map((door) => ({
-                _uid: door.wall.index,
+                _uid: door.wall.uid,
                 _point: {_x: door.center.x, _y: door.center.y},
                 _doorType: door.doorType,
                 _direction: door.direction,
@@ -47,7 +47,7 @@ export class SaveService {
                 _radius: door.radius
             })),
             windowsList: this.archiveService.windowsList.map(window => ({
-                _uid: window.wall.index,
+                _uid: window.wall.uid,
                 _point: {_x: window.center.x, _y: window.center.y},
                 _radius: window.height
             }))
@@ -90,7 +90,7 @@ export class SaveService {
                 new Point(wallData._secondPoint._x, wallData._secondPoint._y),
                 wallData._height,
                 wallData._matrix._reverseTransformationMatrix,
-                wallData._index
+                wallData._uid
             ));
             archive.archiveWallsList = archive.wallsList
             ///\SETTING WALLS//////
@@ -100,7 +100,7 @@ export class SaveService {
             archive.doorsList = doorsList.map((doorData: any) => {
                 // Find the existing wall associated with the door
 
-                let wall = archive.getWallByIndex(doorData._index)
+                let wall = archive.getWallByUid(doorData.uid)
                 if (wall) {
                     return new Door(
                         wall, // Pass the existing wall
@@ -112,7 +112,7 @@ export class SaveService {
                     );
                 } else {
                     // Handle case where wall is not found
-                    console.error(`Wall with index ${doorData._index} not found.`);
+                    console.error(`Wall with uid ${doorData._uid} not found.`);
                     return null; // or handle differently based on your use case
                 }
             });
@@ -122,7 +122,7 @@ export class SaveService {
             ///SETTING WINDOWS//////
             archive.windowsList = stateStringParsed.windowsList.map((windowData: any) => {
 
-                let wall = archive.getWallByIndex(windowData._index)
+                let wall = archive.getWallByUid(windowData._uid)
                 if (wall) {
                     return new Window(
                         wall, // Get wall reference from archive
@@ -131,7 +131,7 @@ export class SaveService {
                     )
                 } else {
                     // Handle case where wall is not found
-                    console.error(`Wall with index ${windowData._index} not found.`);
+                    console.error(`Wall with uid ${windowData._uid} not found.`);
                     return null; // or handle differently based on your use case
                 }
 
