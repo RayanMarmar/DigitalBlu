@@ -395,7 +395,7 @@ export class ArchiveService {
             this.redo()
         }
     }
-    getWallByIndex(index: string): Wall | null {
+    getWallByUid(uid: string): Wall | null {
         const wall = this.archiveWallsList.find(w => w.index === index);
         return wall ? wall : null;
     }
