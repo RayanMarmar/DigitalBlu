@@ -20,6 +20,9 @@ export class EraseModeHandler implements ModeHandler {
     onKeyDown(event: KeyboardEvent): void {
     }
 
+    onKeyUp(event: KeyboardEvent): void {
+    }
+
     onMouseDown(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let point: Point = this.mouse.currentCoordinates!!;

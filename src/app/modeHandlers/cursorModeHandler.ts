@@ -2,13 +2,6 @@ import './modeHandler';
 
 export class CursorModeHandler implements ModeHandler {
     constructor() {
-
-    }
-
-    onMouseUp(event: MouseEvent): void {
-    }
-
-    onKeyDown(event: KeyboardEvent): void {
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -17,4 +10,12 @@ export class CursorModeHandler implements ModeHandler {
     onMouseMove(event: MouseEvent): void {
     }
 
+    onMouseUp(event: MouseEvent): void {
+    }
+
+    onKeyDown(event: KeyboardEvent): void {
+    }
+
+    onKeyUp(event: KeyboardEvent): void {
+    }
 }

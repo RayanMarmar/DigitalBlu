@@ -2,7 +2,6 @@ import {Line} from "./line";
 import {Point} from "./point";
 import {Wall} from "./wall";
 
-
 export class WallOpening {
     protected _wall: Wall;
     protected _parallelLine: Line;

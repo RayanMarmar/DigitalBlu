@@ -6,4 +6,6 @@ interface ModeHandler {
     onMouseUp(event: MouseEvent): void;
 
     onKeyDown(event: KeyboardEvent): void;
+
+    onKeyUp(event: KeyboardEvent): void;
 }
