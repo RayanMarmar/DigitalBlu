@@ -20,7 +20,7 @@ export class Wall implements Drawable {
     private _uid: string;
 
     constructor(firstPoint: Point, secondPoint: Point, height: number, reverseTransformationMatrix: number[][],
-                index?: string) {
+                index: string | null) {
         firstPoint = firstPoint.transform(reverseTransformationMatrix);
         secondPoint = secondPoint.transform(reverseTransformationMatrix);
         this._height = height;
