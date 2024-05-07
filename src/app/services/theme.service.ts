@@ -17,6 +17,11 @@ export class ThemeService {
         return getComputedStyle(this.document.documentElement).getPropertyValue('--wall-color');
     }
 
+    getDeleteDrawableColor(): string {
+        return getComputedStyle(this.document.documentElement).getPropertyValue('--delete-wall-color');
+    }
+
+
     toggleDarkMode(darkMode: boolean) {
         if (darkMode) {
             this.document.documentElement.classList.add('dark-mode');

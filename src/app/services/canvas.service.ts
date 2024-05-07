@@ -76,6 +76,17 @@ export class CanvasService {
         });
     }
 
+    private highlightSelectedElement(): void {
+        if (this.archiveService.selectedElement !== null) {
+            this.archiveService.selectedElement.draw(
+                this.context!!,
+                this.themeService.getCanvasColor(),
+                this.themeService.getDeleteDrawableColor(),
+                this.transformationService.transformationMatrix,
+            )
+        }
+    }
+
     drawAll(): void {
         if (this.context == null) {
             console.log("Context is null...")
@@ -86,6 +97,8 @@ export class CanvasService {
         this.drawAllWalls();
         this.drawAllDoors();
         this.drawAllWindows();
+        this.highlightSelectedElement();
+
     }
 
     undo(): void {
