@@ -87,10 +87,6 @@ export class HeaderComponent {
         this.eventHandlerConfiguration.setEraseMode();
     }
 
-    setSaveMode(): void {
-        this.eventHandlerConfiguration.setEraseMode();
-    }
-
     onInput() {
         if (this.thickness < 1) {
             this.thickness = this.lastValidThickness;
