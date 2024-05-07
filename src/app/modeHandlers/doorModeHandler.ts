@@ -49,6 +49,9 @@ export class DoorModeHandler implements ModeHandler {
         }
     }
 
+    onKeyUp(event: KeyboardEvent): void {
+    }
+
 
     private changeDoorOrientation(): void {
         let door: Door | undefined = this.archiveService.doorsList.pop();

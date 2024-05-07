@@ -98,4 +98,9 @@ export class EventHandlerConfiguration {
         this.globalHandler.onKeyDown(event);
     }
 
+    onKeyUp(event: KeyboardEvent): void {
+        this.eventHandler.onKeyUp(event);
+        this.globalHandler.onKeyUp(event);
+    }
+
 }

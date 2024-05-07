@@ -272,6 +272,21 @@ export class ArchiveService {
         return index == -1 ? point : this._pointsList[index];
     }
 
+    snapAngle(referencePoint: Point, currentPoint: Point, requestedAngle: number): Point {
+        let line: Line = new Line(
+            referencePoint,
+            currentPoint
+        );
+
+        // Calculate the closest number of requested radian intervals
+        const intervals: number = Math.round(line.getAngleWithXVector() / requestedAngle);
+
+        // Calculate the nearest angle divisible by the requested angle degrees
+        const closestAngle: number = intervals * requestedAngle;
+
+        return line.firstPoint.projectCursorToAngleVector(closestAngle, line.secondPoint);
+    }
+
     snapWallOpening(point: Point): Wall | null {
         let index: number = this.inRangeOfAnExistingWall(point);
         return index == -1 ? null : this._wallsList[index];
