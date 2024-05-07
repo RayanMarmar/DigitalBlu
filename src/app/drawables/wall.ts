@@ -17,7 +17,7 @@ export class Wall implements Drawable {
     private _height: number;
     private _xFactor: number;
     private _yFactor: number;
-    private _index: string;
+    private _uid: string;
 
     constructor(firstPoint: Point, secondPoint: Point, height: number, reverseTransformationMatrix: number[][],
                 index?: string) {
