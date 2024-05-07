@@ -1,9 +1,11 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
-import {CanvasComponent} from "../canvas/canvas.component";
+import {Component} from '@angular/core';
 import {CanvasService} from "../../services/canvas.service";
 import {ModesConfiguration} from "../../models/modesConfiguration";
 import {NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
+import {ThemeService} from "../../services/theme.service";
+import {ArchiveService} from "../../services/archive.service";
+import {EventHandlerConfiguration} from "../../models/eventHandlerConfiguration";
 
 @Component({
     selector: 'app-header',
@@ -16,13 +18,15 @@ import {FormsModule} from "@angular/forms";
     styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-    @ViewChild('optionsButton', {static: true}) private optionsButton!: ElementRef;
     thickness: number = this.getThickness();
     lastValidThickness: number = this.modesConfiguration.defaultThickness;
 
     constructor(
         private canvasService: CanvasService,
         public modesConfiguration: ModesConfiguration,
+        public eventHandlerConfiguration: EventHandlerConfiguration,
+        private themeService: ThemeService,
+        private archiveService: ArchiveService
     ) {
     }
 
@@ -39,15 +43,15 @@ export class HeaderComponent {
     }
 
     switchWallMode() {
-        this.modesConfiguration.changeWallMode();
+        this.eventHandlerConfiguration.setWallMode();
     }
 
     switchLineMode() {
-        this.modesConfiguration.changeLineMode();
+        this.eventHandlerConfiguration.setLineMode();
     }
 
     switchDoorMode() {
-        this.modesConfiguration.changeDoorMode();
+        this.eventHandlerConfiguration.setDoorMode();
     }
 
     updateThickness(event: Event) {
@@ -60,16 +64,25 @@ export class HeaderComponent {
             this.modesConfiguration.changeDefaultThickness(this.lastValidThickness);
             this.thickness = this.lastValidThickness;
         }
-        console.log(this.lastValidThickness);
     }
 
 
     switchWindowMode() {
-        this.modesConfiguration.changeWindowMode();
+        this.eventHandlerConfiguration.setWindowMode();
     }
 
     switchGridMode() {
         this.modesConfiguration.changeGridMode();
+    }
+
+    switchDarkMode() {
+        this.modesConfiguration.changeDarkMode();
+        this.themeService.toggleDarkMode(this.modesConfiguration.darkMode)
+        this.canvasService.drawAll();
+    }
+
+    switchEraseMode(): void {
+        this.eventHandlerConfiguration.setEraseMode();
     }
 
     onInput() {
@@ -80,10 +93,27 @@ export class HeaderComponent {
         }
     }
 
+    redoDisabled(): boolean {
+        return !this.archiveService.containsArchivedElements();
+    }
+
+    undoDisabled(): boolean {
+        return !this.archiveService.containsElements();
+    }
+
+    switchCursorMode(): void {
+        this.eventHandlerConfiguration.setCursorMode();
+    }
+
+    switchGrabMode(): void {
+        this.eventHandlerConfiguration.setGrabMode();
+    }
+
     getThickness() {
         return this.modesConfiguration.defaultThickness;
     }
 
-
-    protected readonly CanvasComponent = CanvasComponent;
+    displayHelper(): void {
+        this.modesConfiguration.helperOn();
+    }
 }

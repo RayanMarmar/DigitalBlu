@@ -1,4 +1,6 @@
-export class Point {
+import "./drawable";
+
+export class Point implements Drawable {
     private _x: number;
     private _y: number;
     private range: number = 5;
@@ -48,7 +50,18 @@ export class Point {
         return this._y - this.range <= y && this._y + this.range >= y;
     }
 
-    draw(context: CanvasRenderingContext2D): void {
+    // Method to scale a vec2
+    transform(transformationMatrix: number[][]): Point {
+        return new Point(
+            this.x * transformationMatrix[0][0] + transformationMatrix[0][2],
+            this.y * transformationMatrix[1][1] + transformationMatrix[1][2]
+        );
+    }
+
+    draw(context: CanvasRenderingContext2D,
+         canvasColor: string,
+         drawableColor: string,
+         transformationMatrix: number[][] = [[1, 0, 0], [0, 1, 0]]): void {
         context.fillRect(this._x, this._y, 1, 1);
     }
 }

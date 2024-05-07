@@ -1,7 +1,8 @@
 import {Point} from "./point";
 import {Line} from "./line";
+import "./drawable";
 
-export class Wall {
+export class Wall implements Drawable {
     private _firstPoint: Point;
     private _secondPoint: Point;
     private _thirdPoint: Point;
@@ -15,7 +16,9 @@ export class Wall {
     private _xFactor: number;
     private _yFactor: number;
 
-    constructor(firstPoint: Point, secondPoint: Point, height: number) {
+    constructor(firstPoint: Point, secondPoint: Point, height: number, reverseTransformationMatrix: number[][]) {
+        firstPoint = firstPoint.transform(reverseTransformationMatrix);
+        secondPoint = secondPoint.transform(reverseTransformationMatrix);
         this._height = height;
         this._yFactor = (firstPoint.y - secondPoint.y) >= 0 ? -1 : 1;
         this._xFactor = (firstPoint.x - secondPoint.x) >= 0 ? -1 : 1;
@@ -187,15 +190,41 @@ export class Wall {
         return ((end.x - start.x) * (y - start.y)) - ((x - start.x) * (end.y - start.y));
     }
 
-    draw(context: CanvasRenderingContext2D) {
+    calculateNearestPointDistance(point: Point): number {
+
+        return Math.min(this.firstLine.calculateNearestPointDistance(point),
+            this.secondLine.calculateNearestPointDistance(point),
+            this.thirdLine.calculateNearestPointDistance(point),
+            this.fourthLine.calculateNearestPointDistance(point));
+    }
+
+
+    draw(
+        context: CanvasRenderingContext2D,
+        canvasColor: string,
+        wallColor: string,
+        transformationMatrix: number[][],
+    ) {
+        let wall: Wall = this.transform(transformationMatrix);
         // Draw a filled rectangle with the correct coordinates
         context.beginPath();
-        context.moveTo(this._firstPoint.x, this._firstPoint.y);
-        context.lineTo(this._secondPoint.x, this._secondPoint.y);
-        context.lineTo(this._thirdPoint.x, this._thirdPoint.y);
-        context.lineTo(this._fourthPoint.x, this._fourthPoint.y);
+        context.moveTo(wall.firstPoint.x, wall.firstPoint.y);
+        context.lineTo(wall.secondPoint.x, wall.secondPoint.y);
+        context.lineTo(wall.thirdPoint.x, wall.thirdPoint.y);
+        context.lineTo(wall.fourthPoint.x, wall.fourthPoint.y);
         context.closePath();
+        context.fillStyle = wallColor;
+        context.strokeStyle = wallColor;
         context.fill();
         context.stroke(); // If you want to keep the border, you can include this line
+    }
+
+    transform(transformationMatrix: number[][]): Wall {
+        let firstPoint: Point = this._fourthLine.calculateCenter().transform(transformationMatrix);
+        let secondPoint: Point = this._secondLine.calculateCenter().transform(transformationMatrix);
+        let height: number = this._height * transformationMatrix[0][0];
+        return new Wall(firstPoint, secondPoint, height,
+            [[1, 1, 0], [1, 1, 0]],
+        );
     }
 }

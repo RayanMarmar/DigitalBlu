@@ -5,34 +5,40 @@ import {Injectable} from "@angular/core";
 })
 export class ModesConfiguration {
     private _snapMode: boolean;
-    private _lineMode: boolean;
-    private _wallMode: boolean;
-    private _doorMode: boolean;
-    private _windowMode: boolean;
     private _drawing: boolean;
     private _gridOn: boolean;
     private _defaultThickness: number;
     private _zoomLevel: number;
+    private _darkMode: boolean;
+    private readonly _minZoom: number = 50;
+    private readonly _maxZoom: number = 150;
+    private _helperDisplayed: boolean;
 
 
     constructor() {
         this._snapMode = true;
-        this._lineMode = true;
-        this._wallMode = false;
-        this._doorMode = false;
-        this._windowMode = false;
         this._drawing = false;
         this._gridOn = true;
-        this._defaultThickness = 20;
+        this._defaultThickness = 10;
         this._zoomLevel = 100;
+        this._darkMode = false;
+        this._helperDisplayed = false;
     }
 
-    get lineMode(): boolean {
-        return this._lineMode;
+    get helperDisplayed(): boolean {
+        return this._helperDisplayed;
     }
 
-    set lineMode(value: boolean) {
-        this._lineMode = value;
+    set helperDisplayed(value: boolean) {
+        this._helperDisplayed = value;
+    }
+
+    get minZoom(): number {
+        return this._minZoom;
+    }
+
+    get maxZoom(): number {
+        return this._maxZoom;
     }
 
     get snapMode(): boolean {
@@ -43,28 +49,12 @@ export class ModesConfiguration {
         this._snapMode = value;
     }
 
-    get wallMode(): boolean {
-        return this._wallMode;
-    }
-
-    set wallMode(value: boolean) {
-        this._wallMode = value;
-    }
-
     get drawing(): boolean {
         return this._drawing;
     }
 
     set drawing(value: boolean) {
         this._drawing = value;
-    }
-
-    get doorMode(): boolean {
-        return this._doorMode;
-    }
-
-    set doorMode(value: boolean) {
-        this._doorMode = value;
     }
 
     get gridOn(): boolean {
@@ -83,14 +73,6 @@ export class ModesConfiguration {
         this._defaultThickness = value;
     }
 
-    get windowMode(): boolean {
-        return this._windowMode;
-    }
-
-    set windowMode(value: boolean) {
-        this._windowMode = value;
-    }
-
     get zoomLevel(): number {
         return this._zoomLevel;
     }
@@ -99,8 +81,20 @@ export class ModesConfiguration {
         this._zoomLevel = value;
     }
 
+    get darkMode(): boolean {
+        return this._darkMode;
+    }
+
+    set darkMode(value: boolean) {
+        this._darkMode = value;
+    }
+
     changeSnapMode(): void {
         this._snapMode = !this._snapMode;
+    }
+
+    changeDarkMode(): void {
+        this._darkMode = !this._darkMode;
     }
 
     changeDefaultThickness(value: number) {
@@ -108,36 +102,11 @@ export class ModesConfiguration {
         return this._defaultThickness;
     }
 
-    changeWallMode(): void {
-        this._wallMode = true;
-        this._doorMode = false;
-        this._windowMode = false;
-        this._lineMode = false;
-    }
-
-    changeLineMode(): void {
-        this._wallMode = false;
-        this._windowMode = false;
-        this._doorMode = false;
-        this._lineMode = true;
-    }
-
-    changeDoorMode(): void {
-        this._doorMode = true;
-        this._wallMode = false;
-        this._lineMode = false;
-        this._windowMode = false;
-    }
-
-    changeWindowMode(): void {
-        this._windowMode = true;
-        this._doorMode = false;
-        this._wallMode = false;
-        this._lineMode = false;
-    }
-
     changeGridMode(): void {
         this._gridOn = !this._gridOn;
     }
 
+    helperOn(): void {
+        this._helperDisplayed = !this._helperDisplayed;
+    }
 }

@@ -1,1 +1,4 @@
-<canvas id="drawing-canvas" #myCanvas (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)"></canvas>
+<canvas [class.grab]="grabMode()" [class.cursor]="cursorMode()" [class.erase]="eraseMode()" id="drawing-canvas"
+        #myCanvas (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp($event)">
+
+</canvas>

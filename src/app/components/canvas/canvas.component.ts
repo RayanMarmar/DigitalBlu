@@ -1,6 +1,7 @@
 import {AfterViewInit, Component, ElementRef, HostListener, ViewChild} from '@angular/core';
 import {Mouse} from "../../models/mouse";
 import {CanvasService} from "../../services/canvas.service";
+import {EventHandlerConfiguration} from "../../models/eventHandlerConfiguration";
 
 @Component({
     selector: 'app-canvas',
@@ -17,7 +18,8 @@ export class CanvasComponent implements AfterViewInit {
 
     constructor(
         private canvasService: CanvasService,
-        private mouse: Mouse
+        private mouse: Mouse,
+        public eventHandlerConfiguration: EventHandlerConfiguration,
     ) {
     }
 
@@ -40,11 +42,19 @@ export class CanvasComponent implements AfterViewInit {
     }
 
     onMouseDown(event: MouseEvent): void {
-        this.canvasService.onMouseDown(event);
+        this.eventHandlerConfiguration.onMouseDown(event);
+        this.canvasService.drawAll();
     }
 
+    onMouseUp(event: MouseEvent): void {
+        this.eventHandlerConfiguration.onMouseUp(event);
+        this.canvasService.drawAll();
+    }
+
+
     onMouseMove(event: MouseEvent): void {
-        this.canvasService.onMouseMove(event)
+        this.eventHandlerConfiguration.onMouseMove(event)
+        this.canvasService.drawAll();
     }
 
     setCanvasSize(): void {
@@ -54,16 +64,15 @@ export class CanvasComponent implements AfterViewInit {
         }
     }
 
-    @HostListener('document:keydown', ['$event'])
-    private handleKeyDown(event: KeyboardEvent): void {
-        if (event.key === 'Escape') {
-            this.canvasService.handleEscape();
-        } else if (event.key === ' ') {
-            this.canvasService.changeDoorOrientation();
-        } else if (event.key === 'ArrowUp') {
-            this.canvasService.changeDoorDirection(true);
-        } else if (event.key === 'ArrowDown') {
-            this.canvasService.changeDoorDirection(false);
-        }
+    cursorMode() {
+        return this.eventHandlerConfiguration.cursorMode;
+    }
+
+    eraseMode() {
+        return this.eventHandlerConfiguration.eraseMode;
+    }
+
+    grabMode() {
+        return this.eventHandlerConfiguration.grabMode;
     }
 }

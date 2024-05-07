@@ -1,10 +1,10 @@
 <div id="myHeader" class="pill-header">
     <!-- Left Section -->
     <div class="left-section">
-        <button (click)="undo()"><i class="iconoir iconoir-undo-circle"></i>
+        <button (click)="undo()" [class.disabled]="undoDisabled()"><i class="iconoir iconoir-undo-circle"></i>
             <span class="button-label">Undo</span>
         </button>
-        <button (click)="redo()"><i class="iconoir iconoir-redo-circle"></i>
+        <button (click)="redo()" [class.disabled]="redoDisabled()"><i class="iconoir iconoir-redo-circle"></i>
             <span class="button-label">Redo</span>
         </button>
         <img class="logo-img" src="assets/logo.png" alt="Digital Blu Logo"/>
@@ -13,19 +13,35 @@
     <div class="vertical-line"></div>
 
     <div class="middle-section">
+        <button [class.active]="eventHandlerConfiguration.grabMode" (click)="switchGrabMode()"><i
+                class="iconoir iconoir-drag-hand-gesture"></i>
+            <span class="button-label">Drag mode</span>
+        </button>
 
-        <button [class.active]="modesConfiguration.lineMode" (click)="switchLineMode()"><i
+        <button [class.active]="eventHandlerConfiguration.cursorMode" (click)="switchCursorMode()"><i
+                class="iconoir iconoir-cursor-pointer"></i>
+            <span class="button-label">Cursor mode</span>
+        </button>
+
+    </div>
+
+    <div class="vertical-line"></div>
+
+
+    <div class="middle-section">
+
+        <button [class.active]="eventHandlerConfiguration.lineMode" (click)="switchLineMode()"><i
                 class="iconoir iconoir-design-pencil"></i>
             <span class="button-label">Line mode</span>
         </button>
 
 
-        <button [class.active]="modesConfiguration.wallMode" (click)="switchWallMode()"><i
+        <button [class.active]="eventHandlerConfiguration.wallMode" (click)="switchWallMode()"><i
                 class="iconoir iconoir-cube"></i>
             <span class="button-label">Wall mode</span>
         </button>
 
-        <div class="wall-thickness-container" *ngIf="modesConfiguration.wallMode">
+        <div class="wall-thickness-container" *ngIf="eventHandlerConfiguration.wallMode">
             <i class="iconoir iconoir-de-compress"></i>
             <input type="number" id="wall-thickness-input" [(ngModel)]="lastValidThickness"
                    (input)="onInput();updateThickness($event)" min="1">
@@ -33,13 +49,13 @@
         </div>
 
 
-        <button [class.active]="modesConfiguration.doorMode" (click)="switchDoorMode()"><i
+        <button [class.active]="eventHandlerConfiguration.doorMode" (click)="switchDoorMode()"><i
                 class="iconoir iconoir-closet"></i>
             <span class="button-label">Door mode</span>
         </button>
 
 
-        <button [class.active]="modesConfiguration.windowMode" (click)="switchWindowMode()"><i
+        <button [class.active]="eventHandlerConfiguration.windowMode" (click)="switchWindowMode()"><i
                 class="iconoir iconoir-mirror"></i>
             <span class="button-label">Window mode</span>
         </button>
@@ -72,12 +88,31 @@
     <!-- Right Section -->
     <div class="right-section">
 
-        <button><i class="iconoir iconoir-brightness"></i>
+        <button [class.active]="eventHandlerConfiguration.eraseMode" (click)="switchEraseMode() ">
+            <i class="iconoir iconoir-erase"></i>
+            <span class="button-label">Erase</span>
+        </button>
+
+
+    </div>
+
+    <div class="vertical-line"></div>
+
+    <!-- Right Section -->
+    <div class="right-section">
+
+        <button [class.active]="modesConfiguration.darkMode" (click)="switchDarkMode() ">
+            <i class="iconoir iconoir-brightness"></i>
             <span class="button-label">Dark / Light</span>
         </button>
 
         <button><i class="iconoir iconoir-share-ios"></i>
             <span class="button-label">Share</span>
+        </button>
+
+        <button [class.active]="modesConfiguration.helperDisplayed" (click)="displayHelper()"><i
+                class="iconoir iconoir-help-circle"></i>
+            <span class="button-label">Help</span>
         </button>
     </div>
 
