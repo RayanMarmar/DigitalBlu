@@ -227,4 +227,12 @@ export class Wall implements Drawable {
             [[1, 1, 0], [1, 1, 0]],
         );
     }
+
+    shiftElement(x :number , y : number): void{
+        this._firstPoint.x += x
+        this._firstPoint.y += y
+        this._secondPoint.x += x
+        this._secondPoint.y += y
+    }
+
 }

@@ -200,4 +200,6 @@ export class Door extends WallOpening implements Drawable {
             this._radius * transformationMatrix[0][0]
         );
     }
+
+    shiftElement(x :number , y : number): void{}
 }

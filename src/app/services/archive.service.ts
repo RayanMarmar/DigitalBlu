@@ -7,6 +7,7 @@ import {DrawCommand} from "../commands/drawCommand";
 import {Door} from "../drawables/door";
 import {Window} from "../drawables/window";
 import {DeleteCommand} from "../commands/deleteCommand";
+import {MoveCommand} from "../commands/moveCommand";
 
 
 @Injectable({
@@ -245,6 +246,7 @@ export class ArchiveService {
             return;
         let command: Command | undefined = this.archiveCommandsList.pop();
         if (command != undefined) {
+            console.log("executing command ",command)
             command.execute();
             this.commandsList.push(command);
         }
@@ -394,5 +396,17 @@ export class ArchiveService {
             this.archiveCommandsList.push(command);
             this.redo()
         }
+    }
+
+    moveElement(element: Drawable,source : Point, target : Point): void{
+        // TODO Command here
+
+        let command = new MoveCommand(
+            this._selectedElement!,
+            source,
+            target
+        )
+        this.archiveCommandsList.push(command);
+        this.redo()
     }
 }

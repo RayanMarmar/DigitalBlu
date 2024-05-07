@@ -25,4 +25,6 @@ export class Window extends WallOpening implements Drawable {
             this.height * transformationMatrix[0][0],
         );
     }
+
+    shiftElement(x :number , y : number): void{}
 }

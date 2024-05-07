@@ -219,4 +219,13 @@ export class Line implements Drawable {
         // Calculate the angle in radians using Math.atan2
         return Math.atan2(deltaY, deltaX);
     }
+
+    shiftElement(x :number , y : number): void{
+        console.log("shifting LIne to ")
+        this._firstPoint.x += x
+        this._firstPoint.y += y
+        this._secondPoint.x += x
+        this._secondPoint.y += y
+        console.log("shifting LIne to ",this)
+    }
 }

@@ -7,4 +7,6 @@ interface Drawable {
     ): void;
 
     toString(): String;
+
+    shiftElement(x: number , y : number): void;
 }

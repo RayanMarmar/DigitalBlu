@@ -93,4 +93,5 @@ export class Point implements Drawable {
             this._y + projectedVector[1],
         );
     }
+    shiftElement(x :number , y : number): void{}
 }
