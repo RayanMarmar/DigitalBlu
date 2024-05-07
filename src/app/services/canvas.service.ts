@@ -20,7 +20,7 @@ export class CanvasService {
         private archiveService: ArchiveService,
         private transformationService: TransformationService,
         private themeService: ThemeService,
-        private _saveService : SaveService
+        private saveService : SaveService
     ) {
     }
 
