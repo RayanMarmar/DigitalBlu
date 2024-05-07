@@ -39,7 +39,7 @@ export class SaveService {
             })),
 
             doorsList: this.archiveService.doorsList.map((door) => ({
-                _index: door.wall.index,
+                _uid: door.wall.index,
                 _point: {_x: door.center.x, _y: door.center.y},
                 _doorType: door.doorType,
                 _direction: door.direction,
