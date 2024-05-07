@@ -8,7 +8,7 @@ import {Door} from "../drawables/door";
 })
 export class ComponentSelectorService {
 
-    maxAllowedDistance: number = 30;
+    private readonly maxAllowedDistance: number = 30;
 
     constructor(
         private archiveService: ArchiveService,
