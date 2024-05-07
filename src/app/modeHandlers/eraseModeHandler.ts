@@ -13,7 +13,6 @@ export class EraseModeHandler implements ModeHandler {
     ) {
     }
 
-
     onMouseUp(event: MouseEvent): void {
     }
 
@@ -43,5 +42,8 @@ export class EraseModeHandler implements ModeHandler {
         } catch (e) {
             console.log("Problem on hover cursor mode")
         }
+    }
+
+    onKeyUp(event: KeyboardEvent): void {
     }
 }
