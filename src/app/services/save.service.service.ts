@@ -47,7 +47,7 @@ export class SaveService {
                 _radius: door.radius
             })),
             windowsList: this.archiveService.windowsList.map(window => ({
-                _index: window.wall.index,
+                _uid: window.wall.index,
                 _point: {_x: window.center.x, _y: window.center.y},
                 _radius: window.height
             }))
