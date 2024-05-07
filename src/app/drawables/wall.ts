@@ -36,11 +36,7 @@ export class Wall implements Drawable {
         this._secondLine = new Line(this._secondPoint, this._thirdPoint);
         this._fourthLine = new Line(this._fourthPoint, this._firstPoint);
         this._width = this._firstLine.calculateDistance();
-        if (index !== undefined) {
-            this._index = index;
-        } else {
-            this._index = uuidv4();
-        }
+        this._index = index ?? uuidv4();
     }
 
     get index(): string {
