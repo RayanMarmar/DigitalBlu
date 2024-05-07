@@ -28,6 +28,7 @@ export class ModeManagerService {
         private mouse: Mouse,
         private readonly modesConfiguration: ModesConfiguration,
         private transformationService: TransformationService,
+        private snapService: SnapService,
         private componentSelector: ComponentSelectorService,
         private snapService: SnapService,
     ) {
