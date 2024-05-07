@@ -6,6 +6,8 @@ import "../commands/command";
 import {DrawCommand} from "../commands/drawCommand";
 import {Door} from "../drawables/door";
 import {Window} from "../drawables/window";
+import {DeleteCommand} from "../commands/deleteCommand";
+
 
 @Injectable({
     providedIn: 'root'
@@ -23,6 +25,7 @@ export class ArchiveService {
     private _archiveWindowsList: Window[];
     private commandsList: Command[];
     private archiveCommandsList: Command[];
+    private _selectedElement: Drawable | null = null;
 
     constructor() {
         this._linesList = [];
@@ -37,6 +40,46 @@ export class ArchiveService {
         this._archiveDoorsList = [];
         this._windowsList = [];
         this._archiveWindowsList = [];
+    }
+
+    get archivePointsList(): Point[] {
+        return this._archivePointsList;
+    }
+
+    set archivePointsList(value: Point[]) {
+        this._archivePointsList = value;
+    }
+
+    get archiveLinesList(): Line[] {
+        return this._archiveLinesList;
+    }
+
+    set archiveLinesList(value: Line[]) {
+        this._archiveLinesList = value;
+    }
+
+    get archiveWallsList(): Wall[] {
+        return this._archiveWallsList;
+    }
+
+    set archiveWallsList(value: Wall[]) {
+        this._archiveWallsList = value;
+    }
+
+    get archiveDoorsList(): Door[] {
+        return this._archiveDoorsList;
+    }
+
+    set archiveDoorsList(value: Door[]) {
+        this._archiveDoorsList = value;
+    }
+
+    get selectedElement(): Drawable | null {
+        return this._selectedElement;
+    }
+
+    set selectedElement(value: Drawable | null) {
+        this._selectedElement = value;
     }
 
     get linesList(): Line[] {
@@ -202,7 +245,7 @@ export class ArchiveService {
             return;
         let command: Command | undefined = this.archiveCommandsList.pop();
         if (command != undefined) {
-            command.redo();
+            command.execute();
             this.commandsList.push(command);
         }
     }
@@ -254,6 +297,58 @@ export class ArchiveService {
         return -1; // Return -1 if no matching point is found
     }
 
+    getNearestWall(point: Point): { min: number, minElement: Wall } {
+        let min = Infinity;
+        let minElement: Wall | null = null;
+
+        for (const wall of this._wallsList) {
+            const distance = wall.calculateNearestPointDistance(point);
+            if (distance < min) {
+                min = distance;
+                minElement = wall;
+            }
+        }
+
+        return {min: min, minElement: minElement!};
+    }
+
+    getNearestLine(point: Point): { min: number, minElement: Line } {
+        let min = Infinity;
+        let minElement: Line | null = null;
+
+        for (const line of this._linesList) {
+            const distance = line.calculateNearestPointDistance(point);
+            if (distance < min) {
+                min = distance;
+                minElement = line;
+            }
+        }
+
+        return {min: min, minElement: minElement!};
+    }
+
+    getNearestWallOpening(point: Point): { min: number, minElement: Door | Window | null } {
+        let min = Infinity;
+        let minElement: Door | Window | null = null;
+
+        for (const door of this._doorsList) {
+            const distance = door.calculateNearestPointDistance(point);
+            if (distance < min) {
+                min = distance;
+                minElement = door;
+            }
+        }
+
+        for (const window of this._windowsList) {
+            const distance = window.calculateNearestPointDistance(point);
+            if (distance < min) {
+                min = distance;
+                minElement = window;
+            }
+        }
+
+        return {min: min, minElement: minElement!};
+    }
 
     deleteLine(): void {
         this.popLine();
@@ -264,5 +359,25 @@ export class ArchiveService {
 
     deleteWall(): void {
         this.popWall();
+    }
+
+    deleteElement(list: Drawable[] | null, archiveList: Drawable[] | null): void {
+        if (this.selectedElement === null || list === null || archiveList === null) {
+            // Handle case where x is null
+        } else {
+            let command = new DeleteCommand(
+                this._pointsList,
+                this._archivePointsList,
+                this._windowsList,
+                this._archiveWindowsList,
+                this._doorsList,
+                this._archiveDoorsList,
+                list,
+                archiveList,
+                this._selectedElement!
+            );
+            this.archiveCommandsList.push(command);
+            this.redo()
+        }
     }
 }

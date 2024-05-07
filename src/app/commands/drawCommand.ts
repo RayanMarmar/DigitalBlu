@@ -11,7 +11,7 @@ export class DrawCommand implements Command {
     ) {
     }
 
-    redo(): void {
+    execute(): void {
         let drawable: Drawable | undefined = this.archiveDrawableList.pop();
         if (drawable != undefined) {
             this.drawableList.push(drawable);

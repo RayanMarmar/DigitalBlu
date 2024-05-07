@@ -2,6 +2,7 @@ import {Line} from "./line";
 import {Point} from "./point";
 import {Wall} from "./wall";
 
+
 export class WallOpening {
     protected _wall: Wall;
     protected _parallelLine: Line;
@@ -9,11 +10,15 @@ export class WallOpening {
     protected _center: Point;
     protected _base: Line[];
 
+
     constructor(wall: Wall, point: Point, height: number) {
+
         this.height = height;
         this._wall = wall;
         let line: Line | null = wall.thirdLine.subLine(point, this.height);
         let secondLine: Line | null = wall.firstLine.subLine(point, this.height);
+
+
         if (line == null || secondLine == null)
             throw new Error("No sub line found");
         this._base = [line, secondLine];
@@ -21,6 +26,11 @@ export class WallOpening {
             this.height, wall.xFactor, wall.yFactor, 1
         );
         this._center = this._base[0].firstPoint;
+
+    }
+
+    inRange(point: Point): boolean {
+        return this._wall.containsPoint(point)
     }
 
     // Getter for line
@@ -49,8 +59,24 @@ export class WallOpening {
         this._parallelLine = value;
     }
 
+
+    get wall(): Wall {
+        return this._wall;
+    }
+
+    set wall(value: Wall) {
+        this._wall = value;
+    }
+
     get base(): Line[] {
         return this._base;
+    }
+
+    calculateNearestPointDistance(point: Point): number {
+        return Math.min(
+            this.base[0].calculateNearestPointDistance(point),
+            this.base[1].calculateNearestPointDistance(point)
+        );
     }
 
     set base(value: Line[]) {
