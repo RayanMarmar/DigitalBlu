@@ -30,7 +30,6 @@ export class ModeManagerService {
         private transformationService: TransformationService,
         private snapService: SnapService,
         private componentSelector: ComponentSelectorService,
-        private snapService: SnapService,
     ) {
     }
 
