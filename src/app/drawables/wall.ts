@@ -190,6 +190,15 @@ export class Wall implements Drawable {
         return ((end.x - start.x) * (y - start.y)) - ((x - start.x) * (end.y - start.y));
     }
 
+    calculateNearestPointDistance(point: Point): number {
+
+        return Math.min(this.firstLine.calculateNearestPointDistance(point),
+            this.secondLine.calculateNearestPointDistance(point),
+            this.thirdLine.calculateNearestPointDistance(point),
+            this.fourthLine.calculateNearestPointDistance(point));
+    }
+
+
     draw(
         context: CanvasRenderingContext2D,
         canvasColor: string,
@@ -214,6 +223,8 @@ export class Wall implements Drawable {
         let firstPoint: Point = this._fourthLine.calculateCenter().transform(transformationMatrix);
         let secondPoint: Point = this._secondLine.calculateCenter().transform(transformationMatrix);
         let height: number = this._height * transformationMatrix[0][0];
-        return new Wall(firstPoint, secondPoint, height, [[1, 1, 0], [1, 1, 0]]);
+        return new Wall(firstPoint, secondPoint, height,
+            [[1, 1, 0], [1, 1, 0]],
+        );
     }
 }

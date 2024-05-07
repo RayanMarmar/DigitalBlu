@@ -5,7 +5,9 @@ export class Line implements Drawable {
     private _firstPoint: Point;
     private _secondPoint: Point;
 
-    constructor(firstPoint: Point, secondPoint: Point, reverseTransformationMatrix: number[][] = [[1, 1, 0], [1, 1, 0]]) {
+    constructor(firstPoint: Point, secondPoint: Point,
+                reverseTransformationMatrix: number[][] = [[1, 1, 0], [1, 1, 0]],
+    ) {
         this._firstPoint = firstPoint.transform(reverseTransformationMatrix);
         this._secondPoint = secondPoint.transform(reverseTransformationMatrix);
     }
@@ -160,6 +162,36 @@ export class Line implements Drawable {
     private isHorizontal(): boolean {
         return this.firstPoint.y == this.secondPoint.y;
     }
+
+    calculateNearestPointDistance(point: Point): number {
+        // Step 1: Calculate the direction vector of the line
+        const lineVector = new Point(this._secondPoint.x - this._firstPoint.x, this._secondPoint.y - this._firstPoint.y);
+
+        // Step 2: Calculate the vector from the first point of the line to the given point
+        const pointVector = new Point(point.x - this._firstPoint.x, point.y - this._firstPoint.y);
+
+        // Step 3: Calculate the scalar projection of pointVector onto lineVector
+        const scalarProjection = (lineVector.x * pointVector.x + lineVector.y * pointVector.y) / Math.pow(this.calculateDistance(), 2);
+
+        // Step 4: Calculate the nearest point on the line
+        let nearestPoint: Point;
+
+        if (scalarProjection <= 0) {
+            nearestPoint = this._firstPoint; // Nearest point is the first endpoint
+        } else if (scalarProjection >= 1) {
+            nearestPoint = this._secondPoint; // Nearest point is the second endpoint
+        } else {
+            nearestPoint = new Point(
+                this._firstPoint.x + scalarProjection * lineVector.x,
+                this._firstPoint.y + scalarProjection * lineVector.y
+            );
+        }
+        let line = new Line(nearestPoint, point)
+
+        // Step 5: Calculate the distance between the given point and the nearest point on the line
+        return line.calculateDistance()
+    }
+
 
     draw(
         context: CanvasRenderingContext2D,
