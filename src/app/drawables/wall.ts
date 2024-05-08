@@ -190,12 +190,33 @@ export class Wall implements Drawable {
         return ((end.x - start.x) * (y - start.y)) - ((x - start.x) * (end.y - start.y));
     }
 
-    calculateNearestPointDistance(point: Point): number {
+    calculateNearestPointDistance(point: Point): {distance: number, nearestPoint: Point} {
 
-        return Math.min(this.firstLine.calculateNearestPointDistance(point),
-            this.secondLine.calculateNearestPointDistance(point),
-            this.thirdLine.calculateNearestPointDistance(point),
-            this.fourthLine.calculateNearestPointDistance(point));
+        // Calculate nearest point distances for all lines
+        const distance1 = this.firstLine.calculateNearestPointDistance(point);
+        const distance2 = this.secondLine.calculateNearestPointDistance(point);
+        const distance3 = this.thirdLine.calculateNearestPointDistance(point);
+        const distance4 = this.fourthLine.calculateNearestPointDistance(point);
+
+        // Find the minimum distance among all lines
+        const minDistance = Math.min(distance1.distance, distance2.distance, distance3.distance, distance4.distance);
+
+        // Find the nearest point and return it along with the minimum distance
+        let nearestPoint;
+        if (minDistance === distance1.distance) {
+            nearestPoint = distance1.nearestPoint;
+        } else if (minDistance === distance2.distance) {
+            nearestPoint = distance2.nearestPoint;
+        } else if (minDistance === distance3.distance) {
+            nearestPoint = distance3.nearestPoint;
+        } else {
+            nearestPoint = distance4.nearestPoint;
+        }
+
+        return {
+            distance: minDistance,
+            nearestPoint: nearestPoint
+        };
     }
 
 

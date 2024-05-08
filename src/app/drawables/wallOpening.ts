@@ -79,11 +79,19 @@ export class WallOpening {
         return this._base;
     }
 
-    calculateNearestPointDistance(point: Point): number {
-        return Math.min(
-            this.base[0].calculateNearestPointDistance(point),
-            this.base[1].calculateNearestPointDistance(point)
-        );
+    calculateNearestPointDistance(point: Point): {distance : number,
+        point : Point} {
+
+        const { distance: distance1, nearestPoint: point1 } = this.base[0].calculateNearestPointDistance(point);
+        const { distance: distance2, nearestPoint: point2 } = this.base[1].calculateNearestPointDistance(point);
+
+        let minDistance = Math.min(distance1, distance2);
+
+        // Return the result object with the minimum distance and its corresponding nearest point
+        return {
+            distance: minDistance,
+            point: minDistance === distance1 ? point1 : point2 // Choose the nearest point with the minimum distance
+        }
     }
 
     set base(value: Line[]) {

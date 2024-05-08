@@ -163,7 +163,8 @@ export class Line implements Drawable {
         return this.firstPoint.y == this.secondPoint.y;
     }
 
-    calculateNearestPointDistance(point: Point): number {
+    calculateNearestPointDistance(point: Point): {distance : number,
+        nearestPoint : Point} {
         // Step 1: Calculate the direction vector of the line
         const lineVector = new Point(this._secondPoint.x - this._firstPoint.x, this._secondPoint.y - this._firstPoint.y);
 
@@ -187,9 +188,12 @@ export class Line implements Drawable {
             );
         }
         let line = new Line(nearestPoint, point)
-
+        let distance = line.calculateDistance()
         // Step 5: Calculate the distance between the given point and the nearest point on the line
-        return line.calculateDistance()
+        return {
+            distance,
+            nearestPoint
+        }
     }
 
 

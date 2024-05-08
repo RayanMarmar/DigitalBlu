@@ -27,10 +27,10 @@ export class CursorModeHandler implements ModeHandler {
         let snappedPoint: Point = this.snapService.snapPoint();
         try {
             let {component, list,
-                archiveList} = this.componentSelector.getNearestComponent(snappedPoint);
+                archiveList,nearestPoint:point} = this.componentSelector.getNearestComponent(snappedPoint);
             this.archiveService.selectedElement = component
             this.grabbing = true
-            this.oldCoords = this.mouse.clickedCoordinates!
+            this.oldCoords = point!
             console.log("P")
         } catch (e) {
             console.log("Problem on down cursor mode", e)
