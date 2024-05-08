@@ -68,7 +68,6 @@ export class SaveService {
 
             const pointsList = stateStringParsed.pointsList || [];
             archive.pointsList = pointsList.map((pointData: any) => new Point(pointData._x, pointData._y));
-            archive.archivePointsList = archive.pointsList
 
             ///\SETTING POINTS//////
 
@@ -92,7 +91,6 @@ export class SaveService {
                 wallData._matrix._reverseTransformationMatrix,
                 wallData._uid
             ));
-            archive.archiveWallsList = archive.wallsList
             ///\SETTING WALLS//////
 
             ///SETTING DOORS//////
@@ -116,7 +114,6 @@ export class SaveService {
                     return null; // or handle differently based on your use case
                 }
             });
-            archive.archiveDoorsList = archive.doorsList
             ///////\SETTING DOORS//////
 
             ///SETTING WINDOWS//////
@@ -136,7 +133,6 @@ export class SaveService {
                 }
 
             });
-            archive.archiveWindowsList = archive.windowsList
 
             ///\SETTING WINDOWS//////
 
