@@ -19,7 +19,6 @@ export class SaveService {
 
 
     saveState(): void {
-
         const state = {
             linesList: this.archiveService.linesList.map(line => ({
                 _firstPoint: {_x: line.firstPoint.x, _y: line.firstPoint.y},
@@ -52,8 +51,9 @@ export class SaveService {
                 _radius: window.height
             }))
         };
-        localStorage.setItem('appState', JSON.stringify(state)); // Save state
 
+        // Store current state in cache
+        localStorage.setItem('appState', JSON.stringify(state)); // Save state
     }
 
     getState(archive: ArchiveService): ArchiveService {
@@ -64,24 +64,19 @@ export class SaveService {
         if (stateStringParsed) {
             // Individual assignment of attributes from the parsed state
 
-            ///SETTING POINTS//////
-
+            // SETTING POINTS
             const pointsList = stateStringParsed.pointsList || [];
             archive.pointsList = pointsList.map((pointData: any) => new Point(pointData._x, pointData._y));
 
-            ///\SETTING POINTS//////
-
-            ///SETTING LINES//////
+            // SETTING LINES
             const linesList = stateStringParsed.linesList || [];
             archive.linesList = linesList.map(
                 (lineData: any) => new Line(
                     new Point(lineData._firstPoint._x, lineData._firstPoint._y),
                     new Point(lineData._secondPoint._x, lineData._secondPoint._y))
             );
-            archive.archiveLinesList = archive.linesList
-            ///\SETTING LINES//////
 
-            ///SETTING WALLS//////
+            // SETTING WALLS
             const wallsList = stateStringParsed.wallsList || [];
             archive.wallsList = wallsList.map((wallData: any) => new Wall(
                 // Extract relevant data for constructing a Wall
@@ -91,9 +86,8 @@ export class SaveService {
                 wallData._matrix._reverseTransformationMatrix,
                 wallData._uid
             ));
-            ///\SETTING WALLS//////
 
-            ///SETTING DOORS//////
+            // SETTING DOORS
             const doorsList = stateStringParsed.doorsList || [];
             archive.doorsList = doorsList.map((doorData: any) => {
                 // Find the existing wall associated with the door
@@ -114,9 +108,8 @@ export class SaveService {
                     return null; // or handle differently based on your use case
                 }
             });
-            ///////\SETTING DOORS//////
 
-            ///SETTING WINDOWS//////
+            // SETTING WINDOWS
             archive.windowsList = stateStringParsed.windowsList.map((windowData: any) => {
 
                 let wall = archive.getWallByUid(windowData._uid)
@@ -133,9 +126,6 @@ export class SaveService {
                 }
 
             });
-
-            ///\SETTING WINDOWS//////
-
 
         }
         return archive;
