@@ -6,6 +6,7 @@ import {FormsModule} from "@angular/forms";
 import {ThemeService} from "../../services/theme.service";
 import {ArchiveService} from "../../services/archive.service";
 import {EventHandlerConfiguration} from "../../models/eventHandlerConfiguration";
+import {SaveService} from "../../services/save.service";
 
 @Component({
     selector: 'app-header',
@@ -26,7 +27,8 @@ export class HeaderComponent {
         public modesConfiguration: ModesConfiguration,
         public eventHandlerConfiguration: EventHandlerConfiguration,
         private themeService: ThemeService,
-        private archiveService: ArchiveService
+        private archiveService: ArchiveService,
+        private saveService: SaveService
     ) {
     }
 
@@ -111,6 +113,10 @@ export class HeaderComponent {
 
     getThickness() {
         return this.modesConfiguration.defaultThickness;
+    }
+
+    saveState(): void {
+        return this.saveService.saveState()
     }
 
     displayHelper(): void {
