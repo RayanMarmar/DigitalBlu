@@ -6,24 +6,24 @@ import {Wall} from "./wall";
 export class WallOpening {
     protected _wall: Wall;
     protected _parallelLine: Line;
-    protected height: number;
+    private _height: number;
     protected _center: Point;
     protected _base: Line[];
 
 
     constructor(wall: Wall, point: Point, height: number) {
 
-        this.height = height;
+        this._height = height;
         this._wall = wall;
-        let line: Line | null = wall.thirdLine.subLine(point, this.height);
-        let secondLine: Line | null = wall.firstLine.subLine(point, this.height);
+        let line: Line | null = wall.thirdLine.subLine(point, this._height);
+        let secondLine: Line | null = wall.firstLine.subLine(point, this._height);
 
 
         if (line == null || secondLine == null)
             throw new Error("No sub line found");
         this._base = [line, secondLine];
         this._parallelLine = this._base[0].calculateParallelLine(
-            this.height, wall.xFactor, wall.yFactor, 1
+            this._height, wall.xFactor, wall.yFactor, 1
         );
         this._center = this._base[0].firstPoint;
 
@@ -59,6 +59,13 @@ export class WallOpening {
         this._parallelLine = value;
     }
 
+    get height(): number {
+        return this._height;
+    }
+
+    set height(value: number) {
+        this._height = value;
+    }
 
     get wall(): Wall {
         return this._wall;

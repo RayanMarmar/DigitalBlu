@@ -6,9 +6,11 @@ import {ArchiveService} from "../services/archive.service";
 import {Point} from "../drawables/point";
 import {ComponentSelectorService} from "../services/component-selector.service";
 import {SnapService} from "../services/snap.service";
+import {Line} from "../drawables/line";
 
 export class CursorModeHandler implements ModeHandler {
     private grabbing: boolean = false ;
+    private oldCoords: Point | null = null ;
     constructor(
         private mouse: Mouse,
         private transformationService: TransformationService,
@@ -28,6 +30,7 @@ export class CursorModeHandler implements ModeHandler {
                 archiveList} = this.componentSelector.getNearestComponent(snappedPoint);
             this.archiveService.selectedElement = component
             this.grabbing = true
+            this.oldCoords = this.mouse.clickedCoordinates!
             console.log("P")
         } catch (e) {
             console.log("Problem on down cursor mode", e)
@@ -37,12 +40,13 @@ export class CursorModeHandler implements ModeHandler {
     onMouseMove(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         if (this.grabbing) {
-            let snappedPoint: Point = this.snapService.snapPoint();
             if(this.mouse.clickedCoordinates !== null && this.archiveService.selectedElement !== null ){
                 console.log("in move element source is ", this.mouse.clickedCoordinates ! , this.mouse.currentCoordinates!)
-                this.archiveService.moveElement(this.archiveService.selectedElement!!,
-                    this.mouse.clickedCoordinates !,
+                this.archiveService.moveElement(
+                    this.archiveService.selectedElement!!,
+                    this.oldCoords !,
                     this.mouse.currentCoordinates!)
+                this.oldCoords = this.mouse.currentCoordinates!
                 this.gridService.updateCanvas();
             }
 
@@ -51,7 +55,6 @@ export class CursorModeHandler implements ModeHandler {
 
     onMouseUp(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
-        let point: Point = this.mouse.currentCoordinates!!;
         try {
             this.grabbing = false
         } catch (e) {

@@ -201,5 +201,15 @@ export class Door extends WallOpening implements Drawable {
         );
     }
 
-    shiftElement(x :number , y : number): void{}
+    shiftElement(x :number , y : number): void{
+        this.base[0].firstPoint.x = x
+        this.base[0].firstPoint.y += y
+        this.base[0].secondPoint.x += x
+        this.base[0].secondPoint.y += y
+
+        this.base[1].firstPoint.x += x
+        this.base[1].firstPoint.y += y
+        this.base[1].secondPoint.x += x
+        this.base[1].secondPoint.y += y
+    }
 }

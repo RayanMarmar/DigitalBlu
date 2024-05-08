@@ -402,9 +402,10 @@ export class ArchiveService {
         // TODO Command here
 
         let command = new MoveCommand(
-            this._selectedElement!,
+            element,
             source,
-            target
+            target,
+            this._linesList
         )
         this.archiveCommandsList.push(command);
         this.redo()
