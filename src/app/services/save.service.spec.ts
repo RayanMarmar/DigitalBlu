@@ -1,7 +1,7 @@
 import {TestBed} from '@angular/core/testing';
-import {SaveService} from "./save.service.service";
+import {SaveService} from "./save.service";
 
-describe('SaveServiceService', () => {
+describe('SaveService', () => {
     let service: SaveService;
 
     beforeEach(() => {

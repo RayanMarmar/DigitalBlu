@@ -6,7 +6,7 @@ import {FormsModule} from "@angular/forms";
 import {ThemeService} from "../../services/theme.service";
 import {ArchiveService} from "../../services/archive.service";
 import {EventHandlerConfiguration} from "../../models/eventHandlerConfiguration";
-import {SaveService} from "../../services/save.service.service";
+import {SaveService} from "../../services/save.service";
 
 @Component({
     selector: 'app-header',

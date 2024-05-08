@@ -6,7 +6,7 @@ import {Door} from "../drawables/door";
 import {Window} from "../drawables/window";
 import {TransformationService} from "./transformation.service";
 import {ThemeService} from "./theme.service";
-import {SaveService} from "./save.service.service";
+import {SaveService} from "./save.service";
 
 @Injectable({
     providedIn: 'root'
@@ -20,7 +20,7 @@ export class CanvasService {
         private archiveService: ArchiveService,
         private transformationService: TransformationService,
         private themeService: ThemeService,
-        private saveService : SaveService
+        private saveService: SaveService
     ) {
     }
 
