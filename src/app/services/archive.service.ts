@@ -447,23 +447,16 @@ export class ArchiveService {
 
     }
 
-    moveElement(element: Drawable,source : Point, target : Point): void{
+    moveElement(element: Drawable,source : Point, target : Point, originalCoords : Point): void{
 
         let command = new MoveCommand(
             element,
             source,
             target,
             this._windowsList,
-            this._archiveWindowsList,
             this._doorsList,
-            this._archiveDoorsList,
-            this._pointsList,
-            this._archivePointsList,
-            this._linesList,
-            this._archiveLinesList,
-            this._wallsList,
-            this._archiveWallsList,
-            this._linkedElementsList
+            this._linkedElementsList,
+            originalCoords
         )
         this.archiveCommandsList.push(command);
         this.redo()

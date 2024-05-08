@@ -6,30 +6,26 @@ import {Door} from "../drawables/door";
 
 export class MoveCommand implements Command{
 
+    private delta : Point | undefined
 
     constructor(
         private selectedElement: Drawable,
         private _source : Point,
         private _target : Point,
         private _windowsList : Window[],
-        private _archiveWindowsList: Window[],
         private _doorsList : Door[],
-        private _archiveDoorsList : Door[],
-        private _pointsList: Point[],
-        private _archivePointsList: Point[],
-        private _linesList: Line[],
-        private _archiveLinesList: Line[],
-        private _wallsList: Wall[],
-        private _archiveWallsList: Wall[],
-        private linkedElementsList: Drawable[]
+        private linkedElementsList: Drawable[],
+        private originalCoords : Point
     ) {
     }
     execute(): void {
-        this.moveElement()
+        let delta = this.calculateCoordDelta(this._source,this._target)
+        this.moveElement(delta)
     }
 
     undo(): void {
-
+        let delta = this.calculateCoordDelta(this._source,this.originalCoords)
+        this.moveElement(delta)
     }
     calculateCoordDelta(source : Point, target: Point):Point{
         return new Point(
@@ -69,8 +65,8 @@ export class MoveCommand implements Command{
         }
     }
 
-    moveElement():  void{
-        let delta = this.calculateCoordDelta(this._source,this._target)
+    moveElement(delta : Point):  void{
+
         this.selectedElement.shiftElement(delta.x  ,delta.y)
         if (this.selectedElement instanceof Wall){
 

@@ -225,10 +225,7 @@ export class Line implements Drawable {
     }
 
     shiftElement(x :number , y : number): void{
-
-        let d = this._firstPoint.x + x
-        this._firstPoint.x = d
-        this.firstPoint.x = d
+        this._firstPoint.x = this._firstPoint.x + x
         this._firstPoint.y = this._firstPoint.y + y
         this._secondPoint.x = this._secondPoint.x + x
         this._secondPoint.y = this._secondPoint.y+ y

@@ -10,7 +10,8 @@ import {Line} from "../drawables/line";
 import {ModesConfiguration} from "../models/modesConfiguration";
 
 export class CursorModeHandler implements ModeHandler {
-    private oldCoords: Point | null = null ;
+    private previousCoords: Point | null = null ;
+    private originalCoords: Point | null = null ;
     constructor(
         private mouse: Mouse,
         private gridService: GridService,
@@ -24,13 +25,14 @@ export class CursorModeHandler implements ModeHandler {
 
     onMouseDown(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
+        this.originalCoords = this.mouse.clickedCoordinates
         let snappedPoint: Point = this.snapService.snapPoint();
         try {
             let {component, list,
                 nearestPoint:point
             } = this.componentSelector.getNearestComponent(snappedPoint);
             this.archiveService.selectedElement = component
-            this.oldCoords = point!
+            this.previousCoords = point!
             this.modesConfiguration.moveMode = true
         } catch (e) {
             console.log("Problem on down cursor mode", e)
@@ -43,10 +45,11 @@ export class CursorModeHandler implements ModeHandler {
             if(this.mouse.clickedCoordinates !== null && this.archiveService.selectedElement !== null ){
                 this.archiveService.moveElement(
                     this.archiveService.selectedElement!!,
-                    this.oldCoords !,
-                    this.mouse.currentCoordinates!
+                    this.previousCoords !,
+                    this.mouse.currentCoordinates!,
+                    this.originalCoords!
                 )
-                this.oldCoords = this.mouse.currentCoordinates!
+                this.previousCoords = this.mouse.currentCoordinates!
                 this.gridService.updateCanvas();
             }
 
