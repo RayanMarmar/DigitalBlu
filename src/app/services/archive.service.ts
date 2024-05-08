@@ -83,7 +83,7 @@ export class ArchiveService {
     set selectedElement(value: Drawable | null) {
         this._linkedElementsList = []
         this._selectedElement = value;
-        this.getLinkedElements()
+        this.getLinkedElements(this.selectedElement!)
     }
 
     get linesList(): Line[] {
@@ -407,24 +407,26 @@ export class ArchiveService {
             this.redo()
         }
     }
-    getLinkedElements(): void{
+
+    getLinkedElements(element : Drawable): void{
         let p1 : Point
         let p2 : Point
 
-        if (this.selectedElement instanceof Line){
-            let line = this.selectedElement as Line
+        if (element instanceof Line){
+            let line = element as Line
             p1 = line.firstPoint
             p2 = line.secondPoint
             for (let i: number = 0; i < this._linesList.length; i++) {
                 if ( (this._linesList[i].firstPoint.inPointRange(p1) ||  this._linesList[i].firstPoint.inPointRange(p2) ||
                     this._linesList[i].secondPoint.inPointRange(p1) || this._linesList[i].secondPoint.inPointRange(p2)) &&
-                    this._linesList[i] != line ){
+                    this._linesList[i] != line && !this._linkedElementsList.includes(this._linesList[i] ) && this._linesList[i] !== this.selectedElement &&
+                     this._linesList[i] !== element){
                     this._linkedElementsList.push(this._linesList[i])
-                    console.log("Found line" , this._linkedElementsList)
+                    this.getLinkedElements(this._linesList[i])
                 }
             }
-        }else if (this.selectedElement instanceof Wall){
-            let wall = this.selectedElement as Wall
+        }else if (element instanceof Wall){
+            let wall = element as Wall
             p1 = wall.firstPoint
             p2 = wall.secondPoint
             for (let i: number = 0; i < this._wallsList.length; i++) {
@@ -432,9 +434,10 @@ export class ArchiveService {
                     this._wallsList[i].secondPoint.inPointRange(p1) || this._wallsList[i].secondPoint.inPointRange(p2) ||
                     this._wallsList[i].thirdPoint.inPointRange(p1) ||  this._wallsList[i].thirdPoint.inPointRange(p2) ||
                         this._wallsList[i].fourthPoint.inPointRange(p1) ||  this._wallsList[i].fourthPoint.inPointRange(p2) )&&
-                    this._wallsList[i] != wall){
+                    this._wallsList[i] != wall && !this._linkedElementsList.includes(this._wallsList[i]) && this._wallsList[i] !== this.selectedElement &&
+                    this._wallsList[i] !== element ){
                     this._linkedElementsList.push(this._wallsList[i])
-                    console.log("Found Wall",this._linkedElementsList)
+                    this.getLinkedElements(this._wallsList[i])
                 }
             }
         }else{

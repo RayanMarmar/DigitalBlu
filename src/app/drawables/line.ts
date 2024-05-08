@@ -225,20 +225,12 @@ export class Line implements Drawable {
     }
 
     shiftElement(x :number , y : number): void{
-        console.log("shifting LIne to x and y ", x, y)
-        console.log("calculate before  ",this._firstPoint.x )
-        console.log("calculatein ", this._firstPoint.x + x)
-        let d = this._firstPoint.x + x
-        console.log("d is  ", d)
 
+        let d = this._firstPoint.x + x
         this._firstPoint.x = d
         this.firstPoint.x = d
-        console.log("point x  is  ", this.firstPoint.x)
         this._firstPoint.y = this._firstPoint.y + y
         this._secondPoint.x = this._secondPoint.x + x
         this._secondPoint.y = this._secondPoint.y+ y
-        console.log("shifting LIne to ",this.firstPoint.x)
-        console.log("shifting LIne to ",this.firstPoint)
-        console.log("shifting LIne to ",this.toString())
     }
 }

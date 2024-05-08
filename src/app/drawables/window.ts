@@ -57,11 +57,21 @@ export class Window extends WallOpening implements Drawable {
             this.base[0].firstPoint,
             p3
         )
-        console.log("here",l3.calculateDistance(),l4.calculateDistance())
+        // Check if both new points are on the wall and within its length
+        if (
+            l1.calculateDistance() < wallLength  && l2.calculateDistance() < wallLength
 
-        this.base[1].firstPoint.x += x
-        this.base[1].firstPoint.y += y
-        this.base[1].secondPoint.x += x
-        this.base[1].secondPoint.y += y
+        ) {
+            // If both points are within the wall, update the window's position
+            this.base[0].firstPoint.x = p1.x;
+            this.base[0].firstPoint.y = p1.y;
+            this.base[0].secondPoint.x = p2.x;
+            this.base[0].secondPoint.y = p2.y;
+
+            this.base[1].firstPoint.x = this.base[1].firstPoint.x + x;
+            this.base[1].firstPoint.y = this.base[1].firstPoint.y + y;
+            this.base[1].secondPoint.x = this.base[1].secondPoint.x + x;
+            this.base[1].secondPoint.y = this.base[1].secondPoint.y + y;
+        }
     }
 }

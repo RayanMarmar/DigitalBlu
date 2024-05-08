@@ -13,7 +13,6 @@ export class CursorModeHandler implements ModeHandler {
     private oldCoords: Point | null = null ;
     constructor(
         private mouse: Mouse,
-        private transformationService: TransformationService,
         private gridService: GridService,
         private archiveService : ArchiveService,
         private componentSelector: ComponentSelectorService,
@@ -33,7 +32,6 @@ export class CursorModeHandler implements ModeHandler {
             this.archiveService.selectedElement = component
             this.oldCoords = point!
             this.modesConfiguration.moveMode = true
-            console.log("P")
         } catch (e) {
             console.log("Problem on down cursor mode", e)
         }
@@ -43,7 +41,6 @@ export class CursorModeHandler implements ModeHandler {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         if (this.modesConfiguration.moveMode) {
             if(this.mouse.clickedCoordinates !== null && this.archiveService.selectedElement !== null ){
-                console.log("in move element source is ", this.mouse.clickedCoordinates ! , this.mouse.currentCoordinates!)
                 this.archiveService.moveElement(
                     this.archiveService.selectedElement!!,
                     this.oldCoords !,
@@ -59,7 +56,6 @@ export class CursorModeHandler implements ModeHandler {
     onMouseUp(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         try {
-            console.log("mouse up coord", event.x,event.y)
             this.modesConfiguration.moveMode = false
         } catch (e) {
             console.log("Problem on down cursor mode", e)

@@ -3,7 +3,6 @@ import {Line} from "../drawables/line";
 import {Point} from "../drawables/point";
 import {Window} from "../drawables/window";
 import {Door} from "../drawables/door";
-import {TransformationService} from "../services/transformation.service";
 
 export class MoveCommand implements Command{
 
@@ -71,12 +70,7 @@ export class MoveCommand implements Command{
     }
 
     moveElement():  void{
-        console.log("TARGET Is ",this._target)
-        console.log("SOURCE Is ",this._source)
         let delta = this.calculateCoordDelta(this._source,this._target)
-        console.log("DELTAX Is ",delta.x)
-        console.log("DELTAY Is ",delta.y)
-
         this.selectedElement.shiftElement(delta.x  ,delta.y)
         if (this.selectedElement instanceof Wall){
 
@@ -86,6 +80,5 @@ export class MoveCommand implements Command{
             )
         }
         this.moveLinkedElements(delta)
-        console.log("Linked elements", this.linkedElementsList)
     }
 }

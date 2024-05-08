@@ -202,14 +202,53 @@ export class Door extends WallOpening implements Drawable {
     }
 
     shiftElement(x :number , y : number): void{
-        this.base[0].firstPoint.x = x
-        this.base[0].firstPoint.y += y
-        this.base[0].secondPoint.x += x
-        this.base[0].secondPoint.y += y
 
-        this.base[1].firstPoint.x += x
-        this.base[1].firstPoint.y += y
-        this.base[1].secondPoint.x += x
-        this.base[1].secondPoint.y += y
+        let wallLength = this.wall.firstLine.calculateDistance();
+        let center = this.wall.firstLine.calculateCenter();
+
+        // Calculate new points after shifting
+        let p1 = new Point(this.base[0].firstPoint.x + x, this.base[0].firstPoint.y + y);
+        let p2 = new Point(this.base[0].secondPoint.x + x, this.base[0].secondPoint.y + y);
+
+
+        let p3 = new Point(this.base[1].firstPoint.x + x, this.base[1].firstPoint.y + y);
+        let p4 = new Point(this.base[1].secondPoint.x + x, this.base[1].secondPoint.y + y);
+
+
+        let l1 = new Line(
+            p1,
+            this.wall.firstLine.secondPoint
+        )
+        let l2 = new Line(
+            p2,
+            this.wall.firstLine.firstPoint
+        )
+
+        let l3 = new Line(
+            this.base[0].secondPoint,
+            p4
+        )
+        let l4 = new Line(
+            this.base[0].firstPoint,
+            p3
+        )
+
+        // Check if both new points are on the wall and within its length
+        if (
+            l1.calculateDistance() < wallLength  && l2.calculateDistance() < wallLength
+
+        ) {
+            // If both points are within the wall, update the window's position
+            this.base[0].firstPoint.x = p1.x;
+            this.base[0].firstPoint.y = p1.y;
+            this.base[0].secondPoint.x = p2.x;
+            this.base[0].secondPoint.y = p2.y;
+
+            this.base[1].firstPoint.x = this.base[1].firstPoint.x + x;
+            this.base[1].firstPoint.y = this.base[1].firstPoint.y + y;
+            this.base[1].secondPoint.x = this.base[1].secondPoint.x + x;
+            this.base[1].secondPoint.y = this.base[1].secondPoint.y + y;
+
+        }
     }
 }
