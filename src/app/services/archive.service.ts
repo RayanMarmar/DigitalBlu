@@ -27,6 +27,7 @@ export class ArchiveService {
     private commandsList: Command[];
     private archiveCommandsList: Command[];
     private _selectedElement: Drawable | null = null;
+    private _linkedElementsList : Drawable[] = []
 
     constructor() {
         this._linesList = [];
@@ -80,7 +81,9 @@ export class ArchiveService {
     }
 
     set selectedElement(value: Drawable | null) {
+        this._linkedElementsList = []
         this._selectedElement = value;
+        this.getLinkedElements()
     }
 
     get linesList(): Line[] {
@@ -404,15 +407,60 @@ export class ArchiveService {
             this.redo()
         }
     }
+    getLinkedElements(): void{
+        let p1 : Point
+        let p2 : Point
+
+        if (this.selectedElement instanceof Line){
+            let line = this.selectedElement as Line
+            p1 = line.firstPoint
+            p2 = line.secondPoint
+            for (let i: number = 0; i < this._linesList.length; i++) {
+                if ( (this._linesList[i].firstPoint.inPointRange(p1) ||  this._linesList[i].firstPoint.inPointRange(p2) ||
+                    this._linesList[i].secondPoint.inPointRange(p1) || this._linesList[i].secondPoint.inPointRange(p2)) &&
+                    this._linesList[i] != line ){
+                    this._linkedElementsList.push(this._linesList[i])
+                    console.log("Found line" , this._linkedElementsList)
+                }
+            }
+        }else if (this.selectedElement instanceof Wall){
+            let wall = this.selectedElement as Wall
+            p1 = wall.firstPoint
+            p2 = wall.secondPoint
+            for (let i: number = 0; i < this._wallsList.length; i++) {
+                if ((this._wallsList[i].firstPoint.inPointRange(p1) ||  this._wallsList[i].firstPoint.inPointRange(p2) ||
+                    this._wallsList[i].secondPoint.inPointRange(p1) || this._wallsList[i].secondPoint.inPointRange(p2) ||
+                    this._wallsList[i].thirdPoint.inPointRange(p1) ||  this._wallsList[i].thirdPoint.inPointRange(p2) ||
+                        this._wallsList[i].fourthPoint.inPointRange(p1) ||  this._wallsList[i].fourthPoint.inPointRange(p2) )&&
+                    this._wallsList[i] != wall){
+                    this._linkedElementsList.push(this._wallsList[i])
+                    console.log("Found Wall",this._linkedElementsList)
+                }
+            }
+        }else{
+            return
+        }
+
+
+    }
 
     moveElement(element: Drawable,source : Point, target : Point): void{
-        // TODO Command here
 
         let command = new MoveCommand(
             element,
             source,
             target,
-            this._linesList
+            this._windowsList,
+            this._archiveWindowsList,
+            this._doorsList,
+            this._archiveDoorsList,
+            this._pointsList,
+            this._archivePointsList,
+            this._linesList,
+            this._archiveLinesList,
+            this._wallsList,
+            this._archiveWallsList,
+            this._linkedElementsList
         )
         this.archiveCommandsList.push(command);
         this.redo()

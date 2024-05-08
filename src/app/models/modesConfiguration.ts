@@ -7,6 +7,7 @@ export class ModesConfiguration {
     private _snapMode: boolean;
     private _straightLineMode: boolean;
     private _snapAngleMode: boolean;
+    private _moveMode: boolean;
     private _snapAngle: number | null;
     private _drawing: boolean;
     private _gridOn: boolean;
@@ -22,6 +23,7 @@ export class ModesConfiguration {
         this._snapMode = true;
         this._straightLineMode = false;
         this._snapAngleMode = false;
+        this._moveMode = false ;
         this._snapAngle = Math.PI / 6;
         this._drawing = false;
         this._gridOn = true;
@@ -138,5 +140,13 @@ export class ModesConfiguration {
 
     helperOn(): void {
         this._helperDisplayed = !this._helperDisplayed;
+    }
+
+    get moveMode(): boolean {
+        return this._moveMode;
+    }
+
+    set moveMode(value: boolean) {
+        this._moveMode = value;
     }
 }

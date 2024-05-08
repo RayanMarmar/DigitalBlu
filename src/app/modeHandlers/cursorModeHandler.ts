@@ -7,9 +7,9 @@ import {Point} from "../drawables/point";
 import {ComponentSelectorService} from "../services/component-selector.service";
 import {SnapService} from "../services/snap.service";
 import {Line} from "../drawables/line";
+import {ModesConfiguration} from "../models/modesConfiguration";
 
 export class CursorModeHandler implements ModeHandler {
-    private grabbing: boolean = false ;
     private oldCoords: Point | null = null ;
     constructor(
         private mouse: Mouse,
@@ -18,6 +18,7 @@ export class CursorModeHandler implements ModeHandler {
         private archiveService : ArchiveService,
         private componentSelector: ComponentSelectorService,
         private snapService: SnapService,
+        private readonly modesConfiguration: ModesConfiguration,
     ) {
 
     }
@@ -27,10 +28,11 @@ export class CursorModeHandler implements ModeHandler {
         let snappedPoint: Point = this.snapService.snapPoint();
         try {
             let {component, list,
-                archiveList,nearestPoint:point} = this.componentSelector.getNearestComponent(snappedPoint);
+                nearestPoint:point
+            } = this.componentSelector.getNearestComponent(snappedPoint);
             this.archiveService.selectedElement = component
-            this.grabbing = true
             this.oldCoords = point!
+            this.modesConfiguration.moveMode = true
             console.log("P")
         } catch (e) {
             console.log("Problem on down cursor mode", e)
@@ -39,13 +41,14 @@ export class CursorModeHandler implements ModeHandler {
 
     onMouseMove(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
-        if (this.grabbing) {
+        if (this.modesConfiguration.moveMode) {
             if(this.mouse.clickedCoordinates !== null && this.archiveService.selectedElement !== null ){
                 console.log("in move element source is ", this.mouse.clickedCoordinates ! , this.mouse.currentCoordinates!)
                 this.archiveService.moveElement(
                     this.archiveService.selectedElement!!,
                     this.oldCoords !,
-                    this.mouse.currentCoordinates!)
+                    this.mouse.currentCoordinates!
+                )
                 this.oldCoords = this.mouse.currentCoordinates!
                 this.gridService.updateCanvas();
             }
@@ -56,7 +59,8 @@ export class CursorModeHandler implements ModeHandler {
     onMouseUp(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         try {
-            this.grabbing = false
+            console.log("mouse up coord", event.x,event.y)
+            this.modesConfiguration.moveMode = false
         } catch (e) {
             console.log("Problem on down cursor mode", e)
         }

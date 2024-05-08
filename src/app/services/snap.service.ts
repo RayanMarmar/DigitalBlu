@@ -35,7 +35,7 @@ export class SnapService {
                 this.modesConfiguration.snapAngle!!
             )
         }
-        if (this.modesConfiguration.gridOn) {
+        if (this.modesConfiguration.gridOn && !this.modesConfiguration.moveMode) {
             snapped = this.gridService.calculateNearestGridIntersection(point);
         }
         return snapped;

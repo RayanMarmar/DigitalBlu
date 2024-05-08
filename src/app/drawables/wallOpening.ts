@@ -6,7 +6,7 @@ import {Wall} from "./wall";
 export class WallOpening {
     protected _wall: Wall;
     protected _parallelLine: Line;
-    private _height: number;
+    protected _height: number;
     protected _center: Point;
     protected _base: Line[];
 
