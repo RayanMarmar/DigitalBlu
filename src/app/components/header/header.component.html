@@ -106,8 +106,8 @@
             <span class="button-label">Dark / Light</span>
         </button>
 
-        <button (click)="canvasService.exportCanvas()"><i class="iconoir iconoir-share-ios"></i>
-            <span class="button-label">Share</span>
+        <button (click)="canvasService.exportCanvas('Digital-Blu-canvas')"><i class="iconoir iconoir-share-ios"></i>
+            <span class="button-label">Export canvas</span>
         </button>
 
         <button [class.active]="modesConfiguration.helperDisplayed" (click)="displayHelper()"><i

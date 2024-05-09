@@ -23,11 +23,18 @@ export class ExportService {
         window.URL.revokeObjectURL(url);
     }
 
-    private convertCanvasToSvg(canvas: HTMLCanvasElement): string {
+    convertCanvasToSvg(canvas: HTMLCanvasElement): string {
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        const svgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        //svgPath.setAttribute('d', canvas.toDataURL());
-        svg.appendChild(svgPath);
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const dataUrl = canvas.toDataURL('image/png');
+            const svgImage = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+            svgImage.setAttribute('xlink:href', dataUrl);
+            svgImage.setAttribute('width', canvas.width.toString());
+            svgImage.setAttribute('height', canvas.height.toString());
+            svg.appendChild(svgImage);
+        }
         return svg.outerHTML;
     }
 }
