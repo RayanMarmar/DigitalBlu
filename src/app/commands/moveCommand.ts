@@ -4,6 +4,7 @@ import {Point} from "../drawables/point";
 import {Window} from "../drawables/window";
 import {Door} from "../drawables/door";
 
+
 export class MoveCommand implements Command{
 
     private delta : Point | undefined
@@ -14,8 +15,10 @@ export class MoveCommand implements Command{
         private _target : Point,
         private _windowsList : Window[],
         private _doorsList : Door[],
-        private linkedElementsList: Drawable[],
-        private originalCoords : Point
+        private _linkedElementsList: Drawable[],
+        private _linkedPointsList : Point[],
+        private originalCoords : Point,
+
     ) {
     }
     execute(): void {
@@ -56,11 +59,25 @@ export class MoveCommand implements Command{
     }
 
 
+    stretchLinkedElements(delta: Point) : void{
+        if(this._linkedPointsList !== null){
+            for (let i: number = 0; i < this._linkedPointsList.length; i++) {
+                this._linkedPointsList[i].shiftElement(delta.x,delta.y)
+            }
+            for (let i: number = 0; i < this._linkedElementsList.length; i++) {
+                if(this._linkedElementsList[i] instanceof Wall){
+                    let wall = this._linkedElementsList[i] as Wall
+                    wall.updateLines()
+                }
+            }
+        }
+    }
+
 
     moveLinkedElements(delta : Point): void{
-        if(this.linkedElementsList !== null){
-            for (let i: number = 0; i < this.linkedElementsList.length; i++) {
-                this.linkedElementsList[i].shiftElement(delta.x,delta.y)
+        if(this._linkedElementsList !== null){
+            for (let i: number = 0; i < this._linkedElementsList.length; i++) {
+                this._linkedElementsList[i].shiftElement(delta.x,delta.y)
             }
         }
     }
@@ -75,6 +92,7 @@ export class MoveCommand implements Command{
                 delta,
             )
         }
-        this.moveLinkedElements(delta)
+        this.stretchLinkedElements(delta)
+        //this.moveLinkedElements(delta)
     }
 }

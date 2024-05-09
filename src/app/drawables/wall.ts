@@ -249,6 +249,19 @@ export class Wall implements Drawable {
         );
     }
 
+    updateLines(): void{
+        this._yFactor = (this._firstPoint.y -  this._secondPoint.y) >= 0 ? -1 : 1;
+        this._xFactor = (this._firstPoint.x - this._secondPoint.x) >= 0 ? -1 : 1;
+        this._firstLine = new Line(this._firstPoint, this._secondPoint)
+            .calculateParallelLine(this._height / 2, this._xFactor, this._yFactor, -1);
+        this._thirdLine = this._firstLine.calculateParallelLine(this._height, this._xFactor, this._yFactor);
+        this._thirdPoint = this._thirdLine.secondPoint;
+        this._fourthPoint = this._thirdLine.firstPoint;
+        this._secondLine = new Line(this._secondPoint, this._thirdPoint);
+        this._fourthLine = new Line(this._fourthPoint, this._firstPoint);
+        this._width = this._firstLine.calculateDistance();
+    }
+
     shiftElement(x :number , y : number): void{
         this._firstPoint.x =this._firstPoint.x +  x
         this._firstPoint.y =this._firstPoint.y + y

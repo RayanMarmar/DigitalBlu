@@ -3,7 +3,7 @@ import "./drawable";
 export class Point implements Drawable {
     private _x: number;
     private _y: number;
-    private range: number = 5;
+    private range: number = 10;
 
     constructor(x: number, y: number) {
         this._x = x;
@@ -93,5 +93,8 @@ export class Point implements Drawable {
             this._y + projectedVector[1],
         );
     }
-    shiftElement(x :number , y : number): void{}
+    shiftElement(x :number , y : number): void{
+        this.x = this.x+x
+        this.y = this.y+y
+    }
 }
