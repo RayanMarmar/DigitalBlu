@@ -116,7 +116,12 @@ export class HeaderComponent {
     }
 
     saveState(): void {
-        return this.saveService.saveState()
+        return this.saveService.saveState();
+    }
+
+    canSave() : boolean{
+        console.log("CAN save is ",this.archiveService.getTotalNumberOfElements()>0 )
+        return this.archiveService.getTotalNumberOfElements()>0;
     }
 
     displayHelper(): void {

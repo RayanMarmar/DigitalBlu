@@ -42,6 +42,10 @@ export class ArchiveService {
         this._archiveWindowsList = [];
     }
 
+    getTotalNumberOfElements() : number{
+        return this._linesList.length + this._pointsList.length+this._doorsList.length+this._wallsList.length+this._windowsList.length
+    }
+
     get archivePointsList(): Point[] {
         return this._archivePointsList;
     }
