@@ -12,6 +12,7 @@ import {ModesConfiguration} from "../models/modesConfiguration";
 export class CursorModeHandler implements ModeHandler {
     private previousCoords: Point | null = null ;
     private originalCoords: Point | null = null ;
+    private originalNearestPoint : Point | null = null ;
     constructor(
         private mouse: Mouse,
         private gridService: GridService,
@@ -25,14 +26,16 @@ export class CursorModeHandler implements ModeHandler {
 
     onMouseDown(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
-        this.originalCoords = this.mouse.clickedCoordinates
+
         let snappedPoint: Point = this.snapService.snapPoint();
         try {
             let {component, list,
                 nearestPoint:point
             } = this.componentSelector.getNearestComponent(snappedPoint);
+            this.originalCoords = snappedPoint
             this.archiveService.selectedElement = component
             this.previousCoords = point!
+            this.originalNearestPoint = point!
             this.modesConfiguration.moveMode = true
         } catch (e) {
             console.log("Problem on down cursor mode", e)
@@ -47,7 +50,8 @@ export class CursorModeHandler implements ModeHandler {
                     this.archiveService.selectedElement!!,
                     this.previousCoords !,
                     this.mouse.currentCoordinates!,
-                    this.originalCoords!
+                    this.originalCoords!,
+                    this.originalNearestPoint!
                 )
                 this.previousCoords = this.mouse.currentCoordinates!
                 this.gridService.updateCanvas();

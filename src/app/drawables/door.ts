@@ -249,6 +249,12 @@ export class Door extends WallOpening implements Drawable {
             this.base[1].secondPoint.x = this.base[1].secondPoint.x + x;
             this.base[1].secondPoint.y = this.base[1].secondPoint.y + y;
 
+            this.parallelLine.firstPoint.x = this.base[1].firstPoint.x + x;
+            this.parallelLine.firstPoint.y = this.base[1].firstPoint.y + y;
+            this.parallelLine.secondPoint.x = this.base[1].secondPoint.x + x;
+            this.parallelLine.secondPoint.y = this.base[1].secondPoint.y + y;
+
         }
     }
+
 }

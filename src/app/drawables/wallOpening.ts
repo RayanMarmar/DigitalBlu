@@ -1,6 +1,7 @@
 import {Line} from "./line";
 import {Point} from "./point";
 import {Wall} from "./wall";
+import {min} from "rxjs";
 
 
 export class WallOpening {
@@ -9,6 +10,7 @@ export class WallOpening {
     protected _height: number;
     protected _center: Point;
     protected _base: Line[];
+    protected _minDistance = 50
 
 
     constructor(wall: Wall, point: Point, height: number) {
@@ -78,7 +80,42 @@ export class WallOpening {
     get base(): Line[] {
         return this._base;
     }
+    shouldRemove() : boolean{
+       return this.calculateNearestPointDistanceToWall() < this._minDistance;
+    }
 
+    calculateNearestPointDistanceToWall(): number {
+        let line1 = new Line(
+            this.base[0].calculateCenter(),
+            this.wall.firstPoint
+        )
+        let line2 = new Line(
+            this.base[0].calculateCenter(),
+            this.wall.secondPoint
+        )
+        let line3 = new Line(
+            this.parallelLine.calculateCenter(),
+            this.wall.firstPoint
+        )
+        let line4 = new Line(
+            this.parallelLine.calculateCenter(),
+            this.wall.secondPoint
+        )
+        let line5 = new Line(
+            this.parallelLine.calculateCenter(),
+            this.wall.thirdPoint
+        )
+        let line6 = new Line(
+            this.parallelLine.calculateCenter(),
+            this.wall.fourthPoint
+        )
+
+        console.log("Min distance is " , line1.calculateDistance() , line2.calculateDistance(),line3.calculateDistance(),line4.calculateDistance()
+        ,line5.calculateDistance(),line6.calculateDistance())
+        return Math.min(line1.calculateDistance(),line2.calculateDistance(),line3.calculateDistance(),line4.calculateDistance(),line5.calculateDistance(),line6.calculateDistance())
+
+
+    }
     calculateNearestPointDistance(point: Point): {distance : number,
         point : Point} {
 

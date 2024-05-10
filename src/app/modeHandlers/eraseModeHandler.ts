@@ -29,7 +29,7 @@ export class EraseModeHandler implements ModeHandler {
         try {
             let {component, list, archiveList} = this.componentSelector.getNearestComponent(point);
             this.archiveService.selectedElement = component
-            this.archiveService.deleteElement(list, archiveList)
+            this.archiveService.deleteElement(this.archiveService.selectedElement!,list, archiveList)
         } catch (e) {
             console.log("Problem on down cursor mode", e)
         }

@@ -7,8 +7,6 @@ import {Door} from "../drawables/door";
 
 export class MoveCommand implements Command{
 
-    private delta : Point | undefined
-
     constructor(
         private selectedElement: Drawable,
         private _source : Point,
@@ -64,12 +62,36 @@ export class MoveCommand implements Command{
             for (let i: number = 0; i < this._linkedPointsList.length; i++) {
                 this._linkedPointsList[i].shiftElement(delta.x,delta.y)
             }
-            for (let i: number = 0; i < this._linkedElementsList.length; i++) {
-                if(this._linkedElementsList[i] instanceof Wall){
-                    let wall = this._linkedElementsList[i] as Wall
-                    wall.updateLines()
+            this.removeOpenings()
+
+
+        }
+    }
+
+    removeOpenings(){
+        for (let i: number = 0; i < this._linkedElementsList.length; i++) {
+            if(this._linkedElementsList[i] instanceof Wall){
+                let wall = this._linkedElementsList[i] as Wall
+                wall.updateLines()
+                for (let i: number = 0; i < this._doorsList.length; i++) {
+                    if(this._doorsList[i] instanceof Door && this._doorsList[i].wall === wall){
+                        let door = this._doorsList[i] as Door
+                        if(door.shouldRemove()){
+                            this._doorsList.splice(i, 1);
+                        }
+                    }
+                }
+                for (let i: number = 0; i < this._windowsList.length; i++) {
+                    if(this._windowsList[i] instanceof Door && this._doorsList[i].wall === wall){
+                        let window = this._windowsList[i] as Window
+                        if (window.shouldRemove()){
+                            this._windowsList.splice(i, 1);
+                        }
+
+                    }
                 }
             }
+
         }
     }
 

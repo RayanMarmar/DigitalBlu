@@ -389,8 +389,8 @@ export class ArchiveService {
         this.popWall();
     }
 
-    deleteElement(list: Drawable[] | null, archiveList: Drawable[] | null): void {
-        if (this.selectedElement === null || list === null || archiveList === null) {
+    deleteElement(element :Drawable ,list: Drawable[] | null, archiveList: Drawable[] | null): void {
+        if (element === null || list === null || archiveList === null) {
             // Handle case where x is null
         } else {
             let command = new DeleteCommand(
@@ -402,7 +402,7 @@ export class ArchiveService {
                 this._archiveDoorsList,
                 list,
                 archiveList,
-                this._selectedElement!
+                element!
             );
             this.archiveCommandsList.push(command);
             this.redo()
@@ -493,8 +493,7 @@ export class ArchiveService {
         }
     }
 
-    moveElement(element: Drawable,source : Point, target : Point, originalCoords : Point): void{
-
+    moveElement(element: Drawable,source : Point, target : Point, originalCoords : Point,nearestPoint  : Point): void{
         let command = new MoveCommand(
             element,
             source,
@@ -503,9 +502,15 @@ export class ArchiveService {
             this._doorsList,
             this._linkedElementsList,
             this._linkedPointsList,
-            originalCoords,
+            nearestPoint,
         )
-        this.archiveCommandsList.push(command);
+        if(nearestPoint === source){
+            console.log("HEre")
+            this.archiveCommandsList.push(command);
+        }else{
+            command.execute()
+        }
+
         this.redo()
     }
 }
