@@ -9,12 +9,12 @@ export class ExportService {
 
     exportCanvasAsSVG(canvas: HTMLCanvasElement, filename: string): void {
         // Convert canvas content to SVG
-        const svgContent = this.convertCanvasToSvg(canvas);
+        const svgContent: string = this.convertCanvasToSvg(canvas);
 
         // Create a download link for the SVG
-        const blob = new Blob([svgContent], {type: 'image/svg+xml'});
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
+        const blob: Blob = new Blob([svgContent], {type: 'image/svg+xml'});
+        const url: string = window.URL.createObjectURL(blob);
+        const link: HTMLAnchorElement = document.createElement('a');
         link.href = url;
         link.download = filename + '.svg';
         document.body.appendChild(link);
@@ -24,17 +24,31 @@ export class ExportService {
     }
 
     convertCanvasToSvg(canvas: HTMLCanvasElement): string {
-        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        const ctx = canvas.getContext('2d');
-        if (ctx) {
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const dataUrl = canvas.toDataURL('image/png');
-            const svgImage = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-            svgImage.setAttribute('xlink:href', dataUrl);
-            svgImage.setAttribute('width', canvas.width.toString());
-            svgImage.setAttribute('height', canvas.height.toString());
-            svg.appendChild(svgImage);
-        }
+        // Convert canvas to data URL
+        const dataURL: string = canvas.toDataURL('image/png');
+
+        // Create an image element
+        const img: HTMLImageElement = new Image();
+
+        // Set the data URL as the source of the image
+        img.src = dataURL;
+
+        // Wait for the image to load
+        // Create a new SVG element
+        const svg: SVGSVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+        svg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink'); // Define xlink namespace
+        svg.setAttribute('width', canvas.width.toString());
+        svg.setAttribute('height', canvas.height.toString());
+
+        // Create an image element to embed the canvas
+        const image: SVGImageElement = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+        image.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', dataURL); // Use xlink:href
+        image.setAttribute('width', canvas.width.toString());
+        image.setAttribute('height', canvas.height.toString());
+
+        // Append the image to SVG
+        svg.appendChild(image);
         return svg.outerHTML;
     }
 }
