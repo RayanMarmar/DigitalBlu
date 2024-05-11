@@ -198,8 +198,6 @@ export class Line implements Drawable {
         canvasColor: string,
         lineColor: string,
         transformationMatrix: number[][] = [[1, 0, 0], [0, 1, 0]],
-        fontSize: string = '12px Arial', // Font size and family for dimension text
-        offsetAboveLine: number = 10, // Offset for dimension text above the line
     ): void {
         let line: Line = this.transform(transformationMatrix);
         context.beginPath();
@@ -208,6 +206,16 @@ export class Line implements Drawable {
         context.strokeStyle = lineColor;
         context.stroke();
 
+        this.displayDimensions(context, line, lineColor);
+    }
+
+    displayDimensions(
+        context: CanvasRenderingContext2D,
+        line: Line,
+        textColor: string,
+        offsetAboveLine: number = 10, // Offset for dimension text above the line
+        fontSize: string = '12px Arial', // Font size and family for dimension text
+    ): void {
         // Calculate angle of the line segment relative to the x-axis
         const angle = line.getAngleWithXVector();
 
@@ -229,7 +237,7 @@ export class Line implements Drawable {
         context.rotate(angle);
 
         // Draw dimension text on canvas
-        context.fillStyle = lineColor; // Use line color for dimension text
+        context.fillStyle = textColor; // Use line color for dimension text
         context.font = fontSize;
         context.textAlign = 'center';
         context.textBaseline = 'bottom'; // Align the text baseline to the bottom

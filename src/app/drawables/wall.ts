@@ -231,6 +231,12 @@ export class Wall implements Drawable {
         context.strokeStyle = wallColor;
         context.fill();
         context.stroke(); // If you want to keep the border, you can include this line
+
+        this.firstLine.displayDimensions(
+            context,
+            this.firstLine,// new Line(wall.fourthLine.calculateCenter(), wall.secondLine.calculateCenter()),
+            wallColor,
+        );
     }
 
     transform(transformationMatrix: number[][]): Wall {
