@@ -225,8 +225,7 @@ export class Line implements Drawable {
     }
 
     shiftElement(x :number , y : number): void{
-        this._firstPoint.shiftElement(x,y)
-        this._secondPoint.shiftElement(x,y)
-
+        this._firstPoint.shiftElement(x,y);
+        this._secondPoint.shiftElement(x,y);
     }
 }

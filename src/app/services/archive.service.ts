@@ -29,6 +29,7 @@ export class ArchiveService {
     private _selectedElement: Drawable | null = null;
     private _linkedElementsList : Drawable[] = [] ;
     private _linkedPointsList : Point[] = [];
+    private moveService : MoveService = new MoveService(this)
 
     constructor() {
         this._linesList = [];
@@ -55,6 +56,22 @@ export class ArchiveService {
 
     get archiveLinesList(): Line[] {
         return this._archiveLinesList;
+    }
+
+    get linkedElementsList(): Drawable[] {
+        return this._linkedElementsList;
+    }
+
+    set linkedElementsList(value: Drawable[]) {
+        this._linkedElementsList = value;
+    }
+
+    get linkedPointsList(): Point[] {
+        return this._linkedPointsList;
+    }
+
+    set linkedPointsList(value: Point[]) {
+        this._linkedPointsList = value;
     }
 
     set archiveLinesList(value: Line[]) {
@@ -86,6 +103,7 @@ export class ArchiveService {
         this._linkedPointsList = []
         this._selectedElement = value;
         this.getLinkedElements(this.selectedElement!)
+        console.log("Linked elements are " , this._linkedElementsList)
     }
 
     get linesList(): Line[] {
@@ -489,7 +507,6 @@ export class ArchiveService {
                             this._linkedPointsList.push(this._wallsList[i].firstPoint);
                         }
                     }
-
                     this._linkedElementsList.push(this._wallsList[i])
                     //this.getLinkedElements(this._wallsList[i])
                 }
@@ -497,16 +514,12 @@ export class ArchiveService {
         }
     }
 
-    moveElement(element: Drawable,source : Point, target : Point, originalCoords : Point,nearestPoint  : Point): void{
+    moveElement(source : Point, target : Point, originalCoords : Point,nearestPoint  : Point): void{
         let command = new MoveCommand(
-            element,
             source,
             target,
-            this._windowsList,
-            this._doorsList,
-            this._linkedElementsList,
-            this._linkedPointsList,
             nearestPoint,
+            this.moveService
         )
         if(nearestPoint === source){
             console.log("HEre")

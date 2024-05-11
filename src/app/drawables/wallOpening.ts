@@ -9,7 +9,7 @@ export class WallOpening {
     protected _height: number;
     protected _center: Point;
     protected _base: Line[];
-    protected _minDistance = 50
+    protected _minDistance = 60
 
 
     constructor(wall: Wall, point: Point, height: number) {
@@ -66,14 +66,6 @@ export class WallOpening {
 
     set parallelLine(value: Line) {
         this._parallelLine = value;
-    }
-
-    get height(): number {
-        return this._height;
-    }
-
-    set height(value: number) {
-        this._height = value;
     }
 
     get wall(): Wall {

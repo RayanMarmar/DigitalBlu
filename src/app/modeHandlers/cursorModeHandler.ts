@@ -47,12 +47,11 @@ export class CursorModeHandler implements ModeHandler {
         if (this.modesConfiguration.moveMode) {
             if(this.mouse.clickedCoordinates !== null && this.archiveService.selectedElement !== null ){
                 this.archiveService.moveElement(
-                    this.archiveService.selectedElement!!,
                     this.previousCoords !,
                     this.mouse.currentCoordinates!,
                     this.originalCoords!,
-                    this.originalNearestPoint!
-                )
+                    this.originalNearestPoint!,
+            )
                 this.previousCoords = this.mouse.currentCoordinates!
                 this.gridService.updateCanvas();
             }
