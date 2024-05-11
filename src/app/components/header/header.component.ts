@@ -24,7 +24,7 @@ export class HeaderComponent {
     lastValidThickness: number = this.modesConfiguration.defaultThickness;
 
     constructor(
-        protected canvasService: CanvasService,
+        private canvasService: CanvasService,
         public modesConfiguration: ModesConfiguration,
         public eventHandlerConfiguration: EventHandlerConfiguration,
         private themeService: ThemeService,
