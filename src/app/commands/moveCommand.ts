@@ -1,5 +1,3 @@
-import {Wall} from "../drawables/wall";
-import {Line} from "../drawables/line";
 import {Point} from "../drawables/point";
 import {MoveService} from "../services/move.service";
 
