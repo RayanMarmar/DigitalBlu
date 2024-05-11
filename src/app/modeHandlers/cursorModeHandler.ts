@@ -1,12 +1,10 @@
 import './modeHandler';
 import {Mouse} from "../models/mouse";
-import {TransformationService} from "../services/transformation.service";
 import {GridService} from "../services/grid.service";
 import {ArchiveService} from "../services/archive.service";
 import {Point} from "../drawables/point";
 import {ComponentSelectorService} from "../services/component-selector.service";
 import {SnapService} from "../services/snap.service";
-import {Line} from "../drawables/line";
 import {ModesConfiguration} from "../models/modesConfiguration";
 
 export class CursorModeHandler implements ModeHandler {

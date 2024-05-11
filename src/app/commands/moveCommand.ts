@@ -15,8 +15,6 @@ export class MoveCommand implements Command{
     ) {
     }
     execute(): void {
-        let delta = this.calculateCoordDelta(this._source,this._target)
-        this.moveElement(delta)
         let delta = this.moveService.calculateCoordDelta(this._source,this._target)
         this.moveService.moveElement(delta)
     }

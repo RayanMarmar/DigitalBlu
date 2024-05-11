@@ -8,6 +8,9 @@ import {Door} from "../drawables/door";
 import {Window} from "../drawables/window";
 import {DeleteCommand} from "../commands/deleteCommand";
 import {MoveCommand} from "../commands/moveCommand";
+import {min, window} from "rxjs";
+import {MoveService} from "./move.service";
+
 
 
 @Injectable({
@@ -431,7 +434,7 @@ export class ArchiveService {
         return wall ? wall : null;
     }
 
-    getLinkedElements(element : Drawable): void{
+     getLinkedElements(element : Drawable): void{
         let p1 : Point
         let p2 : Point
         let elementSelected = null
@@ -442,9 +445,6 @@ export class ArchiveService {
         }else{
             return;
         }
-
-
-
             p1 = elementSelected!.firstPoint
             p2 = elementSelected!.secondPoint
             for (let i: number = 0; i < this._linesList.length; i++) {
@@ -462,7 +462,6 @@ export class ArchiveService {
                     }
 
                     this._linkedElementsList.push(this._linesList[i])
-                    //this.getLinkedElements(this._linesList[i])
                 }
             }
             for (let i: number = 0; i < this._wallsList.length; i++) {
@@ -508,7 +507,6 @@ export class ArchiveService {
                         }
                     }
                     this._linkedElementsList.push(this._wallsList[i])
-                    //this.getLinkedElements(this._wallsList[i])
                 }
 
         }
@@ -522,7 +520,6 @@ export class ArchiveService {
             this.moveService
         )
         if(nearestPoint === source){
-            console.log("HEre")
             this.archiveCommandsList.push(command);
         }else{
             command.execute()
