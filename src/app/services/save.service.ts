@@ -30,8 +30,8 @@ export class SaveService {
                 _y: point.y
             })),
             wallsList: this.archiveService.wallsList.map((wall) => ({
-                _firstPoint: wall.secondLine.calculateCenter(),
-                _secondPoint: wall.fourthLine.calculateCenter(),
+                _firstPoint: wall.fourthLine.calculateCenter(),
+                _secondPoint: wall.secondLine.calculateCenter(),
                 _height: wall.height,
                 _matrix: {_reverseTransformationMatrix: this.transformationService.reverseTransformationMatrix},
                 _uid: wall.uid
@@ -94,6 +94,7 @@ export class SaveService {
 
                 let wall = archive.getWallByUid(doorData._uid)
                 if (wall) {
+                    console.log(doorData._doorType)
                     return new Door(
                         wall, // Pass the existing wall
                         new Point(doorData._point._x, doorData._point._y),
