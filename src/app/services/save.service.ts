@@ -19,6 +19,7 @@ export class SaveService {
 
 
     saveState(): void {
+        console.log(this.archiveService.doorsList);
         const state = {
             linesList: this.archiveService.linesList.map(line => ({
                 _firstPoint: {_x: line.firstPoint.x, _y: line.firstPoint.y},
@@ -30,8 +31,8 @@ export class SaveService {
                 _y: point.y
             })),
             wallsList: this.archiveService.wallsList.map((wall) => ({
-                _firstPoint: wall.secondLine.calculateCenter(),
-                _secondPoint: wall.fourthLine.calculateCenter(),
+                _firstPoint: wall.fourthLine.calculateCenter(),
+                _secondPoint: wall.secondLine.calculateCenter(),
                 _height: wall.height,
                 _matrix: {_reverseTransformationMatrix: this.transformationService.reverseTransformationMatrix},
                 _uid: wall.uid
@@ -92,7 +93,7 @@ export class SaveService {
             archive.doorsList = doorsList.map((doorData: any) => {
                 // Find the existing wall associated with the door
 
-                let wall = archive.getWallByUid(doorData.uid)
+                let wall = archive.getWallByUid(doorData._uid)
                 if (wall) {
                     return new Door(
                         wall, // Pass the existing wall
