@@ -30,4 +30,7 @@ export class GrabModeHandler implements ModeHandler {
 
     onKeyDown(event: KeyboardEvent): void {
     }
+
+    onKeyUp(event: KeyboardEvent): void {
+    }
 }

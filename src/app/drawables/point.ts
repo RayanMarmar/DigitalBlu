@@ -64,4 +64,33 @@ export class Point implements Drawable {
          transformationMatrix: number[][] = [[1, 0, 0], [0, 1, 0]]): void {
         context.fillRect(this._x, this._y, 1, 1);
     }
+
+    projectCursorToAngleVector(angle: number, cursorPosition: Point): Point {
+        // Calculate the unit vector in the direction of the snapped angle
+        const snappedVector: [number, number] = [
+            Math.cos(angle),
+            Math.sin(angle),
+        ];
+
+        // Calculate the vector from the starting point to the current cursor position
+        const cursorVector: [number, number] = [
+            cursorPosition.x - this._x,
+            cursorPosition.y - this._y,
+        ];
+
+        // Calculate the dot product of the cursor vector and the snapped vector
+        const dotProduct = cursorVector[0] * snappedVector[0] + cursorVector[1] * snappedVector[1];
+
+        // Calculate the projection of the cursor vector onto the snapped vector
+        const projectedVector: [number, number] = [
+            dotProduct * snappedVector[0],
+            dotProduct * snappedVector[1],
+        ];
+
+        // Calculate the projected position in world coordinates
+        return new Point(
+            this._x + projectedVector[0],
+            this._y + projectedVector[1],
+        );
+    }
 }

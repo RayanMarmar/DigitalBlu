@@ -5,7 +5,7 @@ import {ModesConfiguration} from "../models/modesConfiguration";
 import {TransformationService} from "../services/transformation.service";
 import {ArchiveService} from "../services/archive.service";
 import {Point} from "../drawables/point";
-import {GridService} from "../services/grid.service";
+import {SnapService} from "../services/snap.service";
 
 export class LineModeHandler implements ModeHandler {
     constructor(
@@ -13,25 +13,19 @@ export class LineModeHandler implements ModeHandler {
         private readonly modesConfiguration: ModesConfiguration,
         private transformationService: TransformationService,
         private archiveService: ArchiveService,
-        private gridService: GridService
+        private snapService: SnapService
     ) {
     }
 
     onMouseDown(event: MouseEvent): void {
-        let point: Point = this.mouse.currentCoordinates!!;
-        let snapped: Point = this.snapPoint(point);
+        this.mouse.setCurrentCoordinatesFromEvent(event);
+        let snappedPoint: Point = this.snapService.snapPoint();
         if (this.modesConfiguration.drawing)
             this.archiveService.addLine(
-                new Line(this.mouse.clickedCoordinates!!, snapped, this.transformationService.reverseTransformationMatrix)
+                new Line(this.mouse.clickedCoordinates!!, snappedPoint, this.transformationService.reverseTransformationMatrix)
             )
-        if (snapped.equals(point)) {
-            this.mouse.mouseDown(event);
-        } else {
-            this.mouse.moving = false;
-            this.mouse.clickedCoordinates = snapped;
-            this.mouse.notFirstMouseMoveEvent = false;
-        }
-        this.archiveService.pushPoint(snapped);
+        this.mouse.mouseDown(event, false, snappedPoint);
+        this.archiveService.pushPoint(snappedPoint);
         this.modesConfiguration.drawing = true;
     }
 
@@ -46,14 +40,13 @@ export class LineModeHandler implements ModeHandler {
         // Delete old line when needed
         if (this.mouse.notFirstMouseMoveEvent)
             this.archiveService.popLine();
-        else
-            this.mouse.notFirstMouseMoveEvent = true;
+        this.mouse.notFirstMouseMoveEvent = true;
 
         // Add new line with the new coordinates
         this.archiveService.pushLine(
             new Line(
                 this.mouse.clickedCoordinates!!,
-                this.mouse.currentCoordinates!!,
+                this.snapService.snapPoint(),
                 this.transformationService.reverseTransformationMatrix
             )
         );
@@ -62,25 +55,13 @@ export class LineModeHandler implements ModeHandler {
     onMouseUp(event: MouseEvent): void {
     }
 
-    private snapPoint(point: Point): Point {
-        let snapped: Point = point;
-
-        if (this.modesConfiguration.snapMode) {
-            snapped = this.archiveService.snapPoint(point, true);
-            if (!snapped.equals(point)) {
-                return snapped;
-            }
-        }
-        if (this.modesConfiguration.gridOn) {
-            snapped = this.gridService.calculateNearestGridIntersection(point);
-        }
-        return snapped;
-    }
-
     onKeyDown(event: KeyboardEvent): void {
         if (event.key === 'Escape') {
             this.handleEscape();
         }
+    }
+
+    onKeyUp(event: KeyboardEvent): void {
     }
 
 

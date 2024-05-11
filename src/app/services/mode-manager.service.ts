@@ -13,6 +13,8 @@ import {EraseModeHandler} from "../modeHandlers/eraseModeHandler";
 import {CursorModeHandler} from "../modeHandlers/cursorModeHandler";
 import {GlobalHandler} from "../modeHandlers/globalHandler";
 import {CanvasService} from "./canvas.service";
+import {ComponentSelectorService} from "./component-selector.service";
+import {SnapService} from "./snap.service";
 
 @Injectable({
     providedIn: 'root'
@@ -26,6 +28,8 @@ export class ModeManagerService {
         private mouse: Mouse,
         private readonly modesConfiguration: ModesConfiguration,
         private transformationService: TransformationService,
+        private snapService: SnapService,
+        private componentSelector: ComponentSelectorService,
     ) {
     }
 
@@ -35,7 +39,7 @@ export class ModeManagerService {
             this.modesConfiguration,
             this.transformationService,
             this.archiveService,
-            this.gridService,
+            this.snapService,
         );
     }
 
@@ -45,7 +49,7 @@ export class ModeManagerService {
             this.modesConfiguration,
             this.transformationService,
             this.archiveService,
-            this.gridService,
+            this.snapService,
         );
     }
 
@@ -77,6 +81,9 @@ export class ModeManagerService {
 
     get eraseMode(): EraseModeHandler {
         return new EraseModeHandler(
+            this.mouse,
+            this.archiveService,
+            this.componentSelector,
         );
     }
 

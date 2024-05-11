@@ -7,7 +7,7 @@ import {Window} from "../drawables/window";
 import {TransformationService} from "./transformation.service";
 import {ThemeService} from "./theme.service";
 import {ExportService} from "./export.service";
-
+import {SaveService} from "./save.service";
 
 @Injectable({
     providedIn: 'root'
@@ -21,6 +21,7 @@ export class CanvasService {
         private archiveService: ArchiveService,
         private transformationService: TransformationService,
         private themeService: ThemeService,
+        private saveService: SaveService,
         private exportService: ExportService
     ) {
     }
@@ -29,6 +30,8 @@ export class CanvasService {
         this.canvas = canvas;
         this.context = this.canvas.nativeElement.getContext("2d");
         this.canvasRect = canvas.nativeElement.getBoundingClientRect();
+        this.archiveService = this.saveService.getState(this.archiveService);
+        this.drawAll();
     }
 
     private drawAllLines(): void {
@@ -79,6 +82,17 @@ export class CanvasService {
         });
     }
 
+    private highlightSelectedElement(): void {
+        if (this.archiveService.selectedElement !== null) {
+            this.archiveService.selectedElement.draw(
+                this.context!!,
+                this.themeService.getCanvasColor(),
+                this.themeService.getDeleteDrawableColor(),
+                this.transformationService.transformationMatrix,
+            )
+        }
+    }
+
     drawAll(): void {
         if (this.context == null) {
             console.log("Context is null...")
@@ -89,6 +103,8 @@ export class CanvasService {
         this.drawAllWalls();
         this.drawAllDoors();
         this.drawAllWindows();
+        this.highlightSelectedElement();
+
     }
 
     undo(): void {

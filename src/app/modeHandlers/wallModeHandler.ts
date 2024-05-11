@@ -4,8 +4,8 @@ import {ModesConfiguration} from "../models/modesConfiguration";
 import {TransformationService} from "../services/transformation.service";
 import {ArchiveService} from "../services/archive.service";
 import {Point} from "../drawables/point";
-import {GridService} from "../services/grid.service";
 import {Wall} from "../drawables/wall";
+import {SnapService} from "../services/snap.service";
 
 export class WallModeHandler implements ModeHandler {
     constructor(
@@ -13,32 +13,26 @@ export class WallModeHandler implements ModeHandler {
         private readonly modesConfiguration: ModesConfiguration,
         private transformationService: TransformationService,
         private archiveService: ArchiveService,
-        private gridService: GridService
+        private snapService: SnapService
     ) {
     }
 
     onMouseDown(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
-        let point: Point = this.mouse.currentCoordinates!!;
-        let snapped: Point = this.snapPoint(point);
+        let snappedPoint: Point = this.snapService.snapPoint();
         if (this.modesConfiguration.drawing) {
             this.archiveService.addWall(
                 new Wall(
                     this.mouse.clickedCoordinates!!,
-                    snapped,
+                    snappedPoint,
                     this.modesConfiguration.defaultThickness,
-                    this.transformationService.reverseTransformationMatrix
+                    this.transformationService.reverseTransformationMatrix,
+                    null
                 )
             );
         }
-        if (snapped.equals(point)) {
-            this.mouse.mouseDown(event);
-        } else {
-            this.mouse.moving = false;
-            this.mouse.clickedCoordinates = snapped;
-            this.mouse.notFirstMouseMoveEvent = false;
-        }
-        this.archiveService.pushPoint(snapped);
+        this.mouse.mouseDown(event, false, snappedPoint);
+        this.archiveService.pushPoint(snappedPoint);
         this.modesConfiguration.drawing = true;
     }
 
@@ -46,41 +40,30 @@ export class WallModeHandler implements ModeHandler {
         if (!this.modesConfiguration.drawing)
             return;
         this.mouse.mouseMove(event);
+        let snappedPoint = this.snapService.snapPoint();
+        let wall: Wall = new Wall(
+            this.mouse.clickedCoordinates!!,
+            snappedPoint,
+            this.modesConfiguration.defaultThickness,
+            this.transformationService.reverseTransformationMatrix,
+            null
+        );
         if (this.mouse.notFirstMouseMoveEvent)
             this.archiveService.popWall();
-        else
-            this.mouse.notFirstMouseMoveEvent = true;
-        this.archiveService.pushWall(new Wall(
-                this.mouse.clickedCoordinates!!,
-                this.mouse.currentCoordinates!!,
-                this.modesConfiguration.defaultThickness,
-                this.transformationService.reverseTransformationMatrix
-            )
-        );
+        this.archiveService.pushWall(wall);
+        this.mouse.notFirstMouseMoveEvent = true;
     }
 
     onMouseUp(event: MouseEvent): void {
-    }
-
-    private snapPoint(point: Point): Point {
-        let snapped: Point = point;
-
-        if (this.modesConfiguration.snapMode) {
-            snapped = this.archiveService.snapPoint(point, true);
-            if (!snapped.equals(point)) {
-                return snapped;
-            }
-        }
-        if (this.modesConfiguration.gridOn) {
-            snapped = this.gridService.calculateNearestGridIntersection(point);
-        }
-        return snapped;
     }
 
     onKeyDown(event: KeyboardEvent): void {
         if (event.key === 'Escape') {
             this.handleEscape();
         }
+    }
+
+    onKeyUp(event: KeyboardEvent): void {
     }
 
 

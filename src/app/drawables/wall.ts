@@ -1,8 +1,10 @@
 import {Point} from "./point";
 import {Line} from "./line";
 import "./drawable";
+import {v4 as uuidv4} from 'uuid';
 
 export class Wall implements Drawable {
+
     private _firstPoint: Point;
     private _secondPoint: Point;
     private _thirdPoint: Point;
@@ -15,8 +17,10 @@ export class Wall implements Drawable {
     private _height: number;
     private _xFactor: number;
     private _yFactor: number;
+    private _uid: string;
 
-    constructor(firstPoint: Point, secondPoint: Point, height: number, reverseTransformationMatrix: number[][]) {
+    constructor(firstPoint: Point, secondPoint: Point, height: number, reverseTransformationMatrix: number[][],
+                uid: string | null) {
         firstPoint = firstPoint.transform(reverseTransformationMatrix);
         secondPoint = secondPoint.transform(reverseTransformationMatrix);
         this._height = height;
@@ -32,6 +36,11 @@ export class Wall implements Drawable {
         this._secondLine = new Line(this._secondPoint, this._thirdPoint);
         this._fourthLine = new Line(this._fourthPoint, this._firstPoint);
         this._width = this._firstLine.calculateDistance();
+        this._uid = uid ?? uuidv4();
+    }
+
+    get uid(): string {
+        return this._uid;
     }
 
     // Getter for firstPoint
@@ -190,6 +199,15 @@ export class Wall implements Drawable {
         return ((end.x - start.x) * (y - start.y)) - ((x - start.x) * (end.y - start.y));
     }
 
+    calculateNearestPointDistance(point: Point): number {
+
+        return Math.min(this.firstLine.calculateNearestPointDistance(point),
+            this.secondLine.calculateNearestPointDistance(point),
+            this.thirdLine.calculateNearestPointDistance(point),
+            this.fourthLine.calculateNearestPointDistance(point));
+    }
+
+
     draw(
         context: CanvasRenderingContext2D,
         canvasColor: string,
@@ -214,6 +232,8 @@ export class Wall implements Drawable {
         let firstPoint: Point = this._fourthLine.calculateCenter().transform(transformationMatrix);
         let secondPoint: Point = this._secondLine.calculateCenter().transform(transformationMatrix);
         let height: number = this._height * transformationMatrix[0][0];
-        return new Wall(firstPoint, secondPoint, height, [[1, 1, 0], [1, 1, 0]]);
+        return new Wall(firstPoint, secondPoint, height,
+            [[1, 1, 0], [1, 1, 0]],null
+        );
     }
 }

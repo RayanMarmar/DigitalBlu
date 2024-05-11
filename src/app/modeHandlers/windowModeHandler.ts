@@ -41,4 +41,7 @@ export class WindowModeHandler implements ModeHandler {
 
     onKeyDown(event: KeyboardEvent): void {
     }
+
+    onKeyUp(event: KeyboardEvent): void {
+    }
 }
