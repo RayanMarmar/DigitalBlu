@@ -19,6 +19,7 @@ export class SaveService {
 
 
     saveState(): void {
+        console.log(this.archiveService.doorsList);
         const state = {
             linesList: this.archiveService.linesList.map(line => ({
                 _firstPoint: {_x: line.firstPoint.x, _y: line.firstPoint.y},
@@ -94,7 +95,6 @@ export class SaveService {
 
                 let wall = archive.getWallByUid(doorData._uid)
                 if (wall) {
-                    console.log(doorData._doorType)
                     return new Door(
                         wall, // Pass the existing wall
                         new Point(doorData._point._x, doorData._point._y),
