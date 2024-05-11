@@ -6,6 +6,7 @@ import {Door} from "../drawables/door";
 import {Window} from "../drawables/window";
 import {TransformationService} from "./transformation.service";
 import {ThemeService} from "./theme.service";
+import {ExportService} from "./export.service";
 import {SaveService} from "./save.service";
 
 @Injectable({
@@ -20,7 +21,8 @@ export class CanvasService {
         private archiveService: ArchiveService,
         private transformationService: TransformationService,
         private themeService: ThemeService,
-        private saveService: SaveService
+        private saveService: SaveService,
+        private exportService: ExportService
     ) {
     }
 
@@ -117,5 +119,14 @@ export class CanvasService {
 
     clear(): void {
         this.context!.clearRect(0, 0, this.canvasRect!.width, this.canvasRect!.height);
+    }
+
+
+    exportCanvas(filename: string): void {
+        if (this.canvas !== null) {
+            this.exportService.exportCanvasAsSVG(this.canvas.nativeElement, filename);
+        } else {
+            console.error('Canvas element not found.');
+        }
     }
 }

@@ -8,6 +8,7 @@ import {ArchiveService} from "../../services/archive.service";
 import {EventHandlerConfiguration} from "../../models/eventHandlerConfiguration";
 import {SaveService} from "../../services/save.service";
 
+
 @Component({
     selector: 'app-header',
     standalone: true,
@@ -23,8 +24,8 @@ export class HeaderComponent {
     lastValidThickness: number = this.modesConfiguration.defaultThickness;
 
     constructor(
-        private canvasService: CanvasService,
-        public modesConfiguration: ModesConfiguration,
+        protected canvasService: CanvasService,
+        protected modesConfiguration: ModesConfiguration,
         public eventHandlerConfiguration: EventHandlerConfiguration,
         private themeService: ThemeService,
         private archiveService: ArchiveService,
