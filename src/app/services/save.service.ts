@@ -92,7 +92,7 @@ export class SaveService {
             archive.doorsList = doorsList.map((doorData: any) => {
                 // Find the existing wall associated with the door
 
-                let wall = archive.getWallByUid(doorData.uid)
+                let wall = archive.getWallByUid(doorData._uid)
                 if (wall) {
                     return new Door(
                         wall, // Pass the existing wall
