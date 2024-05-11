@@ -6,6 +6,8 @@ import {Point} from "../drawables/point";
 import {ComponentSelectorService} from "../services/component-selector.service";
 import {SnapService} from "../services/snap.service";
 import {ModesConfiguration} from "../models/modesConfiguration";
+import {Wall} from "../drawables/wall";
+import {Line} from "../drawables/line";
 
 export class CursorModeHandler implements ModeHandler {
     private previousCoords: Point | null = null ;
@@ -49,6 +51,7 @@ export class CursorModeHandler implements ModeHandler {
                     this.mouse.currentCoordinates!,
                     this.originalCoords!,
                     this.originalNearestPoint!,
+                    this.snapService
             )
                 this.previousCoords = this.mouse.currentCoordinates!
                 this.gridService.updateCanvas();
@@ -59,13 +62,14 @@ export class CursorModeHandler implements ModeHandler {
 
     onMouseUp(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
+        // this.snapService.snapElementPoints()
         try {
             this.modesConfiguration.moveMode = false
         } catch (e) {
             console.log("Problem on down cursor mode", e)
         }
+        this.gridService.updateCanvas();
     }
-
     onKeyDown(event: KeyboardEvent): void {
     }
 

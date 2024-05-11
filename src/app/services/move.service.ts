@@ -4,6 +4,7 @@ import {Wall} from "../drawables/wall";
 import {Door} from "../drawables/door";
 import {Window} from "../drawables/window";
 import {Point} from "../drawables/point";
+import {SnapService} from "./snap.service";
 
 @Injectable({
   providedIn: 'root'
@@ -102,13 +103,16 @@ export class MoveService {
     }
   }
 
-  moveElement(delta : Point):  void{
+  moveElement(delta : Point, snapService : SnapService):  void{
     if (this._archiveService.selectedElement instanceof Door){
       // this.archiveService.selectedElement =
       this._archiveService.selectedElement.shiftElement(delta.x  ,delta.y)
     }else{
       this._archiveService.selectedElement!.shiftElement(delta.x  ,delta.y)
       if (this._archiveService.selectedElement instanceof Wall){
+        let wall = this._archiveService.selectedElement as Wall
+
+
         this.moveWallOpenings(
             this._archiveService.selectedElement,
             delta,
@@ -116,6 +120,7 @@ export class MoveService {
       }
       this.stretchLinkedElements(delta)
     }
+    snapService.snapElementPoints()
     // ?this.moveLinkedElements(delta)
   }
 

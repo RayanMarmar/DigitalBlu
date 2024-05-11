@@ -10,6 +10,7 @@ import {DeleteCommand} from "../commands/deleteCommand";
 import {MoveCommand} from "../commands/moveCommand";
 import {min, window} from "rxjs";
 import {MoveService} from "./move.service";
+import {SnapService} from "./snap.service";
 
 
 
@@ -512,12 +513,13 @@ export class ArchiveService {
         }
     }
 
-    moveElement(source : Point, target : Point, originalCoords : Point,nearestPoint  : Point): void{
+    moveElement(source : Point, target : Point, originalCoords : Point,nearestPoint  : Point,snapService : SnapService): void{
         let command = new MoveCommand(
             source,
             target,
             nearestPoint,
-            this.moveService
+            this.moveService,
+            snapService
         )
         if(nearestPoint === source){
             this.archiveCommandsList.push(command);
