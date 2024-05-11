@@ -198,6 +198,8 @@ export class Line implements Drawable {
         canvasColor: string,
         lineColor: string,
         transformationMatrix: number[][] = [[1, 0, 0], [0, 1, 0]],
+        fontSize: string = '12px Arial', // Font size and family for dimension text
+        offsetAboveLine: number = 10, // Offset for dimension text above the line
     ): void {
         let line: Line = this.transform(transformationMatrix);
         context.beginPath();
@@ -205,7 +207,38 @@ export class Line implements Drawable {
         context.lineTo(line.secondPoint.x, line.secondPoint.y);
         context.strokeStyle = lineColor;
         context.stroke();
+
+        // Calculate angle of the line segment relative to the x-axis
+        const angle = line.getAngleWithXVector();
+
+        // Calculate the x and y offsets for the dimension text
+        const xOffset = offsetAboveLine * Math.cos(angle);
+
+        // Calculate position for displaying dimension text
+        const center = line.calculateCenter();
+        const dimensionX = center.x + xOffset;
+        const dimensionY = center.y;
+
+        // Save the current context state
+        context.save();
+
+        // Translate to the position where the text should be drawn
+        context.translate(dimensionX, dimensionY);
+
+        // Rotate the canvas context to make the text parallel to the line
+        context.rotate(angle);
+
+        // Draw dimension text on canvas
+        context.fillStyle = lineColor; // Use line color for dimension text
+        context.font = fontSize;
+        context.textAlign = 'center';
+        context.textBaseline = 'bottom'; // Align the text baseline to the bottom
+        context.fillText(line.calculateDistance().toFixed(2), 0, 0); // Draw text at (0, 0)
+
+        // Restore the context state to prevent affecting other drawings
+        context.restore();
     }
+
 
     transform(transformationMatrix: number[][]): Line {
         return new Line(this._firstPoint.transform(transformationMatrix), this._secondPoint.transform(transformationMatrix));
