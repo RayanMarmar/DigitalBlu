@@ -7,7 +7,7 @@ export class ModesConfiguration {
     private _snapMode: boolean;
     private _straightLineMode: boolean;
     private _snapAngleMode: boolean;
-    private _snapAngle: number | null;
+    private _snapRadiantFactor: number;
     private _drawing: boolean;
     private _gridOn: boolean;
     private _defaultThickness: number;
@@ -22,7 +22,7 @@ export class ModesConfiguration {
         this._snapMode = true;
         this._straightLineMode = false;
         this._snapAngleMode = false;
-        this._snapAngle = Math.PI / 6;
+        this._snapRadiantFactor = 6;
         this._drawing = false;
         this._gridOn = true;
         this._defaultThickness = 10;
@@ -55,8 +55,8 @@ export class ModesConfiguration {
         this._snapMode = value;
     }
 
-    get snapAngle(): number | null {
-        return this.straightLineMode ? Math.PI / 2 : this._snapAngle;
+    get snapAngle(): number {
+        return this.straightLineMode ? Math.PI / 2 : Math.PI / this._snapRadiantFactor;
     }
 
     get snapAngleMode(): boolean {
@@ -65,10 +65,6 @@ export class ModesConfiguration {
 
     set snapAngleMode(value: boolean) {
         this._snapAngleMode = value;
-    }
-
-    set snapAngle(value: number | null) {
-        this._snapAngle = value;
     }
 
     get straightLineMode(): boolean {
@@ -94,6 +90,15 @@ export class ModesConfiguration {
     set gridOn(value: boolean) {
         this._gridOn = value;
     }
+
+    get snapRadiantFactor(): number {
+        return this._snapRadiantFactor;
+    }
+
+    set snapRadiantFactor(value: number) {
+        this._snapRadiantFactor = value;
+    }
+
 
     get defaultThickness(): number {
         return this._defaultThickness;
@@ -138,5 +143,9 @@ export class ModesConfiguration {
 
     helperOn(): void {
         this._helperDisplayed = !this._helperDisplayed;
+    }
+
+    changeSnapAngleMode(): void {
+        this._snapAngleMode = !this._snapAngleMode;
     }
 }

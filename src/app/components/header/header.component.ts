@@ -122,4 +122,8 @@ export class HeaderComponent {
     displayHelper(): void {
         this.modesConfiguration.helperOn();
     }
+
+    changeAngleSnapMode(): void {
+        this.modesConfiguration.changeSnapAngleMode();
+    }
 }
