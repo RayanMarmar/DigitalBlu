@@ -408,6 +408,10 @@ export class ArchiveService {
             this.redo()
         }
     }
+    getWallByUid(uid: string): Wall | null {
+        const wall = this.archiveWallsList.find(w => w.uid === uid);
+        return wall ? wall : null;
+    }
 
     getLinkedElements(element : Drawable): void{
         let p1 : Point

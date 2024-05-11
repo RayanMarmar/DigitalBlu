@@ -3,7 +3,6 @@ import {Point} from "./point";
 import {Wall} from "./wall";
 import {min} from "rxjs";
 
-
 export class WallOpening {
     protected _wall: Wall;
     protected _parallelLine: Line;
@@ -29,6 +28,14 @@ export class WallOpening {
         );
         this._center = this._base[0].firstPoint;
 
+    }
+
+    get height(): number {
+        return this._height;
+    }
+
+    set height(value: number) {
+        this._height = value;
     }
 
     inRange(point: Point): boolean {
