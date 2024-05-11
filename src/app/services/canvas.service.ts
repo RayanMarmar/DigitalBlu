@@ -123,9 +123,8 @@ export class CanvasService {
 
 
     exportCanvas(filename: string): void {
-        const canvas = document.getElementById('drawing-canvas') as HTMLCanvasElement;
-        if (canvas) {
-            this.exportService.exportCanvasAsSVG(canvas, filename);
+        if (this.canvas !== null) {
+            this.exportService.exportCanvasAsSVG(this.canvas.nativeElement, filename);
         } else {
             console.error('Canvas element not found.');
         }
