@@ -121,8 +121,7 @@ export class HeaderComponent {
     }
 
     canSave() : boolean{
-        console.log("CAN save is ",this.archiveService.getTotalNumberOfElements()>0 )
-        return this.archiveService.getTotalNumberOfElements()>0;
+        return this.archiveService.isEmpty;
     }
 
     displayHelper(): void {
