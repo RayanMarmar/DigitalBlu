@@ -10,6 +10,29 @@
         <img class="logo-img" src="assets/logo.png" alt="Digital Blu Logo"/>
     </div>
 
+
+    <div class="vertical-line"></div>
+
+    <div class="middle-section">
+        <button [class.active]="recentsOpen" (click)="recentsOpened()"><i
+                class="iconoir iconoir-folder"></i>
+            <span class="button-label">Recent saved files</span>
+        </button>
+
+        <div class="angle-snap-container" *ngIf="recentsOpen">
+            <select [(ngModel)]="selectedCanvasName">
+                <ng-container *ngIf="modesConfiguration.canvasNames.length > 0; else noCanvasNames">
+                    <option *ngFor="let canvasName of modesConfiguration.canvasNames"
+                            [value]="canvasName">{{ canvasName }}
+                    </option>
+                </ng-container>
+                <ng-template #noCanvasNames>
+                    <option disabled>No canvas names available</option>
+                </ng-template>
+            </select>
+        </div>
+    </div>
+
     <div class="vertical-line"></div>
 
     <div class="middle-section">
@@ -142,6 +165,20 @@
 
 
 </div>
+
+
+<div class="modal" *ngIf="showModal">
+    <div class="modal-content">
+        <!--<span class="close" (click)="closeModal()">&times;</span>-->
+        <div class="label">Enter a name for the canvas:</div>
+        <input type="text" [(ngModel)]="canvasNameInput" placeholder="Canvas Name">
+        <div class="buttons">
+            <button (click)="saveCanvasName()">Save</button>
+            <button class="close" (click)="closeModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
 
 
 

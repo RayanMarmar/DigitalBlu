@@ -1,20 +1,20 @@
 import {Component} from '@angular/core';
 import {CanvasService} from "../../services/canvas.service";
 import {ModesConfiguration} from "../../models/modesConfiguration";
-import {NgIf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {ThemeService} from "../../services/theme.service";
 import {ArchiveService} from "../../services/archive.service";
 import {EventHandlerConfiguration} from "../../models/eventHandlerConfiguration";
 import {SaveService} from "../../services/save.service";
 
-
 @Component({
     selector: 'app-header',
     standalone: true,
     imports: [
         NgIf,
-        FormsModule
+        FormsModule,
+        NgForOf
     ],
     templateUrl: './header.component.html',
     styleUrl: './header.component.css'
@@ -22,6 +22,10 @@ import {SaveService} from "../../services/save.service";
 export class HeaderComponent {
     thickness: number = this.getThickness();
     lastValidThickness: number = this.modesConfiguration.defaultThickness;
+    showModal: boolean = false;
+    canvasNameInput: string = '';
+    recentsOpen: boolean = false;
+    selectedCanvasName: string = "";
 
     constructor(
         protected canvasService: CanvasService,
@@ -117,7 +121,26 @@ export class HeaderComponent {
     }
 
     saveState(): void {
-        return this.saveService.saveState()
+        if (!this.modesConfiguration.canvasName || typeof this.modesConfiguration.canvasName !== 'string' || this.modesConfiguration.canvasName.trim() === '') {
+            this.showModal = true;
+        } else {
+            this.saveService.saveState();
+        }
+    }
+
+    saveCanvasName(): void {
+        if (this.canvasNameInput && this.canvasNameInput.trim() !== '') {
+            this.modesConfiguration.canvasName = this.canvasNameInput;
+            this.modesConfiguration._allCanvasName.push(this.canvasNameInput);
+            this.closeModal();
+            this.saveService.saveState();
+        } else {
+            alert("Please enter a name for the canvas.");
+        }
+    }
+
+    closeModal(): void {
+        this.showModal = false;
     }
 
     displayHelper(): void {
@@ -126,5 +149,9 @@ export class HeaderComponent {
 
     changeAngleSnapMode(): void {
         this.modesConfiguration.changeSnapAngleMode();
+    }
+
+    recentsOpened() {
+        this.recentsOpen = !this.recentsOpen;
     }
 }

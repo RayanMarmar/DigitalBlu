@@ -4,6 +4,7 @@ import {Injectable} from "@angular/core";
     providedIn: 'root',
 })
 export class ModesConfiguration {
+
     private _snapMode: boolean;
     private _straightLineMode: boolean;
     private _snapAngleMode: boolean;
@@ -16,6 +17,8 @@ export class ModesConfiguration {
     private readonly _minZoom: number = 50;
     private readonly _maxZoom: number = 150;
     private _helperDisplayed: boolean;
+    private _canvasName: String = "";
+    _allCanvasName: String[] = [];
 
 
     constructor() {
@@ -148,4 +151,18 @@ export class ModesConfiguration {
     changeSnapAngleMode(): void {
         this._snapAngleMode = !this._snapAngleMode;
     }
+
+    get canvasName(): String {
+        return this._canvasName;
+    }
+
+    set canvasName(value: String) {
+        this._canvasName = value;
+    }
+
+    get canvasNames(): String[] {
+        return this._allCanvasName;
+    }
+
+
 }
