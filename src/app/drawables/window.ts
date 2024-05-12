@@ -4,8 +4,8 @@ import {WallOpening} from "./wallOpening";
 import "./drawable";
 
 export class Window extends WallOpening implements Drawable {
-    constructor(wall: Wall, point: Point, height: number = 50) {
-        super(wall, point, height);
+    constructor(wall: Wall, point: Point, width: number = 50) {
+        super(wall, point, width);
     }
 
     override toString(): string {

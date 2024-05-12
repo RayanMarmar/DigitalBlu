@@ -49,7 +49,7 @@ export class SaveService {
             windowsList: this.archiveService.windowsList.map(window => ({
                 _uid: window.wall.uid,
                 _point: {_x: window.center.x, _y: window.center.y},
-                _radius: window.width
+                _width: window.width
             }))
         };
 
@@ -118,7 +118,7 @@ export class SaveService {
                     return new Window(
                         wall, // Get wall reference from archive
                         new Point(windowData._point._x, windowData._point._y),
-                        windowData._radius
+                        windowData._width
                     )
                 } else {
                     // Handle case where wall is not found
