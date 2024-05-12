@@ -21,10 +21,33 @@ export class LinkedDrawables {
     }
 
     addDrawable(point: Point, drawable: Drawable): void {
-        const serializedPoint = point.serialize();
+        const serializedPoint: string = point.serialize();
         if (!this.dictionary[serializedPoint]) {
             this.dictionary[serializedPoint] = [];
         }
         this.dictionary[serializedPoint].push(drawable);
+    }
+
+    removeDrawable(point: Point, drawable: Drawable): void {
+        const serializedPoint: string = point.serialize();
+        if (!this.dictionary[serializedPoint]) {
+            console.log('No drawables found for key ' + serializedPoint);
+            return;
+        }
+        let index = this.dictionary[serializedPoint].indexOf(drawable);
+        if (index == -1) {
+            console.log('The drawable' + drawable.toString() + ' not found for key ' + serializedPoint);
+            return;
+        }
+        this.dictionary[serializedPoint].splice(index, 1);
+
+        // If the drawable array becomes empty, delete the key
+        if (this.dictionary[serializedPoint].length === 0) {
+            delete this.dictionary[serializedPoint];
+        }
+    }
+
+    keys(): Point[] {
+        return Object.keys(this.dictionary).map(serializedPoint => Point.deserialize(serializedPoint));
     }
 }

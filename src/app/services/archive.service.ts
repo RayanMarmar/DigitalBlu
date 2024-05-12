@@ -26,7 +26,7 @@ export class ArchiveService {
     private _archiveWindowsList: Window[];
     private commandsList: Command[];
     private archiveCommandsList: Command[];
-    private linkedDrawables: LinkedDrawables;
+    private _linkedDrawables: LinkedDrawables;
     private _selectedElement: Drawable | null = null;
     private _upToDate: boolean = true;
 
@@ -43,7 +43,7 @@ export class ArchiveService {
         this._archiveDoorsList = [];
         this._windowsList = [];
         this._archiveWindowsList = [];
-        this.linkedDrawables = new LinkedDrawables();
+        this._linkedDrawables = new LinkedDrawables();
     }
 
     get upToDate(): boolean {
@@ -142,6 +142,10 @@ export class ArchiveService {
         this._windowsList = value;
     }
 
+    get linkedDrawables(): LinkedDrawables {
+        return this._linkedDrawables;
+    }
+
     pushLine(line: Line): void {
         this._linesList.push(line);
     }
@@ -200,14 +204,13 @@ export class ArchiveService {
         this._linesList.pop();
         this._linesList.push(line);
         let command = new DrawCommand(
-            this._pointsList,
-            this._archivePointsList,
+            this._linkedDrawables,
             this._linesList,
             this._archiveLinesList,
         );
         this.addCommand(command);
-        this.linkedDrawables.addDrawable(line.firstPoint, line);
-        this.linkedDrawables.addDrawable(line.secondPoint, line);
+        this._linkedDrawables.addDrawable(line.firstPoint, line);
+        this._linkedDrawables.addDrawable(line.secondPoint, line);
         this.clearArchive();
     }
 
@@ -215,14 +218,13 @@ export class ArchiveService {
         this._wallsList.pop();
         this._wallsList.push(wall);
         let command = new DrawCommand(
-            this._pointsList,
-            this._archivePointsList,
+            this._linkedDrawables,
             this._wallsList,
             this._archiveWallsList,
         );
         this.addCommand(command);
-        this.linkedDrawables.addDrawable(wall.fourthLine.calculateCenter(), wall);
-        this.linkedDrawables.addDrawable(wall.secondLine.calculateCenter(), wall);
+        this._linkedDrawables.addDrawable(wall.fourthLine.calculateCenter(), wall);
+        this._linkedDrawables.addDrawable(wall.secondLine.calculateCenter(), wall);
         this.clearArchive();
     }
 
@@ -230,8 +232,7 @@ export class ArchiveService {
         this._doorsList.push(door);
         door.wall.addWallOpening(door);
         let command = new DrawCommand(
-            this._pointsList,
-            this._archivePointsList,
+            this._linkedDrawables,
             this._doorsList,
             this._archiveDoorsList,
         );
@@ -243,8 +244,7 @@ export class ArchiveService {
         this._windowsList.push(window);
         window.wall.addWallOpening(window);
         let command = new DrawCommand(
-            this._pointsList,
-            this._archivePointsList,
+            this._linkedDrawables,
             this._windowsList,
             this._archiveWindowsList,
         );
@@ -291,8 +291,9 @@ export class ArchiveService {
 
     snapPoint(point: Point, snapMode: boolean): Point {
         if (!snapMode) return point;
+        let pointsList = this._linkedDrawables.keys();
         let index: number = this.inRangeOfAnExistingPoint(point);
-        return index == -1 ? point : this._pointsList[index];
+        return index == -1 ? point : pointsList[index];
     }
 
     snapAngle(referencePoint: Point, currentPoint: Point, requestedAngle: number): Point {
@@ -316,8 +317,9 @@ export class ArchiveService {
     }
 
     private inRangeOfAnExistingPoint(point: Point): number {
-        for (let i: number = 0; i < this._pointsList.length; i++) {
-            const p: Point = this._pointsList[i];
+        let pointsList = this._linkedDrawables.keys();
+        for (let i: number = 0; i < pointsList.length; i++) {
+            const p: Point = pointsList[i];
             if (p.inPointRange(point)) {
                 return i; // Return the index if a matching point is found
             }
