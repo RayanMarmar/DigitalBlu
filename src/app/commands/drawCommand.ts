@@ -1,5 +1,6 @@
 import {Point} from "../drawables/point";
 import {Line} from "../drawables/line";
+import {WallOpening} from "../drawables/wallOpening";
 
 export class DrawCommand implements Command {
 
@@ -19,6 +20,9 @@ export class DrawCommand implements Command {
             if (drawable instanceof Line && this.shouldAddPoint(drawable)) {
                 this.pointsList.push(this.archivePointsList.pop()!!);
             }
+            if (drawable instanceof WallOpening) {
+                drawable.wall.addWallOpening(drawable);
+            }
         }
     }
 
@@ -28,6 +32,9 @@ export class DrawCommand implements Command {
             this.archiveDrawableList.push(drawable);
             if (drawable instanceof Line) {
                 this.removePoints();
+            }
+            if (drawable instanceof WallOpening) {
+                drawable.wall.removeWallOpening(drawable);
             }
         }
     }

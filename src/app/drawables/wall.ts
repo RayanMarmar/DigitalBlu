@@ -2,6 +2,7 @@ import {Point} from "./point";
 import {Line} from "./line";
 import "./drawable";
 import {v4 as uuidv4} from 'uuid';
+import {WallOpening} from "./wallOpening";
 
 export class Wall implements Drawable {
 
@@ -15,6 +16,7 @@ export class Wall implements Drawable {
     private readonly _yFactor: number;
     private readonly _uid: string;
     private range: number = 10;
+    public wallOpenings: WallOpening[] = [];
 
     constructor(
         firstPoint: Point,
@@ -86,6 +88,14 @@ export class Wall implements Drawable {
 
     get yFactor(): number {
         return this._yFactor;
+    }
+
+    addWallOpening(wallOpening: WallOpening): void {
+        this.wallOpenings.push(wallOpening);
+    }
+
+    removeWallOpening(wallOpening: WallOpening): void {
+        this.wallOpenings = this.wallOpenings.filter(item => item !== wallOpening);
     }
 
     toString(): string {

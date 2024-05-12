@@ -221,6 +221,7 @@ export class ArchiveService {
 
     addDoor(door: Door): void {
         this._doorsList.push(door);
+        door.wall.addWallOpening(door);
         let command = new DrawCommand(
             this._pointsList,
             this._archivePointsList,
