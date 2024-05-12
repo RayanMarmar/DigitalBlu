@@ -61,22 +61,27 @@ export class SaveService {
             // Individual assignment of attributes from the parsed state
             // SETTING LINES
             const linesList = stateStringParsed.linesList || [];
-            archive.linesList = linesList.map(
-                (lineData: any) => new Line(
+            linesList.map((lineData: any) => {
+                let line = new Line(
                     new Point(lineData._firstPoint._x, lineData._firstPoint._y),
-                    new Point(lineData._secondPoint._x, lineData._secondPoint._y))
-            );
+                    new Point(lineData._secondPoint._x, lineData._secondPoint._y)
+                );
+                this.archiveService.addLine(line, true);
+            });
 
             // SETTING WALLS
             const wallsList = stateStringParsed.wallsList || [];
-            archive.wallsList = wallsList.map((wallData: any) => new Wall(
-                // Extract relevant data for constructing a Wall
-                new Point(wallData._firstPoint._x, wallData._firstPoint._y),
-                new Point(wallData._secondPoint._x, wallData._secondPoint._y),
-                wallData._height,
-                wallData._matrix._reverseTransformationMatrix,
-                wallData._uid
-            ));
+            wallsList.map((wallData: any) => {
+                let wall: Wall = new Wall(
+                    // Extract relevant data for constructing a Wall
+                    new Point(wallData._firstPoint._x, wallData._firstPoint._y),
+                    new Point(wallData._secondPoint._x, wallData._secondPoint._y),
+                    wallData._height,
+                    wallData._matrix._reverseTransformationMatrix,
+                    wallData._uid
+                );
+                this.archiveService.addWall(wall, true);
+            });
 
             // SETTING DOORS
             const doorsList = stateStringParsed.doorsList || [];

@@ -182,32 +182,38 @@ export class ArchiveService {
         this.archiveCommandsList = [];
     }
 
-    addLine(line: Line): void {
-        this._linesList.pop();
+    addLine(line: Line, fromSaved: boolean = false): void {
         this._linesList.push(line);
-        let command = new DrawCommand(
-            this._linkedDrawables,
-            this._linesList,
-            this._archiveLinesList,
-        );
-        this.addCommand(command);
         this._linkedDrawables.addDrawable(line.firstPoint, line);
         this._linkedDrawables.addDrawable(line.secondPoint, line);
-        this.clearArchive();
+
+        if (!fromSaved) {
+            this._linesList.pop();
+            let command = new DrawCommand(
+                this._linkedDrawables,
+                this._linesList,
+                this._archiveLinesList,
+            );
+            this.addCommand(command);
+            this.clearArchive();
+        }
     }
 
-    addWall(wall: Wall): void {
-        this._wallsList.pop();
+    addWall(wall: Wall, fromSaved: boolean = false): void {
         this._wallsList.push(wall);
-        let command = new DrawCommand(
-            this._linkedDrawables,
-            this._wallsList,
-            this._archiveWallsList,
-        );
-        this.addCommand(command);
         this._linkedDrawables.addDrawable(wall.fourthLine.calculateCenter(), wall);
         this._linkedDrawables.addDrawable(wall.secondLine.calculateCenter(), wall);
-        this.clearArchive();
+        
+        if (!fromSaved) {
+            this._wallsList.pop();
+            let command = new DrawCommand(
+                this._linkedDrawables,
+                this._wallsList,
+                this._archiveWallsList,
+            );
+            this.addCommand(command);
+            this.clearArchive();
+        }
     }
 
     addDoor(door: Door): void {
