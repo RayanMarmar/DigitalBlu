@@ -9,6 +9,7 @@ export class Door extends WallOpening implements Drawable {
     private _doorType: DoorType;
     private _radius: number;
     private _direction: number;
+    private _parallelLine: Line;
 
     constructor(
         wall: Wall,
@@ -19,6 +20,9 @@ export class Door extends WallOpening implements Drawable {
         radius: number = 50,
     ) {
         super(wall, point, height);
+        this._parallelLine = this._base[0].calculateParallelLine(
+            height, wall.xFactor, wall.yFactor, 1
+        );
         this._radius = radius
         this._doorType = doorType;
         this._direction = direction;
@@ -50,6 +54,14 @@ export class Door extends WallOpening implements Drawable {
 
     set direction(value: number) {
         this._direction = value;
+    }
+
+    get parallelLine(): Line {
+        return this._parallelLine;
+    }
+
+    set parallelLine(value: Line) {
+        this._parallelLine = value;
     }
 
     updateDoorType(doorType: DoorType) {
@@ -86,7 +98,7 @@ export class Door extends WallOpening implements Drawable {
             this._base[0].calculateCenter(), this._base[0].calculateDistance()
         )!!;
         this._parallelLine = this._base[0].calculateParallelLine(
-            this.height, this._wall.xFactor, this._wall.yFactor, this._direction
+            this.width, this._wall.xFactor, this._wall.yFactor, this._direction
         );
         this.resetCenter();
     }
@@ -187,7 +199,7 @@ export class Door extends WallOpening implements Drawable {
                 console.error("Invalid door type");
                 return;
         }
-        door.drawOpening(context, canvasColor, wallColor);
+        door.drawOpening(context, canvasColor);
     }
 
     transform(transformationMatrix: number[][]): Door {
@@ -196,7 +208,7 @@ export class Door extends WallOpening implements Drawable {
             this._base[0].calculateCenter().transform(transformationMatrix),
             this._doorType,
             this._direction,
-            this.height * transformationMatrix[0][0],
+            this.width * transformationMatrix[0][0],
             this._radius * transformationMatrix[0][0]
         );
     }

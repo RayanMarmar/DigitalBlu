@@ -14,7 +14,7 @@ export class Window extends WallOpening implements Drawable {
 
     draw(context: CanvasRenderingContext2D, bgColor: string, wallColor: string, transformationMatrix: number[][]): void {
         let window: Window = this.transform(transformationMatrix);
-        window.drawOpening(context, bgColor, wallColor);
+        window.drawOpening(context, bgColor);
     }
 
 
@@ -22,7 +22,7 @@ export class Window extends WallOpening implements Drawable {
         return new Window(
             this._wall.transform(transformationMatrix),
             this._base[0].calculateCenter().transform(transformationMatrix),
-            this.height * transformationMatrix[0][0],
+            this.width * transformationMatrix[0][0],
         );
     }
 }
