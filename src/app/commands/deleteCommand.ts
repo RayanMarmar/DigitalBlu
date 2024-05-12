@@ -1,14 +1,13 @@
-import {Point} from "../drawables/point";
 import {Line} from "../drawables/line";
 import {Wall} from "../drawables/wall";
 import {Window} from "../drawables/window";
 import {Door} from "../drawables/door";
+import {LinkedDrawables} from "../models/linkedDrawables";
 
 export class DeleteCommand implements Command {
 
     constructor(
-        private pointsList: Point[],
-        private archivePointsList: Point[],
+        private linkedDrawables: LinkedDrawables,
         private _windowsList: Window[],
         private _archiveWindowsList: Window[],
         private _doorsList: Door[],
@@ -27,14 +26,16 @@ export class DeleteCommand implements Command {
             if (index > -1) {
                 this.archiveDrawableList.push(this.selectedElement);
                 this.drawableList.splice(index, 1);
+                if (this.selectedElement instanceof Line) {
+                    this.unlinkDrawable(this.selectedElement);
+                }
                 if (this.selectedElement instanceof Wall) {
                     this.removeSelectedElementOpenings();
-                }
-                if (this.selectedElement instanceof Line) {
-                    this.removeSelectedElementPoints();
+                    this.unlinkDrawable(this.selectedElement);
                 }
             }
         }
+        console.log(this.linkedDrawables)
     }
 
     undo(): void {
@@ -43,36 +44,14 @@ export class DeleteCommand implements Command {
             let drawable = this.archiveDrawableList[index]
             this.drawableList.push(drawable);
             this.archiveDrawableList.splice(index, 1);
-            this.pointsList.push(this.archivePointsList.pop()!!)
-            if (drawable instanceof Line && this.shouldAddPoint(drawable)) {
-                this.pointsList.push(this.archivePointsList.pop()!!);
+            if (drawable instanceof Line) {
+                this.linkDrawable(drawable);
             }
             if (drawable instanceof Wall) {
                 this.addOpenings();
+                this.linkDrawable(drawable);
             }
         }
-    }
-
-    removeSelectedElementPoints(): void {
-        const line = this.selectedElement as Line;
-
-        // Iterate over the archivePointsList
-        for (let i = 0, x = 0; i < this.pointsList.length && x < 2; i++) {
-            const point = this.pointsList[i];
-
-            // Check if the point is equal to the firstPoint or secondPoint of the Line
-            if (point.equals(line.firstPoint) || point.equals(line.secondPoint)) {
-                // Remove the point from the archivePointsList
-                if (this.ghostPoint(point)) {
-                    this.archivePointsList.push(point);
-                    this.pointsList.splice(i, 1);
-                    i--; // Adjust the loop index since we removed an element
-                    x++;
-                }
-
-            }
-        }
-
     }
 
     removeSelectedElementOpenings(): void {
@@ -95,19 +74,26 @@ export class DeleteCommand implements Command {
         }
     }
 
+    private unlinkDrawable(drawable: Drawable): void {
+        if (drawable instanceof Line) {
+            this.linkedDrawables.removeDrawable(drawable.firstPoint, drawable);
+            this.linkedDrawables.removeDrawable(drawable.secondPoint, drawable);
 
-    private ghostPoint(point: Point): boolean {
-        if (this.drawableList.length == 0) return true;
-        let drawable: Line = this.selectedElement as Line
-        // Check if the drawable is an instance of Line
-        // Call isLineExtremity only if drawable is a Line instance
-        return !drawable.isLineExtremity(point);
+        } else if (drawable instanceof Wall) {
+            this.linkedDrawables.removeDrawable(drawable.fourthLine.calculateCenter(), drawable);
+            this.linkedDrawables.removeDrawable(drawable.secondLine.calculateCenter(), drawable);
+        }
     }
 
-    private shouldAddPoint(line: Line): boolean {
-        let lastPoint: Point = this.archivePointsList[this.archivePointsList.length - 1];
+    private linkDrawable(drawable: Drawable): void {
+        if (drawable instanceof Line) {
+            this.linkedDrawables.addDrawable(drawable.firstPoint, drawable);
+            this.linkedDrawables.addDrawable(drawable.secondPoint, drawable);
 
-        return lastPoint != undefined && line.isLineExtremity(lastPoint);
+        } else if (drawable instanceof Wall) {
+            this.linkedDrawables.addDrawable(drawable.fourthLine.calculateCenter(), drawable);
+            this.linkedDrawables.addDrawable(drawable.secondLine.calculateCenter(), drawable);
+        }
     }
 
     private addOpenings(): void {

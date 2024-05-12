@@ -385,8 +385,7 @@ export class ArchiveService {
             // Handle case where x is null
         } else {
             let command = new DeleteCommand(
-                this._linkedDrawables.keys(),
-                this._archivePointsList,
+                this._linkedDrawables,
                 this._windowsList,
                 this._archiveWindowsList,
                 this._doorsList,
@@ -395,8 +394,8 @@ export class ArchiveService {
                 archiveList,
                 this._selectedElement!
             );
-            this.archiveCommandsList.push(command);
-            this.redo()
+            this.commandsList.push(command);
+            command.execute();
         }
     }
 

@@ -25,11 +25,6 @@ export class SaveService {
                 _firstPoint: {_x: line.firstPoint.x, _y: line.firstPoint.y},
                 _secondPoint: {_x: line.secondPoint.x, _y: line.secondPoint.y}
             })),
-
-            pointsList: this.archiveService.pointsList.map(point => ({
-                _x: point.x,
-                _y: point.y
-            })),
             wallsList: this.archiveService.wallsList.map((wall) => ({
                 _firstPoint: wall.fourthLine.calculateCenter(),
                 _secondPoint: wall.secondLine.calculateCenter(),
@@ -64,11 +59,6 @@ export class SaveService {
 
         if (stateStringParsed) {
             // Individual assignment of attributes from the parsed state
-
-            // SETTING POINTS
-            const pointsList = stateStringParsed.pointsList || [];
-            archive.pointsList = pointsList.map((pointData: any) => new Point(pointData._x, pointData._y));
-
             // SETTING LINES
             const linesList = stateStringParsed.linesList || [];
             archive.linesList = linesList.map(
