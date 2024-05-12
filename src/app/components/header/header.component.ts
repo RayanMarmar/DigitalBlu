@@ -117,11 +117,12 @@ export class HeaderComponent {
     }
 
     saveState(): void {
+        this.archiveService.upToDate = true;
         return this.saveService.saveState();
     }
 
-    canSave() : boolean{
-        return this.archiveService.isEmpty;
+    canSave(): boolean {
+        return !this.archiveService.upToDate;
     }
 
     displayHelper(): void {

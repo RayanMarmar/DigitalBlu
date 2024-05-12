@@ -7,7 +7,6 @@ import {DrawCommand} from "../commands/drawCommand";
 import {Door} from "../drawables/door";
 import {Window} from "../drawables/window";
 import {DeleteCommand} from "../commands/deleteCommand";
-import {min, window} from "rxjs";
 
 
 @Injectable({
@@ -27,7 +26,7 @@ export class ArchiveService {
     private commandsList: Command[];
     private archiveCommandsList: Command[];
     private _selectedElement: Drawable | null = null;
-    private _isEmpty : boolean=  true;
+    private _upToDate: boolean = true;
 
     constructor() {
         this._linesList = [];
@@ -44,22 +43,12 @@ export class ArchiveService {
         this._archiveWindowsList = [];
     }
 
-    get isEmpty(): boolean {
-        this.checkIfEmpty()
-        return this._isEmpty;
+    get upToDate(): boolean {
+        return this._upToDate;
     }
 
-    set isEmpty(value: boolean) {
-        this._isEmpty = value;
-    }
-
-    checkIfEmpty() : void {
-        this._isEmpty = this.getTotalNumberOfElements() <= 0;
-
-    }
-
-    getTotalNumberOfElements() : number{
-        return this._linesList.length  +this._doorsList.length+this._wallsList.length+this._windowsList.length
+    set upToDate(value: boolean) {
+        this._upToDate = value;
     }
 
     get archivePointsList(): Point[] {
@@ -190,6 +179,11 @@ export class ArchiveService {
         this._windowsList.pop();
     }
 
+    addCommand(command: Command): void {
+        this.commandsList.push(command);
+        this.upToDate = false;
+    }
+
     private clearArchive(): void {
         this._archiveLinesList = [];
         this._archivePointsList = [];
@@ -208,7 +202,7 @@ export class ArchiveService {
             this._linesList,
             this._archiveLinesList,
         );
-        this.commandsList.push(command);
+        this.addCommand(command);
         this.clearArchive();
     }
 
@@ -221,7 +215,7 @@ export class ArchiveService {
             this._wallsList,
             this._archiveWallsList,
         );
-        this.commandsList.push(command);
+        this.addCommand(command);
         this.clearArchive();
     }
 
@@ -233,7 +227,7 @@ export class ArchiveService {
             this._doorsList,
             this._archiveDoorsList,
         );
-        this.commandsList.push(command);
+        this.addCommand(command);
         this.clearArchive();
     }
 
@@ -245,7 +239,7 @@ export class ArchiveService {
             this._windowsList,
             this._archiveWindowsList,
         );
-        this.commandsList.push(command);
+        this.addCommand(command);
         this.clearArchive();
     }
 
@@ -266,7 +260,7 @@ export class ArchiveService {
         let command: Command | undefined = this.archiveCommandsList.pop();
         if (command != undefined) {
             command.execute();
-            this.commandsList.push(command);
+            this.addCommand(command);
         }
     }
 
