@@ -78,34 +78,21 @@ export class DeleteCommand implements Command {
     removeSelectedElementOpenings(): void {
         const wall = this.selectedElement as Wall
         // Iterate over the window and door list
-        for (let i = 0; i < this._windowsList.length; i++) {
-            const window = this._windowsList[i];
 
-            // Check if the wall of the window is equal to the selected wall
-            if (window.wall === wall) {
-                // Remove the window from the list
-                this._archiveWindowsList.push(window)
-                this._windowsList.splice(i, 1);
-                i--; // Adjust the loop index since we removed an element
-                this.nbDeletedWindows++
-
+        for (let i = 0; i < wall.wallOpenings.length; i++) {
+            let wallOpening = wall.wallOpenings[i];
+            if (wallOpening instanceof Door) {
+                this._archiveDoorsList.push(wallOpening);
+                let index = this._doorsList.indexOf(wallOpening);
+                this._doorsList.splice(index, 1);
+                this.nbDeletedDoors++;
+            } else if (wallOpening instanceof Window) {
+                this._archiveWindowsList.push(wallOpening);
+                let index = this._windowsList.indexOf(wallOpening);
+                this._windowsList.splice(index, 1);
+                this.nbDeletedWindows++;
             }
         }
-
-        // Iterate over the door list
-        for (let i = 0; i < this._doorsList.length; i++) {
-            const door = this._doorsList[i];
-
-            // Check if the wall of the door is equal to the selected wall
-            if (door.wall === wall) {
-                // Remove the door from the list
-                this._archiveDoorsList.push(door)
-                this._doorsList.splice(i, 1);
-                i--; // Adjust the loop index since we removed an element
-                this.nbDeletedDoors++
-            }
-        }
-
     }
 
 
@@ -130,5 +117,7 @@ export class DeleteCommand implements Command {
         for (let i = 0; i < this.nbDeletedDoors; i++) {
             this._doorsList.push(this._archiveDoorsList.pop()!!)
         }
+        this.nbDeletedDoors = 0;
+        this.nbDeletedWindows = 0;
     }
 }

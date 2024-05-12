@@ -234,6 +234,7 @@ export class ArchiveService {
 
     addWindow(window: Window): void {
         this._windowsList.push(window);
+        window.wall.addWallOpening(window);
         let command = new DrawCommand(
             this._pointsList,
             this._archivePointsList,

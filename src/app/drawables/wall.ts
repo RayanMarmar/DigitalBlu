@@ -5,7 +5,6 @@ import {v4 as uuidv4} from 'uuid';
 import {WallOpening} from "./wallOpening";
 
 export class Wall implements Drawable {
-
     private readonly _firstLine: Line;
     private readonly _secondLine: Line;
     private readonly _thirdLine: Line;
@@ -16,7 +15,7 @@ export class Wall implements Drawable {
     private readonly _yFactor: number;
     private readonly _uid: string;
     private range: number = 10;
-    public wallOpenings: WallOpening[] = [];
+    private _wallOpenings: WallOpening[] = [];
 
     constructor(
         firstPoint: Point,
@@ -45,6 +44,10 @@ export class Wall implements Drawable {
         this._width = this._firstLine.calculateDistance();
         // Initialize new UID for new walls
         this._uid = uid ?? uuidv4();
+    }
+
+    get wallOpenings(): WallOpening[] {
+        return this._wallOpenings;
     }
 
     get uid(): string {
@@ -95,7 +98,8 @@ export class Wall implements Drawable {
     }
 
     removeWallOpening(wallOpening: WallOpening): void {
-        this.wallOpenings = this.wallOpenings.filter(item => item !== wallOpening);
+        let index: number = this._wallOpenings.indexOf(wallOpening);
+        this._wallOpenings = this._wallOpenings.splice(index, 1);
     }
 
     toString(): string {
