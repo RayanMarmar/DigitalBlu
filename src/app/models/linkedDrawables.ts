@@ -31,12 +31,12 @@ export class LinkedDrawables {
     removeDrawable(point: Point, drawable: Drawable): void {
         const serializedPoint: string = point.serialize();
         if (!this.dictionary[serializedPoint]) {
-            console.log('No drawables found for key ' + serializedPoint);
+            console.error('No drawables found for key ' + serializedPoint);
             return;
         }
         let index = this.dictionary[serializedPoint].indexOf(drawable);
         if (index == -1) {
-            console.log('The drawable' + drawable.toString() + ' not found for key ' + serializedPoint);
+            console.error('The drawable' + drawable.toString() + ' not found for key ' + serializedPoint);
             return;
         }
         this.dictionary[serializedPoint].splice(index, 1);

@@ -27,7 +27,7 @@ export class EraseModeHandler implements ModeHandler {
             this.archiveService.selectedElement = component
             this.archiveService.deleteElement(list, archiveList)
         } catch (e) {
-            console.log("Problem on down cursor mode", e)
+            console.error("Problem on down cursor mode", e)
         }
 
     }
@@ -40,7 +40,7 @@ export class EraseModeHandler implements ModeHandler {
             this.archiveService.selectedElement = component
 
         } catch (e) {
-            console.log("Problem on hover cursor mode")
+            console.error("Problem on hover cursor mode")
         }
     }
 
