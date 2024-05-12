@@ -5,7 +5,6 @@ import {Wall} from "./wall";
 export class WallOpening {
     protected _wall: Wall;
     protected _width: number;
-    protected _center: Point;
     protected _base: Line[];
 
 
@@ -19,8 +18,6 @@ export class WallOpening {
             throw new Error("No sub line found");
 
         this._base = [line, secondLine];
-        this._center = this._base[0].firstPoint;
-
     }
 
     get width(): number {
@@ -29,10 +26,6 @@ export class WallOpening {
 
     set width(value: number) {
         this._width = value;
-    }
-
-    get center(): Point {
-        return this._center;
     }
 
     get wall(): Wall {

@@ -40,7 +40,7 @@ export class SaveService {
 
             doorsList: this.archiveService.doorsList.map((door) => ({
                 _uid: door.wall.uid,
-                _point: {_x: door.center.x, _y: door.center.y},
+                _point: {_x: door.base[0].calculateCenter().x, _y: door.base[0].calculateCenter().y},
                 _doorType: door.doorType,
                 _direction: door.direction,
                 _width: door.width,
@@ -48,7 +48,7 @@ export class SaveService {
             })),
             windowsList: this.archiveService.windowsList.map(window => ({
                 _uid: window.wall.uid,
-                _point: {_x: window.center.x, _y: window.center.y},
+                _point: {_x: window.base[0].calculateCenter().x, _y: window.base[0].calculateCenter().y},
                 _width: window.width
             }))
         };
