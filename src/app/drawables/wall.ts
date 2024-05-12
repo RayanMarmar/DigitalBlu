@@ -5,15 +5,15 @@ import {v4 as uuidv4} from 'uuid';
 
 export class Wall implements Drawable {
 
-    private _firstLine: Line;
-    private _secondLine: Line;
-    private _thirdLine: Line;
-    private _fourthLine: Line;
-    private _width: number;
-    private _height: number;
-    private _xFactor: number;
-    private _yFactor: number;
-    private _uid: string;
+    private readonly _firstLine: Line;
+    private readonly _secondLine: Line;
+    private readonly _thirdLine: Line;
+    private readonly _fourthLine: Line;
+    private readonly _width: number;
+    private readonly _height: number;
+    private readonly _xFactor: number;
+    private readonly _yFactor: number;
+    private readonly _uid: string;
     private range: number = 10;
 
     constructor(
@@ -53,7 +53,7 @@ export class Wall implements Drawable {
     get firstLine(): Line {
         return this._firstLine;
     }
-    
+
     // Getter for secondLine
     get secondLine(): Line {
         return this._secondLine;
@@ -98,32 +98,10 @@ export class Wall implements Drawable {
     }
 
     calculateNearestPointDistance(point: Point): number {
-
         return Math.min(this.firstLine.calculateNearestPointDistance(point),
             this.secondLine.calculateNearestPointDistance(point),
             this.thirdLine.calculateNearestPointDistance(point),
             this.fourthLine.calculateNearestPointDistance(point));
-    }
-
-
-    draw(
-        context: CanvasRenderingContext2D,
-        canvasColor: string,
-        wallColor: string,
-        transformationMatrix: number[][],
-    ) {
-        let wall: Wall = this.transform(transformationMatrix);
-        // Draw a filled rectangle with the correct coordinates
-        context.beginPath();
-        context.moveTo(wall._firstLine.firstPoint.x, wall._firstLine.firstPoint.y);
-        context.lineTo(wall._firstLine.secondPoint.x, wall._firstLine.secondPoint.y);
-        context.lineTo(wall._thirdLine.secondPoint.x, wall._thirdLine.secondPoint.y);
-        context.lineTo(wall._thirdLine.firstPoint.x, wall._thirdLine.firstPoint.y);
-        context.closePath();
-        context.fillStyle = wallColor;
-        context.strokeStyle = wallColor;
-        context.fill();
-        context.stroke(); // If you want to keep the border, you can include this line
     }
 
     transform(transformationMatrix: number[][]): Wall {
@@ -133,5 +111,25 @@ export class Wall implements Drawable {
         return new Wall(firstPoint, secondPoint, height,
             [[1, 1, 0], [1, 1, 0]], this.uid
         );
+    }
+
+    draw(
+        context: CanvasRenderingContext2D,
+        canvasColor: string,
+        wallColor: string,
+        transformationMatrix: number[][],
+    ): void {
+        // Get the updated wall coordinates
+        let wall: Wall = this.transform(transformationMatrix);
+
+        // Draw a filled rectangle with the correct coordinates
+        context.beginPath();
+        context.moveTo(wall._firstLine.firstPoint.x, wall._firstLine.firstPoint.y);
+        context.lineTo(wall._firstLine.secondPoint.x, wall._firstLine.secondPoint.y);
+        context.lineTo(wall._thirdLine.secondPoint.x, wall._thirdLine.secondPoint.y);
+        context.lineTo(wall._thirdLine.firstPoint.x, wall._thirdLine.firstPoint.y);
+        context.closePath();
+        context.fillStyle = wallColor;
+        context.fill();
     }
 }
