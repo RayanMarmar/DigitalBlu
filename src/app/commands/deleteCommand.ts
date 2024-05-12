@@ -35,7 +35,6 @@ export class DeleteCommand implements Command {
                 }
             }
         }
-        console.log(this.linkedDrawables)
     }
 
     undo(): void {

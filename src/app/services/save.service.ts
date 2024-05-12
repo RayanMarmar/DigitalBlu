@@ -19,7 +19,6 @@ export class SaveService {
 
 
     saveState(): void {
-        console.log(this.archiveService.doorsList);
         const state = {
             linesList: this.archiveService.linesList.map(line => ({
                 _firstPoint: {_x: line.firstPoint.x, _y: line.firstPoint.y},
