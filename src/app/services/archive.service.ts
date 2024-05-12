@@ -14,7 +14,6 @@ import {LinkedDrawables} from "../models/linkedDrawables";
     providedIn: 'root'
 })
 export class ArchiveService {
-    private _pointsList: Point[];
     private _archivePointsList: Point[];
     private _linesList: Line[];
     private _archiveLinesList: Line[];
@@ -33,7 +32,6 @@ export class ArchiveService {
     constructor() {
         this._linesList = [];
         this._archiveLinesList = [];
-        this._pointsList = [];
         this._archivePointsList = [];
         this._wallsList = [];
         this._archiveWallsList = [];
@@ -102,14 +100,6 @@ export class ArchiveService {
         this._linesList = value;
     }
 
-    get pointsList(): Point[] {
-        return this._pointsList;
-    }
-
-    set pointsList(value: Point[]) {
-        this._pointsList = value;
-    }
-
     get wallsList(): Wall[] {
         return this._wallsList;
     }
@@ -152,14 +142,6 @@ export class ArchiveService {
 
     popLine(): void {
         this._linesList.pop();
-    }
-
-    pushPoint(point: Point): void {
-        this._pointsList.push(point);
-    }
-
-    popPoint(): void {
-        this._pointsList.pop();
     }
 
     pushWall(wall: Wall): void {
@@ -281,14 +263,6 @@ export class ArchiveService {
         return this.commandsList.length > 0;
     }
 
-    ghostPoint(): boolean {
-        if (this._linesList.length == 0) return true;
-        let lastLine: Line = this._linesList[this._linesList.length - 1];
-        let lastPoint: Point = this._pointsList[this._pointsList.length - 1];
-
-        return !lastLine.isLineExtremity(lastPoint);
-    }
-
     snapPoint(point: Point, snapMode: boolean): Point {
         if (!snapMode) return point;
         let pointsList = this._linkedDrawables.keys();
@@ -391,14 +365,19 @@ export class ArchiveService {
     }
 
     deleteLine(): void {
-        this.popLine();
-        if (this.ghostPoint()) {
-            this.popPoint();
+        let line = this._linesList.pop();
+        if (line) {
+            this._linkedDrawables.addDrawable(line.firstPoint, line);
+            this._linkedDrawables.addDrawable(line.secondPoint, line);
         }
     }
 
     deleteWall(): void {
-        this.popWall();
+        let wall = this._wallsList.pop();
+        if (wall) {
+            this._linkedDrawables.addDrawable(wall.fourthLine.calculateCenter(), wall);
+            this._linkedDrawables.addDrawable(wall.secondLine.calculateCenter(), wall);
+        }
     }
 
     deleteElement(list: Drawable[] | null, archiveList: Drawable[] | null): void {
@@ -406,7 +385,7 @@ export class ArchiveService {
             // Handle case where x is null
         } else {
             let command = new DeleteCommand(
-                this._pointsList,
+                this._linkedDrawables.keys(),
                 this._archivePointsList,
                 this._windowsList,
                 this._archiveWindowsList,

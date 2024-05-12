@@ -26,7 +26,6 @@ export class LineModeHandler implements ModeHandler {
             );
         }
         this.mouse.mouseDown(event, false, snappedPoint);
-        this.archiveService.pushPoint(snappedPoint);
         this.modesConfiguration.drawing = true;
     }
 
