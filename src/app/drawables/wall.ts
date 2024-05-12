@@ -53,20 +53,10 @@ export class Wall implements Drawable {
     get firstLine(): Line {
         return this._firstLine;
     }
-
-    // Setter for firstLine
-    set firstLine(value: Line) {
-        this._firstLine = value;
-    }
-
+    
     // Getter for secondLine
     get secondLine(): Line {
         return this._secondLine;
-    }
-
-    // Setter for secondLine
-    set secondLine(value: Line) {
-        this._secondLine = value;
     }
 
     // Getter for thirdLine
@@ -74,26 +64,15 @@ export class Wall implements Drawable {
         return this._thirdLine;
     }
 
-    // Setter for thirdLine
-    set thirdLine(value: Line) {
-        this._thirdLine = value;
-    }
-
     // Getter for fourthLine
     get fourthLine(): Line {
         return this._fourthLine;
-    }
-
-    // Setter for fourthLine
-    set fourthLine(value: Line) {
-        this._fourthLine = value;
     }
 
     // Getter for width
     get width(): number {
         return this._width;
     }
-
 
     // Getter for width
     get height(): number {
@@ -107,10 +86,6 @@ export class Wall implements Drawable {
 
     get yFactor(): number {
         return this._yFactor;
-    }
-
-    set yFactor(value: number) {
-        this._yFactor = value;
     }
 
     toString(): string {
