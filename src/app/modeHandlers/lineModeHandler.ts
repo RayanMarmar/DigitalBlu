@@ -20,10 +20,11 @@ export class LineModeHandler implements ModeHandler {
     onMouseDown(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         let snappedPoint: Point = this.snapService.snapPoint();
-        if (this.modesConfiguration.drawing)
+        if (this.modesConfiguration.drawing) {
             this.archiveService.addLine(
                 new Line(this.mouse.clickedCoordinates!!, snappedPoint, this.transformationService.reverseTransformationMatrix)
-            )
+            );
+        }
         this.mouse.mouseDown(event, false, snappedPoint);
         this.archiveService.pushPoint(snappedPoint);
         this.modesConfiguration.drawing = true;

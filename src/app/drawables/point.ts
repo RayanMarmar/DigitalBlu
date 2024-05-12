@@ -93,4 +93,15 @@ export class Point implements Drawable {
             this._y + projectedVector[1],
         );
     }
+
+    // Serialize Point to a string representation
+    serialize(): string {
+        return `${this._x},${this._y}`;
+    }
+
+    // Deserialize a string representation to create a Point instance
+    static deserialize(serializedPoint: string): Point {
+        const [x, y] = serializedPoint.split(',').map(Number);
+        return new Point(x, y);
+    }
 }

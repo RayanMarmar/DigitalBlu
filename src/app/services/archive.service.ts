@@ -7,6 +7,7 @@ import {DrawCommand} from "../commands/drawCommand";
 import {Door} from "../drawables/door";
 import {Window} from "../drawables/window";
 import {DeleteCommand} from "../commands/deleteCommand";
+import {LinkedDrawables} from "../models/linkedDrawables";
 
 
 @Injectable({
@@ -25,6 +26,7 @@ export class ArchiveService {
     private _archiveWindowsList: Window[];
     private commandsList: Command[];
     private archiveCommandsList: Command[];
+    private linkedDrawables: LinkedDrawables;
     private _selectedElement: Drawable | null = null;
     private _upToDate: boolean = true;
 
@@ -41,6 +43,7 @@ export class ArchiveService {
         this._archiveDoorsList = [];
         this._windowsList = [];
         this._archiveWindowsList = [];
+        this.linkedDrawables = new LinkedDrawables();
     }
 
     get upToDate(): boolean {
@@ -203,6 +206,8 @@ export class ArchiveService {
             this._archiveLinesList,
         );
         this.addCommand(command);
+        this.linkedDrawables.addDrawable(line.firstPoint, line);
+        this.linkedDrawables.addDrawable(line.secondPoint, line);
         this.clearArchive();
     }
 
@@ -216,6 +221,8 @@ export class ArchiveService {
             this._archiveWallsList,
         );
         this.addCommand(command);
+        this.linkedDrawables.addDrawable(wall.fourthLine.calculateCenter(), wall);
+        this.linkedDrawables.addDrawable(wall.secondLine.calculateCenter(), wall);
         this.clearArchive();
     }
 
