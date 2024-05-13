@@ -22,11 +22,13 @@
         <div class="angle-snap-container" *ngIf="recentsOpen">
             <select [(ngModel)]="selectedCanvasName">
                 <ng-container *ngIf="modesConfiguration.canvasNames.length > 0; else noCanvasNames">
+                    <option>+ New empty canvas</option>
                     <option *ngFor="let canvasName of modesConfiguration.canvasNames"
                             [value]="canvasName">{{ canvasName }}
                     </option>
                 </ng-container>
                 <ng-template #noCanvasNames>
+                    <option>+ New empty canvas</option>
                     <option disabled>No saved canvas</option>
                 </ng-template>
             </select>
