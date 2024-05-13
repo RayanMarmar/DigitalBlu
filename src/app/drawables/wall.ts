@@ -205,32 +205,11 @@ export class Wall implements Drawable {
     }
 
 
-    calculateNearestPointDistance(point: Point): { distance: number, nearestPoint: Point } {
-        // Calculate nearest point distances for all lines
-        const distance1 = this.firstLine.calculateNearestPointDistance(point);
-        const distance2 = this.secondLine.calculateNearestPointDistance(point);
-        const distance3 = this.thirdLine.calculateNearestPointDistance(point);
-        const distance4 = this.fourthLine.calculateNearestPointDistance(point);
-
-        // Build the dictionary with nearest point as key and distance as value
-        const distances: { [key: number]: Point } = {};
-        distances[distance1.distance] = distance1.nearestPoint ;
-        distances[distance2.distance] = distance1.nearestPoint;
-        distances[distance3.distance] = distance1.nearestPoint ;
-        distances[distance4.distance] = distance1.nearestPoint;
-
-
-        // Find the minimum distance among all lines
-        const minDistance = Math.min(distance1.distance, distance2.distance, distance3.distance, distance4.distance);
-
-        // Find the nearest point using the dictionary
-        const nearestPoint = distances[minDistance];
-
-        // Return the minimum distance and its corresponding nearest point
-        return {
-            distance: minDistance,
-            nearestPoint: nearestPoint
-        };
+    calculateNearestPointDistance(point: Point): number {
+        return Math.min(this.firstLine.calculateNearestPointDistance(point),
+            this.secondLine.calculateNearestPointDistance(point),
+            this.thirdLine.calculateNearestPointDistance(point),
+            this.fourthLine.calculateNearestPointDistance(point));
     }
 
 
@@ -263,8 +242,8 @@ export class Wall implements Drawable {
         );
     }
 
-    updateLines(): void{
-        this._yFactor = (this._firstPoint.y -  this._secondPoint.y) >= 0 ? -1 : 1;
+    updateLines(): void {
+        this._yFactor = (this._firstPoint.y - this._secondPoint.y) >= 0 ? -1 : 1;
         this._xFactor = (this._firstPoint.x - this._secondPoint.x) >= 0 ? -1 : 1;
         this._firstLine = new Line(this._firstPoint, this._secondPoint)
             .calculateParallelLine(this._height / 2, this._xFactor, this._yFactor, -1);
@@ -276,11 +255,11 @@ export class Wall implements Drawable {
         this._width = this._firstLine.calculateDistance();
     }
 
-    shiftElement(x :number , y : number): void{
-        this._firstPoint.shiftElement(x,y)
-        this._secondPoint.shiftElement(x,y)
-        this._thirdPoint.shiftElement(x,y)
-        this._fourthPoint.shiftElement(x,y)
+    shiftElement(x: number, y: number): void {
+        this._firstPoint.shiftElement(x, y)
+        this._secondPoint.shiftElement(x, y)
+        this._thirdPoint.shiftElement(x, y)
+        this._fourthPoint.shiftElement(x, y)
         this.updateLines()
     }
 

@@ -45,7 +45,7 @@ export class MoveService {
             // Check if the wall of the door is equal to the selected wall
             if (door.wall === wall) {
                 try {
-                    console.log("moving door")
+                    console.log("moving door", this._archiveService.doorsList[i])
                     door.shiftElement(delta.x, delta.y)
                 } catch (e) {
                     this._archiveService.doorsList.splice(i, 1);
@@ -69,7 +69,7 @@ export class MoveService {
                 }
 
             }
-            this.removeWallOpenings()
+            // this.removeWallOpenings()
         }
     }
 
@@ -81,30 +81,30 @@ export class MoveService {
         }
     }
 
-    removeWallOpenings(): void {
-        for (let i: number = 0; i < this._archiveService.linkedElementsList.length; i++) {
-            if (this._archiveService.linkedElementsList[i] instanceof Wall) {
-                let wall = this._archiveService.linkedElementsList[i] as Wall
-                wall.updateLines()
-                for (let i: number = 0; i < this._archiveService.doorsList.length; i++) {
-                    if (this._archiveService.doorsList[i] instanceof Door && this._archiveService.doorsList[i].wall === wall) {
-                        let door = this._archiveService.doorsList[i] as Door
-                        if (door.shouldRemove()) {
-                            this._archiveService.doorsList.splice(i, 1);
-                        }
-                    }
-                }
-                for (let i: number = 0; i < this._archiveService.windowsList.length; i++) {
-                    if (this._archiveService.windowsList[i] instanceof Door && this._archiveService.doorsList[i].wall === wall) {
-                        let window = this._archiveService.windowsList[i] as Window
-                        if (window.shouldRemove()) {
-                            this._archiveService.windowsList.splice(i, 1);
-                        }
-                    }
-                }
-            }
-        }
-    }
+    // removeWallOpenings(): void {
+    //     for (let i: number = 0; i < this._archiveService.linkedElementsList.length; i++) {
+    //         if (this._archiveService.linkedElementsList[i] instanceof Wall) {
+    //             let wall = this._archiveService.linkedElementsList[i] as Wall
+    //             wall.updateLines()
+    //             for (let i: number = 0; i < this._archiveService.doorsList.length; i++) {
+    //                 if (this._archiveService.doorsList[i] instanceof Door && this._archiveService.doorsList[i].wall === wall) {
+    //                     let door = this._archiveService.doorsList[i] as Door
+    //                     if (door.shouldRemove()) {
+    //                         this._archiveService.doorsList.splice(i, 1);
+    //                     }
+    //                 }
+    //             }
+    //             for (let i: number = 0; i < this._archiveService.windowsList.length; i++) {
+    //                 if (this._archiveService.windowsList[i] instanceof Door && this._archiveService.doorsList[i].wall === wall) {
+    //                     let window = this._archiveService.windowsList[i] as Window
+    //                     if (window.shouldRemove()) {
+    //                         this._archiveService.windowsList.splice(i, 1);
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     moveElement(delta: Point, element: Drawable): void {
         this._archiveService.getLinkedElements(element)

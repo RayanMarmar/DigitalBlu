@@ -354,9 +354,9 @@ export class ArchiveService {
         let minElement: Wall | null = null;
 
         for (const wall of this._wallsList) {
-            const wallPoint = wall.calculateNearestPointDistance(point);
-            if (wallPoint.distance < min) {
-                min = wallPoint.distance;
+            const minDistance = wall.calculateNearestPointDistance(point);
+            if (minDistance < min) {
+                min = minDistance;
                 minElement = wall;
             }
         }
@@ -369,9 +369,9 @@ export class ArchiveService {
         let minElement: Line | null = null;
 
         for (const line of this._linesList) {
-            const linePoint = line.calculateNearestPointDistance(point);
-            if (linePoint.distance < min) {
-                min = linePoint.distance;
+            const minDistance = line.calculateNearestPointDistance(point);
+            if (minDistance < min) {
+                min = minDistance;
                 minElement = line;
             }
         }
@@ -384,17 +384,17 @@ export class ArchiveService {
         let minElement: Door | Window | null = null;
 
         for (const door of this._doorsList) {
-            const doorPoint = door.calculateNearestPointDistance(point); // Calculate nearest point distance
-            if (doorPoint.distance < min) {
-                min = doorPoint.distance;
+            const minDistance = door.calculateNearestPointDistance(point); // Calculate nearest point distance
+            if (minDistance < min) {
+                min = minDistance;
                 minElement = door;
             }
         }
 
         for (const window of this._windowsList) {
-            const windowPoint = window.calculateNearestPointDistance(point); // Calculate nearest point distance
-            if (windowPoint.distance < min) {
-                min = windowPoint.distance;
+            const minDistance = window.calculateNearestPointDistance(point); // Calculate nearest point distance
+            if (minDistance < min) {
+                min = minDistance;
                 minElement = window;
             }
         }
