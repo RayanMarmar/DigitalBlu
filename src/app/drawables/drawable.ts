@@ -9,4 +9,6 @@ interface Drawable {
     toString(): String;
 
     shiftElement(x: number , y : number): void;
+
+    equals(drawable: Drawable): boolean;
 }

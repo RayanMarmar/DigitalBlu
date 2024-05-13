@@ -4,74 +4,32 @@ import {Wall} from "./wall";
 
 export class WallOpening {
     protected _wall: Wall;
-    protected _parallelLine: Line;
-    protected _height: number;
-    protected _center: Point;
+    protected _width: number;
     protected _base: Line[];
 
 
-    constructor(wall: Wall, point: Point, height: number) {
-
-        this._height = height;
+    constructor(wall: Wall, point: Point, width: number) {
+        this._width = width;
         this._wall = wall;
-        let line: Line | null = wall.thirdLine.subLine(point, this._height);
-        let secondLine: Line | null = wall.firstLine.subLine(point, this._height);
-
+        let line: Line | null = wall.thirdLine.subLine(point, this._width);
+        let secondLine: Line | null = wall.firstLine.subLine(point, this._width);
 
         if (line == null || secondLine == null)
             throw new Error("No sub line found");
+
         this._base = [line, secondLine];
-        this._parallelLine = this._base[0].calculateParallelLine(
-            this._height, wall.xFactor, wall.yFactor, 1
-        );
-        this._center = this._base[0].firstPoint;
-
     }
 
-    get height(): number {
-        return this._height;
+    get width(): number {
+        return this._width;
     }
 
-    set height(value: number) {
-        this._height = value;
-    }
-
-    inRange(point: Point): boolean {
-        return this._wall.containsPoint(point)
-    }
-
-    // Getter for line
-    get line(): Line {
-        return this._base[0];
-    }
-
-    // Setter for line
-    set line(value: Line) {
-        this._base[0] = value;
-    }
-
-    get center(): Point {
-        return this._center;
-    }
-
-    set center(value: Point) {
-        this._center = value;
-    }
-
-    get parallelLine(): Line {
-        return this._parallelLine;
-    }
-
-    set parallelLine(value: Line) {
-        this._parallelLine = value;
+    set width(value: number) {
+        this._width = value;
     }
 
     get wall(): Wall {
         return this._wall;
-    }
-
-    set wall(value: Wall) {
-        this._wall = value;
     }
 
     get base(): Line[] {
@@ -85,11 +43,7 @@ export class WallOpening {
         );
     }
 
-    set base(value: Line[]) {
-        this._base = value;
-    }
-
-    protected drawOpening(context: CanvasRenderingContext2D, bgColor: string, wallColor: string) {
+    protected drawOpening(context: CanvasRenderingContext2D, canvasColor: string): void {
         // Draw a filled rectangle with the correct coordinates
         context.beginPath();
         context.moveTo(this._base[0].firstPoint.x, this._base[0].firstPoint.y);
@@ -97,28 +51,20 @@ export class WallOpening {
         context.lineTo(this._base[1].secondPoint.x, this._base[1].secondPoint.y);
         context.lineTo(this._base[1].firstPoint.x, this._base[1].firstPoint.y);
         context.closePath();
-        context.fillStyle = bgColor;
+        context.fillStyle = canvasColor;
+        context.strokeStyle = canvasColor;
         context.fill();
-        context.strokeStyle = bgColor;
-        context.stroke(); // If you want to keep the border, you can include this line
-        context.fillStyle = wallColor;
-        context.strokeStyle = wallColor;
+        context.stroke();
+        context.restore();
     }
 
     shiftElement(x: number, y: number): void {
-
         let point = this._base[0].calculateCenter();
         point.shiftElement(x, y)
-        this.wall = this._wall;
         let line: Line | null = this.wall.thirdLine.subLine(point, this._height);
         let secondLine: Line | null = this.wall.firstLine.subLine(point, this._height);
         if (line == null || secondLine == null)
             throw new Error("No sub line found");
         this._base = [line, secondLine];
-        this._parallelLine = this._base[0].calculateParallelLine(
-            this._height, this.wall.xFactor, this.wall.yFactor, 1
-        );
-        this._center = this._base[0].firstPoint;
-
     }
 }

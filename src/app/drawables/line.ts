@@ -5,8 +5,10 @@ export class Line implements Drawable {
     private _firstPoint: Point;
     private _secondPoint: Point;
 
-    constructor(firstPoint: Point, secondPoint: Point,
-                reverseTransformationMatrix: number[][] = [[1, 1, 0], [1, 1, 0]],
+    constructor(
+        firstPoint: Point,
+        secondPoint: Point,
+        reverseTransformationMatrix: number[][] = [[1, 1, 0], [1, 1, 0]],
     ) {
         this._firstPoint = firstPoint.transform(reverseTransformationMatrix);
         this._secondPoint = secondPoint.transform(reverseTransformationMatrix);
@@ -186,7 +188,9 @@ export class Line implements Drawable {
                 this._firstPoint.y + scalarProjection * lineVector.y
             );
         }
-        let line = new Line(nearestPoint, point);
+        let line = new Line(nearestPoint, point)
+
+        // Step 5: Calculate the distance between the given point and the nearest point on the line
         return line.calculateDistance();
     }
 
@@ -221,5 +225,11 @@ export class Line implements Drawable {
     shiftElement(x: number, y: number): void {
         this._firstPoint.shiftElement(x, y);
         this._secondPoint.shiftElement(x, y);
+    }
+
+    equals(drawable: Drawable): boolean {
+        return drawable instanceof Line
+            && this._firstPoint.equals(drawable.firstPoint)
+            && this._secondPoint.equals(drawable.secondPoint);
     }
 }

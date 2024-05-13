@@ -30,8 +30,8 @@ export class Point implements Drawable {
         this._y = value;
     }
 
-    equals(point: Point): boolean {
-        return point.x == this._x && point.y == this._y;
+    equals(drawable: Drawable): boolean {
+        return drawable instanceof Point && drawable.x == this._x && drawable.y == this._y;
     }
 
     toString(): string {
@@ -96,5 +96,16 @@ export class Point implements Drawable {
     shiftElement(x :number , y : number): void{
         this.x = this.x+x
         this.y = this.y+y
+    }
+
+    // Serialize Point to a string representation
+    serialize(): string {
+        return `${this._x},${this._y}`;
+    }
+
+    // Deserialize a string representation to create a Point instance
+    static deserialize(serializedPoint: string): Point {
+        const [x, y] = serializedPoint.split(',').map(Number);
+        return new Point(x, y);
     }
 }
