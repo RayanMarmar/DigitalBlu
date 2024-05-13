@@ -95,7 +95,6 @@ export class ModeManagerService {
             this.gridService,
             this.archiveService,
             this.componentSelector,
-            this.snapService,
             this.modesConfiguration,
             this.moveService
         );

@@ -426,7 +426,7 @@ export class ArchiveService {
                 this._archiveDoorsList,
                 list,
                 archiveList,
-                element!
+                element
             );
             this.archiveCommandsList.push(command);
             this.redo()
