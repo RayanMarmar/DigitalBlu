@@ -14,7 +14,6 @@ import {LinkedDrawables} from "../models/linkedDrawables";
     providedIn: 'root'
 })
 export class ArchiveService {
-    private _archivePointsList: Point[];
     private _linesList: Line[];
     private _archiveLinesList: Line[];
     private _wallsList: Wall[];
@@ -32,7 +31,6 @@ export class ArchiveService {
     constructor() {
         this._linesList = [];
         this._archiveLinesList = [];
-        this._archivePointsList = [];
         this._wallsList = [];
         this._archiveWallsList = [];
         this.commandsList = [];
@@ -50,14 +48,6 @@ export class ArchiveService {
 
     set upToDate(value: boolean) {
         this._upToDate = value;
-    }
-
-    get archivePointsList(): Point[] {
-        return this._archivePointsList;
-    }
-
-    set archivePointsList(value: Point[]) {
-        this._archivePointsList = value;
     }
 
     get archiveLinesList(): Line[] {
@@ -175,7 +165,6 @@ export class ArchiveService {
 
     private clearArchive(): void {
         this._archiveLinesList = [];
-        this._archivePointsList = [];
         this._archiveWallsList = [];
         this._archiveDoorsList = [];
         this._archiveWindowsList = [];
