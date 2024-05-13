@@ -4,8 +4,6 @@ import {ModesConfiguration} from "../models/modesConfiguration";
 import {ArchiveService} from "./archive.service";
 import {GridService} from "./grid.service";
 import {Point} from "../drawables/point";
-import {Wall} from "../drawables/wall";
-import {Line} from "../drawables/line";
 
 @Injectable({
     providedIn: 'root'
@@ -37,7 +35,7 @@ export class SnapService {
                 this.modesConfiguration.snapAngle!!
             )
         }
-        if (this.modesConfiguration.gridOn && !this.modesConfiguration.moveMode) {
+        if (this.modesConfiguration.gridOn) {
             snapped = this.gridService.calculateNearestGridIntersection(point);
         }
         return snapped;

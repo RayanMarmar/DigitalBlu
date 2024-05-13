@@ -16,7 +16,7 @@ export class MoveService {
     ) {
     }
 
-    calculateCoordDelta(source: Point, target: Point): Point {
+    calculateDeltaCoord(source: Point, target: Point): Point {
         return new Point(
             target.x - source.x,
             target.y - source.y

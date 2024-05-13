@@ -38,7 +38,7 @@ export class CursorModeHandler implements ModeHandler {
     onMouseMove(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         if (this.modesConfiguration.moveMode && this.mouse.clickedCoordinates !== null && this.archiveService.selectedElement !== null) {
-            let delta = this.moveService.calculateCoordDelta(this.previousCoords !, this.mouse.currentCoordinates!);
+            let delta = this.moveService.calculateDeltaCoord(this.previousCoords !, this.mouse.currentCoordinates!);
             this.previousCoords = this.mouse.currentCoordinates!;
             this.moveService.moveElement(delta, this.archiveService.selectedElement);
             this.delta = new Point(this.delta.x + delta.x, this.delta.y + delta.y);
@@ -49,7 +49,7 @@ export class CursorModeHandler implements ModeHandler {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         try {
             if (this.modesConfiguration.moveMode && this.mouse.clickedCoordinates !== null && this.archiveService.selectedElement !== null) {
-                let delta = this.moveService.calculateCoordDelta(this.previousCoords !, this.mouse.currentCoordinates!);
+                let delta = this.moveService.calculateDeltaCoord(this.previousCoords !, this.mouse.currentCoordinates!);
 
                 this.archiveService.moveElement(
                     this.delta,
