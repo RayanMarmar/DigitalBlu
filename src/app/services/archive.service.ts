@@ -8,9 +8,7 @@ import {Door} from "../drawables/door";
 import {Window} from "../drawables/window";
 import {DeleteCommand} from "../commands/deleteCommand";
 import {MoveCommand} from "../commands/moveCommand";
-import {min, window} from "rxjs";
-import {MoveService} from "./move.service";
-import {SnapService} from "./snap.service";
+
 
 
 
@@ -33,7 +31,6 @@ export class ArchiveService {
     private _selectedElement: Drawable | null = null;
     private _linkedElementsList : Drawable[] = [] ;
     private _linkedPointsList : Point[] = [];
-    private moveService : MoveService = new MoveService(this)
 
     constructor() {
         this._linesList = [];
@@ -106,8 +103,8 @@ export class ArchiveService {
         this._linkedElementsList = []
         this._linkedPointsList = []
         this._selectedElement = value;
-        this.getLinkedElements(this.selectedElement!)
-        console.log("Linked elements are " , this._linkedElementsList)
+        this.getLinkedElements()
+        console.log("linked elements are ", this.linkedElementsList)
     }
 
     get linesList(): Line[] {
@@ -436,30 +433,29 @@ export class ArchiveService {
         return wall ? wall : null;
     }
 
-     getLinkedElements(element : Drawable): void{
-        let p1 : Point
-        let p2 : Point
+     getLinkedElements(): void{
+        let firstPoint : Point
+        let secondPoint : Point
         let elementSelected = null
-        if (element instanceof Line){
-             elementSelected = element as Line
-        }else if (element instanceof Wall){
-             elementSelected = element as Wall
+        if (this._selectedElement instanceof Line){
+             elementSelected = this._selectedElement as Line
+        }else if (this._selectedElement instanceof Wall){
+             elementSelected = this._selectedElement as Wall
         }else{
             return;
         }
-            p1 = elementSelected!.firstPoint
-            p2 = elementSelected!.secondPoint
+            firstPoint = elementSelected!.firstPoint
+            secondPoint = elementSelected!.secondPoint
             for (let i: number = 0; i < this._linesList.length; i++) {
-                if ( (this._linesList[i].firstPoint.inPointRange(p1) ||  this._linesList[i].firstPoint.inPointRange(p2) ||
-                    this._linesList[i].secondPoint.inPointRange(p1) || this._linesList[i].secondPoint.inPointRange(p2)) &&
-                    this._linesList[i] != elementSelected! && !this._linkedElementsList.includes(this._linesList[i] ) && this._linesList[i] !== this.selectedElement &&
-                     this._linesList[i] !== element){
+                if (
+                    this._linesList[i] != elementSelected! && !this._linkedElementsList.includes(this._linesList[i] )&&
+                     this._linesList[i] !== this._selectedElement){
 
-                    if (this._linesList[i].firstPoint.inPointRange(p1) || this._linesList[i].firstPoint.inPointRange(p2)) {
+                    if (this._linesList[i].firstPoint.inPointRange(firstPoint) || this._linesList[i].firstPoint.inPointRange(secondPoint)) {
                         this._linkedPointsList.push(this._linesList[i].firstPoint);
                     }
 
-                    if (this._linesList[i].secondPoint.inPointRange(p1) || this._linesList[i].secondPoint.inPointRange(p2)) {
+                    if (this._linesList[i].secondPoint.inPointRange(firstPoint) || this._linesList[i].secondPoint.inPointRange(secondPoint)) {
                         this._linkedPointsList.push(this._linesList[i].secondPoint);
                     }
 
@@ -467,46 +463,28 @@ export class ArchiveService {
                 }
             }
             for (let i: number = 0; i < this._wallsList.length; i++) {
-                if ((this._wallsList[i].firstPoint.inPointRange(p1) ||  this._wallsList[i].firstPoint.inPointRange(p2) ||
-                    this._wallsList[i].secondPoint.inPointRange(p1) || this._wallsList[i].secondPoint.inPointRange(p2) ||
-                    this._wallsList[i].thirdPoint.inPointRange(p1) ||  this._wallsList[i].thirdPoint.inPointRange(p2) ||
-                        this._wallsList[i].fourthPoint.inPointRange(p1) ||  this._wallsList[i].fourthPoint.inPointRange(p2) )&&
-                    this._wallsList[i] != elementSelected! && !this._linkedElementsList.includes(this._wallsList[i]) && this._wallsList[i] !== this.selectedElement &&
-                    this._wallsList[i] !== element ){
+                if (
+                    this._wallsList[i] != elementSelected! && !this._linkedElementsList.includes(this._wallsList[i]) &&
+                    this._wallsList[i] !== this._selectedElement ){
 
-                    if ((this._wallsList[i].firstPoint.inPointRange(p1) || this._wallsList[i].firstPoint.inPointRange(p2))
+                    if ((this._wallsList[i].firstPoint.inPointRange(firstPoint) || this._wallsList[i].firstPoint.inPointRange(secondPoint))
                         && !this._linkedPointsList.includes(this._wallsList[i].firstPoint)){
                         this._linkedPointsList.push(this._wallsList[i].firstPoint);
-                        if (!this._linkedPointsList.includes(this._wallsList[i].fourthPoint)){
-                            this._linkedPointsList.push(this._wallsList[i].fourthPoint);
-                        }
                     }
 
-                    if (this._wallsList[i].secondPoint.inPointRange(p1) || this._wallsList[i].secondPoint.inPointRange(p2)
+                    if (this._wallsList[i].secondPoint.inPointRange(firstPoint) || this._wallsList[i].secondPoint.inPointRange(secondPoint)
                         && !this._linkedPointsList.includes(this._wallsList[i].secondPoint)) {
                         this._linkedPointsList.push(this._wallsList[i].secondPoint);
-
-                        if (!this._linkedPointsList.includes(this._wallsList[i].thirdPoint)){
-                            this._linkedPointsList.push(this._wallsList[i].thirdPoint);
-                        }
-
-
                     }
                     // Check if the third point is in range and push it into the array
-                    if (this._wallsList[i].thirdPoint.inPointRange(p1) || this._wallsList[i].thirdPoint.inPointRange(p2)
+                    if (this._wallsList[i].thirdPoint.inPointRange(firstPoint) || this._wallsList[i].thirdPoint.inPointRange(secondPoint)
                         && !this._linkedPointsList.includes(this._wallsList[i].thirdPoint)) {
                         this._linkedPointsList.push(this._wallsList[i].thirdPoint);
-                        if (!this._linkedPointsList.includes(this._wallsList[i].secondPoint)){
-                            this._linkedPointsList.push(this._wallsList[i].secondPoint);
-                        }
                     }
                     // Check if the third point is in range and push it into the array
-                    if (this._wallsList[i].fourthPoint.inPointRange(p1) || this._wallsList[i].fourthPoint.inPointRange(p2)
+                    if (this._wallsList[i].fourthPoint.inPointRange(firstPoint) || this._wallsList[i].fourthPoint.inPointRange(secondPoint)
                         && !this._linkedPointsList.includes(this._wallsList[i].fourthPoint)) {
                         this._linkedPointsList.push(this._wallsList[i].fourthPoint);
-                        if (!this._linkedPointsList.includes(this._wallsList[i].firstPoint)){
-                            this._linkedPointsList.push(this._wallsList[i].firstPoint);
-                        }
                     }
                     this._linkedElementsList.push(this._wallsList[i])
                 }
@@ -514,19 +492,12 @@ export class ArchiveService {
         }
     }
 
-    moveElement(source : Point, target : Point, originalCoords : Point,nearestPoint  : Point,snapService : SnapService): void{
+    moveElement(delta : Point, element: Drawable): void{
         let command = new MoveCommand(
-            source,
-            target,
-            nearestPoint,
-            this.moveService,
-            snapService
+            delta,
+            element
         )
-        if(nearestPoint === source){
-            this.archiveCommandsList.push(command);
-        }else{
-            command.execute()
-        }
+
 
         this.redo()
     }

@@ -200,25 +200,5 @@ export class Door extends WallOpening implements Drawable {
             this._radius * transformationMatrix[0][0]
         );
     }
-    shiftElement(x :number , y : number): void{
-
-        let point = this._base[0].calculateCenter();
-        console.log("Poitnn Before  ",point.toString())
-        point.shiftElement(x, y)
-        console.log("Poitnn after  ",point.toString())
-
-        this.wall =  this._wall;
-        let line: Line | null = this.wall.thirdLine.subLine(point, this._height);
-        let secondLine: Line | null = this.wall.firstLine.subLine(point, this._height);
-
-
-        if (line == null || secondLine == null)
-            throw new Error("No sub line found");
-        this._base = [line, secondLine];
-        this._parallelLine = this._base[0].calculateParallelLine(
-            this._height, this.wall.xFactor, this.wall.yFactor, 1
-        );
-        this._center = this._base[0].firstPoint;
-    }
 
 }

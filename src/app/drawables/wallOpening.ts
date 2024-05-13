@@ -1,7 +1,6 @@
 import {Line} from "./line";
 import {Point} from "./point";
 import {Wall} from "./wall";
-import {min} from "rxjs";
 
 export class WallOpening {
     protected _wall: Wall;
@@ -80,41 +79,36 @@ export class WallOpening {
         return this._base;
     }
     shouldRemove() : boolean{
-       return this.calculateNearestPointDistanceToWall() < this._minDistance;
+       return this.calculateNearestPointDistanceToWall(this.center) < this._minDistance;
     }
 
-    calculateNearestPointDistanceToWall(): number {
+    canMove(x : number, y : number) : boolean{
+        let center = this._base[0].calculateCenter();
+        center.shiftElement(x, y)
+        return this.calculateNearestPointDistanceToWall(center) >= this._minDistance;
+
+    }
+
+    calculateNearestPointDistanceToWall(point : Point): number {
         let line1 = new Line(
-            this.base[0].calculateCenter(),
+            point,
             this.wall.firstPoint
         )
         let line2 = new Line(
-            this.base[0].calculateCenter(),
+            point,
             this.wall.secondPoint
         )
         let line3 = new Line(
-            this.parallelLine.calculateCenter(),
-            this.wall.firstPoint
-        )
-        let line4 = new Line(
-            this.parallelLine.calculateCenter(),
-            this.wall.secondPoint
-        )
-        let line5 = new Line(
-            this.parallelLine.calculateCenter(),
+            point,
             this.wall.thirdPoint
         )
-        let line6 = new Line(
-            this.parallelLine.calculateCenter(),
+        let line4 = new Line(
+            point,
             this.wall.fourthPoint
         )
-
-        console.log("Min distance is " , line1.calculateDistance() , line2.calculateDistance(),line3.calculateDistance(),line4.calculateDistance()
-        ,line5.calculateDistance(),line6.calculateDistance())
-        return Math.min(line1.calculateDistance(),line2.calculateDistance(),line3.calculateDistance(),line4.calculateDistance(),line5.calculateDistance(),line6.calculateDistance())
-
-
+        return Math.min(line1.calculateDistance(),line2.calculateDistance(),line3.calculateDistance(),line4.calculateDistance())
     }
+
     calculateNearestPointDistance(point: Point): {distance : number,
         point : Point} {
 
@@ -148,5 +142,25 @@ export class WallOpening {
         context.stroke(); // If you want to keep the border, you can include this line
         context.fillStyle = wallColor;
         context.strokeStyle = wallColor;
+    }
+    shiftElement(x :number , y : number): void {
+        if(this.canMove(x,y)){
+            let point = this._base[0].calculateCenter();
+
+            point.shiftElement(x, y)
+            this.wall =  this._wall;
+            let line: Line | null = this.wall.thirdLine.subLine(point, this._height);
+            let secondLine: Line | null = this.wall.firstLine.subLine(point, this._height);
+
+
+            if (line == null || secondLine == null)
+                throw new Error("No sub line found");
+            this._base = [line, secondLine];
+            this._parallelLine = this._base[0].calculateParallelLine(
+                this._height, this.wall.xFactor, this.wall.yFactor, 1
+            );
+            this._center = this._base[0].firstPoint;
+        }
+
     }
 }

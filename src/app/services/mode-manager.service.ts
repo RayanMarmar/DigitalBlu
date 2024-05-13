@@ -15,6 +15,7 @@ import {GlobalHandler} from "../modeHandlers/globalHandler";
 import {CanvasService} from "./canvas.service";
 import {ComponentSelectorService} from "./component-selector.service";
 import {SnapService} from "./snap.service";
+import {MoveService} from "./move.service";
 
 @Injectable({
     providedIn: 'root'
@@ -30,6 +31,7 @@ export class ModeManagerService {
         private transformationService: TransformationService,
         private snapService: SnapService,
         private componentSelector: ComponentSelectorService,
+        private moveService: MoveService,
     ) {
     }
 
@@ -94,7 +96,8 @@ export class ModeManagerService {
             this.archiveService,
             this.componentSelector,
             this.snapService,
-            this.modesConfiguration
+            this.modesConfiguration,
+            this.moveService
         );
     }
 

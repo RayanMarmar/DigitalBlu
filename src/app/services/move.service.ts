@@ -4,13 +4,13 @@ import {Wall} from "../drawables/wall";
 import {Door} from "../drawables/door";
 import {Window} from "../drawables/window";
 import {Point} from "../drawables/point";
-import {SnapService} from "./snap.service";
+import {Line} from "../drawables/line";
 
 @Injectable({
   providedIn: 'root'
 })
 export class MoveService {
-
+  private delta : Point = new Point(0,0)
   constructor(
       private _archiveService: ArchiveService,
   ) {
@@ -24,7 +24,7 @@ export class MoveService {
 
   moveWallOpenings(wall : Wall,delta : Point) {
     for (let i = 0; i < this._archiveService.windowsList.length; i++) {
-      const window = this._archiveService.windowsList[i];
+      let window = this._archiveService.windowsList[i];
 
       // Check if the wall of the window is equal to the selected wall
       if (window.wall === wall) {
@@ -103,25 +103,23 @@ export class MoveService {
     }
   }
 
-  moveElement(delta : Point, snapService : SnapService):  void{
-    if (this._archiveService.selectedElement instanceof Door){
-      // this.archiveService.selectedElement =
-      this._archiveService.selectedElement.shiftElement(delta.x  ,delta.y)
-    }else{
-      this._archiveService.selectedElement!.shiftElement(delta.x  ,delta.y)
-      if (this._archiveService.selectedElement instanceof Wall){
-        let wall = this._archiveService.selectedElement as Wall
+  moveElement(delta : Point ): void {
+    if(this._archiveService.selectedElement instanceof Window || Door)
+    {
+      this._archiveService.selectedElement!.shiftElement(delta.x,delta.y)
 
+    }else if (this._archiveService.selectedElement instanceof Wall){
+      this.moveWallOpenings(
+          this._archiveService.selectedElement,
+          delta,
+      )
+    }else {
+      this._archiveService.selectedElement!.shiftElement(delta.x,delta.y)
+    }
 
-        this.moveWallOpenings(
-            this._archiveService.selectedElement,
-            delta,
-        )
-      }
+    if(this._archiveService.selectedElement instanceof Wall || Line){
       this.stretchLinkedElements(delta)
     }
-    snapService.snapElementPoints()
-    // ?this.moveLinkedElements(delta)
   }
 
 }

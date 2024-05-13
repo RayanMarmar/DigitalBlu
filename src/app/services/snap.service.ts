@@ -42,36 +42,4 @@ export class SnapService {
         }
         return snapped;
     }
-    snapElementPoints(): void{
-        console.log("snapping",this.archiveService.selectedElement?.toString())
-
-        let wall  = this.archiveService.selectedElement as Wall
-        let p1 = wall.firstPoint
-        let p2 = wall.secondPoint
-        let snapped1: Point = wall.firstPoint;
-        let snapped2: Point = wall.secondPoint;
-        if (this.modesConfiguration.snapMode && this.modesConfiguration.moveMode) {
-            console.log("in Snap mode ")
-            snapped1 = this.archiveService.snapPoint(p1, true);
-            snapped2 = this.archiveService.snapPoint(p2, true);
-            if (!snapped1.equals(wall.firstPoint)) {
-
-                wall.firstPoint =  snapped1;
-                wall.updateLines()
-            }
-            if (!snapped2.equals(wall.secondPoint)) {
-                wall.secondPoint =  snapped2;
-                wall.updateLines()
-            }
-        }
-
-        if (this.modesConfiguration.gridOn && !this.modesConfiguration.moveMode) {
-            console.log("in move mode")
-            wall.firstPoint = this.gridService.calculateNearestGridIntersection(wall.firstPoint);
-            wall.secondPoint = this.gridService.calculateNearestGridIntersection(wall.secondPoint);
-            wall.updateLines()
-        }
-        console.log("after snapping",this.archiveService.selectedElement)
-    }
-
 }

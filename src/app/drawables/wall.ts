@@ -204,29 +204,29 @@ export class Wall implements Drawable {
         return ((end.x - start.x) * (y - start.y)) - ((x - start.x) * (end.y - start.y));
     }
 
-    calculateNearestPointDistance(point: Point): {distance: number, nearestPoint: Point} {
 
+    calculateNearestPointDistance(point: Point): { distance: number, nearestPoint: Point } {
         // Calculate nearest point distances for all lines
         const distance1 = this.firstLine.calculateNearestPointDistance(point);
         const distance2 = this.secondLine.calculateNearestPointDistance(point);
         const distance3 = this.thirdLine.calculateNearestPointDistance(point);
         const distance4 = this.fourthLine.calculateNearestPointDistance(point);
 
+        // Build the dictionary with nearest point as key and distance as value
+        const distances: { [key: number]: Point } = {};
+        distances[distance1.distance] = distance1.nearestPoint ;
+        distances[distance2.distance] = distance1.nearestPoint;
+        distances[distance3.distance] = distance1.nearestPoint ;
+        distances[distance4.distance] = distance1.nearestPoint;
+
+
         // Find the minimum distance among all lines
         const minDistance = Math.min(distance1.distance, distance2.distance, distance3.distance, distance4.distance);
 
-        // Find the nearest point and return it along with the minimum distance
-        let nearestPoint;
-        if (minDistance === distance1.distance) {
-            nearestPoint = distance1.nearestPoint;
-        } else if (minDistance === distance2.distance) {
-            nearestPoint = distance2.nearestPoint;
-        } else if (minDistance === distance3.distance) {
-            nearestPoint = distance3.nearestPoint;
-        } else {
-            nearestPoint = distance4.nearestPoint;
-        }
+        // Find the nearest point using the dictionary
+        const nearestPoint = distances[minDistance];
 
+        // Return the minimum distance and its corresponding nearest point
         return {
             distance: minDistance,
             nearestPoint: nearestPoint
@@ -277,10 +277,11 @@ export class Wall implements Drawable {
     }
 
     shiftElement(x :number , y : number): void{
-        this._firstLine.shiftElement(x,y)
-        this._secondLine.shiftElement(x,y)
-        this._thirdLine.shiftElement(x,y)
-        this._fourthLine.shiftElement(x,y)
+        this._firstPoint.shiftElement(x,y)
+        this._secondPoint.shiftElement(x,y)
+        this._thirdPoint.shiftElement(x,y)
+        this._fourthPoint.shiftElement(x,y)
+        this.updateLines()
     }
 
 }
