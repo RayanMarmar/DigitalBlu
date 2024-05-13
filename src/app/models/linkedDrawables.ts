@@ -9,10 +9,8 @@ import {Wall} from "../drawables/wall";
 export class LinkedDrawables {
     private dictionary: { [key: string]: Drawable[] } = {};
 
-
     constructor() {
     }
-
 
     set(point: Point, drawables: Drawable[]): void {
         this.dictionary[point.serialize()] = drawables;

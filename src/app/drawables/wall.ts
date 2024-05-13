@@ -9,10 +9,10 @@ export class Wall implements Drawable {
     private readonly _secondLine: Line;
     private readonly _thirdLine: Line;
     private readonly _fourthLine: Line;
-    private readonly _width: number;
+    private _width: number;
     private readonly _height: number;
-    private readonly _xFactor: number;
-    private readonly _yFactor: number;
+    private _xFactor: number;
+    private _yFactor: number;
     private readonly _uid: string;
     private range: number = 10;
     private _wallOpenings: WallOpening[] = [];
@@ -157,24 +157,31 @@ export class Wall implements Drawable {
     }
 
     updateLines(): void {
-        this._yFactor = (this._firstPoint.y - this._secondPoint.y) >= 0 ? -1 : 1;
-        this._xFactor = (this._firstPoint.x - this._secondPoint.x) >= 0 ? -1 : 1;
-        this._firstLine = new Line(this._firstPoint, this._secondPoint)
-            .calculateParallelLine(this._height / 2, this._xFactor, this._yFactor, -1);
-        this._thirdLine = this._firstLine.calculateParallelLine(this._height, this._xFactor, this._yFactor);
-        this._thirdPoint = this._thirdLine.secondPoint;
-        this._fourthPoint = this._thirdLine.firstPoint;
-        this._secondLine = new Line(this._secondPoint, this._thirdPoint);
-        this._fourthLine = new Line(this._fourthPoint, this._firstPoint);
+        this._yFactor = (this._firstLine.firstPoint.y - this._firstLine.secondPoint.y) >= 0 ? -1 : 1;
+        this._xFactor = (this._firstLine.firstPoint.x - this._firstLine.secondPoint.x) >= 0 ? -1 : 1;
         this._width = this._firstLine.calculateDistance();
     }
 
     shiftElement(x: number, y: number): void {
-        this._firstPoint.shiftElement(x, y)
-        this._secondPoint.shiftElement(x, y)
-        this._thirdPoint.shiftElement(x, y)
-        this._fourthPoint.shiftElement(x, y)
+        this._firstLine.shiftElement(x, y)
+        this._secondLine.shiftElement(x, y)
+        this._thirdLine.shiftElement(x, y)
+        this._fourthLine.shiftElement(x, y)
         this.updateLines()
     }
 
+    shiftExtremity(extremity: Point, x: number, y: number): void {
+        if (extremity.equals(this.fourthLine.calculateCenter())) {
+            this._firstLine.firstPoint.shiftElement(x, y);
+            this._thirdLine.secondPoint.shiftElement(x, y);
+        } else if (extremity.equals(this.secondLine.calculateCenter())) {
+            this._firstLine.secondPoint.shiftElement(x, y);
+            this._thirdLine.firstPoint.shiftElement(x, y);
+        }
+        this.updateLines()
+    }
+
+    get extremities(): Point[] {
+        return [this._fourthLine.calculateCenter(), this._secondLine.calculateCenter()];
+    }
 }

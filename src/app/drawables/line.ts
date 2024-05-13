@@ -232,4 +232,16 @@ export class Line implements Drawable {
             && this._firstPoint.equals(drawable.firstPoint)
             && this._secondPoint.equals(drawable.secondPoint);
     }
+
+    get extremities(): Point[] {
+        return [this._firstPoint, this._secondPoint];
+    }
+
+    shiftExtremity(extremity: Point, x: number, y: number): void {
+        if (extremity.equals(this._firstPoint)) {
+            this._firstPoint.shiftElement(x, y);
+        } else if (extremity.equals(this._secondPoint)) {
+            this._secondPoint.shiftElement(x, y);
+        }
+    }
 }

@@ -26,6 +26,9 @@ export class Window extends WallOpening implements Drawable {
         );
     }
 
+    shiftExtremity(extremity: Point, x: number, y: number): void {
+    }
+
     equals(drawable: Drawable): boolean {
         return drawable instanceof Window
             && this._wall.equals(drawable.wall)

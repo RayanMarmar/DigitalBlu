@@ -28,8 +28,6 @@ export class ArchiveService {
     private archiveCommandsList: Command[];
     private _linkedDrawables: LinkedDrawables;
     private _selectedElement: Drawable | null = null;
-    private _linkedElementsList: Drawable[] = [];
-    private _linkedPointsList: Point[] = [];
     private _upToDate: boolean = true;
 
     constructor() {
@@ -58,22 +56,6 @@ export class ArchiveService {
         return this._archiveLinesList;
     }
 
-    get linkedElementsList(): Drawable[] {
-        return this._linkedElementsList;
-    }
-
-    set linkedElementsList(value: Drawable[]) {
-        this._linkedElementsList = value;
-    }
-
-    get linkedPointsList(): Point[] {
-        return this._linkedPointsList;
-    }
-
-    set linkedPointsList(value: Point[]) {
-        this._linkedPointsList = value;
-    }
-
     set archiveLinesList(value: Line[]) {
         this._archiveLinesList = value;
     }
@@ -99,10 +81,7 @@ export class ArchiveService {
     }
 
     set selectedElement(value: Drawable | null) {
-        this._linkedElementsList = []
-        this._linkedPointsList = []
         this._selectedElement = value;
-        this.getLinkedElements(this._selectedElement!)
     }
 
     get linesList(): Line[] {
@@ -410,65 +389,6 @@ export class ArchiveService {
     getWallByUid(uid: string): Wall | null {
         const wall = this.wallsList.find(w => w.uid === uid);
         return wall ? wall : null;
-    }
-
-    getLinkedElements(element: Drawable): void {
-        let firstPoint: Point
-        let secondPoint: Point
-        let elementSelected = null
-        if (element instanceof Line) {
-            elementSelected = element as Line
-        } else if (element instanceof Wall) {
-            elementSelected = element as Wall
-        } else {
-            return;
-        }
-        firstPoint = elementSelected!.firstPoint
-        secondPoint = elementSelected!.secondPoint
-        for (let i: number = 0; i < this._linesList.length; i++) {
-            if (
-                this._linesList[i] != elementSelected! && !this._linkedElementsList.includes(this._linesList[i]) &&
-                this._linesList[i] !== element) {
-
-                if (this._linesList[i].firstPoint.inPointRange(firstPoint) || this._linesList[i].firstPoint.inPointRange(secondPoint)) {
-                    this._linkedPointsList.push(this._linesList[i].firstPoint);
-                }
-
-                if (this._linesList[i].secondPoint.inPointRange(firstPoint) || this._linesList[i].secondPoint.inPointRange(secondPoint)) {
-                    this._linkedPointsList.push(this._linesList[i].secondPoint);
-                }
-
-                this._linkedElementsList.push(this._linesList[i])
-            }
-        }
-        for (let i: number = 0; i < this._wallsList.length; i++) {
-            if (
-                this._wallsList[i] != elementSelected! && !this._linkedElementsList.includes(this._wallsList[i]) &&
-                this._wallsList[i] !== element) {
-
-                if ((this._wallsList[i].firstPoint.inPointRange(firstPoint) || this._wallsList[i].firstPoint.inPointRange(secondPoint))
-                    && !this._linkedPointsList.includes(this._wallsList[i].firstPoint)) {
-                    this._linkedPointsList.push(this._wallsList[i].firstPoint);
-                }
-
-                if (this._wallsList[i].secondPoint.inPointRange(firstPoint) || this._wallsList[i].secondPoint.inPointRange(secondPoint)
-                    && !this._linkedPointsList.includes(this._wallsList[i].secondPoint)) {
-                    this._linkedPointsList.push(this._wallsList[i].secondPoint);
-                }
-                // Check if the third point is in range and push it into the array
-                if (this._wallsList[i].thirdPoint.inPointRange(firstPoint) || this._wallsList[i].thirdPoint.inPointRange(secondPoint)
-                    && !this._linkedPointsList.includes(this._wallsList[i].thirdPoint)) {
-                    this._linkedPointsList.push(this._wallsList[i].thirdPoint);
-                }
-                // Check if the third point is in range and push it into the array
-                if (this._wallsList[i].fourthPoint.inPointRange(firstPoint) || this._wallsList[i].fourthPoint.inPointRange(secondPoint)
-                    && !this._linkedPointsList.includes(this._wallsList[i].fourthPoint)) {
-                    this._linkedPointsList.push(this._wallsList[i].fourthPoint);
-                }
-                this._linkedElementsList.push(this._wallsList[i])
-            }
-
-        }
     }
 
     moveElement(delta: Point, element: Drawable, moveService: MoveService): void {

@@ -194,4 +194,7 @@ export class Door extends WallOpening implements Drawable {
             && this._direction == drawable.direction
             && this._doorType == drawable.doorType;
     }
+
+    shiftExtremity(extremity: Point, x: number, y: number): void {
+    }
 }

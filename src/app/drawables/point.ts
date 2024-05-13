@@ -93,9 +93,10 @@ export class Point implements Drawable {
             this._y + projectedVector[1],
         );
     }
-    shiftElement(x :number , y : number): void{
-        this.x = this.x+x
-        this.y = this.y+y
+
+    shiftElement(x: number, y: number): void {
+        this.x = this.x + x
+        this.y = this.y + y
     }
 
     // Serialize Point to a string representation
@@ -107,5 +108,8 @@ export class Point implements Drawable {
     static deserialize(serializedPoint: string): Point {
         const [x, y] = serializedPoint.split(',').map(Number);
         return new Point(x, y);
+    }
+
+    shiftExtremity(extremity: Point, x: number, y: number): void {
     }
 }

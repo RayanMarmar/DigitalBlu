@@ -61,8 +61,8 @@ export class WallOpening {
     shiftElement(x: number, y: number): void {
         let point = this._base[0].calculateCenter();
         point.shiftElement(x, y)
-        let line: Line | null = this.wall.thirdLine.subLine(point, this._height);
-        let secondLine: Line | null = this.wall.firstLine.subLine(point, this._height);
+        let line: Line | null = this.wall.thirdLine.subLine(point, this._width);
+        let secondLine: Line | null = this.wall.firstLine.subLine(point, this._width);
         if (line == null || secondLine == null)
             throw new Error("No sub line found");
         this._base = [line, secondLine];

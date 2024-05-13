@@ -57,52 +57,36 @@ export class MoveService {
         }
     }
 
-    stretchLinkedElements(delta: Point): void {
-        if (this._archiveService.linkedPointsList !== null) {
-            for (let i: number = 0; i < this._archiveService.linkedPointsList.length; i++) {
-                this._archiveService.linkedPointsList[i].shiftElement(delta.x, delta.y)
-            }
-            for (let i: number = 0; i < this._archiveService.linkedElementsList.length; i++) {
-                if (this._archiveService.linkedElementsList[i] instanceof Wall) {
-                    let wall = this._archiveService.linkedElementsList[i] as Wall
-                    wall.updateLines()
-                }
-
-            }
-            // this.removeWallOpenings()
-        }
-    }
-
-    moveLinkedElements(delta: Point): void {
-        if (this._archiveService.linkedElementsList !== null) {
-            for (let i: number = 0; i < this._archiveService.linkedElementsList.length; i++) {
-                this._archiveService.linkedElementsList[i].shiftElement(delta.x, delta.y)
+    stretchLinkedElements(delta: Point, selectedDrawable: Drawable): void {
+        if (selectedDrawable instanceof Wall || selectedDrawable instanceof Line) {
+            let linkedElements = this._archiveService.linkedDrawables
+                .get(selectedDrawable.extremities[0])
+                .concat(
+                    this._archiveService.linkedDrawables.get(selectedDrawable.extremities[1])
+                );
+            for (let i: number = 0; i < linkedElements.length; i++) {
+                linkedElements[i].shiftExtremity(selectedDrawable.extremities[0], delta.x, delta.y);
+                linkedElements[i].shiftExtremity(selectedDrawable.extremities[1], delta.x, delta.y);
             }
         }
     }
-
 
     moveElement(delta: Point, element: Drawable): void {
-        this._archiveService.getLinkedElements(element)
-        if (element instanceof Window || Door) {
-            try {
-                element.shiftElement(delta.x, delta.y)
-            } catch (e) {
-                return
+        try {
+            element.shiftElement(delta.x, delta.y)
+        } catch (e) {
+            if (element instanceof Window || Door) {
+                //remove opening
             }
+            return
+        }
 
-        } else if (element instanceof Wall) {
+        if (element instanceof Wall) {
             this.moveWallOpenings(
                 element,
                 delta,
             )
-        } else {
-            element.shiftElement(delta.x, delta.y)
         }
-
-        if (element instanceof Wall || Line) {
-            this.stretchLinkedElements(delta)
-        }
+        this.stretchLinkedElements(delta, element);
     }
-
 }
