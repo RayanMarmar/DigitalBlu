@@ -38,6 +38,10 @@ export class GlobalHandler implements ModeHandler {
         if (event.key === 'Shift') {
             this.modesConfiguration.straightLineMode = true;
         }
+
+        if (event.key === 'Escape') {
+            this.modesConfiguration.helperDisplayed = false;
+        }
     }
 
     onKeyUp(event: KeyboardEvent): void {
