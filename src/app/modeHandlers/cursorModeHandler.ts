@@ -9,16 +9,17 @@ import {ModesConfiguration} from "../models/modesConfiguration";
 import {MoveService} from "../services/move.service";
 
 export class CursorModeHandler implements ModeHandler {
-    private previousCoords: Point = new Point(0,0)  ;
-    private delta : Point = new Point(0,0) ;
+    private previousCoords: Point = new Point(0, 0);
+    private delta: Point = new Point(0, 0);
+
     constructor(
         private mouse: Mouse,
         private gridService: GridService,
-        private archiveService : ArchiveService,
+        private archiveService: ArchiveService,
         private componentSelector: ComponentSelectorService,
         private snapService: SnapService,
         private readonly modesConfiguration: ModesConfiguration,
-        private moveService : MoveService
+        private moveService: MoveService
     ) {
 
     }
@@ -29,9 +30,11 @@ export class CursorModeHandler implements ModeHandler {
 
         let snappedPoint: Point = this.snapService.snapPoint();
         try {
-            let {component, list,
-                nearestPoint:point
+            let {
+                component, list,
+                nearestPoint: point
             } = this.componentSelector.getNearestComponent(snappedPoint);
+
             this.archiveService.selectedElement = component
             this.previousCoords = point!
             this.modesConfiguration.moveMode = true
@@ -43,11 +46,11 @@ export class CursorModeHandler implements ModeHandler {
     onMouseMove(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         if (this.modesConfiguration.moveMode) {
-            if(this.mouse.clickedCoordinates !== null && this.archiveService.selectedElement !== null ){
-                let delta = this.moveService.calculateCoordDelta(this.previousCoords !,this.mouse.currentCoordinates!)
+            if (this.mouse.clickedCoordinates !== null && this.archiveService.selectedElement !== null) {
+                let delta = this.moveService.calculateCoordDelta(this.previousCoords !, this.mouse.currentCoordinates!)
                 this.previousCoords = this.mouse.currentCoordinates!
-                this.moveService.moveElement(delta)
-                this.delta = new Point (this.delta.x + delta.x,this.delta.y + delta.y)
+                this.moveService.moveElement(delta, this.archiveService.selectedElement)
+                this.delta = new Point(this.delta.x + delta.x, this.delta.y + delta.y)
                 this.gridService.updateCanvas();
             }
 
@@ -58,25 +61,29 @@ export class CursorModeHandler implements ModeHandler {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         try {
             if (this.modesConfiguration.moveMode) {
-                if(this.mouse.clickedCoordinates !== null && this.archiveService.selectedElement !== null ){
+                if (this.mouse.clickedCoordinates !== null && this.archiveService.selectedElement !== null) {
+                    let delta = this.moveService.calculateCoordDelta(this.previousCoords !, this.mouse.currentCoordinates!)
+
                     this.archiveService.moveElement(
                         this.delta,
                         this.archiveService.selectedElement,
+                        this.moveService
                     )
-                    let delta = this.moveService.calculateCoordDelta(this.previousCoords !,this.mouse.currentCoordinates!)
-                    this.moveService.moveElement(delta)
-                    this.modesConfiguration.moveMode = false
+
+                    this.moveService.moveElement(delta, this.archiveService.selectedElement)
                     this.previousCoords = this.mouse.currentCoordinates!
                     this.gridService.updateCanvas();
                 }
 
             }
+            this.delta = new Point(0, 0);
             this.modesConfiguration.moveMode = false
         } catch (e) {
             console.log("Problem on down cursor mode", e)
         }
         this.gridService.updateCanvas();
     }
+
     onKeyDown(event: KeyboardEvent): void {
     }
 
