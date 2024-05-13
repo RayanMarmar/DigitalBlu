@@ -183,4 +183,15 @@ export class Door extends WallOpening implements Drawable {
             this._radius * transformationMatrix[0][0]
         );
     }
+
+    equals(drawable: Drawable): boolean {
+        return drawable instanceof Door
+            && this._wall.equals(drawable.wall)
+            && this._width == drawable.width
+            && this._radius == drawable.radius
+            && this._base[0].equals(drawable._base[0])
+            && this._base[1].equals(drawable._base[1])
+            && this._direction == drawable.direction
+            && this._doorType == drawable.doorType;
+    }
 }

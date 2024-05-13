@@ -184,8 +184,7 @@ export class ArchiveService {
 
     addLine(line: Line, fromSaved: boolean = false): void {
         this._linesList.push(line);
-        this._linkedDrawables.addDrawable(line.firstPoint, line);
-        this._linkedDrawables.addDrawable(line.secondPoint, line);
+        this._linkedDrawables.linkDrawable(line);
 
         if (!fromSaved) {
             this._linesList.pop();
@@ -201,8 +200,7 @@ export class ArchiveService {
 
     addWall(wall: Wall, fromSaved: boolean = false): void {
         this._wallsList.push(wall);
-        this._linkedDrawables.addDrawable(wall.fourthLine.calculateCenter(), wall);
-        this._linkedDrawables.addDrawable(wall.secondLine.calculateCenter(), wall);
+        this._linkedDrawables.linkDrawable(wall);
 
         if (!fromSaved) {
             this._wallsList.pop();
@@ -214,8 +212,6 @@ export class ArchiveService {
             this.addCommand(command);
             this.clearArchive();
         }
-
-        console.log(this._linkedDrawables);
     }
 
     addDoor(door: Door): void {
@@ -228,7 +224,6 @@ export class ArchiveService {
         );
         this.addCommand(command);
         this.clearArchive();
-        console.log(this._linkedDrawables);
     }
 
     addWindow(window: Window): void {

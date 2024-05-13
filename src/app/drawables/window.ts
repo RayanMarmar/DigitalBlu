@@ -25,4 +25,12 @@ export class Window extends WallOpening implements Drawable {
             this.width * transformationMatrix[0][0],
         );
     }
+
+    equals(drawable: Drawable): boolean {
+        return drawable instanceof Window
+            && this._wall.equals(drawable.wall)
+            && this._width == drawable.width
+            && this._base[0].equals(drawable._base[0])
+            && this._base[1].equals(drawable._base[1]);
+    }
 }

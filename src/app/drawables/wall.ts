@@ -146,4 +146,12 @@ export class Wall implements Drawable {
         context.fillStyle = wallColor;
         context.fill();
     }
+
+    equals(drawable: Drawable): boolean {
+        return drawable instanceof Wall
+            && this._firstLine.equals(drawable.firstLine)
+            && this._secondLine.equals(drawable.secondLine)
+            && this._thirdLine.equals(drawable.thirdLine)
+            && this._fourthLine.equals(drawable.fourthLine);
+    }
 }

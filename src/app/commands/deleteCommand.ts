@@ -27,11 +27,11 @@ export class DeleteCommand implements Command {
                 this.archiveDrawableList.push(this.selectedElement);
                 this.drawableList.splice(index, 1);
                 if (this.selectedElement instanceof Line) {
-                    this.unlinkDrawable(this.selectedElement);
+                    this.linkedDrawables.unlinkDrawable(this.selectedElement);
                 }
                 if (this.selectedElement instanceof Wall) {
                     this.removeSelectedElementOpenings();
-                    this.unlinkDrawable(this.selectedElement);
+                    this.linkedDrawables.unlinkDrawable(this.selectedElement);
                 }
             }
         }
@@ -44,11 +44,11 @@ export class DeleteCommand implements Command {
             this.drawableList.push(drawable);
             this.archiveDrawableList.splice(index, 1);
             if (drawable instanceof Line) {
-                this.linkDrawable(drawable);
+                this.linkedDrawables.linkDrawable(drawable);
             }
             if (drawable instanceof Wall) {
                 this.addOpenings();
-                this.linkDrawable(drawable);
+                this.linkedDrawables.linkDrawable(drawable);
             }
         }
     }
@@ -70,28 +70,6 @@ export class DeleteCommand implements Command {
                 this._windowsList.splice(index, 1);
                 this.nbDeletedWindows++;
             }
-        }
-    }
-
-    private unlinkDrawable(drawable: Drawable): void {
-        if (drawable instanceof Line) {
-            this.linkedDrawables.removeDrawable(drawable.firstPoint, drawable);
-            this.linkedDrawables.removeDrawable(drawable.secondPoint, drawable);
-
-        } else if (drawable instanceof Wall) {
-            this.linkedDrawables.removeDrawable(drawable.fourthLine.calculateCenter(), drawable);
-            this.linkedDrawables.removeDrawable(drawable.secondLine.calculateCenter(), drawable);
-        }
-    }
-
-    private linkDrawable(drawable: Drawable): void {
-        if (drawable instanceof Line) {
-            this.linkedDrawables.addDrawable(drawable.firstPoint, drawable);
-            this.linkedDrawables.addDrawable(drawable.secondPoint, drawable);
-
-        } else if (drawable instanceof Wall) {
-            this.linkedDrawables.addDrawable(drawable.fourthLine.calculateCenter(), drawable);
-            this.linkedDrawables.addDrawable(drawable.secondLine.calculateCenter(), drawable);
         }
     }
 

@@ -24,8 +24,9 @@ export class EraseModeHandler implements ModeHandler {
         let point: Point = this.mouse.currentCoordinates!!;
         try {
             let {component, list, archiveList} = this.componentSelector.getNearestComponent(point);
-            this.archiveService.selectedElement = component
-            this.archiveService.deleteElement(list, archiveList)
+            this.archiveService.selectedElement = component;
+            this.archiveService.deleteElement(list, archiveList);
+            this.archiveService.selectedElement = null;
         } catch (e) {
             console.error("Problem on down cursor mode", e)
         }

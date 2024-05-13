@@ -30,8 +30,8 @@ export class Point implements Drawable {
         this._y = value;
     }
 
-    equals(point: Point): boolean {
-        return point.x == this._x && point.y == this._y;
+    equals(drawable: Drawable): boolean {
+        return drawable instanceof Point && drawable.x == this._x && drawable.y == this._y;
     }
 
     toString(): string {

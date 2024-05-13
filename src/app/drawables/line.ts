@@ -221,4 +221,10 @@ export class Line implements Drawable {
         // Calculate the angle in radians using Math.atan2
         return Math.atan2(deltaY, deltaX);
     }
+
+    equals(drawable: Drawable): boolean {
+        return drawable instanceof Line
+            && this._firstPoint.equals(drawable.firstPoint)
+            && this._secondPoint.equals(drawable.secondPoint);
+    }
 }
