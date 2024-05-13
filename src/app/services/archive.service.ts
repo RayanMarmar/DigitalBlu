@@ -418,13 +418,15 @@ export class ArchiveService {
         let elementSelected = null
         if (element instanceof Line) {
             elementSelected = element as Line
+            firstPoint = elementSelected!.firstPoint
+            secondPoint = elementSelected!.secondPoint
         } else if (element instanceof Wall) {
             elementSelected = element as Wall
+            firstPoint = elementSelected!.firstLine.firstPoint
+            secondPoint = elementSelected!.firstLine.secondPoint
         } else {
             return;
         }
-        firstPoint = elementSelected!.firstPoint
-        secondPoint = elementSelected!.secondPoint
         for (let i: number = 0; i < this._linesList.length; i++) {
             if (
                 this._linesList[i] != elementSelected! && !this._linkedElementsList.includes(this._linesList[i]) &&
@@ -446,24 +448,24 @@ export class ArchiveService {
                 this._wallsList[i] != elementSelected! && !this._linkedElementsList.includes(this._wallsList[i]) &&
                 this._wallsList[i] !== element) {
 
-                if ((this._wallsList[i].firstPoint.inPointRange(firstPoint) || this._wallsList[i].firstPoint.inPointRange(secondPoint))
-                    && !this._linkedPointsList.includes(this._wallsList[i].firstPoint)) {
-                    this._linkedPointsList.push(this._wallsList[i].firstPoint);
+                if ((this._wallsList[i].firstLine.firstPoint.inPointRange(firstPoint) || this._wallsList[i].firstLine.firstPoint.inPointRange(secondPoint))
+                    && !this._linkedPointsList.includes(this._wallsList[i].firstLine.firstPoint)) {
+                    this._linkedPointsList.push(this._wallsList[i].firstLine.firstPoint);
                 }
 
-                if (this._wallsList[i].secondPoint.inPointRange(firstPoint) || this._wallsList[i].secondPoint.inPointRange(secondPoint)
-                    && !this._linkedPointsList.includes(this._wallsList[i].secondPoint)) {
-                    this._linkedPointsList.push(this._wallsList[i].secondPoint);
+                if (this._wallsList[i].firstLine.secondPoint.inPointRange(firstPoint) || this._wallsList[i].firstLine.secondPoint.inPointRange(secondPoint)
+                    && !this._linkedPointsList.includes(this._wallsList[i].firstLine.secondPoint)) {
+                    this._linkedPointsList.push(this._wallsList[i].firstLine.secondPoint);
                 }
                 // Check if the third point is in range and push it into the array
-                if (this._wallsList[i].thirdPoint.inPointRange(firstPoint) || this._wallsList[i].thirdPoint.inPointRange(secondPoint)
-                    && !this._linkedPointsList.includes(this._wallsList[i].thirdPoint)) {
-                    this._linkedPointsList.push(this._wallsList[i].thirdPoint);
+                if (this._wallsList[i].secondLine.firstPoint.inPointRange(firstPoint) || this._wallsList[i].secondLine.firstPoint.inPointRange(secondPoint)
+                    && !this._linkedPointsList.includes(this._wallsList[i].secondLine.firstPoint)) {
+                    this._linkedPointsList.push(this._wallsList[i].secondLine.firstPoint);
                 }
                 // Check if the third point is in range and push it into the array
-                if (this._wallsList[i].fourthPoint.inPointRange(firstPoint) || this._wallsList[i].fourthPoint.inPointRange(secondPoint)
-                    && !this._linkedPointsList.includes(this._wallsList[i].fourthPoint)) {
-                    this._linkedPointsList.push(this._wallsList[i].fourthPoint);
+                if (this._wallsList[i].secondLine.secondPoint.inPointRange(firstPoint) || this._wallsList[i].secondLine.secondPoint.inPointRange(secondPoint)
+                    && !this._linkedPointsList.includes(this._wallsList[i].secondLine.secondPoint)) {
+                    this._linkedPointsList.push(this._wallsList[i].secondLine.secondPoint);
                 }
                 this._linkedElementsList.push(this._wallsList[i])
             }
