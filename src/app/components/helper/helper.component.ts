@@ -17,5 +17,9 @@ export class HelperComponent {
 
     }
 
+    closeHelper() {
+        this.modesConfiguration.helperDisplayed = false;
+    }
+
 }
 

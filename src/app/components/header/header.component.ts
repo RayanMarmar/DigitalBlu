@@ -26,6 +26,7 @@ export class HeaderComponent {
     canvasNameInput: string = '';
     recentsOpen: boolean = false;
     selectedCanvasName: string = "";
+    isCanvasNameTaken: boolean = false;
 
     constructor(
         protected canvasService: CanvasService,
@@ -130,14 +131,19 @@ export class HeaderComponent {
 
     saveCanvasName(): void {
         if (this.canvasNameInput && this.canvasNameInput.trim() !== '') {
-            this.modesConfiguration.canvasName = this.canvasNameInput;
-            this.modesConfiguration._allCanvasName.push(this.canvasNameInput);
-            this.closeModal();
-            this.saveService.saveState();
+            if (this.modesConfiguration._allCanvasName.includes(this.canvasNameInput)) {
+                this.isCanvasNameTaken = true;
+            } else {
+                this.modesConfiguration.canvasName = this.canvasNameInput;
+                this.modesConfiguration._allCanvasName.push(this.canvasNameInput);
+                this.closeModal();
+                this.saveService.saveState();
+            }
         } else {
             alert("Please enter a name for the canvas.");
         }
     }
+
 
     closeModal(): void {
         this.showModal = false;

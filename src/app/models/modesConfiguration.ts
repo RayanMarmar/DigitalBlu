@@ -18,7 +18,7 @@ export class ModesConfiguration {
     private readonly _maxZoom: number = 150;
     private _helperDisplayed: boolean;
     private _canvasName: String = "";
-    _allCanvasName: String[] = [];
+    _allCanvasName: String[] = ["Test", "One", "Two", "Three"];
 
 
     constructor() {

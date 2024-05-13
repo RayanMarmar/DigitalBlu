@@ -150,6 +150,10 @@ button:hover .button-label {
 }
 
 .modal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
     background-color: var(--main-bg-color);
@@ -163,6 +167,7 @@ button:hover .button-label {
     font-family: 'Poppins';
     text-align: center;
     transition: all 0.5s ease-in-out;
+    z-index: 10;
 }
 
 .buttons {
@@ -184,8 +189,10 @@ button:hover .button-label {
 }
 
 .modal .label {
+    font-weight: bold;
+    font-size: 20px;
     margin-top: 0px;
-    margin-bottom: 0px;
+    margin-bottom: 10px;
     color: var(--font-color);
 }
 
@@ -195,8 +202,14 @@ button:hover .button-label {
     padding: 5px 10px;
     background-color: var(--button-hover-color);
     font-family: 'Poppins', sans-serif;
-    width: auto;
+    width: 270px;
     flex: 1;
     color: var(--font-color);
 
+}
+
+.error-message {
+    font-size: 16px;
+    color: red;
+    margin-bottom: 10px;
 }

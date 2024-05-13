@@ -27,7 +27,7 @@
                     </option>
                 </ng-container>
                 <ng-template #noCanvasNames>
-                    <option disabled>No canvas names available</option>
+                    <option disabled>No saved canvas</option>
                 </ng-template>
             </select>
         </div>
@@ -170,7 +170,11 @@
 <div class="modal" *ngIf="showModal">
     <div class="modal-content">
         <!--<span class="close" (click)="closeModal()">&times;</span>-->
+        <div><i class="iconoir iconoir-folder"></i></div>
         <div class="label">Enter a name for the canvas:</div>
+        <div class="error-message" *ngIf="isCanvasNameTaken">
+            Canvas name already taken. <br>Please choose a different name.
+        </div>
         <input type="text" [(ngModel)]="canvasNameInput" placeholder="Canvas Name">
         <div class="buttons">
             <button (click)="saveCanvasName()">Save</button>
