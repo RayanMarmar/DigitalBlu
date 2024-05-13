@@ -203,7 +203,7 @@ export class ArchiveService {
         this._wallsList.push(wall);
         this._linkedDrawables.addDrawable(wall.fourthLine.calculateCenter(), wall);
         this._linkedDrawables.addDrawable(wall.secondLine.calculateCenter(), wall);
-        
+
         if (!fromSaved) {
             this._wallsList.pop();
             let command = new DrawCommand(
@@ -214,6 +214,8 @@ export class ArchiveService {
             this.addCommand(command);
             this.clearArchive();
         }
+
+        console.log(this._linkedDrawables);
     }
 
     addDoor(door: Door): void {
@@ -226,6 +228,7 @@ export class ArchiveService {
         );
         this.addCommand(command);
         this.clearArchive();
+        console.log(this._linkedDrawables);
     }
 
     addWindow(window: Window): void {
@@ -371,19 +374,11 @@ export class ArchiveService {
     }
 
     deleteLine(): void {
-        let line = this._linesList.pop();
-        if (line) {
-            this._linkedDrawables.addDrawable(line.firstPoint, line);
-            this._linkedDrawables.addDrawable(line.secondPoint, line);
-        }
+        this._linesList.pop();
     }
 
     deleteWall(): void {
-        let wall = this._wallsList.pop();
-        if (wall) {
-            this._linkedDrawables.addDrawable(wall.fourthLine.calculateCenter(), wall);
-            this._linkedDrawables.addDrawable(wall.secondLine.calculateCenter(), wall);
-        }
+        this._wallsList.pop();
     }
 
     deleteElement(list: Drawable[] | null, archiveList: Drawable[] | null): void {
