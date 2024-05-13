@@ -7,4 +7,6 @@ interface Drawable {
     ): void;
 
     toString(): String;
+
+    equals(drawable: Drawable): boolean;
 }

@@ -95,7 +95,7 @@ export class CanvasService {
 
     drawAll(): void {
         if (this.context == null) {
-            console.log("Context is null...")
+            console.error("Context is null...")
             return;
         }
         this.clear();
