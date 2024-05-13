@@ -125,8 +125,13 @@ export class HeaderComponent {
         if (!this.modesConfiguration.canvasName || typeof this.modesConfiguration.canvasName !== 'string' || this.modesConfiguration.canvasName.trim() === '') {
             this.showModal = true;
         } else {
+            this.archiveService.upToDate = true;
             this.saveService.saveState();
         }
+    }
+
+    canSave(): boolean {
+        return !this.archiveService.upToDate;
     }
 
     saveCanvasName(): void {

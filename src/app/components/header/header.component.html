@@ -134,7 +134,7 @@
 
     <div class="right-section">
 
-        <button [class.active]="" (click)="saveState()">
+        <button (click)="saveState()" [class.disabled]="!canSave()">
             <i class="iconoir iconoir-floppy-disk"></i>
             <span class="button-label">Save canvas</span>
         </button>

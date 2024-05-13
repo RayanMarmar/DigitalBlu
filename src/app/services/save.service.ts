@@ -19,16 +19,10 @@ export class SaveService {
 
 
     saveState(): void {
-        console.log(this.archiveService.doorsList);
         const state = {
             linesList: this.archiveService.linesList.map(line => ({
                 _firstPoint: {_x: line.firstPoint.x, _y: line.firstPoint.y},
                 _secondPoint: {_x: line.secondPoint.x, _y: line.secondPoint.y}
-            })),
-
-            pointsList: this.archiveService.pointsList.map(point => ({
-                _x: point.x,
-                _y: point.y
             })),
             wallsList: this.archiveService.wallsList.map((wall) => ({
                 _firstPoint: wall.fourthLine.calculateCenter(),
@@ -40,16 +34,16 @@ export class SaveService {
 
             doorsList: this.archiveService.doorsList.map((door) => ({
                 _uid: door.wall.uid,
-                _point: {_x: door.center.x, _y: door.center.y},
+                _point: {_x: door.base[0].calculateCenter().x, _y: door.base[0].calculateCenter().y},
                 _doorType: door.doorType,
                 _direction: door.direction,
-                _height: door.height,
+                _width: door.width,
                 _radius: door.radius
             })),
             windowsList: this.archiveService.windowsList.map(window => ({
                 _uid: window.wall.uid,
-                _point: {_x: window.center.x, _y: window.center.y},
-                _radius: window.height
+                _point: {_x: window.base[0].calculateCenter().x, _y: window.base[0].calculateCenter().y},
+                _width: window.width
             }))
         };
 
@@ -64,29 +58,29 @@ export class SaveService {
 
         if (stateStringParsed) {
             // Individual assignment of attributes from the parsed state
-
-            // SETTING POINTS
-            const pointsList = stateStringParsed.pointsList || [];
-            archive.pointsList = pointsList.map((pointData: any) => new Point(pointData._x, pointData._y));
-
             // SETTING LINES
             const linesList = stateStringParsed.linesList || [];
-            archive.linesList = linesList.map(
-                (lineData: any) => new Line(
+            linesList.map((lineData: any) => {
+                let line = new Line(
                     new Point(lineData._firstPoint._x, lineData._firstPoint._y),
-                    new Point(lineData._secondPoint._x, lineData._secondPoint._y))
-            );
+                    new Point(lineData._secondPoint._x, lineData._secondPoint._y)
+                );
+                this.archiveService.addLine(line, true);
+            });
 
             // SETTING WALLS
             const wallsList = stateStringParsed.wallsList || [];
-            archive.wallsList = wallsList.map((wallData: any) => new Wall(
-                // Extract relevant data for constructing a Wall
-                new Point(wallData._firstPoint._x, wallData._firstPoint._y),
-                new Point(wallData._secondPoint._x, wallData._secondPoint._y),
-                wallData._height,
-                wallData._matrix._reverseTransformationMatrix,
-                wallData._uid
-            ));
+            wallsList.map((wallData: any) => {
+                let wall: Wall = new Wall(
+                    // Extract relevant data for constructing a Wall
+                    new Point(wallData._firstPoint._x, wallData._firstPoint._y),
+                    new Point(wallData._secondPoint._x, wallData._secondPoint._y),
+                    wallData._height,
+                    wallData._matrix._reverseTransformationMatrix,
+                    wallData._uid
+                );
+                this.archiveService.addWall(wall, true);
+            });
 
             // SETTING DOORS
             const doorsList = stateStringParsed.doorsList || [];
@@ -100,7 +94,7 @@ export class SaveService {
                         new Point(doorData._point._x, doorData._point._y),
                         doorData._doorType,
                         doorData._direction,
-                        doorData._height,
+                        doorData._width,
                         doorData._radius
                     );
                 } else {
@@ -118,7 +112,7 @@ export class SaveService {
                     return new Window(
                         wall, // Get wall reference from archive
                         new Point(windowData._point._x, windowData._point._y),
-                        windowData._radius
+                        windowData._width
                     )
                 } else {
                     // Handle case where wall is not found
