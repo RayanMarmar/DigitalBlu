@@ -30,6 +30,7 @@ export class MoveService {
             // Check if the wall of the window is equal to the selected wall
             if (window.wall === wall) {
                 try {
+                    console.log("moving window")
                     window.shiftElement(delta.x, delta.y)
                 } catch (e) {
                     this._archiveService.windowsList.splice(i, 1);
@@ -44,6 +45,7 @@ export class MoveService {
             // Check if the wall of the door is equal to the selected wall
             if (door.wall === wall) {
                 try {
+                    console.log("moving door")
                     door.shiftElement(delta.x, delta.y)
                 } catch (e) {
                     this._archiveService.doorsList.splice(i, 1);
@@ -107,7 +109,11 @@ export class MoveService {
     moveElement(delta: Point, element: Drawable): void {
         this._archiveService.getLinkedElements(element)
         if (element instanceof Window || Door) {
-            element.shiftElement(delta.x, delta.y)
+            try {
+                element.shiftElement(delta.x, delta.y)
+            } catch (e) {
+                return
+            }
 
         } else if (element instanceof Wall) {
             this.moveWallOpenings(

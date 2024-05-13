@@ -78,18 +78,19 @@ export class WallOpening {
     get base(): Line[] {
         return this._base;
     }
-    shouldRemove() : boolean{
-       return this.calculateNearestPointDistanceToWall(this.center) < this._minDistance;
+
+    shouldRemove(): boolean {
+        return this.calculateNearestPointDistanceToWall(this.center) < this._minDistance;
     }
 
-    canMove(x : number, y : number) : boolean{
+    canMove(x: number, y: number): boolean {
         let center = this._base[0].calculateCenter();
         center.shiftElement(x, y)
         return this.calculateNearestPointDistanceToWall(center) >= this._minDistance;
 
     }
 
-    calculateNearestPointDistanceToWall(point : Point): number {
+    calculateNearestPointDistanceToWall(point: Point): number {
         let line1 = new Line(
             point,
             this.wall.firstPoint
@@ -106,14 +107,16 @@ export class WallOpening {
             point,
             this.wall.fourthPoint
         )
-        return Math.min(line1.calculateDistance(),line2.calculateDistance(),line3.calculateDistance(),line4.calculateDistance())
+        return Math.min(line1.calculateDistance(), line2.calculateDistance(), line3.calculateDistance(), line4.calculateDistance())
     }
 
-    calculateNearestPointDistance(point: Point): {distance : number,
-        point : Point} {
+    calculateNearestPointDistance(point: Point): {
+        distance: number,
+        point: Point
+    } {
 
-        const { distance: distance1, nearestPoint: point1 } = this.base[0].calculateNearestPointDistance(point);
-        const { distance: distance2, nearestPoint: point2 } = this.base[1].calculateNearestPointDistance(point);
+        const {distance: distance1, nearestPoint: point1} = this.base[0].calculateNearestPointDistance(point);
+        const {distance: distance2, nearestPoint: point2} = this.base[1].calculateNearestPointDistance(point);
 
         let minDistance = Math.min(distance1, distance2);
 
@@ -143,24 +146,25 @@ export class WallOpening {
         context.fillStyle = wallColor;
         context.strokeStyle = wallColor;
     }
-    shiftElement(x :number , y : number): void {
-        if(this.canMove(x,y)){
-            let point = this._base[0].calculateCenter();
 
-            point.shiftElement(x, y)
-            this.wall =  this._wall;
-            let line: Line | null = this.wall.thirdLine.subLine(point, this._height);
-            let secondLine: Line | null = this.wall.firstLine.subLine(point, this._height);
+    shiftElement(x: number, y: number): void {
+
+        let point = this._base[0].calculateCenter();
+
+        point.shiftElement(x, y)
+        this.wall = this._wall;
+        let line: Line | null = this.wall.thirdLine.subLine(point, this._height);
+        let secondLine: Line | null = this.wall.firstLine.subLine(point, this._height);
 
 
-            if (line == null || secondLine == null)
-                throw new Error("No sub line found");
-            this._base = [line, secondLine];
-            this._parallelLine = this._base[0].calculateParallelLine(
-                this._height, this.wall.xFactor, this.wall.yFactor, 1
-            );
-            this._center = this._base[0].firstPoint;
-        }
+        if (line == null || secondLine == null)
+            throw new Error("No sub line found");
+        this._base = [line, secondLine];
+        this._parallelLine = this._base[0].calculateParallelLine(
+            this._height, this.wall.xFactor, this.wall.yFactor, 1
+        );
+        this._center = this._base[0].firstPoint;
+
 
     }
 }

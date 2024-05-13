@@ -349,50 +349,44 @@ export class ArchiveService {
         return -1; // Return -1 if no matching point is found
     }
 
-    getNearestWall(point: Point): { min: number, minElement: Wall, nearestPoint: Point } {
+    getNearestWall(point: Point): { min: number, minElement: Wall } {
         let min = Infinity;
         let minElement: Wall | null = null;
-        let nearestPoint: Point | null = null;
 
         for (const wall of this._wallsList) {
             const wallPoint = wall.calculateNearestPointDistance(point);
             if (wallPoint.distance < min) {
                 min = wallPoint.distance;
                 minElement = wall;
-                nearestPoint = wallPoint.nearestPoint;
             }
         }
 
-        return {min: min, minElement: minElement!, nearestPoint: nearestPoint!};
+        return {min: min, minElement: minElement!};
     }
 
-    getNearestLine(point: Point): { min: number, minElement: Line, nearestPoint: Point } {
+    getNearestLine(point: Point): { min: number, minElement: Line } {
         let min = Infinity;
         let minElement: Line | null = null;
-        let nearestPoint: Point | null = null;
 
         for (const line of this._linesList) {
             const linePoint = line.calculateNearestPointDistance(point);
             if (linePoint.distance < min) {
                 min = linePoint.distance;
                 minElement = line;
-                nearestPoint = linePoint.nearestPoint
             }
         }
 
-        return {min: min, minElement: minElement!, nearestPoint: nearestPoint!};
+        return {min: min, minElement: minElement!};
     }
 
-    getNearestWallOpening(point: Point): { min: number, nearestPoint: Point | null, minElement: Door | Window | null } {
+    getNearestWallOpening(point: Point): { min: number, minElement: Door | Window | null } {
         let min = Infinity;
-        let nearestPoint: Point | null = null;
         let minElement: Door | Window | null = null;
 
         for (const door of this._doorsList) {
             const doorPoint = door.calculateNearestPointDistance(point); // Calculate nearest point distance
             if (doorPoint.distance < min) {
                 min = doorPoint.distance;
-                nearestPoint = doorPoint.point;
                 minElement = door;
             }
         }
@@ -401,12 +395,11 @@ export class ArchiveService {
             const windowPoint = window.calculateNearestPointDistance(point); // Calculate nearest point distance
             if (windowPoint.distance < min) {
                 min = windowPoint.distance;
-                nearestPoint = windowPoint.point;
                 minElement = window;
             }
         }
 
-        return {min: min, nearestPoint: nearestPoint, minElement: minElement!};
+        return {min: min, minElement: minElement!};
     }
 
     deleteLine(): void {

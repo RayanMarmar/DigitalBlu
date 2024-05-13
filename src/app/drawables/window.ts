@@ -2,7 +2,6 @@ import {Point} from "./point";
 import {Wall} from "./wall";
 import {WallOpening} from "./wallOpening";
 import "./drawable";
-import {Line} from "./line";
 
 export class Window extends WallOpening implements Drawable {
     constructor(wall: Wall, point: Point, height: number = 50) {
@@ -25,13 +24,6 @@ export class Window extends WallOpening implements Drawable {
             this._base[0].calculateCenter().transform(transformationMatrix),
             this.height * transformationMatrix[0][0],
         );
-    }
-
-    updateLines() : void {
-        this._parallelLine = this._base[0].calculateParallelLine(
-            this._height, this.wall.xFactor, this.wall.yFactor, 1
-        );
-        this._center = this._base[0].firstPoint;
     }
 
 }
