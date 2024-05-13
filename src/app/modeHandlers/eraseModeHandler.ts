@@ -28,7 +28,7 @@ export class EraseModeHandler implements ModeHandler {
             this.archiveService.deleteElement(list, archiveList);
             this.archiveService.selectedElement = null;
         } catch (e) {
-            console.error("Problem on down cursor mode", e)
+            console.error("Problem on down cursor mode", e);
         }
 
     }
@@ -38,10 +38,10 @@ export class EraseModeHandler implements ModeHandler {
         let point: Point = this.mouse.currentCoordinates!!;
         try {
             const {component} = this.componentSelector.getNearestComponent(point);
-            this.archiveService.selectedElement = component
+            this.archiveService.selectedElement = component;
 
         } catch (e) {
-            console.error("Problem on hover cursor mode")
+            console.error("Problem on hover cursor mode");
         }
     }
 
