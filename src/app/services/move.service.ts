@@ -56,38 +56,35 @@ export class MoveService {
         }
     }
 
-    stretchLinkedElements(delta: Point, selectedDrawable: Drawable): void {
+    stretchLinkedElements(delta: Point, total: Point, selectedDrawable: Drawable, updateKeys: boolean): void {
         if (selectedDrawable instanceof Wall || selectedDrawable instanceof Line) {
-            //console.log(selectedDrawable.toString())
-            //console.log(this._archiveService.linkedDrawables.toString())
+            console.log(this._archiveService.linkedDrawables.toString())
             for (let i: number = 0; i < selectedDrawable.extremities.length; i++) {
-                const linkedElements: Drawable[] = this._archiveService.linkedDrawables.get(selectedDrawable.extremities[i]);
-                //console.log('linked elements : ' + linkedElements.length)
+                let originalExtremityCoordinates = new Point(selectedDrawable.extremities[i].x - total.x, selectedDrawable.extremities[i].y - total.y);
+                let previousExtremityCoordinates = new Point(selectedDrawable.extremities[i].x - delta.x, selectedDrawable.extremities[i].y - delta.y);
+                const linkedElements: Drawable[] = this._archiveService.linkedDrawables.get(originalExtremityCoordinates);
 
                 for (let j: number = 0; j < linkedElements.length; j++) {
-                    if (!linkedElements[j].equals(selectedDrawable)) {
-                        this._archiveService.updateDrawable(selectedDrawable.extremities[i], linkedElements[j], delta);
-                    }
-                    linkedElements[j].shiftExtremity(selectedDrawable.extremities[i], delta.x, delta.y);
+                    this._archiveService.updateDrawable(previousExtremityCoordinates, linkedElements[j], delta);
+                    linkedElements[j].shiftExtremity(previousExtremityCoordinates, delta.x, delta.y);
                 }
 
-                let oldExtremity = new Point(selectedDrawable.extremities[i].x, selectedDrawable.extremities[i].y);
-                let newExtremity = new Point(selectedDrawable.extremities[i].x + delta.x, selectedDrawable.extremities[i].y + delta.y);
-                this._archiveService.linkedDrawables.updateKey(oldExtremity, newExtremity);
-
+                if (updateKeys) {
+                    this._archiveService.linkedDrawables.updateKey(originalExtremityCoordinates, selectedDrawable.extremities[i]);
+                }
             }
         }
     }
 
-    moveElement(delta: Point, element: Drawable): void {
-        this.stretchLinkedElements(delta, element);
+    moveElement(delta: Point, element: Drawable, total: Point = new Point(0, 0), updateKeys: boolean = false): void {
         try {
             element.shiftElement(delta.x, delta.y)
         } catch (e) {
             if (element instanceof Window || Door) {
                 //remove opening
+            } else {
+                return;
             }
-            return
         }
 
         if (element instanceof Wall) {
@@ -96,5 +93,6 @@ export class MoveService {
                 delta,
             )
         }
+        this.stretchLinkedElements(delta, total, element, updateKeys);
     }
 }

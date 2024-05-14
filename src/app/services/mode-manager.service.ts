@@ -92,7 +92,6 @@ export class ModeManagerService {
     get cursorMode(): CursorModeHandler {
         return new CursorModeHandler(
             this.mouse,
-            this.gridService,
             this.archiveService,
             this.componentSelector,
             this.modesConfiguration,

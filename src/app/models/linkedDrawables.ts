@@ -85,10 +85,7 @@ export class LinkedDrawables {
 
     updateKey(oldKey: Point, newKey: Point): void {
         let drawables = this.get(oldKey);
-        console.log(oldKey.toString() + '  ' + newKey.toString());
-        console.log(this.toString())
         for (let i = 0; i < drawables.length; i++) {
-            console.log(drawables[i].toString())
             this.addDrawable(newKey, drawables[i]);
         }
         delete this.dictionary[oldKey.serialize()];
