@@ -19,41 +19,7 @@ export class MoveService {
             target.y - source.y
         )
     }
-
-    moveWallOpenings(wall: Wall, delta: Point) {
-        for (let i = 0; i < this._archiveService.windowsList.length; i++) {
-            let window = this._archiveService.windowsList[i];
-
-            // Check if the wall of the window is equal to the selected wall
-            if (window.wall === wall) {
-                try {
-                    console.log("moving window")
-                    window.shiftElement(delta.x, delta.y)
-                } catch (e) {
-                    this._archiveService.windowsList.splice(i, 1);
-                    i--; // Adjust the loop index since we removed an element
-                }
-            }
-        }
-        // Iterate over the door list
-        for (let i = 0; i < this._archiveService.doorsList.length; i++) {
-            let door = this._archiveService.doorsList[i];
-
-            // Check if the wall of the door is equal to the selected wall
-            if (door.wall === wall) {
-                try {
-                    console.log("moving door", this._archiveService.doorsList[i])
-                    door.shiftElement(delta.x, delta.y)
-                } catch (e) {
-                    this._archiveService.doorsList.splice(i, 1);
-                    i--; // Adjust the loop index since we removed an element
-                }
-
-
-            }
-        }
-    }
-
+    
     stretchLinkedElements(delta: Point, total: Point, selectedDrawable: Drawable, updateKeys: boolean): void {
         if (selectedDrawable instanceof Wall || selectedDrawable instanceof Line) {
             for (let i: number = 0; i < selectedDrawable.extremities.length; i++) {
