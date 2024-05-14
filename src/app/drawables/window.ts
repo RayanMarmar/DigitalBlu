@@ -3,7 +3,7 @@ import {Wall} from "./wall";
 import {WallOpening} from "./wallOpening";
 import "./drawable";
 
-export class Window extends WallOpening implements Drawable {
+export class Window extends WallOpening {
     constructor(wall: Wall, point: Point, width: number = 50) {
         super(wall, point, width);
     }

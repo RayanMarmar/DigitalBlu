@@ -2,7 +2,7 @@ import {Line} from "./line";
 import {Point} from "./point";
 import {Wall} from "./wall";
 
-export class WallOpening {
+export abstract class WallOpening implements Drawable {
     protected _wall: Wall;
     protected _width: number;
     protected _base: Line[];
@@ -19,6 +19,14 @@ export class WallOpening {
 
         this._base = [line, secondLine];
     }
+
+    abstract draw(context: CanvasRenderingContext2D, canvasColor: string, drawableColor: string, transformationMatrix: number[][]): void ;
+
+    abstract toString(): String ;
+
+    abstract equals(drawable: Drawable): boolean ;
+
+    abstract shiftExtremity(extremity: Drawable, x: number, y: number): void ;
 
     get width(): number {
         return this._width;

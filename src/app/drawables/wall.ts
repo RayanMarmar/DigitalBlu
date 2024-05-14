@@ -146,6 +146,14 @@ export class Wall implements Drawable {
         context.closePath();
         context.fillStyle = wallColor;
         context.fill();
+
+        this._wallOpenings
+            .forEach(wallOpening => wallOpening.draw(
+                context,
+                canvasColor,
+                wallColor,
+                transformationMatrix)
+            );
     }
 
     equals(drawable: Drawable): boolean {

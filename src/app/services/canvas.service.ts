@@ -101,8 +101,6 @@ export class CanvasService {
         this.clear();
         this.drawAllLines();
         this.drawAllWalls();
-        this.drawAllDoors();
-        this.drawAllWindows();
         this.highlightSelectedElement(eraseMode);
     }
 

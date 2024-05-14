@@ -5,7 +5,7 @@ import {Wall} from "./wall";
 import {WallOpening} from "./wallOpening";
 import "./drawable";
 
-export class Door extends WallOpening implements Drawable {
+export class Door extends WallOpening {
     private _doorType: DoorType;
     private _radius: number;
     private _direction: number;
