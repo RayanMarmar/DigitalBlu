@@ -22,10 +22,9 @@ import {SaveService} from "../../services/save.service";
 export class HeaderComponent {
     thickness: number = this.getThickness();
     lastValidThickness: number = this.modesConfiguration.defaultThickness;
-    showModal: boolean = false;
+    nameModalOpened: boolean = false;
     canvasNameInput: string = '';
-    recentsOpen: boolean = false;
-    selectedCanvasName: string = "";
+    canvasSelectorOpened: boolean = false;
     isCanvasNameTaken: boolean = false;
     isCanvasNameEmpty: boolean = false;
 
@@ -123,12 +122,13 @@ export class HeaderComponent {
     }
 
     saveState(): void {
-        if (!this.modesConfiguration.canvasName || typeof this.modesConfiguration.canvasName !== 'string' || this.modesConfiguration.canvasName.trim() === '') {
-            this.showModal = true;
-        } else {
-            this.archiveService.upToDate = true;
-            this.saveService.saveState();
+        if (this.modesConfiguration.canvasName == "") {
+            this.openModal();
+            return;
         }
+
+        this.archiveService.upToDate = true;
+        this.saveService.saveState();
     }
 
     canSave(): boolean {
@@ -137,16 +137,15 @@ export class HeaderComponent {
 
     saveCanvasName(): void {
         if (this.canvasNameInput && this.canvasNameInput.trim() !== '') {
-            if (this.modesConfiguration._allCanvasName.includes(this.canvasNameInput)) {
+            if (this.modesConfiguration.allCanvasNames.includes(this.canvasNameInput)) {
                 this.isCanvasNameTaken = true;
                 this.isCanvasNameEmpty = false;
             } else {
                 this.isCanvasNameTaken = false;
                 this.isCanvasNameEmpty = false;
-                this.modesConfiguration.canvasName = this.canvasNameInput;
-                this.modesConfiguration._allCanvasName.push(this.canvasNameInput);
-                this.closeModal();
+                this.modesConfiguration.addCanvasName(this.canvasNameInput);
                 this.saveService.saveState();
+                this.closeModal();
             }
         } else {
             this.isCanvasNameTaken = false;
@@ -156,7 +155,11 @@ export class HeaderComponent {
 
 
     closeModal(): void {
-        this.showModal = false;
+        this.nameModalOpened = false;
+    }
+
+    openModal(): void {
+        this.nameModalOpened = true;
     }
 
     displayHelper(): void {
@@ -167,7 +170,7 @@ export class HeaderComponent {
         this.modesConfiguration.changeSnapAngleMode();
     }
 
-    recentsOpened() {
-        this.recentsOpen = !this.recentsOpen;
+    openCanvasSelector() {
+        this.canvasSelectorOpened = !this.canvasSelectorOpened;
     }
 }
