@@ -127,7 +127,7 @@ export class HeaderComponent {
         }
 
         this.archiveService.upToDate = true;
-        this.saveService.saveState();
+        this.saveService.saveState(this.modesConfiguration.canvasName);
     }
 
     canSave(): boolean {
@@ -140,7 +140,7 @@ export class HeaderComponent {
                 this.isCanvasNameTaken = true;
             } else {
                 this.modesConfiguration.addCanvasName(this.canvasNameInput);
-                this.saveService.saveState();
+                this.saveService.saveState(this.modesConfiguration.canvasName);
                 this.closeModal();
             }
         } else {

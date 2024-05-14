@@ -18,7 +18,7 @@ export class SaveService {
     }
 
 
-    saveState(): void {
+    saveState(canvasName: string): void {
         const state = {
             linesList: this.archiveService.linesList.map(line => ({
                 _firstPoint: {_x: line.firstPoint.x, _y: line.firstPoint.y},
