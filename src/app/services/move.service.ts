@@ -58,7 +58,6 @@ export class MoveService {
 
     stretchLinkedElements(delta: Point, total: Point, selectedDrawable: Drawable, updateKeys: boolean): void {
         if (selectedDrawable instanceof Wall || selectedDrawable instanceof Line) {
-            console.log(this._archiveService.linkedDrawables.toString())
             for (let i: number = 0; i < selectedDrawable.extremities.length; i++) {
                 let originalExtremityCoordinates = new Point(selectedDrawable.extremities[i].x - total.x, selectedDrawable.extremities[i].y - total.y);
                 let previousExtremityCoordinates = new Point(selectedDrawable.extremities[i].x - delta.x, selectedDrawable.extremities[i].y - delta.y);

@@ -156,7 +156,7 @@ export class Wall implements Drawable {
             && this._fourthLine.equals(drawable.fourthLine);
     }
 
-    updateLines(): void {
+    updateInfos(): void {
         this._yFactor = (this._firstLine.firstPoint.y - this._firstLine.secondPoint.y) >= 0 ? -1 : 1;
         this._xFactor = (this._firstLine.firstPoint.x - this._firstLine.secondPoint.x) >= 0 ? -1 : 1;
         this._width = this._firstLine.calculateDistance();
@@ -167,18 +167,20 @@ export class Wall implements Drawable {
         this._secondLine.shiftElement(x, y)
         this._thirdLine.shiftElement(x, y)
         this._fourthLine.shiftElement(x, y)
-        this.updateLines()
+        this.updateInfos()
     }
 
     shiftExtremity(extremity: Point, x: number, y: number): void {
         if (extremity.equals(this.fourthLine.calculateCenter())) {
             this._firstLine.firstPoint.shiftElement(x, y);
             this._thirdLine.secondPoint.shiftElement(x, y);
+            this._fourthLine.shiftElement(x, y);
         } else if (extremity.equals(this.secondLine.calculateCenter())) {
             this._firstLine.secondPoint.shiftElement(x, y);
+            this._secondLine.shiftElement(x, y);
             this._thirdLine.firstPoint.shiftElement(x, y);
         }
-        this.updateLines()
+        this.updateInfos()
     }
 
     get extremities(): Point[] {
