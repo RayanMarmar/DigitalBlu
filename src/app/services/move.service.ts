@@ -1,8 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ArchiveService} from "./archive.service";
 import {Wall} from "../drawables/wall";
-import {Door} from "../drawables/door";
-import {Window} from "../drawables/window";
 import {Point} from "../drawables/point";
 import {Line} from "../drawables/line";
 
@@ -76,22 +74,8 @@ export class MoveService {
     }
 
     moveElement(delta: Point, element: Drawable, total: Point = new Point(0, 0), updateKeys: boolean = false): void {
-        try {
-            element.shiftElement(delta.x, delta.y)
-        } catch (e) {
-            if (element instanceof Window || Door) {
-                //remove opening
-            } else {
-                return;
-            }
-        }
+        element.shiftElement(delta.x, delta.y)
 
-        if (element instanceof Wall) {
-            this.moveWallOpenings(
-                element,
-                delta,
-            )
-        }
         this.stretchLinkedElements(delta, total, element, updateKeys);
     }
 }

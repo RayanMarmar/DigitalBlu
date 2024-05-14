@@ -107,70 +107,73 @@ export class Door extends WallOpening implements Drawable {
         transformationMatrix: number[][],
     ): void {
         // Get the updated coordinates
-        let door: Door = this.transform(transformationMatrix);
-        let parallelLine: Line = door._base[0].calculateParallelLine(
-            door._radius, door._wall.xFactor, door._wall.yFactor, door._direction
-        );
+        try {
+            let door: Door = this.transform(transformationMatrix);
+            let parallelLine: Line = door._base[0].calculateParallelLine(
+                door._radius, door._wall.xFactor, door._wall.yFactor, door._direction
+            );
 
-        // Draw quarter circle based on door type
-        switch (door._doorType) {
-            case DoorType.OPEN_LEFT:
-                this.drawQuarterCircle(
-                    context,
-                    door._base[0].firstPoint,
-                    door._base[0].secondPoint,
-                    parallelLine.firstPoint,
-                    door._radius,
-                    door._direction < 0,
-                    wallColor
-                );
-                new Line(parallelLine.firstPoint, door._base[0].firstPoint).draw(context, canvasColor, wallColor);
-                break;
+            // Draw quarter circle based on door type
+            switch (door._doorType) {
+                case DoorType.OPEN_LEFT:
+                    this.drawQuarterCircle(
+                        context,
+                        door._base[0].firstPoint,
+                        door._base[0].secondPoint,
+                        parallelLine.firstPoint,
+                        door._radius,
+                        door._direction < 0,
+                        wallColor
+                    );
+                    new Line(parallelLine.firstPoint, door._base[0].firstPoint).draw(context, canvasColor, wallColor);
+                    break;
 
-            case DoorType.OPEN_RIGHT:
-                this.drawQuarterCircle(
-                    context,
-                    door._base[0].secondPoint,
-                    parallelLine.secondPoint,
-                    door._base[0].firstPoint,
-                    door._radius,
-                    door._direction < 0,
-                    wallColor
-                );
-                new Line(parallelLine.secondPoint, door._base[0].secondPoint).draw(context, canvasColor, wallColor);
-                break;
+                case DoorType.OPEN_RIGHT:
+                    this.drawQuarterCircle(
+                        context,
+                        door._base[0].secondPoint,
+                        parallelLine.secondPoint,
+                        door._base[0].firstPoint,
+                        door._radius,
+                        door._direction < 0,
+                        wallColor
+                    );
+                    new Line(parallelLine.secondPoint, door._base[0].secondPoint).draw(context, canvasColor, wallColor);
+                    break;
 
-            case DoorType.OPEN_TWO_WAY:
-                // Draw two quarter circles for OPEN_TWO_WAY
-                this.drawQuarterCircle(
-                    context,
-                    door._base[0].firstPoint,
-                    door._base[0].calculateCenter(),
-                    parallelLine.firstPoint,
-                    door._radius,
-                    door._direction < 0,
-                    wallColor
-                );
-                this.drawQuarterCircle(
-                    context,
-                    door._base[0].secondPoint,
-                    parallelLine.secondPoint,
-                    door._base[0].calculateCenter(),
-                    door._radius,
-                    door._direction < 0,
-                    wallColor
-                );
+                case DoorType.OPEN_TWO_WAY:
+                    // Draw two quarter circles for OPEN_TWO_WAY
+                    this.drawQuarterCircle(
+                        context,
+                        door._base[0].firstPoint,
+                        door._base[0].calculateCenter(),
+                        parallelLine.firstPoint,
+                        door._radius,
+                        door._direction < 0,
+                        wallColor
+                    );
+                    this.drawQuarterCircle(
+                        context,
+                        door._base[0].secondPoint,
+                        parallelLine.secondPoint,
+                        door._base[0].calculateCenter(),
+                        door._radius,
+                        door._direction < 0,
+                        wallColor
+                    );
 
-                new Line(parallelLine.firstPoint, door._base[0].firstPoint).draw(context, canvasColor, wallColor);
-                new Line(parallelLine.secondPoint, door._base[0].secondPoint).draw(context, canvasColor, wallColor);
-                break;
+                    new Line(parallelLine.firstPoint, door._base[0].firstPoint).draw(context, canvasColor, wallColor);
+                    new Line(parallelLine.secondPoint, door._base[0].secondPoint).draw(context, canvasColor, wallColor);
+                    break;
 
-            default:
-                // Invalid door type
-                console.error("Invalid door type");
-                return;
+                default:
+                    // Invalid door type
+                    console.error("Invalid door type");
+                    return;
+            }
+            door.drawOpening(context, canvasColor);
+        } catch (e) {
         }
-        door.drawOpening(context, canvasColor);
     }
 
     transform(transformationMatrix: number[][]): Door {

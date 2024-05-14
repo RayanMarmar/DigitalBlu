@@ -64,7 +64,7 @@ export class WallOpening {
         let line: Line | null = this.wall.thirdLine.subLine(point, this._width);
         let secondLine: Line | null = this.wall.firstLine.subLine(point, this._width);
         if (line == null || secondLine == null)
-            throw new Error("No sub line found");
+            return;
         this._base = [line, secondLine];
     }
 }

@@ -13,8 +13,11 @@ export class Window extends WallOpening implements Drawable {
     }
 
     draw(context: CanvasRenderingContext2D, bgColor: string, wallColor: string, transformationMatrix: number[][]): void {
-        let window: Window = this.transform(transformationMatrix);
-        window.drawOpening(context, bgColor);
+        try {
+            let window: Window = this.transform(transformationMatrix);
+            window.drawOpening(context, bgColor);
+        } catch (e) {
+        }
     }
 
 
