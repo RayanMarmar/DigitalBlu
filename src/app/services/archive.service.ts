@@ -391,7 +391,7 @@ export class ArchiveService {
         return wall ? wall : null;
     }
 
-    moveElement(delta: Point, element: Drawable, moveService: MoveService): void {
+    addMoveCommand(delta: Point, element: Drawable, moveService: MoveService): void {
         let command = new MoveCommand(
             delta,
             element,

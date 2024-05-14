@@ -3,7 +3,6 @@ import {MoveService} from "../services/move.service";
 
 
 export class MoveCommand implements Command {
-
     constructor(
         private delta: Point,
         private element: Drawable,
@@ -24,5 +23,4 @@ export class MoveCommand implements Command {
         let y = -this.delta.y;
         return new Point(x, y)
     }
-
 }

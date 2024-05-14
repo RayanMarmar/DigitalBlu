@@ -13,13 +13,13 @@ export class MoveService {
     ) {
     }
 
-    calculateDeltaCoord(source: Point, target: Point): Point {
+    calculateDeltaCoordinates(source: Point, target: Point): Point {
         return new Point(
             target.x - source.x,
             target.y - source.y
         )
     }
-    
+
     stretchLinkedElements(delta: Point, total: Point, selectedDrawable: Drawable, updateKeys: boolean): void {
         if (selectedDrawable instanceof Wall || selectedDrawable instanceof Line) {
             for (let i: number = 0; i < selectedDrawable.extremities.length; i++) {
