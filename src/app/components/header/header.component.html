@@ -16,21 +16,20 @@
     <div class="vertical-line"></div>
 
     <div class="middle-section">
-        <button [class.active]="recentsOpen" (click)="recentsOpened()"><i
+        <button [class.active]="canvasSelectorOpened" (click)="openCanvasSelector()"><i
                 class="iconoir iconoir-folder"></i>
             <span class="button-label">Recent saved files</span>
         </button>
 
-        <div class="angle-snap-container" *ngIf="recentsOpen">
-            <select [(ngModel)]="selectedCanvasName">
-                <ng-container *ngIf="modesConfiguration.canvasNames.length > 0; else noCanvasNames">
-                    <option>+ New empty canvas</option>
-                    <option *ngFor="let canvasName of modesConfiguration.canvasNames"
+        <div class="angle-snap-container" *ngIf="canvasSelectorOpened">
+            <select [(ngModel)]="modesConfiguration.canvasName">
+                <option>+ New empty canvas</option>
+                <ng-container *ngIf="modesConfiguration.allCanvasNames.length > 0; else noCanvasNames">
+                    <option *ngFor="let canvasName of modesConfiguration.allCanvasNames"
                             [value]="canvasName">{{ canvasName }}
                     </option>
                 </ng-container>
                 <ng-template #noCanvasNames>
-                    <option>+ New empty canvas</option>
                     <option disabled>No saved canvas</option>
                 </ng-template>
             </select>
@@ -171,7 +170,7 @@
 </div>
 
 
-<div class="modal" *ngIf="showModal">
+<div class="modal" *ngIf="nameModalOpened">
     <div class="modal-content">
         <!--<span class="close" (click)="closeModal()">&times;</span>-->
         <div><i class="iconoir iconoir-folder"></i></div>
