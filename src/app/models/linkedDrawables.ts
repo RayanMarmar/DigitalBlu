@@ -82,4 +82,12 @@ export class LinkedDrawables {
             this.addDrawable(drawable.secondLine.calculateCenter(), drawable);
         }
     }
+
+    updateKey(oldKey: Point, newKey: Point): void {
+        let drawables = this.get(oldKey);
+        for (let i = 0; i < (drawables ?? []).length; i++) {
+            this.addDrawable(newKey, drawables[i]);
+            this.removeDrawable(oldKey, drawables[i]);
+        }
+    }
 }

@@ -95,8 +95,8 @@ export class Point implements Drawable {
     }
 
     shiftElement(x: number, y: number): void {
-        this.x = this.x + x
-        this.y = this.y + y
+        this.x = this.x + x;
+        this.y = this.y + y;
     }
 
     // Serialize Point to a string representation
