@@ -10,7 +10,6 @@ import {Line} from "../drawables/line";
     providedIn: 'root'
 })
 export class MoveService {
-
     constructor(
         private _archiveService: ArchiveService,
     ) {
@@ -59,19 +58,29 @@ export class MoveService {
 
     stretchLinkedElements(delta: Point, selectedDrawable: Drawable): void {
         if (selectedDrawable instanceof Wall || selectedDrawable instanceof Line) {
-            let linkedElements = this._archiveService.linkedDrawables
-                .get(selectedDrawable.extremities[0])
-                .concat(
-                    this._archiveService.linkedDrawables.get(selectedDrawable.extremities[1])
-                );
-            for (let i: number = 0; i < linkedElements.length; i++) {
-                linkedElements[i].shiftExtremity(selectedDrawable.extremities[0], delta.x, delta.y);
-                linkedElements[i].shiftExtremity(selectedDrawable.extremities[1], delta.x, delta.y);
+            //console.log(selectedDrawable.toString())
+            //console.log(this._archiveService.linkedDrawables.toString())
+            for (let i: number = 0; i < selectedDrawable.extremities.length; i++) {
+                const linkedElements: Drawable[] = this._archiveService.linkedDrawables.get(selectedDrawable.extremities[i]);
+                //console.log('linked elements : ' + linkedElements.length)
+
+                for (let j: number = 0; j < linkedElements.length; j++) {
+                    if (!linkedElements[j].equals(selectedDrawable)) {
+                        this._archiveService.updateDrawable(selectedDrawable.extremities[i], linkedElements[j], delta);
+                    }
+                    linkedElements[j].shiftExtremity(selectedDrawable.extremities[i], delta.x, delta.y);
+                }
+
+                let oldExtremity = new Point(selectedDrawable.extremities[i].x, selectedDrawable.extremities[i].y);
+                let newExtremity = new Point(selectedDrawable.extremities[i].x + delta.x, selectedDrawable.extremities[i].y + delta.y);
+                this._archiveService.linkedDrawables.updateKey(oldExtremity, newExtremity);
+
             }
         }
     }
 
     moveElement(delta: Point, element: Drawable): void {
+        this.stretchLinkedElements(delta, element);
         try {
             element.shiftElement(delta.x, delta.y)
         } catch (e) {
@@ -87,6 +96,5 @@ export class MoveService {
                 delta,
             )
         }
-        this.stretchLinkedElements(delta, element);
     }
 }

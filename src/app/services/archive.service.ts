@@ -399,4 +399,17 @@ export class ArchiveService {
         )
         this.addCommand(command);
     }
+
+    updateDrawable(extremity: Point, drawable: Drawable, delta: Point) {
+        if (drawable instanceof Line) {
+            this.linesList
+                .filter(line => line.equals(drawable))
+                .forEach(line => line.shiftExtremity(extremity, delta.x, delta.y));
+        }
+        if (drawable instanceof Wall) {
+            this.wallsList
+                .filter(wall => wall.equals(drawable))
+                .forEach(wall => wall.shiftExtremity(extremity, delta.x, delta.y));
+        }
+    }
 }

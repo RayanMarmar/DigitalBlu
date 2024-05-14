@@ -31,17 +31,21 @@ export class CursorModeHandler implements ModeHandler {
             this.previousCoords = this.mouse.currentCoordinates!;
             this.modesConfiguration.moveMode = true
         } catch (e) {
-            console.log("Problem on down cursor mode", e)
+            console.error("Problem on down cursor mode", e)
         }
     }
 
     onMouseMove(event: MouseEvent): void {
-        this.mouse.setCurrentCoordinatesFromEvent(event);
-        if (this.modesConfiguration.moveMode && this.mouse.clickedCoordinates !== null && this.archiveService.selectedElement !== null) {
-            let delta = this.moveService.calculateDeltaCoord(this.previousCoords !, this.mouse.currentCoordinates!);
-            this.previousCoords = this.mouse.currentCoordinates!;
-            this.moveService.moveElement(delta, this.archiveService.selectedElement);
-            this.delta = new Point(this.delta.x + delta.x, this.delta.y + delta.y);
+        try {
+            this.mouse.setCurrentCoordinatesFromEvent(event);
+            if (this.modesConfiguration.moveMode && this.mouse.clickedCoordinates !== null && this.archiveService.selectedElement !== null) {
+                let delta = this.moveService.calculateDeltaCoord(this.previousCoords !, this.mouse.currentCoordinates!);
+                this.previousCoords = this.mouse.currentCoordinates!;
+                //this.moveService.moveElement(delta, this.archiveService.selectedElement);
+                this.delta = new Point(this.delta.x + delta.x, this.delta.y + delta.y);
+            }
+        } catch (e) {
+            console.error("Problem on move cursor mode", e)
         }
     }
 
@@ -57,14 +61,16 @@ export class CursorModeHandler implements ModeHandler {
                     this.moveService
                 )
 
-                this.moveService.moveElement(delta, this.archiveService.selectedElement);
+                console.log("downnnn")
+                this.moveService.moveElement(this.delta, this.archiveService.selectedElement);
+                console.log("down ended")
                 this.previousCoords = this.mouse.currentCoordinates!;
-                this.gridService.updateCanvas();
             }
             this.delta = new Point(0, 0);
+            this.archiveService.selectedElement = null;
             this.modesConfiguration.moveMode = false;
         } catch (e) {
-            console.log("Problem on down cursor mode", e)
+            console.error("Problem on up cursor mode", e)
         }
     }
 

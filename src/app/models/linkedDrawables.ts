@@ -17,7 +17,7 @@ export class LinkedDrawables {
     }
 
     get(point: Point): Drawable[] {
-        return this.dictionary[point.serialize()];
+        return this.dictionary[point.serialize()] ?? [];
     }
 
     addDrawable(point: Point, drawable: Drawable): void {
@@ -85,9 +85,34 @@ export class LinkedDrawables {
 
     updateKey(oldKey: Point, newKey: Point): void {
         let drawables = this.get(oldKey);
-        for (let i = 0; i < (drawables ?? []).length; i++) {
+        console.log(oldKey.toString() + '  ' + newKey.toString());
+        console.log(this.toString())
+        for (let i = 0; i < drawables.length; i++) {
+            console.log(drawables[i].toString())
             this.addDrawable(newKey, drawables[i]);
-            this.removeDrawable(oldKey, drawables[i]);
         }
+        delete this.dictionary[oldKey.serialize()];
+    }
+
+    getLinkedDrawables(drawable: Drawable): Drawable[] {
+        if (drawable instanceof Wall || drawable instanceof Line) {
+            const firstList = this.get(drawable.extremities[0]);
+            const secondList = this.get(drawable.extremities[1]);
+
+            return (firstList ?? []).concat(secondList ?? []);
+        }
+        return [];
+    }
+
+    public toString(): string {
+        let result = "";
+        for (const key in this.dictionary) {
+            if (this.dictionary.hasOwnProperty(key)) {
+                const drawables = this.dictionary[key];
+                const drawableStrings = drawables.map(drawable => "\t" + drawable.toString()).join(",\n");
+                result += `${key}: [\n${drawableStrings}]\n`;
+            }
+        }
+        return result;
     }
 }
