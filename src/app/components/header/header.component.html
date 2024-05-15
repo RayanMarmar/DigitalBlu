@@ -69,7 +69,6 @@
         </button>
 
         <div class="wall-thickness-container" *ngIf="eventHandlerConfiguration.wallMode">
-            <i class="iconoir iconoir-de-compress"></i>
             <input type="number" id="wall-thickness-input" [(ngModel)]="lastValidThickness"
                    (input)="onInput();updateThickness($event)" min="1">
 
@@ -179,6 +178,11 @@
         <div class="error-message" *ngIf="isCanvasNameTaken">
             Canvas name already taken. <br>Please choose a different name.
         </div>
+
+        <div class="error-message" *ngIf="isCanvasNameEmpty">
+            Canvas name is empty.<br>Enter a name to save the canvas.
+        </div>
+
         <input type="text" [(ngModel)]="canvasNameInput" placeholder="Canvas Name">
         <div class="buttons">
             <button (click)="saveCanvasName()">Save</button>
