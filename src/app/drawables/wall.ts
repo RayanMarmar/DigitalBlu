@@ -146,6 +146,14 @@ export class Wall implements Drawable {
         context.closePath();
         context.fillStyle = wallColor;
         context.fill();
+
+        this._wallOpenings
+            .forEach(wallOpening => wallOpening.draw(
+                context,
+                canvasColor,
+                wallColor,
+                transformationMatrix)
+            );
     }
 
     equals(drawable: Drawable): boolean {
@@ -156,10 +164,12 @@ export class Wall implements Drawable {
             && this._fourthLine.equals(drawable.fourthLine);
     }
 
-    updateLines(): void {
+    updateInfos(x: number, y: number): void {
         this._yFactor = (this._firstLine.firstPoint.y - this._firstLine.secondPoint.y) >= 0 ? -1 : 1;
         this._xFactor = (this._firstLine.firstPoint.x - this._firstLine.secondPoint.x) >= 0 ? -1 : 1;
         this._width = this._firstLine.calculateDistance();
+        this._wallOpenings
+            .forEach(wallOpening => wallOpening.shiftElement(x, y));
     }
 
     shiftElement(x: number, y: number): void {
@@ -167,7 +177,23 @@ export class Wall implements Drawable {
         this._secondLine.shiftElement(x, y)
         this._thirdLine.shiftElement(x, y)
         this._fourthLine.shiftElement(x, y)
-        this.updateLines()
+        this.updateInfos(x, y)
     }
 
+    shiftExtremity(extremity: Point, x: number, y: number): void {
+        if (extremity.equals(this.fourthLine.calculateCenter())) {
+            this._firstLine.firstPoint.shiftElement(x, y);
+            this._thirdLine.secondPoint.shiftElement(x, y);
+            this._fourthLine.shiftElement(x, y);
+        } else if (extremity.equals(this.secondLine.calculateCenter())) {
+            this._firstLine.secondPoint.shiftElement(x, y);
+            this._secondLine.shiftElement(x, y);
+            this._thirdLine.firstPoint.shiftElement(x, y);
+        }
+        this.updateInfos(x, y)
+    }
+
+    get extremities(): Point[] {
+        return [this._fourthLine.calculateCenter(), this._secondLine.calculateCenter()];
+    }
 }

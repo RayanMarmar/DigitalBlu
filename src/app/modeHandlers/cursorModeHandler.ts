@@ -1,11 +1,11 @@
 import './modeHandler';
 import {Mouse} from "../models/mouse";
-import {GridService} from "../services/grid.service";
 import {ArchiveService} from "../services/archive.service";
 import {Point} from "../drawables/point";
 import {ComponentSelectorService} from "../services/component-selector.service";
 import {ModesConfiguration} from "../models/modesConfiguration";
 import {MoveService} from "../services/move.service";
+import {TransformationService} from "../services/transformation.service";
 
 export class CursorModeHandler implements ModeHandler {
     private previousCoords: Point = new Point(0, 0);
@@ -13,11 +13,11 @@ export class CursorModeHandler implements ModeHandler {
 
     constructor(
         private mouse: Mouse,
-        private gridService: GridService,
         private archiveService: ArchiveService,
         private componentSelector: ComponentSelectorService,
         private readonly modesConfiguration: ModesConfiguration,
-        private moveService: MoveService
+        private moveService: MoveService,
+        private transformationService: TransformationService,
     ) {
 
     }
@@ -25,23 +25,30 @@ export class CursorModeHandler implements ModeHandler {
     onMouseDown(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         try {
-            let {component} = this.componentSelector.getNearestComponent(this.mouse.currentCoordinates!);
+            this.previousCoords = this.mouse.currentCoordinates!.transform(this.transformationService.reverseTransformationMatrix);
+            let {component} = this.componentSelector.getNearestComponent(this.previousCoords);
 
             this.archiveService.selectedElement = component;
-            this.previousCoords = this.mouse.currentCoordinates!;
             this.modesConfiguration.moveMode = true
         } catch (e) {
-            console.log("Problem on down cursor mode", e)
+            console.error("Problem on down cursor mode", e)
         }
     }
 
     onMouseMove(event: MouseEvent): void {
-        this.mouse.setCurrentCoordinatesFromEvent(event);
-        if (this.modesConfiguration.moveMode && this.mouse.clickedCoordinates !== null && this.archiveService.selectedElement !== null) {
-            let delta = this.moveService.calculateDeltaCoord(this.previousCoords !, this.mouse.currentCoordinates!);
-            this.previousCoords = this.mouse.currentCoordinates!;
-            this.moveService.moveElement(delta, this.archiveService.selectedElement);
-            this.delta = new Point(this.delta.x + delta.x, this.delta.y + delta.y);
+        try {
+            this.mouse.setCurrentCoordinatesFromEvent(event);
+            if (this.modesConfiguration.moveMode && this.mouse.clickedCoordinates !== null && this.archiveService.selectedElement !== null) {
+                let delta = this.moveService.calculateDeltaCoordinates(
+                    this.previousCoords!,
+                    this.mouse.currentCoordinates!.transform(this.transformationService.reverseTransformationMatrix)
+                );
+                this.previousCoords = this.mouse.currentCoordinates!.transform(this.transformationService.reverseTransformationMatrix);
+                this.delta = new Point(this.delta.x + delta.x, this.delta.y + delta.y);
+                this.moveService.moveElement(delta, this.archiveService.selectedElement, this.delta);
+            }
+        } catch (e) {
+            console.error("Problem on move cursor mode", e)
         }
     }
 
@@ -49,22 +56,24 @@ export class CursorModeHandler implements ModeHandler {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         try {
             if (this.modesConfiguration.moveMode && this.mouse.clickedCoordinates !== null && this.archiveService.selectedElement !== null) {
-                let delta = this.moveService.calculateDeltaCoord(this.previousCoords !, this.mouse.currentCoordinates!);
+                let delta = this.moveService.calculateDeltaCoordinates(
+                    this.previousCoords !,
+                    this.mouse.currentCoordinates!.transform(this.transformationService.reverseTransformationMatrix)
+                );
+                this.moveService.moveElement(delta, this.archiveService.selectedElement, this.delta, true);
 
-                this.archiveService.moveElement(
+                this.archiveService.addMoveCommand(
                     this.delta,
                     this.archiveService.selectedElement,
                     this.moveService
                 )
 
-                this.moveService.moveElement(delta, this.archiveService.selectedElement);
-                this.previousCoords = this.mouse.currentCoordinates!;
-                this.gridService.updateCanvas();
             }
             this.delta = new Point(0, 0);
+            this.archiveService.selectedElement = null;
             this.modesConfiguration.moveMode = false;
         } catch (e) {
-            console.log("Problem on down cursor mode", e)
+            console.error("Problem on up cursor mode", e)
         }
     }
 
