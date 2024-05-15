@@ -138,11 +138,9 @@ export class HeaderComponent {
     saveCanvasName(): void {
         if (this.canvasNameInput && this.canvasNameInput.trim() !== '') {
             if (this.modesConfiguration.allCanvasNames.includes(this.canvasNameInput)) {
+                this.isCanvasNameEmpty = false;
                 this.isCanvasNameTaken = true;
-                this.isCanvasNameEmpty = false;
             } else {
-                this.isCanvasNameTaken = false;
-                this.isCanvasNameEmpty = false;
                 this.modesConfiguration.addCanvasName(this.canvasNameInput);
                 this.saveService.saveState();
                 this.closeModal();
@@ -155,6 +153,9 @@ export class HeaderComponent {
 
 
     closeModal(): void {
+        this.canvasNameInput = "";
+        this.isCanvasNameTaken = false;
+        this.isCanvasNameEmpty = false;
         this.nameModalOpened = false;
     }
 
