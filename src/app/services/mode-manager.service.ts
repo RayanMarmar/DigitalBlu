@@ -86,6 +86,7 @@ export class ModeManagerService {
             this.mouse,
             this.archiveService,
             this.componentSelector,
+            this.transformationService,
         );
     }
 
@@ -95,7 +96,8 @@ export class ModeManagerService {
             this.archiveService,
             this.componentSelector,
             this.modesConfiguration,
-            this.moveService
+            this.moveService,
+            this.transformationService
         );
     }
 

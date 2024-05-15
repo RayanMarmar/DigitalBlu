@@ -5,6 +5,7 @@ import {Point} from "../drawables/point";
 import {ComponentSelectorService} from "../services/component-selector.service";
 import {ModesConfiguration} from "../models/modesConfiguration";
 import {MoveService} from "../services/move.service";
+import {TransformationService} from "../services/transformation.service";
 
 export class CursorModeHandler implements ModeHandler {
     private previousCoords: Point = new Point(0, 0);
@@ -15,7 +16,8 @@ export class CursorModeHandler implements ModeHandler {
         private archiveService: ArchiveService,
         private componentSelector: ComponentSelectorService,
         private readonly modesConfiguration: ModesConfiguration,
-        private moveService: MoveService
+        private moveService: MoveService,
+        private transformationService: TransformationService,
     ) {
 
     }
@@ -23,10 +25,10 @@ export class CursorModeHandler implements ModeHandler {
     onMouseDown(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         try {
-            let {component} = this.componentSelector.getNearestComponent(this.mouse.currentCoordinates!);
+            this.previousCoords = this.mouse.currentCoordinates!.transform(this.transformationService.reverseTransformationMatrix);
+            let {component} = this.componentSelector.getNearestComponent(this.previousCoords);
 
             this.archiveService.selectedElement = component;
-            this.previousCoords = this.mouse.currentCoordinates!;
             this.modesConfiguration.moveMode = true
         } catch (e) {
             console.error("Problem on down cursor mode", e)
@@ -37,8 +39,11 @@ export class CursorModeHandler implements ModeHandler {
         try {
             this.mouse.setCurrentCoordinatesFromEvent(event);
             if (this.modesConfiguration.moveMode && this.mouse.clickedCoordinates !== null && this.archiveService.selectedElement !== null) {
-                let delta = this.moveService.calculateDeltaCoordinates(this.previousCoords!, this.mouse.currentCoordinates!);
-                this.previousCoords = this.mouse.currentCoordinates!;
+                let delta = this.moveService.calculateDeltaCoordinates(
+                    this.previousCoords!,
+                    this.mouse.currentCoordinates!.transform(this.transformationService.reverseTransformationMatrix)
+                );
+                this.previousCoords = this.mouse.currentCoordinates!.transform(this.transformationService.reverseTransformationMatrix);
                 this.delta = new Point(this.delta.x + delta.x, this.delta.y + delta.y);
                 this.moveService.moveElement(delta, this.archiveService.selectedElement, this.delta);
             }
@@ -51,7 +56,10 @@ export class CursorModeHandler implements ModeHandler {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         try {
             if (this.modesConfiguration.moveMode && this.mouse.clickedCoordinates !== null && this.archiveService.selectedElement !== null) {
-                let delta = this.moveService.calculateDeltaCoordinates(this.previousCoords !, this.mouse.currentCoordinates!);
+                let delta = this.moveService.calculateDeltaCoordinates(
+                    this.previousCoords !,
+                    this.mouse.currentCoordinates!.transform(this.transformationService.reverseTransformationMatrix)
+                );
                 this.moveService.moveElement(delta, this.archiveService.selectedElement, this.delta, true);
 
                 this.archiveService.addMoveCommand(
