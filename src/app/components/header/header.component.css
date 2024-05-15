@@ -209,7 +209,7 @@ button:hover .button-label {
 }
 
 .error-message {
-    font-size: 16px;
+    font-size: 14px;
     color: red;
     margin-bottom: 10px;
 }
