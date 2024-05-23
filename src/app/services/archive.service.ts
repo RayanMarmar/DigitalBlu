@@ -412,4 +412,20 @@ export class ArchiveService {
                 .forEach(wall => wall.shiftExtremity(extremity, delta.x, delta.y));
         }
     }
+
+    clearCanvas(): void {
+        this._linesList = [];
+        this._archiveLinesList = [];
+        this._wallsList = [];
+        this._archiveWallsList = [];
+        this.commandsList = [];
+        this.archiveCommandsList = [];
+        this._doorsList = [];
+        this._archiveDoorsList = [];
+        this._windowsList = [];
+        this._archiveWindowsList = [];
+        this._linkedDrawables = new LinkedDrawables();
+        this._selectedElement = null;
+        this._upToDate = true;
+    }
 }
