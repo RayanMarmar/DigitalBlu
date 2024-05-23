@@ -24,6 +24,7 @@ export class HeaderComponent {
     lastValidThickness: number = this.modesConfiguration.defaultThickness;
     nameModalOpened: boolean = false;
     canvasNameInput: string = '';
+    selectedCanvas: string = '';
     canvasSelectorOpened: boolean = false;
     isCanvasNameTaken: boolean = false;
     isCanvasNameEmpty: boolean = false;
@@ -36,6 +37,7 @@ export class HeaderComponent {
         private archiveService: ArchiveService,
         private saveService: SaveService
     ) {
+        this.selectedCanvas = modesConfiguration.canvasName;
     }
 
     switchSnapMode() {
@@ -93,12 +95,29 @@ export class HeaderComponent {
         this.eventHandlerConfiguration.setEraseMode();
     }
 
+    clearCanvas(): void {
+        this.archiveService.clearCanvas()
+        this.canvasService.drawAll();
+    }
+
     onInput() {
         if (this.thickness < 1) {
             this.thickness = this.lastValidThickness;
         } else {
             this.lastValidThickness = this.thickness;
         }
+    }
+
+    onCanvasChange(event: Event) {
+        const selectedValue = (event.target as HTMLSelectElement).value;
+        this.archiveService.clearCanvas()
+        if (selectedValue === 'null') {
+            this.selectedCanvas = "";
+        } else {
+            this.saveService.getCanvasState(this.archiveService, selectedValue);
+        }
+        this.modesConfiguration.canvasName = this.selectedCanvas;
+        this.canvasService.drawAll();
     }
 
     redoDisabled(): boolean {
@@ -128,7 +147,7 @@ export class HeaderComponent {
         }
 
         this.archiveService.upToDate = true;
-        this.saveService.saveState();
+        this.saveService.saveState(this.modesConfiguration.canvasName);
     }
 
     canSave(): boolean {
@@ -142,7 +161,7 @@ export class HeaderComponent {
                 this.isCanvasNameTaken = true;
             } else {
                 this.modesConfiguration.addCanvasName(this.canvasNameInput);
-                this.saveService.saveState();
+                this.saveService.saveState(this.modesConfiguration.canvasName);
                 this.closeModal();
             }
         } else {
@@ -172,6 +191,7 @@ export class HeaderComponent {
     }
 
     openCanvasSelector() {
+        this.selectedCanvas = this.modesConfiguration.canvasName;
         this.canvasSelectorOpened = !this.canvasSelectorOpened;
     }
 }

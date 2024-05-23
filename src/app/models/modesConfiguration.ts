@@ -17,8 +17,8 @@ export class ModesConfiguration {
     private readonly _minZoom: number = 50;
     private readonly _maxZoom: number = 150;
     private _helperDisplayed: boolean;
-    private _canvasName: String = "";
-    private _allCanvasNames: String[] = [];
+    private _canvasName: string = "";
+    private _allCanvasNames: string[] = [];
 
 
     constructor() {
@@ -152,19 +152,24 @@ export class ModesConfiguration {
         this._snapAngleMode = !this._snapAngleMode;
     }
 
-    get canvasName(): String {
+    get canvasName(): string {
         return this._canvasName;
     }
 
-    set canvasName(value: String) {
+    set canvasName(value: string) {
         this._canvasName = value;
     }
 
-    get allCanvasNames(): String[] {
+    get allCanvasNames(): string[] {
         return this._allCanvasNames;
     }
 
-    addCanvasName(value: String): void {
+    set allCanvasNames(names: string[]) {
+        this._allCanvasNames = names;
+    }
+
+    addCanvasName(value: string): void {
+        this.canvasName = value;
         this._allCanvasNames.push(value);
     }
 }
