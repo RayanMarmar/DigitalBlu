@@ -22,7 +22,6 @@ import {SaveService} from "../../services/save.service";
 export class HeaderComponent {
     thickness: number = this.getThickness();
     lastValidThickness: number = this.modesConfiguration.defaultThickness;
-    nameModalOpened: boolean = false;
     canvasNameInput: string = '';
     selectedCanvas: string = '';
     canvasSelectorOpened: boolean = false;
@@ -141,8 +140,7 @@ export class HeaderComponent {
     }
 
     saveState(): void {
-        if (this.modesConfiguration.canvasName == "") {
-            this.openModal();
+        if (!this.modesConfiguration.checkSave()) {
             return;
         }
 
@@ -175,11 +173,7 @@ export class HeaderComponent {
         this.canvasNameInput = "";
         this.isCanvasNameTaken = false;
         this.isCanvasNameEmpty = false;
-        this.nameModalOpened = false;
-    }
-
-    openModal(): void {
-        this.nameModalOpened = true;
+        this.modesConfiguration.nameModalOpened = false;
     }
 
     displayHelper(): void {

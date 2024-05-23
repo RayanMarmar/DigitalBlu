@@ -4,7 +4,6 @@ import {Injectable} from "@angular/core";
     providedIn: 'root',
 })
 export class ModesConfiguration {
-
     private _snapMode: boolean;
     private _straightLineMode: boolean;
     private _snapAngleMode: boolean;
@@ -20,13 +19,14 @@ export class ModesConfiguration {
     private _helperDisplayed: boolean;
     private _canvasName: string = "";
     private _allCanvasNames: string[] = [];
+    private _nameModalOpened: boolean = false;
 
 
     constructor() {
         this._snapMode = true;
         this._straightLineMode = false;
         this._snapAngleMode = false;
-        this._moveMode = false ;
+        this._moveMode = false;
         this._snapRadiantFactor = 6;
         this._drawing = false;
         this._gridOn = true;
@@ -34,6 +34,14 @@ export class ModesConfiguration {
         this._zoomLevel = 100;
         this._darkMode = false;
         this._helperDisplayed = false;
+    }
+
+    get nameModalOpened(): boolean {
+        return this._nameModalOpened;
+    }
+
+    set nameModalOpened(value: boolean) {
+        this._nameModalOpened = value;
     }
 
     get helperDisplayed(): boolean {
@@ -71,6 +79,7 @@ export class ModesConfiguration {
     set snapAngleMode(value: boolean) {
         this._snapAngleMode = value;
     }
+
     get straightLineMode(): boolean {
         return this._straightLineMode;
     }
@@ -180,5 +189,17 @@ export class ModesConfiguration {
     addCanvasName(value: string): void {
         this.canvasName = value;
         this._allCanvasNames.push(value);
+    }
+
+    checkSave(): boolean {
+        if (this.canvasName == "") {
+            this.openModal();
+            return false;
+        }
+        return true;
+    }
+
+    openModal(): void {
+        this.nameModalOpened = true;
     }
 }
