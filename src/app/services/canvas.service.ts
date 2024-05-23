@@ -8,6 +8,7 @@ import {TransformationService} from "./transformation.service";
 import {ThemeService} from "./theme.service";
 import {ExportService} from "./export.service";
 import {SaveService} from "./save.service";
+import {ModesConfiguration} from "../models/modesConfiguration";
 
 @Injectable({
     providedIn: 'root'
@@ -22,6 +23,7 @@ export class CanvasService {
         private transformationService: TransformationService,
         private themeService: ThemeService,
         private saveService: SaveService,
+        private modeConfiguration: ModesConfiguration,
         private exportService: ExportService
     ) {
     }
@@ -30,7 +32,9 @@ export class CanvasService {
         this.canvas = canvas;
         this.context = this.canvas.nativeElement.getContext("2d");
         this.canvasRect = canvas.nativeElement.getBoundingClientRect();
-        this.archiveService = this.saveService.getState(this.archiveService);
+        this.saveService.getState(this.archiveService);
+        this.saveService.getModeConfiguration(this.modeConfiguration);
+        this.themeService.toggleDarkMode(this.modeConfiguration.darkMode)
         this.drawAll();
     }
 

@@ -12,8 +12,8 @@
     transition: 1s ease-in-out;
     z-index: 200;
     position: fixed;
-    top: 140px;
-    right: 3%;
+    top: 110px;
+    right: 2%;
     color: var(--font-color);
     border: 1px solid var(--borders-color);
     border-radius: 10px;
@@ -23,6 +23,22 @@
     backdrop-filter: blur(5px);
     max-height: 70vh;
     overflow-x: auto;
+}
+
+.shortcut-overlay::-webkit-scrollbar {
+    width: 0px; /* Width of the scrollbar */
+}
+
+.shortcut-overlay::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0); /* Color of the scrollbar track */
+}
+
+.shortcut-overlay::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0); /* Color of the scrollbar thumb */
+}
+
+.shortcut-overlay::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0); /* Color of the scrollbar thumb on hover */
 }
 
 .shortcut-header {
@@ -80,4 +96,3 @@
     font-size: 12px;
     font-weight: 400;
 }
-

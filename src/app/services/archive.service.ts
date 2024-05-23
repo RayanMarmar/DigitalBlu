@@ -388,4 +388,20 @@ export class ArchiveService {
         const wall = this.wallsList.find(w => w.uid === uid);
         return wall ? wall : null;
     }
+
+    clearCanvas(): void {
+        this._linesList = [];
+        this._archiveLinesList = [];
+        this._wallsList = [];
+        this._archiveWallsList = [];
+        this.commandsList = [];
+        this.archiveCommandsList = [];
+        this._doorsList = [];
+        this._archiveDoorsList = [];
+        this._windowsList = [];
+        this._archiveWindowsList = [];
+        this._linkedDrawables = new LinkedDrawables();
+        this._selectedElement = null;
+        this._upToDate = true;
+    }
 }
