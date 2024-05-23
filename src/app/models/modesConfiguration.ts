@@ -164,7 +164,12 @@ export class ModesConfiguration {
         return this._allCanvasNames;
     }
 
+    set allCanvasNames(names: string[]) {
+        this._allCanvasNames = names;
+    }
+
     addCanvasName(value: string): void {
+        this.canvasName = value;
         this._allCanvasNames.push(value);
     }
 }
