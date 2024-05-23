@@ -23,10 +23,11 @@
 
         <div class="angle-snap-container" *ngIf="canvasSelectorOpened">
             <select [(ngModel)]="modesConfiguration.canvasName">
-                <option>+ New empty canvas</option>
-                <ng-container *ngIf="modesConfiguration.allCanvasNames.length > 0; else noCanvasNames">
-                    <option *ngFor="let canvasName of modesConfiguration.allCanvasNames"
-                            [value]="canvasName">{{ canvasName }}
+                <option [value]="null">+ New empty canvas</option>
+                <ng-container
+                        *ngIf="modesConfiguration.allCanvasNames && modesConfiguration.allCanvasNames.length > 0; else noCanvasNames">
+                    <option *ngFor="let canvasName of modesConfiguration.allCanvasNames" [value]="canvasName">
+                        {{ canvasName }}
                     </option>
                 </ng-container>
                 <ng-template #noCanvasNames>
@@ -129,7 +130,7 @@
             <span class="button-label">Erase</span>
         </button>
 
-        <button [class.active]="eventHandlerConfiguration.eraseMode" (click)="switchEraseMode() ">
+        <button (click)="clearCanvas() ">
             <i class="iconoir iconoir-bin-full"></i>
             <span class="button-label">Clear canvas</span>
         </button>

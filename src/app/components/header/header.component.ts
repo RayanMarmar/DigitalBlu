@@ -93,6 +93,11 @@ export class HeaderComponent {
         this.eventHandlerConfiguration.setEraseMode();
     }
 
+    clearCanvas(): void {
+        this.archiveService.clearCanvas()
+        this.canvasService.drawAll();
+    }
+
     onInput() {
         if (this.thickness < 1) {
             this.thickness = this.lastValidThickness;
