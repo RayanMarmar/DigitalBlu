@@ -78,21 +78,31 @@ export class SaveService {
         }
 
         localStorage.setItem('appState', JSON.stringify(appState)); // Save state
-        console.log(localStorage.getItem('appState'))
+        this.previousAppData = appState;
     }
 
     getState(archive: ArchiveService) {
         const stateString = localStorage.getItem('appState');
         const appStateParsed = stateString ? JSON.parse(stateString) : null;
         if (appStateParsed == null) {
-            return archive;
+            return;
         }
         this.previousAppData = appStateParsed;
         this.canvasName = appStateParsed.currentCanvas;
         this.darkMode = appStateParsed.theme == "dark";
         this.allCanvasNames = Object.keys(appStateParsed.canvases);
 
-        const currentCanvasState = appStateParsed.canvases[appStateParsed.currentCanvas];
+        this.getCanvasState(archive, appStateParsed.currentCanvas)
+    }
+
+    getCanvasState(archive: ArchiveService, canvasName: string): void {
+        console.log(canvasName);
+        console.log(this.previousAppData);
+        if (this.previousAppData == null) {
+            return;
+        }
+        const currentCanvasState: any = this.previousAppData.canvases[canvasName];
+        console.log(currentCanvasState)
         if (currentCanvasState) {
             // Individual assignment of attributes from the parsed state
             // SETTING LINES
@@ -160,10 +170,12 @@ export class SaveService {
             });
 
         }
-        return archive;
     }
 
     getModeConfiguration(modeConf: ModesConfiguration): void {
+        if (this.previousAppData == null) {
+            return;
+        }
         modeConf.darkMode = this.darkMode!
         modeConf.canvasName = this.canvasName!
         modeConf.allCanvasNames = this.allCanvasNames

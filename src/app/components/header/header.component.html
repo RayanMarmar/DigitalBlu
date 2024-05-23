@@ -22,7 +22,7 @@
         </button>
 
         <div class="angle-snap-container" *ngIf="canvasSelectorOpened">
-            <select [(ngModel)]="modesConfiguration.canvasName">
+            <select [(ngModel)]="selectedCanvas" (change)="onCanvasChange($event)">
                 <option [value]="null">+ New empty canvas</option>
                 <ng-container
                         *ngIf="modesConfiguration.allCanvasNames && modesConfiguration.allCanvasNames.length > 0; else noCanvasNames">
