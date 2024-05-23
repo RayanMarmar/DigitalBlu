@@ -129,8 +129,14 @@
             <span class="button-label">Erase</span>
         </button>
 
+        <button [class.active]="eventHandlerConfiguration.eraseMode" (click)="switchEraseMode() ">
+            <i class="iconoir iconoir-bin-full"></i>
+            <span class="button-label">Clear canvas</span>
+        </button>
+
 
     </div>
+
 
     <div class="vertical-line"></div>
 
