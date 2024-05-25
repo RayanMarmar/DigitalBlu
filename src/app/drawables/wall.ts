@@ -30,8 +30,8 @@ export class Wall implements Drawable {
 
         // Initialize variables
         this._height = height;
-        this._yFactor = (firstPoint.y - secondPoint.y) >= 0 ? -1 : 1;
-        this._xFactor = (firstPoint.x - secondPoint.x) >= 0 ? -1 : 1;
+        this._yFactor = (firstPoint.y - secondPoint.y) > 0 ? -1 : 1;
+        this._xFactor = (firstPoint.x - secondPoint.x) > 0 ? -1 : 1;
 
         // Calculate wall lines
         this._firstLine = new Line(firstPoint, secondPoint)
@@ -146,10 +146,10 @@ export class Wall implements Drawable {
         context.fillStyle = wallColor;
         context.fill();
         context.stroke(); // If you want to keep the border, you can include this line
-
+        let displayLine =  this.xFactor == 1 ? this._thirdLine : this._firstLine ;
         this.firstLine.displayDimensions(
             context,
-            this.firstLine,// new Line(wall.fourthLine.calculateCenter(), wall.secondLine.calculateCenter()),
+            displayLine,
             wallColor,
         );
     }

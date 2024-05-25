@@ -215,19 +215,20 @@ export class Line implements Drawable {
         context: CanvasRenderingContext2D,
         line: Line,
         textColor: string,
-        offsetAboveLine: number = 10, // Offset for dimension text above the line
-        fontSize: string = '12px Arial', // Font size and family for dimension text
+        offsetAboveLine: number = 15, // Offset for dimension text above the line
+        fontSize: string = '12px Arial' // Font size and family for dimension text
     ): void {
         // Calculate angle of the line segment relative to the x-axis
         const angle = line.getAngleWithXVector();
 
         // Calculate the x and y offsets for the dimension text
-        const xOffset = offsetAboveLine * Math.cos(angle);
+        const xOffset = offsetAboveLine * Math.cos(angle + Math.PI / 2);
+        const yOffset = offsetAboveLine * Math.sin(angle + Math.PI / 2);
 
         // Calculate position for displaying dimension text
         const center = line.calculateCenter();
         const dimensionX = center.x + xOffset;
-        const dimensionY = center.y;
+        const dimensionY = center.y + yOffset;
 
         // Save the current context state
         context.save();
@@ -236,7 +237,9 @@ export class Line implements Drawable {
         context.translate(dimensionX, dimensionY);
 
         // Rotate the canvas context to make the text parallel to the line
-        context.rotate(angle);
+        // Adjust rotation to ensure text is not upside down
+        const adjustedAngle = angle > Math.PI / 2 || angle < -Math.PI / 2 ? angle + Math.PI : angle;
+        context.rotate(adjustedAngle);
 
         // Draw dimension text on canvas
         context.fillStyle = textColor; // Use line color for dimension text
