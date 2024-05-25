@@ -25,8 +25,8 @@ export class Wall implements Drawable {
         uid: string | null
     ) {
         // Get the original point coordinates in case of a certain transformation
-        firstPoint = firstPoint.transform(reverseTransformationMatrix);
-        secondPoint = secondPoint.transform(reverseTransformationMatrix);
+        firstPoint = firstPoint.reverseTransform(reverseTransformationMatrix);
+        secondPoint = secondPoint.reverseTransform(reverseTransformationMatrix);
 
         // Initialize variables
         this._height = height;
