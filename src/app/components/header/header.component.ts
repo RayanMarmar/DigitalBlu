@@ -97,7 +97,6 @@ export class HeaderComponent {
     clearCanvas(): void {
         this.archiveService.clearCanvas()
         this.canvasService.drawAll();
-        this.saveService.clearState()
     }
 
     onInput() {
