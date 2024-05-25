@@ -60,14 +60,14 @@ export class CursorModeHandler implements ModeHandler {
                     this.previousCoords !,
                     this.mouse.currentCoordinates!.transform(this.transformationService.reverseTransformationMatrix)
                 );
-                this.moveService.moveElement(delta, this.archiveService.selectedElement, this.delta, true);
-
-                this.archiveService.addMoveCommand(
-                    this.delta,
-                    this.archiveService.selectedElement,
-                    this.moveService
-                )
-
+                if(delta.x != 0 || delta.y != 0) {
+                    this.moveService.moveElement(delta, this.archiveService.selectedElement, this.delta, true);
+                    this.archiveService.addMoveCommand(
+                        this.delta,
+                        this.archiveService.selectedElement,
+                        this.moveService
+                    )
+                }
             }
             this.delta = new Point(0, 0);
             this.archiveService.selectedElement = null;
