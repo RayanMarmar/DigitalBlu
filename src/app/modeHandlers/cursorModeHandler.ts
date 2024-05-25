@@ -55,19 +55,23 @@ export class CursorModeHandler implements ModeHandler {
     onMouseUp(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         try {
-            if (this.modesConfiguration.moveMode && this.mouse.clickedCoordinates !== null && this.archiveService.selectedElement !== null) {
+            if (
+                this.modesConfiguration.moveMode &&
+                this.mouse.clickedCoordinates !== null &&
+                this.archiveService.selectedElement !== null &&
+                this.previousCoords!.equals(this.mouse.currentCoordinates!)
+            ) {
                 let delta = this.moveService.calculateDeltaCoordinates(
                     this.previousCoords !,
                     this.mouse.currentCoordinates!.transform(this.transformationService.reverseTransformationMatrix)
                 );
-                if(delta.x != 0 || delta.y != 0) {
-                    this.moveService.moveElement(delta, this.archiveService.selectedElement, this.delta, true);
-                    this.archiveService.addMoveCommand(
-                        this.delta,
-                        this.archiveService.selectedElement,
-                        this.moveService
-                    )
-                }
+                
+                this.moveService.moveElement(delta, this.archiveService.selectedElement, this.delta, true);
+                this.archiveService.addMoveCommand(
+                    this.delta,
+                    this.archiveService.selectedElement,
+                    this.moveService
+                )
             }
             this.delta = new Point(0, 0);
             this.archiveService.selectedElement = null;
