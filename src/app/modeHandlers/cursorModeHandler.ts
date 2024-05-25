@@ -6,6 +6,7 @@ import {ComponentSelectorService} from "../services/component-selector.service";
 import {ModesConfiguration} from "../models/modesConfiguration";
 import {MoveService} from "../services/move.service";
 import {TransformationService} from "../services/transformation.service";
+import {CopyPasteService} from "../services/copy-paste.service";
 
 export class CursorModeHandler implements ModeHandler {
     private previousCoords: Point = new Point(0, 0);
@@ -18,6 +19,7 @@ export class CursorModeHandler implements ModeHandler {
         private readonly modesConfiguration: ModesConfiguration,
         private moveService: MoveService,
         private transformationService: TransformationService,
+        private copyPasteService : CopyPasteService,
     ) {
 
     }
@@ -74,7 +76,7 @@ export class CursorModeHandler implements ModeHandler {
                 )
             }
             this.delta = new Point(0, 0);
-            this.archiveService.selectedElement = null;
+            // this.archiveService.selectedElement = null;
             this.modesConfiguration.moveMode = false;
         } catch (e) {
             console.error("Problem on up cursor mode", e)
@@ -82,6 +84,19 @@ export class CursorModeHandler implements ModeHandler {
     }
 
     onKeyDown(event: KeyboardEvent): void {
+        if (event.ctrlKey) {
+            switch (event.key) {
+                case 'c':
+                    if(this.archiveService.selectedElement){
+                        this.archiveService.copyElement(this.archiveService.selectedElement,this.copyPasteService);
+                        this.archiveService.copiedElement = this.archiveService.selectedElement;
+                    }
+                    break;
+                case 'v':
+                    this.archiveService.pasteElement(this.archiveService.copiedElement,this.copyPasteService);
+                    break;
+            }
+        }
     }
 
     onKeyUp(event: KeyboardEvent): void {

@@ -6,11 +6,12 @@ export abstract class WallOpening implements Drawable {
     protected _wall: Wall;
     protected _width: number;
     protected _base: Line[];
-
+    private _center: Point;
 
     constructor(wall: Wall, point: Point, width: number) {
         this._width = width;
         this._wall = wall;
+        this._center = point;
         let line: Line | null = wall.thirdLine.subLine(point, this._width);
         let secondLine: Line | null = wall.firstLine.subLine(point, this._width);
 
@@ -18,6 +19,14 @@ export abstract class WallOpening implements Drawable {
             throw new Error("No sub line found");
 
         this._base = [line, secondLine];
+    }
+
+    get center(): Point {
+        return this._center;
+    }
+
+    set center(value: Point) {
+        this._center = value;
     }
 
     abstract draw(context: CanvasRenderingContext2D, canvasColor: string, drawableColor: string, transformationMatrix: number[][]): void ;

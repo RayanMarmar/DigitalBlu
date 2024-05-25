@@ -10,6 +10,8 @@ import {DeleteCommand} from "../commands/deleteCommand";
 import {LinkedDrawables} from "../models/linkedDrawables";
 import {MoveCommand} from "../commands/moveCommand";
 import {MoveService} from "./move.service";
+import {CopyPasteService} from "./copy-paste.service";
+import {PasteCommand} from "../commands/pasteCommand";
 
 
 @Injectable({
@@ -29,6 +31,7 @@ export class ArchiveService {
     private _linkedDrawables: LinkedDrawables;
     private _selectedElement: Drawable | null = null;
     private _upToDate: boolean = true;
+    private _copiedElement: Drawable | null = null ;
 
     constructor() {
         this._linesList = [];
@@ -127,6 +130,13 @@ export class ArchiveService {
     get linkedDrawables(): LinkedDrawables {
         return this._linkedDrawables;
     }
+    get copiedElement(): Drawable | null {
+        return this._copiedElement;
+    }
+
+    set copiedElement(value: Drawable | null) {
+        this._copiedElement = value;
+    }
 
     pushLine(line: Line): void {
         this._linesList.push(line);
@@ -195,6 +205,7 @@ export class ArchiveService {
 
         if (!fromSaved) {
             this._wallsList.pop();
+             console.log("creating draw command")
             let command = new DrawCommand(
                 this._linkedDrawables,
                 this._wallsList,
@@ -427,5 +438,22 @@ export class ArchiveService {
         this._linkedDrawables = new LinkedDrawables();
         this._selectedElement = null;
         this._upToDate = true;
+    }
+
+    copyElement(element : Drawable | null , copyPasteService : CopyPasteService){
+        copyPasteService.copyElement(element)
+        this._copiedElement = copyPasteService.copiedElement
+    }
+    pasteElement(element : Drawable | null , copyPasteService : CopyPasteService){
+        if(element){
+            console.log("adding command")
+            let command = new PasteCommand(
+               copyPasteService
+            )
+            this.addCommand(command);
+            console.log(" command",command)
+            copyPasteService.pasteElement()
+        }
+
     }
 }

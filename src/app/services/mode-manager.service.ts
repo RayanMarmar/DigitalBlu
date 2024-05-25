@@ -17,6 +17,7 @@ import {ComponentSelectorService} from "./component-selector.service";
 import {SnapService} from "./snap.service";
 import {MoveService} from "./move.service";
 import {SaveService} from "./save.service";
+import {CopyPasteService} from "./copy-paste.service";
 
 @Injectable({
     providedIn: 'root'
@@ -34,6 +35,7 @@ export class ModeManagerService {
         private componentSelector: ComponentSelectorService,
         private moveService: MoveService,
         private saveService: SaveService,
+        private copyPasteService : CopyPasteService,
     ) {
     }
 
@@ -99,7 +101,8 @@ export class ModeManagerService {
             this.componentSelector,
             this.modesConfiguration,
             this.moveService,
-            this.transformationService
+            this.transformationService,
+            this.copyPasteService
         );
     }
 
