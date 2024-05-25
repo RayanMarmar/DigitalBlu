@@ -1,20 +1,20 @@
 import {Component} from '@angular/core';
 import {CanvasService} from "../../services/canvas.service";
 import {ModesConfiguration} from "../../models/modesConfiguration";
-import {NgIf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {ThemeService} from "../../services/theme.service";
 import {ArchiveService} from "../../services/archive.service";
 import {EventHandlerConfiguration} from "../../models/eventHandlerConfiguration";
 import {SaveService} from "../../services/save.service";
 
-
 @Component({
     selector: 'app-header',
     standalone: true,
     imports: [
         NgIf,
-        FormsModule
+        FormsModule,
+        NgForOf
     ],
     templateUrl: './header.component.html',
     styleUrl: './header.component.css'
@@ -22,6 +22,12 @@ import {SaveService} from "../../services/save.service";
 export class HeaderComponent {
     thickness: number = this.getThickness();
     lastValidThickness: number = this.modesConfiguration.defaultThickness;
+    nameModalOpened: boolean = false;
+    canvasNameInput: string = '';
+    selectedCanvas: string = '';
+    canvasSelectorOpened: boolean = false;
+    isCanvasNameTaken: boolean = false;
+    isCanvasNameEmpty: boolean = false;
 
     constructor(
         protected canvasService: CanvasService,
@@ -31,6 +37,7 @@ export class HeaderComponent {
         private archiveService: ArchiveService,
         private saveService: SaveService
     ) {
+        this.selectedCanvas = modesConfiguration.canvasName;
     }
 
     switchSnapMode() {
@@ -88,12 +95,29 @@ export class HeaderComponent {
         this.eventHandlerConfiguration.setEraseMode();
     }
 
+    clearCanvas(): void {
+        this.archiveService.clearCanvas()
+        this.canvasService.drawAll();
+    }
+
     onInput() {
         if (this.thickness < 1) {
             this.thickness = this.lastValidThickness;
         } else {
             this.lastValidThickness = this.thickness;
         }
+    }
+
+    onCanvasChange(event: Event) {
+        const selectedValue = (event.target as HTMLSelectElement).value;
+        this.archiveService.clearCanvas()
+        if (selectedValue === 'null') {
+            this.selectedCanvas = "";
+        } else {
+            this.saveService.getCanvasState(this.archiveService, selectedValue);
+        }
+        this.modesConfiguration.canvasName = this.selectedCanvas;
+        this.canvasService.drawAll();
     }
 
     redoDisabled(): boolean {
@@ -117,7 +141,45 @@ export class HeaderComponent {
     }
 
     saveState(): void {
-        return this.saveService.saveState()
+        if (this.modesConfiguration.canvasName == "") {
+            this.openModal();
+            return;
+        }
+
+        this.archiveService.upToDate = true;
+        this.saveService.saveState(this.modesConfiguration.canvasName);
+    }
+
+    canSave(): boolean {
+        return !this.archiveService.upToDate;
+    }
+
+    saveCanvasName(): void {
+        if (this.canvasNameInput && this.canvasNameInput.trim() !== '') {
+            if (this.modesConfiguration.allCanvasNames.includes(this.canvasNameInput)) {
+                this.isCanvasNameEmpty = false;
+                this.isCanvasNameTaken = true;
+            } else {
+                this.modesConfiguration.addCanvasName(this.canvasNameInput);
+                this.saveService.saveState(this.modesConfiguration.canvasName);
+                this.closeModal();
+            }
+        } else {
+            this.isCanvasNameTaken = false;
+            this.isCanvasNameEmpty = true;
+        }
+    }
+
+
+    closeModal(): void {
+        this.canvasNameInput = "";
+        this.isCanvasNameTaken = false;
+        this.isCanvasNameEmpty = false;
+        this.nameModalOpened = false;
+    }
+
+    openModal(): void {
+        this.nameModalOpened = true;
     }
 
     displayHelper(): void {
@@ -126,5 +188,10 @@ export class HeaderComponent {
 
     changeAngleSnapMode(): void {
         this.modesConfiguration.changeSnapAngleMode();
+    }
+
+    openCanvasSelector() {
+        this.selectedCanvas = this.modesConfiguration.canvasName;
+        this.canvasSelectorOpened = !this.canvasSelectorOpened;
     }
 }

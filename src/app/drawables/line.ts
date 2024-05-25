@@ -5,8 +5,10 @@ export class Line implements Drawable {
     private _firstPoint: Point;
     private _secondPoint: Point;
 
-    constructor(firstPoint: Point, secondPoint: Point,
-                reverseTransformationMatrix: number[][] = [[1, 1, 0], [1, 1, 0]],
+    constructor(
+        firstPoint: Point,
+        secondPoint: Point,
+        reverseTransformationMatrix: number[][] = [[1, 1, 0], [1, 1, 0]],
     ) {
         this._firstPoint = firstPoint.transform(reverseTransformationMatrix);
         this._secondPoint = secondPoint.transform(reverseTransformationMatrix);
@@ -259,5 +261,11 @@ export class Line implements Drawable {
 
         // Calculate the angle in radians using Math.atan2
         return Math.atan2(deltaY, deltaX);
+    }
+
+    equals(drawable: Drawable): boolean {
+        return drawable instanceof Line
+            && this._firstPoint.equals(drawable.firstPoint)
+            && this._secondPoint.equals(drawable.secondPoint);
     }
 }

@@ -7,14 +7,13 @@ import {DrawCommand} from "../commands/drawCommand";
 import {Door} from "../drawables/door";
 import {Window} from "../drawables/window";
 import {DeleteCommand} from "../commands/deleteCommand";
+import {LinkedDrawables} from "../models/linkedDrawables";
 
 
 @Injectable({
     providedIn: 'root'
 })
 export class ArchiveService {
-    private _pointsList: Point[];
-    private _archivePointsList: Point[];
     private _linesList: Line[];
     private _archiveLinesList: Line[];
     private _wallsList: Wall[];
@@ -25,13 +24,13 @@ export class ArchiveService {
     private _archiveWindowsList: Window[];
     private commandsList: Command[];
     private archiveCommandsList: Command[];
+    private _linkedDrawables: LinkedDrawables;
     private _selectedElement: Drawable | null = null;
+    private _upToDate: boolean = true;
 
     constructor() {
         this._linesList = [];
         this._archiveLinesList = [];
-        this._pointsList = [];
-        this._archivePointsList = [];
         this._wallsList = [];
         this._archiveWallsList = [];
         this.commandsList = [];
@@ -40,14 +39,15 @@ export class ArchiveService {
         this._archiveDoorsList = [];
         this._windowsList = [];
         this._archiveWindowsList = [];
+        this._linkedDrawables = new LinkedDrawables();
     }
 
-    get archivePointsList(): Point[] {
-        return this._archivePointsList;
+    get upToDate(): boolean {
+        return this._upToDate;
     }
 
-    set archivePointsList(value: Point[]) {
-        this._archivePointsList = value;
+    set upToDate(value: boolean) {
+        this._upToDate = value;
     }
 
     get archiveLinesList(): Line[] {
@@ -90,14 +90,6 @@ export class ArchiveService {
         this._linesList = value;
     }
 
-    get pointsList(): Point[] {
-        return this._pointsList;
-    }
-
-    set pointsList(value: Point[]) {
-        this._pointsList = value;
-    }
-
     get wallsList(): Wall[] {
         return this._wallsList;
     }
@@ -130,20 +122,16 @@ export class ArchiveService {
         this._windowsList = value;
     }
 
+    get linkedDrawables(): LinkedDrawables {
+        return this._linkedDrawables;
+    }
+
     pushLine(line: Line): void {
         this._linesList.push(line);
     }
 
     popLine(): void {
         this._linesList.pop();
-    }
-
-    pushPoint(point: Point): void {
-        this._pointsList.push(point);
-    }
-
-    popPoint(): void {
-        this._pointsList.pop();
     }
 
     pushWall(wall: Wall): void {
@@ -170,62 +158,72 @@ export class ArchiveService {
         this._windowsList.pop();
     }
 
+    addCommand(command: Command): void {
+        this.commandsList.push(command);
+        this.upToDate = false;
+    }
+
     private clearArchive(): void {
         this._archiveLinesList = [];
-        this._archivePointsList = [];
         this._archiveWallsList = [];
         this._archiveDoorsList = [];
         this._archiveWindowsList = [];
         this.archiveCommandsList = [];
     }
 
-    addLine(line: Line): void {
-        this._linesList.pop();
+    addLine(line: Line, fromSaved: boolean = false): void {
         this._linesList.push(line);
-        let command = new DrawCommand(
-            this._pointsList,
-            this._archivePointsList,
-            this._linesList,
-            this._archiveLinesList,
-        );
-        this.commandsList.push(command);
-        this.clearArchive();
+        this._linkedDrawables.linkDrawable(line);
+
+        if (!fromSaved) {
+            this._linesList.pop();
+            let command = new DrawCommand(
+                this._linkedDrawables,
+                this._linesList,
+                this._archiveLinesList,
+            );
+            this.addCommand(command);
+            this.clearArchive();
+        }
     }
 
-    addWall(wall: Wall): void {
-        this._wallsList.pop();
+    addWall(wall: Wall, fromSaved: boolean = false): void {
         this._wallsList.push(wall);
-        let command = new DrawCommand(
-            this._pointsList,
-            this._archivePointsList,
-            this._wallsList,
-            this._archiveWallsList,
-        );
-        this.commandsList.push(command);
-        this.clearArchive();
+        this._linkedDrawables.linkDrawable(wall);
+
+        if (!fromSaved) {
+            this._wallsList.pop();
+            let command = new DrawCommand(
+                this._linkedDrawables,
+                this._wallsList,
+                this._archiveWallsList,
+            );
+            this.addCommand(command);
+            this.clearArchive();
+        }
     }
 
     addDoor(door: Door): void {
         this._doorsList.push(door);
+        door.wall.addWallOpening(door);
         let command = new DrawCommand(
-            this._pointsList,
-            this._archivePointsList,
+            this._linkedDrawables,
             this._doorsList,
             this._archiveDoorsList,
         );
-        this.commandsList.push(command);
+        this.addCommand(command);
         this.clearArchive();
     }
 
     addWindow(window: Window): void {
         this._windowsList.push(window);
+        window.wall.addWallOpening(window);
         let command = new DrawCommand(
-            this._pointsList,
-            this._archivePointsList,
+            this._linkedDrawables,
             this._windowsList,
             this._archiveWindowsList,
         );
-        this.commandsList.push(command);
+        this.addCommand(command);
         this.clearArchive();
     }
 
@@ -246,7 +244,7 @@ export class ArchiveService {
         let command: Command | undefined = this.archiveCommandsList.pop();
         if (command != undefined) {
             command.execute();
-            this.commandsList.push(command);
+            this.addCommand(command);
         }
     }
 
@@ -258,18 +256,11 @@ export class ArchiveService {
         return this.commandsList.length > 0;
     }
 
-    ghostPoint(): boolean {
-        if (this._linesList.length == 0) return true;
-        let lastLine: Line = this._linesList[this._linesList.length - 1];
-        let lastPoint: Point = this._pointsList[this._pointsList.length - 1];
-
-        return !lastLine.isLineExtremity(lastPoint);
-    }
-
     snapPoint(point: Point, snapMode: boolean): Point {
         if (!snapMode) return point;
+        let pointsList = this._linkedDrawables.keys();
         let index: number = this.inRangeOfAnExistingPoint(point);
-        return index == -1 ? point : this._pointsList[index];
+        return index == -1 ? point : pointsList[index];
     }
 
     snapAngle(referencePoint: Point, currentPoint: Point, requestedAngle: number): Point {
@@ -293,8 +284,9 @@ export class ArchiveService {
     }
 
     private inRangeOfAnExistingPoint(point: Point): number {
-        for (let i: number = 0; i < this._pointsList.length; i++) {
-            const p: Point = this._pointsList[i];
+        let pointsList = this._linkedDrawables.keys();
+        for (let i: number = 0; i < pointsList.length; i++) {
+            const p: Point = pointsList[i];
             if (p.inPointRange(point)) {
                 return i; // Return the index if a matching point is found
             }
@@ -366,14 +358,11 @@ export class ArchiveService {
     }
 
     deleteLine(): void {
-        this.popLine();
-        if (this.ghostPoint()) {
-            this.popPoint();
-        }
+        this._linesList.pop();
     }
 
     deleteWall(): void {
-        this.popWall();
+        this._wallsList.pop();
     }
 
     deleteElement(list: Drawable[] | null, archiveList: Drawable[] | null): void {
@@ -381,8 +370,7 @@ export class ArchiveService {
             // Handle case where x is null
         } else {
             let command = new DeleteCommand(
-                this._pointsList,
-                this._archivePointsList,
+                this._linkedDrawables,
                 this._windowsList,
                 this._archiveWindowsList,
                 this._doorsList,
@@ -391,13 +379,29 @@ export class ArchiveService {
                 archiveList,
                 this._selectedElement!
             );
-            this.archiveCommandsList.push(command);
-            this.redo()
+            this.commandsList.push(command);
+            command.execute();
         }
     }
 
     getWallByUid(uid: string): Wall | null {
         const wall = this.wallsList.find(w => w.uid === uid);
         return wall ? wall : null;
+    }
+
+    clearCanvas(): void {
+        this._linesList = [];
+        this._archiveLinesList = [];
+        this._wallsList = [];
+        this._archiveWallsList = [];
+        this.commandsList = [];
+        this.archiveCommandsList = [];
+        this._doorsList = [];
+        this._archiveDoorsList = [];
+        this._windowsList = [];
+        this._archiveWindowsList = [];
+        this._linkedDrawables = new LinkedDrawables();
+        this._selectedElement = null;
+        this._upToDate = true;
     }
 }
