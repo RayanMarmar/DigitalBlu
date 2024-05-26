@@ -27,6 +27,7 @@ export class HeaderComponent {
     canvasSelectorOpened: boolean = false;
     isCanvasNameTaken: boolean = false;
     isCanvasNameEmpty: boolean = false;
+    valuesModalOpened: boolean = false;
 
     constructor(
         protected canvasService: CanvasService,
@@ -187,5 +188,9 @@ export class HeaderComponent {
     openCanvasSelector() {
         this.selectedCanvas = this.modesConfiguration.canvasName;
         this.canvasSelectorOpened = !this.canvasSelectorOpened;
+    }
+
+    openValuesModal() {
+        this.valuesModalOpened = !this.valuesModalOpened;
     }
 }
