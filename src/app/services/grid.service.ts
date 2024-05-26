@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {GridComponent} from "../components/grid/grid.component";
 import {Point} from "../drawables/point";
 import {TransformationService} from "./transformation.service";
+import {ModesConfiguration} from "../models/modesConfiguration";
 
 @Injectable({
     providedIn: 'root'
@@ -11,7 +12,8 @@ export class GridService {
     #gridComponent: GridComponent | null = null;
 
     constructor(
-        private transformationService: TransformationService
+        private transformationService: TransformationService,
+        private modeConfiguration: ModesConfiguration
     ) {
     }
 
@@ -26,16 +28,19 @@ export class GridService {
     //Method Used to get nearest intersection for snapping point to grid
     calculateNearestGridIntersection(point: Point): Point {
         if (this.gridComponent != null) {
-            const gridSize = this.gridComponent.squareSize * this.transformationService.scaleValue; // Adjust grid size based on zoom level
-            let xDelta = (this.transformationService.transformationMatrix[0][2]) % gridSize;
-            let yDelta = (this.transformationService.transformationMatrix[1][2]) % gridSize;
+            // Adjust cursor position based on reverse transformation
+            let originalPoint = point.reverseTransform(this.transformationService.reverseTransformationMatrix);
 
-            // Calculate the nearest intersection coordinates
-            let x = Math.round(point.x / gridSize) * gridSize + xDelta;
-            let y = Math.round(point.y / gridSize) * gridSize + yDelta;
+            // Find the nearest grid line in the x direction
+            const nearestX = Math.round(originalPoint.x / this.modeConfiguration.gridSquareSize) * this.modeConfiguration.gridSquareSize;
+            // Find the nearest grid line in the y direction
+            const nearestY = Math.round(originalPoint.y / this.modeConfiguration.gridSquareSize) * this.modeConfiguration.gridSquareSize;
 
+            // Create the snapped point in the transformed coordinate system
+            let snappedPoint = new Point(nearestX, nearestY);
 
-            return new Point(x, y);
+            // Transform the snapped point back to the original coordinate system
+            return snappedPoint.transform(this.transformationService.transformationMatrix);
         }
         return point;
     }

@@ -15,7 +15,6 @@ export class GridComponent implements AfterViewInit {
     @ViewChild('gridCanvas', {static: true}) private gridCanvas!: ElementRef<HTMLCanvasElement>;
     private context: CanvasRenderingContext2D | null = null;
     private canvasRect: DOMRect | null = null;
-    private readonly _squareSize: number = 30;
 
     constructor(
         private transformationService: TransformationService,
@@ -23,11 +22,6 @@ export class GridComponent implements AfterViewInit {
         private modeConfiguration: ModesConfiguration
     ) {
     }
-
-    get squareSize(): number {
-        return this._squareSize;
-    }
-
 
     ngAfterViewInit() {
         // Replace direct access to the DOM with Renderer2
@@ -47,12 +41,13 @@ export class GridComponent implements AfterViewInit {
 
 
     // Draw the grid
+    // Draw the grid
     drawGrid() {
         if (this.context) {
             this.canvasRect = this.gridCanvas.nativeElement.getBoundingClientRect();
-            const gridSize = this._squareSize * this.modeConfiguration.zoomLevel / 100; // Adjust grid size based on zoom level
-            let xDelta = (this.transformationService.transformationMatrix[0][2]) % gridSize;
-            let yDelta = (this.transformationService.transformationMatrix[1][2]) % gridSize;
+            const gridSize = this.modeConfiguration.gridSquareSize * this.modeConfiguration.zoomLevel / 100; // Adjust grid size based on zoom level
+            const xDelta = this.transformationService.transformationMatrix[0][2] % gridSize;
+            const yDelta = this.transformationService.transformationMatrix[1][2] % gridSize;
             this.context.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--grid-color');
 
             if (this.canvasRect != null) {
@@ -64,7 +59,6 @@ export class GridComponent implements AfterViewInit {
 
                 // Draw vertical lines
                 for (let x = 0; x <= numVerticalLines; x++) {
-                    // Adjust the starting point of each line based on xDelta
                     const xOffset = x * gridSize + xDelta;
                     this.context.moveTo(xOffset, 0);
                     this.context.lineTo(xOffset, this.canvasRect.height);
@@ -72,7 +66,6 @@ export class GridComponent implements AfterViewInit {
 
                 // Draw horizontal lines
                 for (let y = 0; y <= numHorizontalLines; y++) {
-                    // Adjust the starting point of each line based on yDelta
                     const yOffset = y * gridSize + yDelta;
                     this.context.moveTo(0, yOffset);
                     this.context.lineTo(this.canvasRect.width, yOffset);
@@ -82,6 +75,7 @@ export class GridComponent implements AfterViewInit {
             }
         }
     }
+
 
     updateCanvas(): void {
         this.setGridSize();

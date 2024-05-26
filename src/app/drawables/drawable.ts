@@ -3,6 +3,7 @@ interface Drawable {
         context: CanvasRenderingContext2D,
         canvasColor: string,
         drawableColor: string,
+        conversionFactor: number,
         transformationMatrix: number[][],
     ): void;
 
@@ -13,4 +14,6 @@ interface Drawable {
     equals(drawable: Drawable): boolean;
 
     shiftExtremity(extremity: Drawable, x: number, y: number): void;
+
+    transform(transformationMatrix: number[][]): Drawable;
 }
