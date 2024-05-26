@@ -1,9 +1,12 @@
 <head>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconoir@latest/iconoir.css">
+<link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css"/>
 </head>
 
-<img src="src/assets/logo.png" alt="Logo" style="width: 150px; margin-right: 20px">
-<img src="src/assets/logo.png" alt="Logo" style="filter: invert() hue-rotate(100deg); width: 150px; margin-top: 20px">
+
+<img src="src/assets/logo.png" alt="Logo" style="width: 150px; margin-top: 20px;">
+
+# Digital Blu
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.7.
 
@@ -35,6 +38,73 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
     - Icon: <i class="iconoir iconoir-mirror"></i>
     - Description: Add windows to your design.
     - Access: Click on the window icon in the toolbar, and place the window on the desired wall.
+
+### Modes of Operation
+
+- **Draw Mode**
+    - Icon: ![Draw Mode Icon](https://iconoir.com/icons/draw-mode.svg)
+    - Description: The primary mode for creating and modifying design elements.
+    - Access: Select the draw mode icon from the mode selector.
+
+- **Delete Mode**
+    - Icon: ![Delete Mode Icon](https://iconoir.com/icons/delete-mode.svg)
+    - Description: Enables deletion of selected elements from the canvas.
+    - Access: Click on the delete mode icon in the mode selector.
+
+- **Move Mode**
+    - Icon: ![Move Mode Icon](https://iconoir.com/icons/move-mode.svg)
+    - Description: Allows you to move selected elements around the canvas.
+    - Access: Select the move mode icon in the mode selector.
+
+- **Grab Display Mode**
+    - Icon: ![Grab Display Mode Icon](https://iconoir.com/icons/grab-display-mode.svg)
+    - Description: Enables panning and navigating across the canvas.
+    - Access: Click on the grab display mode icon in the mode selector.
+
+### Helper Features
+
+- **Snap Point**
+    - Icon: ![Snap Point Icon](https://iconoir.com/icons/snap-point.svg)
+    - Description: Snaps elements to predefined points for precision.
+    - Access: Enable snap points from the helper tools menu.
+
+- **Snap Angle**
+    - Icon: ![Snap Angle Icon](https://iconoir.com/icons/snap-angle.svg)
+    - Description: Ensures elements snap to specific angles (e.g., 45°, 90°).
+    - Access: Activate snap angles from the helper tools menu.
+
+- **Grid**
+    - Icon: ![Grid Icon](https://iconoir.com/icons/grid.svg)
+    - Description: Displays a grid to help align and scale elements accurately.
+    - Access: Toggle the grid view from the helper tools menu.
+
+### Additional Functionalities
+
+- **Undo/Redo**
+    - Icon: ![Undo Icon](https://iconoir.com/icons/undo.svg) ![Redo Icon](https://iconoir.com/icons/redo.svg)
+    - Description: Undo and redo actions to easily correct mistakes.
+    - Access: Use the undo and redo icons in the toolbar.
+
+- **Clear Canvas**
+    - Icon: ![Clear Canvas Icon](https://iconoir.com/icons/clear-canvas.svg)
+    - Description: Clears all elements from the current canvas.
+    - Access: Click on the clear canvas icon in the toolbar.
+
+- **Save Multiple Canvases**
+    - Icon: ![Save Icon](https://iconoir.com/icons/save.svg)
+    - Description: Save different versions of your canvases for later use.
+    - Access: Use the save option in the file menu.
+
+- **Export Canvas**
+    - Icon: ![Export Icon](https://iconoir.com/icons/export.svg)
+    - Description: Export your canvas in various formats (e.g., PNG, PDF).
+    - Access: Click the export icon in the toolbar.
+
+- **Light Mode/Dark Mode**
+  -
+  Icon: ![Light Mode Icon](https://iconoir.com/icons/light-mode.svg) ![Dark Mode Icon](https://iconoir.com/icons/dark-mode.svg)
+    - Description: Toggle between light and dark themes for better visibility.
+    - Access: Use the light/dark mode toggle in the settings menu.
 
 ## Technical
 
