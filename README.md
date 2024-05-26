@@ -11,15 +11,17 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ### Architectural Elements
 
+- **Line**
+    - Icon: <i class="iconoir iconoir-design-pencil"></i>
+    - Description: Draw straight lines for partitions or design elements.
+    - Access: Click on the line icon in the toolbar.
+
+
 - **Wall**
     - Icon: <i class="iconoir iconoir-cube"></i>
     - Description: Allows you to draw walls in your architectural plans.
     - Access: Click on the wall icon in the toolbar.
 
-- **Line**
-    - Icon: <i class="iconoir iconoir-design-pencil"></i>
-    - Description: Draw straight lines for partitions or design elements.
-    - Access: Click on the line icon in the toolbar.
 
 - **Door**
     - Icon: <i class="iconoir iconoir-closet"></i>
