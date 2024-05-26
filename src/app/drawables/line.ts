@@ -199,6 +199,7 @@ export class Line implements Drawable {
         context: CanvasRenderingContext2D,
         canvasColor: string,
         lineColor: string,
+        conversionFactor: number,
         transformationMatrix: number[][] = [[1, 0, 0], [0, 1, 0]],
     ): void {
         let line: Line = this.transform(transformationMatrix);
@@ -208,15 +209,16 @@ export class Line implements Drawable {
         context.strokeStyle = lineColor;
         context.stroke();
 
-        this.displayDimensions(context, line, lineColor);
+        this.displayDimensions(context, line, lineColor, conversionFactor);
     }
 
     displayDimensions(
         context: CanvasRenderingContext2D,
         line: Line,
         textColor: string,
+        conversionFactor: number,
         offsetAboveLine: number = 15, // Offset for dimension text above the line
-        fontSize: string = '12px Arial' // Font size and family for dimension text
+        fontSize: string = '12px Arial', // Font size and family for dimension text
     ): void {
         // Calculate angle of the line segment relative to the x-axis
         const angle = line.getAngleWithXVector();
@@ -241,8 +243,7 @@ export class Line implements Drawable {
         const adjustedAngle = angle > Math.PI / 2 || angle < -Math.PI / 2 ? angle + Math.PI : angle;
         context.rotate(adjustedAngle);
 
-        // Compute the conversion factor (50 cm by 30 pixels grid square)
-        const conversionFactor = 50 / 30;
+        // Get the line dimension in centimeters
         const convertedDistance = this.calculateDistance() * conversionFactor;
 
         // Draw dimension text on canvas

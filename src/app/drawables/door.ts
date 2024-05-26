@@ -104,6 +104,7 @@ export class Door extends WallOpening implements Drawable {
         context: CanvasRenderingContext2D,
         canvasColor: string,
         wallColor: string,
+        conversionFactor: number,
         transformationMatrix: number[][],
     ): void {
         // Get the updated coordinates
@@ -124,7 +125,7 @@ export class Door extends WallOpening implements Drawable {
                     door._direction < 0,
                     wallColor
                 );
-                new Line(parallelLine.firstPoint, door._base[0].firstPoint).draw(context, canvasColor, wallColor);
+                new Line(parallelLine.firstPoint, door._base[0].firstPoint).draw(context, canvasColor, wallColor, conversionFactor);
                 break;
 
             case DoorType.OPEN_RIGHT:
@@ -137,7 +138,7 @@ export class Door extends WallOpening implements Drawable {
                     door._direction < 0,
                     wallColor
                 );
-                new Line(parallelLine.secondPoint, door._base[0].secondPoint).draw(context, canvasColor, wallColor);
+                new Line(parallelLine.secondPoint, door._base[0].secondPoint).draw(context, canvasColor, wallColor, conversionFactor);
                 break;
 
             case DoorType.OPEN_TWO_WAY:
@@ -161,8 +162,8 @@ export class Door extends WallOpening implements Drawable {
                     wallColor
                 );
 
-                new Line(parallelLine.firstPoint, door._base[0].firstPoint).draw(context, canvasColor, wallColor);
-                new Line(parallelLine.secondPoint, door._base[0].secondPoint).draw(context, canvasColor, wallColor);
+                new Line(parallelLine.firstPoint, door._base[0].firstPoint).draw(context, canvasColor, wallColor, conversionFactor);
+                new Line(parallelLine.secondPoint, door._base[0].secondPoint).draw(context, canvasColor, wallColor, conversionFactor);
                 break;
 
             default:

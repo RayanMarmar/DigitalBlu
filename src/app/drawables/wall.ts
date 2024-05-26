@@ -131,6 +131,7 @@ export class Wall implements Drawable {
         context: CanvasRenderingContext2D,
         canvasColor: string,
         wallColor: string,
+        conversionFactor: number,
         transformationMatrix: number[][],
     ): void {
         // Get the updated wall coordinates
@@ -146,11 +147,12 @@ export class Wall implements Drawable {
         context.fillStyle = wallColor;
         context.fill();
         context.stroke(); // If you want to keep the border, you can include this line
-        let displayLine =  this.xFactor == 1 ? wall._thirdLine : wall._firstLine ;
+        let displayLine = this.xFactor == 1 ? wall._thirdLine : wall._firstLine;
         this.firstLine.displayDimensions(
             context,
             displayLine,
             wallColor,
+            conversionFactor
         );
     }
 
