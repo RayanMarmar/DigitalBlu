@@ -9,7 +9,6 @@ export class ModesConfiguration {
     private _straightLineMode: boolean;
     private _snapAngleMode: boolean;
     private _moveMode: boolean;
-    private _snapRadiantFactor: number;
     private _drawing: boolean;
     private _gridOn: boolean;
     private _helperDisplayed: boolean;

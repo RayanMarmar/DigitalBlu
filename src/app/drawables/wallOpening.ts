@@ -20,13 +20,15 @@ export abstract class WallOpening implements Drawable {
         this._base = [line, secondLine];
     }
 
-    abstract draw(context: CanvasRenderingContext2D, canvasColor: string, drawableColor: string, transformationMatrix: number[][]): void ;
+    abstract draw(context: CanvasRenderingContext2D, canvasColor: string, drawableColor: string, conversionFactor: number, transformationMatrix: number[][]): void ;
 
     abstract toString(): String ;
 
     abstract equals(drawable: Drawable): boolean ;
 
     abstract shiftExtremity(extremity: Drawable, x: number, y: number): void ;
+
+    abstract transform(transformationMatrix: number[][]): WallOpening;
 
     get width(): number {
         return this._width;
