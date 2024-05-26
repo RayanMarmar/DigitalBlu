@@ -203,20 +203,21 @@ export class ArchiveService {
         this._wallsList.push(wall);
         this._linkedDrawables.linkDrawable(wall);
     }
-    addOpenings(openings : WallOpening[]): void {
-        if (openings.length <= 0){
-            return ;
+
+    addOpenings(openings: WallOpening[]): void {
+        if (openings.length <= 0) {
+            return;
         }
         for (let i = 0; i < openings.length; i++) {
-            if (openings[i] instanceof  Window){
+            if (openings[i] instanceof Window) {
                 let window = openings[i] as Window;
                 this.addWindow(window);
-            }else if (openings[i] instanceof  Door){
+            } else if (openings[i] instanceof Door) {
                 let door = openings[i] as Door;
                 this.addWindow(door);
             }
         }
-        }
+    }
 
     addDoor(door: Door): void {
         this._doorsList.push(door);
@@ -258,7 +259,6 @@ export class ArchiveService {
             return;
         let command: Command | undefined = this.archiveCommandsList.pop();
         if (command != undefined) {
-            console.log("!undefined")
             command.execute();
             this.addCommand(command);
         }
