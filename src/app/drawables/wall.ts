@@ -146,7 +146,7 @@ export class Wall implements Drawable {
         context.closePath();
         context.fillStyle = wallColor;
         context.fill();
-        context.stroke(); // If you want to keep the border, you can include this line
+        context.stroke();
         let displayLine = this.xFactor == 1 ? wall._thirdLine : wall._firstLine;
         this.firstLine.displayDimensions(
             context,
