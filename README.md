@@ -83,7 +83,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
     - Description: Change the global values of three components, the wall thickness, the grid unit measure, and the
       display of the elements measures.
     - Access: Press the icon in the toolbar and changed the values in the modal.
-
+  
 - **Shift key**
     - Icon: <img src="icons/arrow-up-circle.svg">
     - Description: Draw horizontal or vertical lines while pressing the shift key.
