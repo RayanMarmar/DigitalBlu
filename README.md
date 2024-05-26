@@ -15,20 +15,19 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 ### Architectural Elements
 
 - **Line**
-    -
-    Icon: <?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M8 21.1679V14L12 7L16 14V21.1679" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M8 14C8 14 9.12676 15 10 15C10.8732 15 12 14 12 14C12 14 13.1268 15 14 15C14.8732 15 16 14 16 14" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    - Icon: <img src="icons/design-pencil.svg">
     - Description: Draw straight lines for partitions or design elements.
     - Access: Click on the line icon in the toolbar.
 
 
 - **Wall**
-    - Icon: <i class="iconoir iconoir-cube"></i>
+    - Icon: <img src="icons/cube.svg">
     - Description: Allows you to draw walls in your architectural plans.
     - Access: Click on the wall icon in the toolbar.
 
 
 - **Door**
-    - Icon: <i class="iconoir iconoir-closet"></i>
+    - Icon: <img src="icons/closet.svg">
     - Description: Insert doors into your design. Available in three types: single left opening, single right opening,
       double.
     - Access: Click on the door icon in the toolbar and place it on a wall, use the up and down arrows to change the
@@ -36,74 +35,89 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 
 - **Window**
-    - Icon: <i class="iconoir iconoir-mirror"></i>
+    - Icon: <img src="icons/mirror.svg">
     - Description: Add windows to your design.
     - Access: Click on the window icon in the toolbar, and place the window on the desired wall.
 
 ### Modes of Operation
 
 - **Draw Mode**
-    - Icon: ![Draw Mode Icon](https://iconoir.com/icons/draw-mode.svg)
+    - Icon: <img src="icons/design-pencil.svg"><img src="icons/cube.svg">
     - Description: The primary mode for creating and modifying design elements.
-    - Access: Select the draw mode icon from the mode selector.
+    - Access: The draw mode is automatically selected when one of the two icons are selected (Line, Wall).
 
 - **Delete Mode**
-    - Icon: ![Delete Mode Icon](https://iconoir.com/icons/delete-mode.svg)
+    - Icon: <img src="icons/erase.svg">
     - Description: Enables deletion of selected elements from the canvas.
-    - Access: Click on the delete mode icon in the mode selector.
+    - Access: Click on the delete mode icon in the mode selector and then click on the elements to delete them.
 
 - **Move Mode**
-    - Icon: ![Move Mode Icon](https://iconoir.com/icons/move-mode.svg)
+    - Icon: <img src="icons/cursor-pointer.svg">
     - Description: Allows you to move selected elements around the canvas.
     - Access: Select the move mode icon in the mode selector.
 
 - **Grab Display Mode**
-    - Icon: ![Grab Display Mode Icon](https://iconoir.com/icons/grab-display-mode.svg)
+    - Icon: <img src="icons/drag-hand-gesture.svg">
     - Description: Enables panning and navigating across the canvas.
     - Access: Click on the grab display mode icon in the mode selector.
 
 ### Helper Features
 
 - **Snap Point**
-    - Icon: ![Snap Point Icon](https://iconoir.com/icons/snap-point.svg)
+    - Icon: <img src="icons/one-point-circle.svg">
     - Description: Snaps elements to predefined points for precision.
     - Access: Enable snap points from the helper tools menu.
 
 - **Snap Angle**
-    - Icon: ![Snap Angle Icon](https://iconoir.com/icons/snap-angle.svg)
-    - Description: Ensures elements snap to specific angles (e.g., 45°, 90°).
+    - Icon: <img src="icons/angle-tool.svg">
+    - Description: Ensures elements snap to specific angles (e.g., 45°, 90° etc...).
     - Access: Activate snap angles from the helper tools menu.
 
 - **Grid**
-    - Icon: ![Grid Icon](https://iconoir.com/icons/grid.svg)
-    - Description: Displays a grid to help align and scale elements accurately.
+    - Icon: <img src="icons/orthogonal-view.svg">
+    - Description: Displays a grid to help align elements accurately.
     - Access: Toggle the grid view from the helper tools menu.
+
+- **Change global values**
+    - Icon: <img src="icons/control-slider.svg">
+    - Description: Change the global values of three components, the wall thickness, the grid unit measure, and the
+      display of the elements measures.
+    - Access: Press the icon in the toolbar and changed the values in the modal.
+
+- **Shift key**
+    - Icon: <img src="icons/arrow-up-circle.svg">
+    - Description: Draw horizontal or vertical lines while pressing the shift key.
+    - Access: Press the shift key and draw.
 
 ### Additional Functionalities
 
 - **Undo/Redo**
-    - Icon: ![Undo Icon](https://iconoir.com/icons/undo.svg) ![Redo Icon](https://iconoir.com/icons/redo.svg)
+    - Icon: <img src="icons/undo-circle.svg"> <img src="icons/redo-circle.svg">
     - Description: Undo and redo actions to easily correct mistakes.
     - Access: Use the undo and redo icons in the toolbar.
 
 - **Clear Canvas**
-    - Icon: ![Clear Canvas Icon](https://iconoir.com/icons/clear-canvas.svg)
+    - Icon: <img src="icons/bin-full.svg">
     - Description: Clears all elements from the current canvas.
     - Access: Click on the clear canvas icon in the toolbar.
 
 - **Save Multiple Canvases**
-    - Icon: ![Save Icon](https://iconoir.com/icons/save.svg)
+    - Icon: <img src="icons/floppy-disk.svg">
+    - Description: Save different versions of your canvases for later use.
+    - Access: Use the save option in the file menu.
+
+- **Open recent saved canvases**
+    - Icon: <img src="icons/folder.svg">
     - Description: Save different versions of your canvases for later use.
     - Access: Use the save option in the file menu.
 
 - **Export Canvas**
-    - Icon: ![Export Icon](https://iconoir.com/icons/export.svg)
+    - Icon: <img src="icons/share-ios.svg">
     - Description: Export your canvas in various formats (e.g., PNG, PDF).
     - Access: Click the export icon in the toolbar.
 
 - **Light Mode/Dark Mode**
-  -
-  Icon: ![Light Mode Icon](https://iconoir.com/icons/light-mode.svg) ![Dark Mode Icon](https://iconoir.com/icons/dark-mode.svg)
+    - Icon: <img src="icons/brightness.svg">
     - Description: Toggle between light and dark themes for better visibility.
     - Access: Use the light/dark mode toggle in the settings menu.
 
