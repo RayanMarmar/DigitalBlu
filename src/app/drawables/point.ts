@@ -122,4 +122,7 @@ export class Point implements Drawable {
 
     shiftExtremity(extremity: Point, x: number, y: number): void {
     }
+    clone() : Point {
+        return new Point(this._x, this._y);
+    }
 }

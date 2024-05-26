@@ -201,4 +201,8 @@ export class Door extends WallOpening {
 
     shiftExtremity(extremity: Point, x: number, y: number): void {
     }
+
+    clone() : Door {
+        return this;
+    }
 }

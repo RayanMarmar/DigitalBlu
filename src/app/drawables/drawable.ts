@@ -16,4 +16,6 @@ interface Drawable {
     shiftExtremity(extremity: Drawable, x: number, y: number): void;
 
     transform(transformationMatrix: number[][]): Drawable;
+
+    clone() : Drawable;
 }
