@@ -15,7 +15,6 @@ export class GridComponent implements AfterViewInit {
     @ViewChild('gridCanvas', {static: true}) private gridCanvas!: ElementRef<HTMLCanvasElement>;
     private context: CanvasRenderingContext2D | null = null;
     private canvasRect: DOMRect | null = null;
-    private readonly _squareSize: number = 30;
 
     constructor(
         private transformationService: TransformationService,
@@ -23,11 +22,6 @@ export class GridComponent implements AfterViewInit {
         private modeConfiguration: ModesConfiguration
     ) {
     }
-
-    get squareSize(): number {
-        return this._squareSize;
-    }
-
 
     ngAfterViewInit() {
         // Replace direct access to the DOM with Renderer2
@@ -51,7 +45,7 @@ export class GridComponent implements AfterViewInit {
     drawGrid() {
         if (this.context) {
             this.canvasRect = this.gridCanvas.nativeElement.getBoundingClientRect();
-            const gridSize = this._squareSize * this.modeConfiguration.zoomLevel / 100; // Adjust grid size based on zoom level
+            const gridSize = this.modeConfiguration.gridSquareSize * this.modeConfiguration.zoomLevel / 100; // Adjust grid size based on zoom level
             const xDelta = this.transformationService.transformationMatrix[0][2] % gridSize;
             const yDelta = this.transformationService.transformationMatrix[1][2] % gridSize;
             this.context.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--grid-color');
