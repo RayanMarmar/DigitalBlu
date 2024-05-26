@@ -1,5 +1,4 @@
 import './modeHandler';
-import {CopyPasteService} from "../services/copy-paste.service";
 import {Mouse} from "../models/mouse";
 import {ArchiveService} from "../services/archive.service";
 import {Point} from "../drawables/point";
@@ -75,7 +74,6 @@ export class CursorModeHandler implements ModeHandler {
                 }
             }
             this.delta = new Point(0, 0);
-            //this.archiveService.selectedElement = null;
             this.modesConfiguration.moveMode = false;
         } catch (e) {
             console.error("Problem on up cursor mode", e)
