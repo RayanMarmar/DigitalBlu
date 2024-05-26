@@ -15,6 +15,8 @@ import {GlobalHandler} from "../modeHandlers/globalHandler";
 import {CanvasService} from "./canvas.service";
 import {ComponentSelectorService} from "./component-selector.service";
 import {SnapService} from "./snap.service";
+import {MoveService} from "./move.service";
+import {SaveService} from "./save.service";
 
 @Injectable({
     providedIn: 'root'
@@ -30,6 +32,8 @@ export class ModeManagerService {
         private transformationService: TransformationService,
         private snapService: SnapService,
         private componentSelector: ComponentSelectorService,
+        private moveService: MoveService,
+        private saveService: SaveService,
     ) {
     }
 
@@ -84,11 +88,18 @@ export class ModeManagerService {
             this.mouse,
             this.archiveService,
             this.componentSelector,
+            this.transformationService,
         );
     }
 
     get cursorMode(): CursorModeHandler {
         return new CursorModeHandler(
+            this.mouse,
+            this.archiveService,
+            this.componentSelector,
+            this.modesConfiguration,
+            this.moveService,
+            this.transformationService
         );
     }
 
@@ -98,6 +109,8 @@ export class ModeManagerService {
             this.modesConfiguration,
             this.transformationService,
             this.gridService,
+            this.saveService,
+            this.archiveService,
         );
     }
 }

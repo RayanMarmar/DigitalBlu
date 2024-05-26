@@ -3,6 +3,7 @@ import {Mouse} from "../models/mouse";
 import {ArchiveService} from "../services/archive.service";
 import {Point} from "../drawables/point";
 import {ComponentSelectorService} from "../services/component-selector.service";
+import {TransformationService} from "../services/transformation.service";
 
 export class EraseModeHandler implements ModeHandler {
 
@@ -10,6 +11,7 @@ export class EraseModeHandler implements ModeHandler {
         private mouse: Mouse,
         private archiveService: ArchiveService,
         private componentSelector: ComponentSelectorService,
+        private transformationService: TransformationService,
     ) {
     }
 
@@ -21,11 +23,11 @@ export class EraseModeHandler implements ModeHandler {
 
     onMouseDown(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
-        let point: Point = this.mouse.currentCoordinates!!;
+        let point: Point = this.mouse.currentCoordinates!!.reverseTransform(this.transformationService.reverseTransformationMatrix);
         try {
             let {component, list, archiveList} = this.componentSelector.getNearestComponent(point);
             this.archiveService.selectedElement = component;
-            this.archiveService.deleteElement(list, archiveList);
+            this.archiveService.deleteElement(this.archiveService.selectedElement!, list, archiveList);
             this.archiveService.selectedElement = null;
         } catch (e) {
             console.error("Problem on down cursor mode", e);
@@ -35,7 +37,7 @@ export class EraseModeHandler implements ModeHandler {
 
     onMouseMove(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
-        let point: Point = this.mouse.currentCoordinates!!;
+        let point: Point = this.mouse.currentCoordinates!!.reverseTransform(this.transformationService.reverseTransformationMatrix);
         try {
             const {component} = this.componentSelector.getNearestComponent(point);
             this.archiveService.selectedElement = component;

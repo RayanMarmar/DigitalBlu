@@ -96,13 +96,11 @@ export class SaveService {
     }
 
     getCanvasState(archive: ArchiveService, canvasName: string): void {
-        console.log(canvasName);
-        console.log(this.previousAppData);
         if (this.previousAppData == null) {
             return;
         }
+
         const currentCanvasState: any = this.previousAppData.canvases[canvasName];
-        console.log(currentCanvasState)
         if (currentCanvasState) {
             // Individual assignment of attributes from the parsed state
             // SETTING LINES
@@ -131,12 +129,11 @@ export class SaveService {
 
             // SETTING DOORS
             const doorsList = currentCanvasState.doorsList || [];
-            archive.doorsList = doorsList.map((doorData: any) => {
+            doorsList.map((doorData: any) => {
                 // Find the existing wall associated with the door
-
                 let wall = archive.getWallByUid(doorData._uid)
                 if (wall) {
-                    return new Door(
+                    let door = new Door(
                         wall, // Pass the existing wall
                         new Point(doorData._point._x, doorData._point._y),
                         doorData._doorType,
@@ -144,27 +141,29 @@ export class SaveService {
                         doorData._width,
                         doorData._radius
                     );
+                    wall.addWallOpening(door);
+                    archive.doorsList.push(door);
                 } else {
                     // Handle case where wall is not found
                     console.error(`Wall with uid ${doorData._uid} not found.`);
-                    return null; // or handle differently based on your use case
                 }
             });
 
             // SETTING WINDOWS
-            archive.windowsList = currentCanvasState.windowsList.map((windowData: any) => {
-
+            currentCanvasState.windowsList.map((windowData: any) => {
+                // Find the existing wall associated with the door
                 let wall = archive.getWallByUid(windowData._uid)
                 if (wall) {
-                    return new Window(
+                    let window = new Window(
                         wall, // Get wall reference from archive
                         new Point(windowData._point._x, windowData._point._y),
                         windowData._width
                     )
+                    wall.addWallOpening(window);
+                    archive.windowsList.push(window);
                 } else {
                     // Handle case where wall is not found
                     console.error(`Wall with uid ${windowData._uid} not found.`);
-                    return null; // or handle differently based on your use case
                 }
 
             });

@@ -3,6 +3,8 @@ import {ModesConfiguration} from "../models/modesConfiguration";
 import {TransformationService} from "../services/transformation.service";
 import {CanvasService} from "../services/canvas.service";
 import {GridService} from "../services/grid.service";
+import {SaveService} from "../services/save.service";
+import {ArchiveService} from "../services/archive.service";
 
 export class GlobalHandler implements ModeHandler {
     constructor(
@@ -10,6 +12,8 @@ export class GlobalHandler implements ModeHandler {
         private readonly modesConfiguration: ModesConfiguration,
         private transformationService: TransformationService,
         private gridService: GridService,
+        private saveService: SaveService,
+        private archiveService: ArchiveService,
     ) {
     }
 
@@ -32,6 +36,11 @@ export class GlobalHandler implements ModeHandler {
                 this.undo();
             } else if (event.key === 'y') {
                 this.redo();
+            } else if (event.key === 's') {
+                if (!this.archiveService.upToDate && this.modesConfiguration.checkSave()) {
+                    this.archiveService.upToDate = true;
+                    this.saveService.saveState(this.modesConfiguration.canvasName);
+                }
             }
             event.preventDefault();
         }

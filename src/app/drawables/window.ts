@@ -3,7 +3,7 @@ import {Wall} from "./wall";
 import {WallOpening} from "./wallOpening";
 import "./drawable";
 
-export class Window extends WallOpening implements Drawable {
+export class Window extends WallOpening {
     constructor(wall: Wall, point: Point, width: number = 50) {
         super(wall, point, width);
     }
@@ -19,8 +19,11 @@ export class Window extends WallOpening implements Drawable {
         conversionFactor: number,
         transformationMatrix: number[][],
     ): void {
-        let window: Window = this.transform(transformationMatrix);
-        window.drawOpening(context, bgColor);
+        try {
+            let window: Window = this.transform(transformationMatrix);
+            window.drawOpening(context, bgColor);
+        } catch (e) {
+        }
     }
 
 
@@ -30,6 +33,9 @@ export class Window extends WallOpening implements Drawable {
             this._base[0].calculateCenter().transform(transformationMatrix),
             this.width * transformationMatrix[0][0],
         );
+    }
+
+    shiftExtremity(extremity: Point, x: number, y: number): void {
     }
 
     equals(drawable: Drawable): boolean {

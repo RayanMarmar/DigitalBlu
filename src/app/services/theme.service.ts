@@ -18,9 +18,13 @@ export class ThemeService {
     }
 
     getDeleteDrawableColor(): string {
-        return getComputedStyle(this.document.documentElement).getPropertyValue('--delete-wall-color');
+        return getComputedStyle(this.document.documentElement).getPropertyValue('--delete-drawable-color');
     }
 
+    getSelectedDrawableColor(eraseMode: boolean = false): string {
+        const colorProperty = eraseMode ? '--delete-drawable-color' : '--selected-drawable-color';
+        return getComputedStyle(this.document.documentElement).getPropertyValue(colorProperty);
+    }
 
     toggleDarkMode(darkMode: boolean) {
         if (darkMode) {

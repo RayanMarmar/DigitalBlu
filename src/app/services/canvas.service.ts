@@ -24,7 +24,7 @@ export class CanvasService {
         private themeService: ThemeService,
         private saveService: SaveService,
         private modeConfiguration: ModesConfiguration,
-        private exportService: ExportService
+        private exportService: ExportService,
     ) {
     }
 
@@ -90,19 +90,19 @@ export class CanvasService {
         });
     }
 
-    private highlightSelectedElement(): void {
+    private highlightSelectedElement(eraseMode: boolean): void {
         if (this.archiveService.selectedElement !== null) {
             this.archiveService.selectedElement.draw(
                 this.context!!,
                 this.themeService.getCanvasColor(),
-                this.themeService.getDeleteDrawableColor(),
+                this.themeService.getSelectedDrawableColor(eraseMode),
                 this.modeConfiguration.conversionFactor,
                 this.transformationService.transformationMatrix,
             )
         }
     }
 
-    drawAll(): void {
+    drawAll(eraseMode: boolean = false): void {
         if (this.context == null) {
             console.error("Context is null...")
             return;
@@ -110,10 +110,7 @@ export class CanvasService {
         this.clear();
         this.drawAllLines();
         this.drawAllWalls();
-        this.drawAllDoors();
-        this.drawAllWindows();
-        this.highlightSelectedElement();
-
+        this.highlightSelectedElement(eraseMode);
     }
 
     undo(): void {

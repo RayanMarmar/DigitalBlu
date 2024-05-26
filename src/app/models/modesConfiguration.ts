@@ -8,12 +8,14 @@ export class ModesConfiguration {
     private _snapMode: boolean;
     private _straightLineMode: boolean;
     private _snapAngleMode: boolean;
+    private _moveMode: boolean;
     private _drawing: boolean;
     private _gridOn: boolean;
     private _helperDisplayed: boolean;
     private _canvasName: string = "";
     private _allCanvasNames: string[] = [];
     private _darkMode: boolean;
+    private _nameModalOpened: boolean = false;
 
     // default wall thickness in pixels
     private _defaultThickness: number = 10;
@@ -33,6 +35,8 @@ export class ModesConfiguration {
         this._snapMode = true;
         this._straightLineMode = false;
         this._snapAngleMode = false;
+        this._moveMode = false;
+        this._snapRadiantFactor = 6;
         this._drawing = false;
         this._gridOn = true;
         this._darkMode = false;
@@ -46,6 +50,14 @@ export class ModesConfiguration {
     // Get the factor of conversion from pixels to centimeters
     get conversionFactor(): number {
         return this._gridUnitValue / this._gridSquareSize;
+    }
+
+    get nameModalOpened(): boolean {
+        return this._nameModalOpened;
+    }
+
+    set nameModalOpened(value: boolean) {
+        this._nameModalOpened = value;
     }
 
     get helperDisplayed(): boolean {
@@ -162,6 +174,14 @@ export class ModesConfiguration {
         this._helperDisplayed = !this._helperDisplayed;
     }
 
+    get moveMode(): boolean {
+        return this._moveMode;
+    }
+
+    set moveMode(value: boolean) {
+        this._moveMode = value;
+    }
+
     changeSnapAngleMode(): void {
         this._snapAngleMode = !this._snapAngleMode;
     }
@@ -185,5 +205,17 @@ export class ModesConfiguration {
     addCanvasName(value: string): void {
         this.canvasName = value;
         this._allCanvasNames.push(value);
+    }
+
+    checkSave(): boolean {
+        if (this.canvasName == "") {
+            this.openModal();
+            return false;
+        }
+        return true;
+    }
+
+    openModal(): void {
+        this.nameModalOpened = true;
     }
 }

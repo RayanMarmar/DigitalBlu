@@ -8,6 +8,8 @@ import {Door} from "../drawables/door";
 import {Window} from "../drawables/window";
 import {DeleteCommand} from "../commands/deleteCommand";
 import {LinkedDrawables} from "../models/linkedDrawables";
+import {MoveCommand} from "../commands/moveCommand";
+import {MoveService} from "./move.service";
 
 
 @Injectable({
@@ -309,9 +311,9 @@ export class ArchiveService {
         let minElement: Wall | null = null;
 
         for (const wall of this._wallsList) {
-            const distance = wall.calculateNearestPointDistance(point);
-            if (distance < min) {
-                min = distance;
+            const minDistance = wall.calculateNearestPointDistance(point);
+            if (minDistance < min) {
+                min = minDistance;
                 minElement = wall;
             }
         }
@@ -324,9 +326,9 @@ export class ArchiveService {
         let minElement: Line | null = null;
 
         for (const line of this._linesList) {
-            const distance = line.calculateNearestPointDistance(point);
-            if (distance < min) {
-                min = distance;
+            const minDistance = line.calculateNearestPointDistance(point);
+            if (minDistance < min) {
+                min = minDistance;
                 minElement = line;
             }
         }
@@ -339,17 +341,17 @@ export class ArchiveService {
         let minElement: Door | Window | null = null;
 
         for (const door of this._doorsList) {
-            const distance = door.calculateNearestPointDistance(point);
-            if (distance < min) {
-                min = distance;
+            const minDistance = door.calculateNearestPointDistance(point); // Calculate nearest point distance
+            if (minDistance < min) {
+                min = minDistance;
                 minElement = door;
             }
         }
 
         for (const window of this._windowsList) {
-            const distance = window.calculateNearestPointDistance(point);
-            if (distance < min) {
-                min = distance;
+            const minDistance = window.calculateNearestPointDistance(point); // Calculate nearest point distance
+            if (minDistance < min) {
+                min = minDistance;
                 minElement = window;
             }
         }
@@ -365,8 +367,8 @@ export class ArchiveService {
         this._wallsList.pop();
     }
 
-    deleteElement(list: Drawable[] | null, archiveList: Drawable[] | null): void {
-        if (this.selectedElement === null || list === null || archiveList === null) {
+    deleteElement(element: Drawable, list: Drawable[] | null, archiveList: Drawable[] | null): void {
+        if (element === null || list === null || archiveList === null) {
             // Handle case where x is null
         } else {
             let command = new DeleteCommand(
@@ -377,7 +379,7 @@ export class ArchiveService {
                 this._archiveDoorsList,
                 list,
                 archiveList,
-                this._selectedElement!
+                element
             );
             this.commandsList.push(command);
             command.execute();
@@ -387,6 +389,28 @@ export class ArchiveService {
     getWallByUid(uid: string): Wall | null {
         const wall = this.wallsList.find(w => w.uid === uid);
         return wall ? wall : null;
+    }
+
+    addMoveCommand(delta: Point, element: Drawable, moveService: MoveService): void {
+        let command = new MoveCommand(
+            delta,
+            element,
+            moveService
+        )
+        this.addCommand(command);
+    }
+
+    updateDrawable(extremity: Point, drawable: Drawable, delta: Point) {
+        if (drawable instanceof Line) {
+            this.linesList
+                .filter(line => line.equals(drawable))
+                .forEach(line => line.shiftExtremity(extremity, delta.x, delta.y));
+        }
+        if (drawable instanceof Wall) {
+            this.wallsList
+                .filter(wall => wall.equals(drawable))
+                .forEach(wall => wall.shiftExtremity(extremity, delta.x, delta.y));
+        }
     }
 
     clearCanvas(): void {

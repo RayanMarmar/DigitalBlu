@@ -3,7 +3,7 @@ import "./drawable";
 export class Point implements Drawable {
     private _x: number;
     private _y: number;
-    private range: number = 5;
+    private range: number = 10;
 
     constructor(x: number, y: number) {
         this._x = x;
@@ -104,6 +104,11 @@ export class Point implements Drawable {
         );
     }
 
+    shiftElement(x: number, y: number): void {
+        this.x = this.x + x;
+        this.y = this.y + y;
+    }
+
     // Serialize Point to a string representation
     serialize(): string {
         return `${this._x},${this._y}`;
@@ -113,5 +118,8 @@ export class Point implements Drawable {
     static deserialize(serializedPoint: string): Point {
         const [x, y] = serializedPoint.split(',').map(Number);
         return new Point(x, y);
+    }
+
+    shiftExtremity(extremity: Point, x: number, y: number): void {
     }
 }

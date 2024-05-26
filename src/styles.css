@@ -10,7 +10,8 @@
     --transparent: transparent;
     --grid-color: rgba(152, 152, 152, 0.55);
     --wall-color: black;
-    --delete-wall-color: #FF0000;
+    --delete-drawable-color: #C40C0C;
+    --selected-drawable-color: #0404fc;
     --cursor-filter: none;
 }
 
@@ -25,7 +26,8 @@
     --transparent: transparent;
     --grid-color: rgba(208, 208, 208, 0.55);
     --wall-color: #ffffff;
-    --delete-wall-color: #FF0000;
+    --delete-drawable-color: #C40C0C;
+    --selected-drawable-color: #0404fc;
     --cursor-filter: invert(100%);
 
 }
