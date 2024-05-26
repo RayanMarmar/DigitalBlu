@@ -255,6 +255,7 @@ export class ArchiveService {
             return;
         let command: Command | undefined = this.archiveCommandsList.pop();
         if (command != undefined) {
+            console.log("!undefined")
             command.execute();
             this.addCommand(command);
         }
@@ -445,13 +446,11 @@ export class ArchiveService {
     }
     pasteElement(element : Drawable | null , copyPasteService : CopyPasteService){
         if(element){
-            console.log("adding command")
-            let command = new PasteCommand(
+            let command: PasteCommand = new PasteCommand(
                copyPasteService
             )
-            this.addCommand(command);
-            console.log(" command",command)
-            copyPasteService.pasteElement()
+            this.commandsList.push(command);
+            command.execute();
         }
 
     }

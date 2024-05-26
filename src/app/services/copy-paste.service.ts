@@ -74,7 +74,6 @@ export class CopyPasteService {
   }
 
   copyElement(element : Drawable | null) : Line | Wall | void {
-    console.log("copying")
     if (element instanceof Line) {
       let e = element as Line ;
       this.copiedElement = new Line(
@@ -98,16 +97,32 @@ export class CopyPasteService {
     return
   }
   pasteElement() : void {
-    console.log("pasting",this._copiedElement)
     if (this._copiedElement instanceof Line) {
       this._archiveService.pushLine(this._copiedElement)
+      this._archiveService.addLine(this._copiedElement)
     }
     if (this._copiedElement instanceof Wall) {
-      console.log("adding wall")
-      console.log("element",this.copiedElement)
       let e = this._copiedElement as Wall
       this._archiveService.pushWall(this._copiedElement)
+      this._archiveService.addWall(this._copiedElement)
       this.addOpenings(e.wallOpenings)
+    }
+  }
+
+  deleteElement() : void {
+    if (this._copiedElement instanceof Line) {
+      this._archiveService.deleteElement(
+          this._archiveService.copiedElement!,
+          this._archiveService.linesList,
+          this._archiveService.archiveLinesList
+      )
+    }
+    if (this._copiedElement instanceof Wall) {
+      this._archiveService.deleteElement(
+          this._archiveService.copiedElement!,
+          this._archiveService.wallsList,
+          this._archiveService.archiveWallsList
+      )
     }
   }
 }

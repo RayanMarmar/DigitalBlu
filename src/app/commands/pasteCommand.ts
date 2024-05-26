@@ -6,10 +6,9 @@ export class PasteCommand implements Command{
     ) {
     }
     execute():void {
-        console.log("executingPaste")
         this.copyPasteService.pasteElement()
     }
     undo():void {
-        // this.archiveService.deleteElement() = null ;
+        this.copyPasteService.deleteElement()
     }
 }
