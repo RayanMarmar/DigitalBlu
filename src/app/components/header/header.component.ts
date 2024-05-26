@@ -200,6 +200,13 @@ export class HeaderComponent {
         this.canvasSelectorOpened = !this.canvasSelectorOpened;
     }
 
+    cancelGlobalValues(): void {
+        this.lastValidThickness = this.thicknessInput = this.modesConfiguration.defaultThickness;
+        this.lastValidUnitValue = this.unitValueInput = this.modesConfiguration.gridUnitValue;
+
+        this.modesConfiguration.toggleGlobalValuesModal();
+    }
+
     saveGlobalValues(): void {
         this.modesConfiguration.changeDefaultThickness(this.lastValidThickness);
         this.modesConfiguration.gridUnitValue = this.lastValidUnitValue;
