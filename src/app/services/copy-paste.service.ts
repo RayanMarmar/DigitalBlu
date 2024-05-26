@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ArchiveService} from "./archive.service";
 import {Line} from "../drawables/line";
 import {TransformationService} from "./transformation.service";
@@ -13,7 +13,7 @@ import {Door} from "../drawables/door";
 })
 export class CopyPasteService {
 
-  private shift : number = 10
+  private shift : number = 20
   private _copiedElement : Drawable | null = null ;
   constructor(
       private _archiveService: ArchiveService,
@@ -38,7 +38,7 @@ export class CopyPasteService {
         let x = openings[i] as Window;
         let newWindow = new Window(
             wall,
-            new Point(x.center.x + this.shift, x.center.y + this.shift),
+            new Point(x.base[0].firstPoint.x + this.shift, x.base[0].firstPoint.y + this.shift),
             x.width
         );
         wall.addWallOpening(newWindow) ;
@@ -47,8 +47,11 @@ export class CopyPasteService {
         let x = openings[i] as Door;
         let newDoor = new Door(
             wall,
-            new Point(x.center.x + this.shift, x.center.y + this.shift),
-            x.width
+            new Point(x.base[0].firstPoint.x + this.shift, x.base[0].firstPoint.y + this.shift),
+            x.doorType,
+            x.direction,
+            x.width,
+            x.radius
         );
         wall.addWallOpening(newDoor) ;
       }
@@ -62,10 +65,10 @@ export class CopyPasteService {
     for (let i = 0; i < openings.length; i++) {
       if (openings[i] instanceof  Window){
         let x = openings[i] as Window;
-        this._archiveService.addWindow(x)
-      }else {
+        this._archiveService.pushWindow(x)
+      }else if (openings[i] instanceof  Door){
         let x = openings[i] as Door;
-        this._archiveService.addDoor(x)
+        this._archiveService.pushDoor(x)
       }
     }
   }
@@ -74,12 +77,11 @@ export class CopyPasteService {
     console.log("copying")
     if (element instanceof Line) {
       let e = element as Line ;
-      let newLine =   new Line(
-          new Point(element.firstPoint.x + this.shift , element.firstPoint.y + this.shift ),
+      this.copiedElement = new Line(
+          new Point(element.firstPoint.x + this.shift, element.firstPoint.y + this.shift),
           new Point(element.secondPoint.x + this.shift, element.secondPoint.y + this.shift),
           this._transformationService.reverseTransformationMatrix
       );
-      this.copiedElement = newLine;
     }
     if (element instanceof Wall) {
       let e = element as Wall ;
@@ -96,15 +98,15 @@ export class CopyPasteService {
     return
   }
   pasteElement() : void {
-    console.log("pasting")
+    console.log("pasting",this._copiedElement)
     if (this._copiedElement instanceof Line) {
-      this._archiveService.addLine(this._copiedElement)
+      this._archiveService.pushLine(this._copiedElement)
     }
     if (this._copiedElement instanceof Wall) {
       console.log("adding wall")
       console.log("element",this.copiedElement)
       let e = this._copiedElement as Wall
-      this._archiveService.addWall(this._copiedElement)
+      this._archiveService.pushWall(this._copiedElement)
       this.addOpenings(e.wallOpenings)
     }
   }
