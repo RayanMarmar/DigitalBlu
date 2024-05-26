@@ -257,6 +257,12 @@ export class Line implements Drawable {
         context.restore();
     }
 
+    clone() : Line {
+        return new Line(
+            this._firstPoint.clone(),
+            this._secondPoint.clone()
+        );
+    }
 
     transform(transformationMatrix: number[][]): Line {
         return new Line(this._firstPoint.transform(transformationMatrix), this._secondPoint.transform(transformationMatrix));

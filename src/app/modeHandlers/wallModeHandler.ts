@@ -26,8 +26,8 @@ export class WallModeHandler implements ModeHandler {
                     this.mouse.clickedCoordinates!!,
                     snappedPoint,
                     this.modesConfiguration.defaultThickness,
+                    null,
                     this.transformationService.reverseTransformationMatrix,
-                    null
                 )
             );
         }
@@ -44,8 +44,8 @@ export class WallModeHandler implements ModeHandler {
             this.mouse.clickedCoordinates!!,
             snappedPoint,
             this.modesConfiguration.defaultThickness,
+            null,
             this.transformationService.reverseTransformationMatrix,
-            null
         );
         if (this.mouse.notFirstMouseMoveEvent)
             this.archiveService.popWall();

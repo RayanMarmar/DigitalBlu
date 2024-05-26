@@ -45,4 +45,20 @@ export class Window extends WallOpening {
             && this._base[0].equals(drawable._base[0])
             && this._base[1].equals(drawable._base[1]);
     }
+
+    clone() : Window {
+        return new Window(
+            this.wall,
+            this._base[0].calculateCenter().clone(),
+            this._width
+        ) ;
+    }
+
+    shallowCopy(wall : Wall) : Window{
+        return  new Window(
+            wall,
+            this._base[0].calculateCenter().clone(),
+            this._width
+        );
+    }
 }

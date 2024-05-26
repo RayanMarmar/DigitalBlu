@@ -5,6 +5,7 @@ import {CanvasService} from "../services/canvas.service";
 import {GridService} from "../services/grid.service";
 import {SaveService} from "../services/save.service";
 import {ArchiveService} from "../services/archive.service";
+import {CopyPasteService} from "../services/copy-paste.service";
 
 export class GlobalHandler implements ModeHandler {
     constructor(
@@ -14,6 +15,7 @@ export class GlobalHandler implements ModeHandler {
         private gridService: GridService,
         private saveService: SaveService,
         private archiveService: ArchiveService,
+        private copyPasteService : CopyPasteService,
     ) {
     }
 
@@ -41,6 +43,10 @@ export class GlobalHandler implements ModeHandler {
                     this.archiveService.upToDate = true;
                     this.saveService.saveState(this.modesConfiguration.canvasName);
                 }
+            }else if (event.key === 'c'){
+                this.copyPasteService.copy();
+            }else if (event.key === 'v'){
+                this.copyPasteService.paste();
             }
             event.preventDefault();
         }

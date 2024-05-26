@@ -121,8 +121,8 @@ export class SaveService {
                     new Point(wallData._firstPoint._x, wallData._firstPoint._y),
                     new Point(wallData._secondPoint._x, wallData._secondPoint._y),
                     wallData._height,
-                    wallData._matrix._reverseTransformationMatrix,
-                    wallData._uid
+                    wallData._uid,
+                    wallData._matrix._reverseTransformationMatrix
                 );
                 this.archiveService.addWall(wall, true);
             });

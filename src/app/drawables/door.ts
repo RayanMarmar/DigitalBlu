@@ -201,4 +201,26 @@ export class Door extends WallOpening {
 
     shiftExtremity(extremity: Point, x: number, y: number): void {
     }
+
+    clone() : Door {
+        return new Door(
+            this._wall,
+            this._base[0].calculateCenter().clone(),
+            this._doorType,
+            this._direction,
+            this._width,
+            this._radius
+        );
+    }
+
+    shallowCopy(wall : Wall) : Door{
+        return  new Door(
+            wall,
+            this._base[0].calculateCenter().clone(),
+            this._doorType,
+            this._direction,
+            this._width,
+            this._radius
+        );
+    }
 }

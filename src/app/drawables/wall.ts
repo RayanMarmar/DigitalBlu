@@ -21,8 +21,8 @@ export class Wall implements Drawable {
         firstPoint: Point,
         secondPoint: Point,
         height: number,
-        reverseTransformationMatrix: number[][],
-        uid: string | null
+        uid: string | null,
+        reverseTransformationMatrix: number[][] = [[1, 1, 0], [1, 1, 0]]
     ) {
         // Get the original point coordinates in case of a certain transformation
         firstPoint = firstPoint.reverseTransform(reverseTransformationMatrix);
@@ -122,9 +122,7 @@ export class Wall implements Drawable {
         let firstPoint: Point = this._fourthLine.calculateCenter().transform(transformationMatrix);
         let secondPoint: Point = this._secondLine.calculateCenter().transform(transformationMatrix);
         let height: number = this._height * transformationMatrix[0][0];
-        return new Wall(firstPoint, secondPoint, height,
-            [[1, 1, 0], [1, 1, 0]], this.uid
-        );
+        return new Wall(firstPoint, secondPoint, height,this.uid);
     }
 
     draw(
@@ -203,5 +201,17 @@ export class Wall implements Drawable {
 
     get extremities(): Point[] {
         return [this._fourthLine.calculateCenter(), this._secondLine.calculateCenter()];
+    }
+    clone() : Wall {
+        let wall =  new Wall(
+            this._fourthLine.calculateCenter().clone(),
+            this._secondLine.calculateCenter().clone(),
+            this._height,
+            null
+        );
+
+        this._wallOpenings
+            .forEach(wallOpening => wall.addWallOpening(wallOpening.shallowCopy(wall)));
+        return wall;
     }
 }
