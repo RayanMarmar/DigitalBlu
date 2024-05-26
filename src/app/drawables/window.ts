@@ -47,6 +47,18 @@ export class Window extends WallOpening {
     }
 
     clone() : Window {
-        return this ;
+        return new Window(
+            this.wall,
+            this._base[0].calculateCenter().clone(),
+            this._width
+        ) ;
+    }
+
+    shallowCopy(wall : Wall) : Window{
+        return  new Window(
+            wall,
+            this._base[0].calculateCenter().clone(),
+            this._width
+        );
     }
 }

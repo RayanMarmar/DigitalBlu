@@ -208,11 +208,10 @@ export class Wall implements Drawable {
             this._secondLine.calculateCenter().clone(),
             this._height,
             null
-        )
+        );
 
         this._wallOpenings
-            .forEach(wallOpening => wall.addWallOpening(wallOpening.clone()));
+            .forEach(wallOpening => wall.addWallOpening(wallOpening.shallowCopy(wall)));
         return wall;
     }
-
 }

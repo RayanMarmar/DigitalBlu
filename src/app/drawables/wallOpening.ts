@@ -32,6 +32,8 @@ export abstract class WallOpening implements Drawable {
 
     abstract clone() : WallOpening;
 
+    abstract shallowCopy(wall : Wall) : WallOpening ;
+
     get width(): number {
         return this._width;
     }
