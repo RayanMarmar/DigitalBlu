@@ -1,13 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ArchiveService} from "./archive.service";
 import {Line} from "../drawables/line";
-import {TransformationService} from "./transformation.service";
-import {Point} from "../drawables/point";
 import {Wall} from "../drawables/wall";
-import {WallOpening} from "../drawables/wallOpening";
-import {Window} from "../drawables/window";
-import {Door} from "../drawables/door";
-
 @Injectable({
   providedIn: 'root'
 })
@@ -32,7 +26,6 @@ export class CopyPasteService {
       this.archiveService.addLine(this.copiedElement)
     }
     if (this.copiedElement instanceof Wall) {
-      let e = this.copiedElement as Wall
       this.archiveService.pushWall(this.copiedElement)
       this.archiveService.addWall(this.copiedElement)
     }
