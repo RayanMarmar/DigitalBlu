@@ -115,14 +115,6 @@
     </div>
 
 
-    <div class="middle-section">
-        <button [class.active]="valuesModalOpened" (click)="openValuesModal()"><i
-                class="iconoir iconoir-control-slider"></i>
-            <span class="button-label">Modify global values</span>
-        </button>
-    </div>
-
-
     <div class="vertical-line"></div>
 
     <!-- Right Section -->
@@ -164,6 +156,13 @@
     <!-- Right Section -->
     <div class="right-section">
 
+
+        <button [class.active]="modesConfiguration.valuesModalOpened"
+                (click)="modesConfiguration.toggleGlobalValuesModal()"><i
+                class="iconoir iconoir-control-slider"></i>
+            <span class="button-label">Modify global values</span>
+        </button>
+
         <button [class.active]="modesConfiguration.darkMode" (click)="switchDarkMode() ">
             <i class="iconoir iconoir-brightness"></i>
             <span class="button-label">Dark / Light</span>
@@ -201,7 +200,7 @@
 </div>
 
 
-<div class="modal" *ngIf="valuesModalOpened">
+<div class="modal" *ngIf="modesConfiguration.valuesModalOpened">
     <div class="modal-content">
         <!--<span class="close" (click)="closeModal()">&times;</span>-->
         <div><i class="iconoir iconoir-control-slider"></i></div>
@@ -240,8 +239,8 @@
         <div class="spacer"></div>
 
         <div class="buttons">
-            <button (click)="openValuesModal()">Save</button>
-            <button class="close" (click)="openValuesModal()">Cancel</button>
+            <button (click)="saveGlobalValues()">Save</button>
+            <button class="close" (click)="modesConfiguration.toggleGlobalValuesModal()">Cancel</button>
         </div>
     </div>
 </div>

@@ -16,6 +16,7 @@ export class ModesConfiguration {
     private _allCanvasNames: string[] = [];
     private _darkMode: boolean;
     private _nameModalOpened: boolean = false;
+    private _valuesModalOpened: boolean = false;
 
     // default wall thickness in pixels
     private _defaultThickness: number = 10;
@@ -58,6 +59,10 @@ export class ModesConfiguration {
 
     set nameModalOpened(value: boolean) {
         this._nameModalOpened = value;
+    }
+
+    get valuesModalOpened(): boolean {
+        return this._valuesModalOpened;
     }
 
     get helperDisplayed(): boolean {
@@ -209,13 +214,17 @@ export class ModesConfiguration {
 
     checkSave(): boolean {
         if (this.canvasName == "") {
-            this.openModal();
+            this.openCanvasNameModal();
             return false;
         }
         return true;
     }
 
-    openModal(): void {
-        this.nameModalOpened = true;
+    openCanvasNameModal(): void {
+        this._nameModalOpened = true;
+    }
+
+    toggleGlobalValuesModal(): void {
+        this._valuesModalOpened = !this._valuesModalOpened;
     }
 }
