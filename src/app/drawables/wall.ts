@@ -130,6 +130,7 @@ export class Wall implements Drawable {
         canvasColor: string,
         wallColor: string,
         conversionFactor: number,
+        displayDimensions: boolean,
         transformationMatrix: number[][],
     ): void {
         // Get the updated wall coordinates
@@ -145,12 +146,15 @@ export class Wall implements Drawable {
         context.fillStyle = wallColor;
         context.fill();
         let displayLine = this.xFactor == 1 ? wall._thirdLine : wall._firstLine;
-        this.firstLine.displayDimensions(
-            context,
-            displayLine,
-            wallColor,
-            conversionFactor
-        );
+
+        if (displayDimensions) {
+            this.firstLine.displayDimensions(
+                context,
+                displayLine,
+                wallColor,
+                conversionFactor
+            );
+        }
 
         this._wallOpenings
             .forEach(wallOpening => wallOpening.draw(
@@ -158,6 +162,7 @@ export class Wall implements Drawable {
                 canvasColor,
                 wallColor,
                 conversionFactor,
+                displayDimensions,
                 transformationMatrix)
             );
     }

@@ -213,3 +213,32 @@ button:hover .button-label {
     color: red;
     margin-bottom: 10px;
 }
+
+.modal .wall-thickness-container input {
+    text-align: center;
+}
+
+.modal .dimensions-container form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 65px;
+    padding: 5px 10px;
+    color: var(--font-color);
+    background-color: var(--button-hover-color);
+    margin: 0 5px;
+}
+
+.spacer {
+    min-height: 20px;
+}
+
+.modal .dimensions-container form .case {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content {
+    color: var(--font-color);
+}

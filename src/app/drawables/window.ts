@@ -17,6 +17,7 @@ export class Window extends WallOpening {
         bgColor: string,
         wallColor: string,
         conversionFactor: number,
+        displayDimensions: boolean,
         transformationMatrix: number[][],
     ): void {
         try {

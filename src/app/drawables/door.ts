@@ -105,6 +105,7 @@ export class Door extends WallOpening {
         canvasColor: string,
         wallColor: string,
         conversionFactor: number,
+        displayDimensions: boolean,
         transformationMatrix: number[][],
     ): void {
         // Get the updated coordinates
@@ -126,7 +127,7 @@ export class Door extends WallOpening {
                         door._direction < 0,
                         wallColor
                     );
-                    new Line(parallelLine.firstPoint, door._base[0].firstPoint).draw(context, canvasColor, wallColor, conversionFactor);
+                    new Line(parallelLine.firstPoint, door._base[0].firstPoint).draw(context, canvasColor, wallColor, conversionFactor, displayDimensions);
                     break;
 
                 case DoorType.OPEN_RIGHT:
@@ -139,7 +140,7 @@ export class Door extends WallOpening {
                         door._direction < 0,
                         wallColor
                     );
-                    new Line(parallelLine.secondPoint, door._base[0].secondPoint).draw(context, canvasColor, wallColor, conversionFactor);
+                    new Line(parallelLine.secondPoint, door._base[0].secondPoint).draw(context, canvasColor, wallColor, conversionFactor, displayDimensions);
                     break;
 
                 case DoorType.OPEN_TWO_WAY:
@@ -163,8 +164,8 @@ export class Door extends WallOpening {
                         wallColor
                     );
 
-                    new Line(parallelLine.firstPoint, door._base[0].firstPoint).draw(context, canvasColor, wallColor, conversionFactor);
-                    new Line(parallelLine.secondPoint, door._base[0].secondPoint).draw(context, canvasColor, wallColor, conversionFactor);
+                    new Line(parallelLine.firstPoint, door._base[0].firstPoint).draw(context, canvasColor, wallColor, conversionFactor, displayDimensions);
+                    new Line(parallelLine.secondPoint, door._base[0].secondPoint).draw(context, canvasColor, wallColor, conversionFactor, displayDimensions);
                     break;
 
                 default:

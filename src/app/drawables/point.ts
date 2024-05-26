@@ -70,6 +70,7 @@ export class Point implements Drawable {
          canvasColor: string,
          drawableColor: string,
          conversionFactor: number,
+         displayDimensions: boolean,
          transformationMatrix: number[][] = [[1, 0, 0], [0, 1, 0]],
     ): void {
         context.fillRect(this._x, this._y, 1, 1);
