@@ -83,7 +83,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
     - Description: Change the global values of three components, the wall thickness, the grid unit measure, and the
       display of the elements measures.
     - Access: Press the icon in the toolbar and changed the values in the modal.
-  
+
 - **Shift key**
     - Icon: <img src="icons/arrow-up-circle.svg">
     - Description: Draw horizontal or vertical lines while pressing the shift key.
@@ -104,22 +104,30 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 - **Save Multiple Canvases**
     - Icon: <img src="icons/floppy-disk.svg">
     - Description: Save different versions of your canvases for later use.
-    - Access: Use the save option in the file menu.
+    - Access: Use the save option in the toolbar.
 
 - **Open recent saved canvases**
     - Icon: <img src="icons/folder.svg">
-    - Description: Save different versions of your canvases for later use.
-    - Access: Use the save option in the file menu.
+    - Description: Open your recent saved canvases.
+    - Access: Access the folder on the toolbar.
 
 - **Export Canvas**
     - Icon: <img src="icons/share-ios.svg">
-    - Description: Export your canvas in various formats (e.g., PNG, PDF).
+    - Description: Export your canvas.
     - Access: Click the export icon in the toolbar.
 
 - **Light Mode/Dark Mode**
     - Icon: <img src="icons/brightness.svg">
     - Description: Toggle between light and dark themes for better visibility.
-    - Access: Use the light/dark mode toggle in the settings menu.
+    - Access: Use the light/dark mode toggle in the toolbar.
+
+### Need more help ?
+
+**Helper & shortcuts**
+
+- Icon: <img src="icons/help-circle.svg">
+- Description: Open helper and shortcut display.
+- Access: Use the Helper icon in the toolbar.
 
 ## Technical
 
