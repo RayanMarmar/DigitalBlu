@@ -101,8 +101,7 @@ export class ModeManagerService {
             this.componentSelector,
             this.modesConfiguration,
             this.moveService,
-            this.transformationService,
-            this.copyPasteService
+            this.transformationService
         );
     }
 
@@ -114,6 +113,7 @@ export class ModeManagerService {
             this.gridService,
             this.saveService,
             this.archiveService,
+            this.copyPasteService
         );
     }
 }

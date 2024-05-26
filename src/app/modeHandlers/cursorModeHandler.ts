@@ -19,7 +19,6 @@ export class CursorModeHandler implements ModeHandler {
         private readonly modesConfiguration: ModesConfiguration,
         private moveService: MoveService,
         private transformationService: TransformationService,
-        private copyPasteService : CopyPasteService,
     ) {
 
     }
@@ -84,19 +83,6 @@ export class CursorModeHandler implements ModeHandler {
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        if (event.ctrlKey) {
-            switch (event.key) {
-                case 'c':
-                    if(this.archiveService.selectedElement){
-                        this.archiveService.copyElement(this.archiveService.selectedElement,this.copyPasteService);
-                        this.archiveService.copiedElement = this.archiveService.selectedElement;
-                    }
-                    break;
-                case 'v':
-                    this.archiveService.pasteElement(this.archiveService.copiedElement,this.copyPasteService);
-                    break;
-            }
-        }
     }
 
     onKeyUp(event: KeyboardEvent): void {

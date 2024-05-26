@@ -10,9 +10,6 @@ import {DeleteCommand} from "../commands/deleteCommand";
 import {LinkedDrawables} from "../models/linkedDrawables";
 import {MoveCommand} from "../commands/moveCommand";
 import {MoveService} from "./move.service";
-import {CopyPasteService} from "./copy-paste.service";
-import {PasteCommand} from "../commands/pasteCommand";
-
 
 @Injectable({
     providedIn: 'root'
@@ -31,7 +28,6 @@ export class ArchiveService {
     private _linkedDrawables: LinkedDrawables;
     private _selectedElement: Drawable | null = null;
     private _upToDate: boolean = true;
-    private _copiedElement: Drawable | null = null ;
 
     constructor() {
         this._linesList = [];
@@ -130,13 +126,6 @@ export class ArchiveService {
     get linkedDrawables(): LinkedDrawables {
         return this._linkedDrawables;
     }
-    get copiedElement(): Drawable | null {
-        return this._copiedElement;
-    }
-
-    set copiedElement(value: Drawable | null) {
-        this._copiedElement = value;
-    }
 
     pushLine(line: Line): void {
         this._linesList.push(line);
@@ -184,9 +173,6 @@ export class ArchiveService {
     }
 
     addLine(line: Line, fromSaved: boolean = false): void {
-        this._linesList.push(line);
-        this._linkedDrawables.linkDrawable(line);
-
         if (!fromSaved) {
             this._linesList.pop();
             let command = new DrawCommand(
@@ -197,12 +183,11 @@ export class ArchiveService {
             this.addCommand(command);
             this.clearArchive();
         }
+        this._linesList.push(line);
+        this._linkedDrawables.linkDrawable(line);
     }
 
     addWall(wall: Wall, fromSaved: boolean = false): void {
-        this._wallsList.push(wall);
-        this._linkedDrawables.linkDrawable(wall);
-
         if (!fromSaved) {
             this._wallsList.pop();
             let command = new DrawCommand(
@@ -213,6 +198,8 @@ export class ArchiveService {
             this.addCommand(command);
             this.clearArchive();
         }
+        this._wallsList.push(wall);
+        this._linkedDrawables.linkDrawable(wall);
     }
 
     addDoor(door: Door): void {
@@ -438,20 +425,5 @@ export class ArchiveService {
         this._linkedDrawables = new LinkedDrawables();
         this._selectedElement = null;
         this._upToDate = true;
-    }
-
-    copyElement(element : Drawable | null , copyPasteService : CopyPasteService){
-        copyPasteService.copyElement(element)
-        this._copiedElement = copyPasteService.copiedElement
-    }
-    pasteElement(element : Drawable | null , copyPasteService : CopyPasteService){
-        if(element){
-            let command: PasteCommand = new PasteCommand(
-               copyPasteService
-            )
-            this.commandsList.push(command);
-            command.execute();
-        }
-
     }
 }

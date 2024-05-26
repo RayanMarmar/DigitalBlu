@@ -212,9 +212,7 @@ export class Wall implements Drawable {
 
         this._wallOpenings
             .forEach(wallOpening => wall.addWallOpening(wallOpening.clone()));
-
         return wall;
-
     }
 
 }
