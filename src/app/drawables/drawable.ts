@@ -3,6 +3,7 @@ interface Drawable {
         context: CanvasRenderingContext2D,
         canvasColor: string,
         drawableColor: string,
+        conversionFactor: number,
         transformationMatrix: number[][],
     ): void;
 

@@ -44,6 +44,7 @@ export class CanvasService {
                 this.context!!,
                 this.themeService.getCanvasColor(),
                 this.themeService.getDrawableColor(),
+                this.modeConfiguration.conversionFactor,
                 this.transformationService.transformationMatrix,
             );
         });
@@ -59,6 +60,7 @@ export class CanvasService {
                 this.context!!,
                 this.themeService.getCanvasColor(),
                 this.themeService.getDrawableColor(),
+                this.modeConfiguration.conversionFactor,
                 this.transformationService.transformationMatrix,
             );
         });
@@ -70,6 +72,7 @@ export class CanvasService {
                 this.context!!,
                 this.themeService.getCanvasColor(),
                 this.themeService.getDrawableColor(),
+                this.modeConfiguration.conversionFactor,
                 this.transformationService.transformationMatrix
             );
         });
@@ -81,6 +84,7 @@ export class CanvasService {
                 this.context!!,
                 this.themeService.getCanvasColor(),
                 this.themeService.getDrawableColor(),
+                this.modeConfiguration.conversionFactor,
                 this.transformationService.transformationMatrix,
             );
         });
@@ -92,6 +96,7 @@ export class CanvasService {
                 this.context!!,
                 this.themeService.getCanvasColor(),
                 this.themeService.getDeleteDrawableColor(),
+                this.modeConfiguration.conversionFactor,
                 this.transformationService.transformationMatrix,
             )
         }
