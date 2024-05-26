@@ -205,7 +205,6 @@ export class ArchiveService {
 
         if (!fromSaved) {
             this._wallsList.pop();
-             console.log("creating draw command")
             let command = new DrawCommand(
                 this._linkedDrawables,
                 this._wallsList,

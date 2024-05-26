@@ -10,8 +10,8 @@ export class Line implements Drawable {
         secondPoint: Point,
         reverseTransformationMatrix: number[][] = [[1, 1, 0], [1, 1, 0]],
     ) {
-        this._firstPoint = firstPoint.transform(reverseTransformationMatrix);
-        this._secondPoint = secondPoint.transform(reverseTransformationMatrix);
+        this._firstPoint = firstPoint.reverseTransform(reverseTransformationMatrix);
+        this._secondPoint = secondPoint.reverseTransform(reverseTransformationMatrix);
     }
 
     // Getter for firstPoint
@@ -199,6 +199,7 @@ export class Line implements Drawable {
         context: CanvasRenderingContext2D,
         canvasColor: string,
         lineColor: string,
+        conversionFactor: number,
         transformationMatrix: number[][] = [[1, 0, 0], [0, 1, 0]],
     ): void {
         let line: Line = this.transform(transformationMatrix);
@@ -207,7 +208,55 @@ export class Line implements Drawable {
         context.lineTo(line.secondPoint.x, line.secondPoint.y);
         context.strokeStyle = lineColor;
         context.stroke();
+
+        this.displayDimensions(context, line, lineColor, conversionFactor);
     }
+
+    displayDimensions(
+        context: CanvasRenderingContext2D,
+        line: Line,
+        textColor: string,
+        conversionFactor: number,
+        offsetAboveLine: number = 15, // Offset for dimension text above the line
+        fontSize: string = '12px Arial', // Font size and family for dimension text
+    ): void {
+        // Calculate angle of the line segment relative to the x-axis
+        const angle = line.getAngleWithXVector();
+
+        // Calculate the x and y offsets for the dimension text
+        const xOffset = offsetAboveLine * Math.cos(angle + Math.PI / 2);
+        const yOffset = offsetAboveLine * Math.sin(angle + Math.PI / 2);
+
+        // Calculate position for displaying dimension text
+        const center = line.calculateCenter();
+        const dimensionX = center.x + xOffset;
+        const dimensionY = center.y + yOffset;
+
+        // Save the current context state
+        context.save();
+
+        // Translate to the position where the text should be drawn
+        context.translate(dimensionX, dimensionY);
+
+        // Rotate the canvas context to make the text parallel to the line
+        // Adjust rotation to ensure text is not upside down
+        const adjustedAngle = angle > Math.PI / 2 || angle < -Math.PI / 2 ? angle + Math.PI : angle;
+        context.rotate(adjustedAngle);
+
+        // Get the line dimension in centimeters
+        const convertedDistance = this.calculateDistance() * conversionFactor;
+
+        // Draw dimension text on canvas
+        context.fillStyle = textColor; // Use line color for dimension text
+        context.font = fontSize;
+        context.textAlign = 'center';
+        context.textBaseline = 'bottom'; // Align the text baseline to the bottom
+        context.fillText(convertedDistance.toFixed(2), 0, 0); // Draw text at (0, 0)
+
+        // Restore the context state to prevent affecting other drawings
+        context.restore();
+    }
+
 
     transform(transformationMatrix: number[][]): Line {
         return new Line(this._firstPoint.transform(transformationMatrix), this._secondPoint.transform(transformationMatrix));

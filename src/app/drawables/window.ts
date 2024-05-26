@@ -12,7 +12,13 @@ export class Window extends WallOpening {
         return "window : {firstLine : " + this._base[0].toString() + " secondLine : " + this._base[1].toString() + "}";
     }
 
-    draw(context: CanvasRenderingContext2D, bgColor: string, wallColor: string, transformationMatrix: number[][]): void {
+    draw(
+        context: CanvasRenderingContext2D,
+        bgColor: string,
+        wallColor: string,
+        conversionFactor: number,
+        transformationMatrix: number[][],
+    ): void {
         try {
             let window: Window = this.transform(transformationMatrix);
             window.drawOpening(context, bgColor);

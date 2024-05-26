@@ -4,22 +4,31 @@ import {Injectable} from "@angular/core";
     providedIn: 'root',
 })
 export class ModesConfiguration {
+
     private _snapMode: boolean;
     private _straightLineMode: boolean;
     private _snapAngleMode: boolean;
     private _moveMode: boolean;
-    private _snapRadiantFactor: number;
     private _drawing: boolean;
     private _gridOn: boolean;
-    private _defaultThickness: number;
-    private _zoomLevel: number;
-    private _darkMode: boolean;
-    private readonly _minZoom: number = 50;
-    private readonly _maxZoom: number = 150;
     private _helperDisplayed: boolean;
     private _canvasName: string = "";
     private _allCanvasNames: string[] = [];
+    private _darkMode: boolean;
     private _nameModalOpened: boolean = false;
+
+    // default wall thickness in pixels
+    private _defaultThickness: number = 10;
+    // Default angle snap PI/6 (30 degrees)
+    private _snapRadiantFactor: number = 6;
+    // Zoom levels
+    private _zoomLevel: number = 100;
+    private readonly _minZoom: number = 50;
+    private readonly _maxZoom: number = 150;
+    // Grid square vertex size in pixels
+    private readonly _gridSquareSize: number = 30;
+    // Grid vertex value in centimeters
+    private readonly _gridUnitValue: number = 50;
 
 
     constructor() {
@@ -30,10 +39,17 @@ export class ModesConfiguration {
         this._snapRadiantFactor = 6;
         this._drawing = false;
         this._gridOn = true;
-        this._defaultThickness = 10;
-        this._zoomLevel = 100;
         this._darkMode = false;
         this._helperDisplayed = false;
+    }
+
+    get gridSquareSize(): number {
+        return this._gridSquareSize;
+    }
+
+    // Get the factor of conversion from pixels to centimeters
+    get conversionFactor(): number {
+        return this._gridUnitValue / this._gridSquareSize;
     }
 
     get nameModalOpened(): boolean {

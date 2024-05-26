@@ -6,12 +6,11 @@ export abstract class WallOpening implements Drawable {
     protected _wall: Wall;
     protected _width: number;
     protected _base: Line[];
-    private _center: Point;
+
 
     constructor(wall: Wall, point: Point, width: number) {
         this._width = width;
         this._wall = wall;
-        this._center = point;
         let line: Line | null = wall.thirdLine.subLine(point, this._width);
         let secondLine: Line | null = wall.firstLine.subLine(point, this._width);
 
@@ -21,21 +20,15 @@ export abstract class WallOpening implements Drawable {
         this._base = [line, secondLine];
     }
 
-    get center(): Point {
-        return this._center;
-    }
-
-    set center(value: Point) {
-        this._center = value;
-    }
-
-    abstract draw(context: CanvasRenderingContext2D, canvasColor: string, drawableColor: string, transformationMatrix: number[][]): void ;
+    abstract draw(context: CanvasRenderingContext2D, canvasColor: string, drawableColor: string, conversionFactor: number, transformationMatrix: number[][]): void ;
 
     abstract toString(): String ;
 
     abstract equals(drawable: Drawable): boolean ;
 
     abstract shiftExtremity(extremity: Drawable, x: number, y: number): void ;
+
+    abstract transform(transformationMatrix: number[][]): WallOpening;
 
     get width(): number {
         return this._width;

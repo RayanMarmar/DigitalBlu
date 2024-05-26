@@ -23,7 +23,7 @@ export class EraseModeHandler implements ModeHandler {
 
     onMouseDown(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
-        let point: Point = this.mouse.currentCoordinates!!.transform(this.transformationService.reverseTransformationMatrix);
+        let point: Point = this.mouse.currentCoordinates!!.reverseTransform(this.transformationService.reverseTransformationMatrix);
         try {
             let {component, list, archiveList} = this.componentSelector.getNearestComponent(point);
             this.archiveService.selectedElement = component;
@@ -37,7 +37,7 @@ export class EraseModeHandler implements ModeHandler {
 
     onMouseMove(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
-        let point: Point = this.mouse.currentCoordinates!!.transform(this.transformationService.reverseTransformationMatrix);
+        let point: Point = this.mouse.currentCoordinates!!.reverseTransform(this.transformationService.reverseTransformationMatrix);
         try {
             const {component} = this.componentSelector.getNearestComponent(point);
             this.archiveService.selectedElement = component;

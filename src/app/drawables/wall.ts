@@ -25,13 +25,13 @@ export class Wall implements Drawable {
         uid: string | null
     ) {
         // Get the original point coordinates in case of a certain transformation
-        firstPoint = firstPoint.transform(reverseTransformationMatrix);
-        secondPoint = secondPoint.transform(reverseTransformationMatrix);
+        firstPoint = firstPoint.reverseTransform(reverseTransformationMatrix);
+        secondPoint = secondPoint.reverseTransform(reverseTransformationMatrix);
 
         // Initialize variables
         this._height = height;
-        this._yFactor = (firstPoint.y - secondPoint.y) >= 0 ? -1 : 1;
-        this._xFactor = (firstPoint.x - secondPoint.x) >= 0 ? -1 : 1;
+        this._yFactor = (firstPoint.y - secondPoint.y) > 0 ? -1 : 1;
+        this._xFactor = (firstPoint.x - secondPoint.x) > 0 ? -1 : 1;
 
         // Calculate wall lines
         this._firstLine = new Line(firstPoint, secondPoint)
@@ -111,7 +111,6 @@ export class Wall implements Drawable {
         return this.calculateNearestPointDistance(point) < this.range;
     }
 
-
     calculateNearestPointDistance(point: Point): number {
         return Math.min(this.firstLine.calculateNearestPointDistance(point),
             this.secondLine.calculateNearestPointDistance(point),
@@ -132,6 +131,7 @@ export class Wall implements Drawable {
         context: CanvasRenderingContext2D,
         canvasColor: string,
         wallColor: string,
+        conversionFactor: number,
         transformationMatrix: number[][],
     ): void {
         // Get the updated wall coordinates
@@ -146,12 +146,20 @@ export class Wall implements Drawable {
         context.closePath();
         context.fillStyle = wallColor;
         context.fill();
+        let displayLine = this.xFactor == 1 ? wall._thirdLine : wall._firstLine;
+        this.firstLine.displayDimensions(
+            context,
+            displayLine,
+            wallColor,
+            conversionFactor
+        );
 
         this._wallOpenings
             .forEach(wallOpening => wallOpening.draw(
                 context,
                 canvasColor,
                 wallColor,
+                conversionFactor,
                 transformationMatrix)
             );
     }
