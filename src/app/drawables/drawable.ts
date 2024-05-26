@@ -9,4 +9,6 @@ interface Drawable {
     toString(): String;
 
     equals(drawable: Drawable): boolean;
+
+    transform(transformationMatrix: number[][]): Drawable;
 }
