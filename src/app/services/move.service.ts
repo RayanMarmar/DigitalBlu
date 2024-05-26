@@ -25,7 +25,6 @@ export class MoveService {
             for (let i: number = 0; i < selectedDrawable.extremities.length; i++) {
                 let originalExtremityCoordinates = new Point(selectedDrawable.extremities[i].x - total.x, selectedDrawable.extremities[i].y - total.y);
                 let previousExtremityCoordinates = new Point(selectedDrawable.extremities[i].x - delta.x, selectedDrawable.extremities[i].y - delta.y);
-                console.log(originalExtremityCoordinates.toString());
                 const linkedElements: Drawable[] = this._archiveService.linkedDrawables.get(originalExtremityCoordinates);
 
                 for (let j: number = 0; j < linkedElements.length; j++) {
