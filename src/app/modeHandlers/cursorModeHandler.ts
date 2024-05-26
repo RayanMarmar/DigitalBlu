@@ -23,9 +23,9 @@ export class CursorModeHandler implements ModeHandler {
     }
 
     onMouseDown(event: MouseEvent): void {
-        this.mouse.setCurrentCoordinatesFromEvent(event);
+        this.mouse.mouseDown(event);
         try {
-            this.previousCoords = this.mouse.currentCoordinates!.reverseTransform(this.transformationService.reverseTransformationMatrix);
+            this.previousCoords = this.mouse.clickedCoordinates!.reverseTransform(this.transformationService.reverseTransformationMatrix);
             let {component} = this.componentSelector.getNearestComponent(this.previousCoords);
 
             this.archiveService.selectedElement = component;
