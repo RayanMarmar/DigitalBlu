@@ -20,8 +20,10 @@ import {SaveService} from "../../services/save.service";
     styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-    thickness: number = this.getThickness();
+    thicknessInput: number = this.modesConfiguration.defaultThickness;
     lastValidThickness: number = this.modesConfiguration.defaultThickness;
+    unitValueInput: number = this.modesConfiguration.gridUnitValue;
+    lastValidUnitValue: number = this.modesConfiguration.gridUnitValue;
     canvasNameInput: string = '';
     selectedCanvas: string = '';
     canvasSelectorOpened: boolean = false;
@@ -67,14 +69,19 @@ export class HeaderComponent {
         const value = Number((event.target as HTMLInputElement).value);
         if (value >= 0) {
             this.lastValidThickness = value;
-            this.modesConfiguration.changeDefaultThickness(value);
         } else {
-            // If negative value, revert to the last valid thickness
-            this.modesConfiguration.changeDefaultThickness(this.lastValidThickness);
-            this.thickness = this.lastValidThickness;
+            this.thicknessInput = this.lastValidThickness;
         }
     }
 
+    updateUnitValue(event: Event) {
+        const value = Number((event.target as HTMLInputElement).value);
+        if (value >= 0) {
+            this.lastValidUnitValue = value;
+        } else {
+            this.unitValueInput = this.lastValidUnitValue;
+        }
+    }
 
     switchWindowMode() {
         this.eventHandlerConfiguration.setWindowMode();
@@ -99,11 +106,19 @@ export class HeaderComponent {
         this.canvasService.drawAll();
     }
 
-    onInput() {
-        if (this.thickness < 1) {
-            this.thickness = this.lastValidThickness;
+    onThicknessInput() {
+        if (this.thicknessInput < 1) {
+            this.thicknessInput = this.lastValidThickness;
         } else {
-            this.lastValidThickness = this.thickness;
+            this.lastValidThickness = this.thicknessInput;
+        }
+    }
+
+    onUnitValueInput() {
+        if (this.unitValueInput < 1) {
+            this.unitValueInput = this.lastValidUnitValue;
+        } else {
+            this.lastValidUnitValue = this.unitValueInput;
         }
     }
 
@@ -133,10 +148,6 @@ export class HeaderComponent {
 
     switchGrabMode(): void {
         this.eventHandlerConfiguration.setGrabMode();
-    }
-
-    getThickness() {
-        return this.modesConfiguration.defaultThickness;
     }
 
     saveState(): void {
@@ -190,6 +201,9 @@ export class HeaderComponent {
     }
 
     saveGlobalValues(): void {
+        this.modesConfiguration.changeDefaultThickness(this.lastValidThickness);
+        this.modesConfiguration.gridUnitValue = this.lastValidUnitValue;
+
         this.modesConfiguration.toggleGlobalValuesModal();
     }
 }

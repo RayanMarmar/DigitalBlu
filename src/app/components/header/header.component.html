@@ -209,15 +209,15 @@
         <div>Wall thickness :</div>
         <div class="wall-thickness-container">
             <input type="number" id="wall-thickness-input" [(ngModel)]="lastValidThickness"
-                   (input)="onInput();updateThickness($event)" min="1">
+                   (input)="onThicknessInput();updateThickness($event)" min="1">
         </div>
 
         <div class="spacer"></div>
 
         <div>Grid unit value (in centimeters) :</div>
         <div class="wall-thickness-container">
-            <input type="number" id="grid-unit-input" [(ngModel)]="lastValidThickness"
-                   (input)="onInput();updateThickness($event)" min="1">
+            <input type="number" id="grid-unit-input" [(ngModel)]="lastValidUnitValue"
+                   (input)="onUnitValueInput();updateUnitValue($event)" min="1">
         </div>
 
         <div class="spacer"></div>

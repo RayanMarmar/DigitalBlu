@@ -29,7 +29,7 @@ export class ModesConfiguration {
     // Grid square vertex size in pixels
     private readonly _gridSquareSize: number = 30;
     // Grid vertex value in centimeters
-    private readonly _gridUnitValue: number = 50;
+    private _gridUnitValue: number = 50;
 
 
     constructor() {
@@ -46,6 +46,14 @@ export class ModesConfiguration {
 
     get gridSquareSize(): number {
         return this._gridSquareSize;
+    }
+
+    get gridUnitValue(): number {
+        return this._gridUnitValue;
+    }
+
+    set gridUnitValue(value: number) {
+        this._gridUnitValue = value;
     }
 
     // Get the factor of conversion from pixels to centimeters
