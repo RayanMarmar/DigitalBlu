@@ -20,15 +20,16 @@ import {SaveService} from "../../services/save.service";
     styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-    thicknessInput: number = this.modesConfiguration.defaultThickness;
+    private thicknessInput: number = this.modesConfiguration.defaultThickness;
     lastValidThickness: number = this.modesConfiguration.defaultThickness;
-    unitValueInput: number = this.modesConfiguration.gridUnitValue;
+    private unitValueInput: number = this.modesConfiguration.gridUnitValue;
     lastValidUnitValue: number = this.modesConfiguration.gridUnitValue;
     canvasNameInput: string = '';
     selectedCanvas: string = '';
     canvasSelectorOpened: boolean = false;
     isCanvasNameTaken: boolean = false;
     isCanvasNameEmpty: boolean = false;
+    private _displayDimensionsOnInput: boolean = this.modesConfiguration.displayDimensionsOn;
 
     constructor(
         protected canvasService: CanvasService,
@@ -39,6 +40,16 @@ export class HeaderComponent {
         private saveService: SaveService
     ) {
         this.selectedCanvas = modesConfiguration.canvasName;
+    }
+
+    // Getter for the radio button value
+    get displayDimensionsOnInput(): string {
+        return this._displayDimensionsOnInput ? 'yes' : 'no';
+    }
+
+    // Setter for the radio button value
+    set displayDimensionsOnInput(value: string) {
+        this._displayDimensionsOnInput = (value === 'yes');
     }
 
     switchSnapMode() {
@@ -203,14 +214,14 @@ export class HeaderComponent {
     cancelGlobalValues(): void {
         this.lastValidThickness = this.thicknessInput = this.modesConfiguration.defaultThickness;
         this.lastValidUnitValue = this.unitValueInput = this.modesConfiguration.gridUnitValue;
-
+        this._displayDimensionsOnInput = this.modesConfiguration.displayDimensionsOn;
         this.modesConfiguration.toggleGlobalValuesModal();
     }
 
     saveGlobalValues(): void {
         this.modesConfiguration.changeDefaultThickness(this.lastValidThickness);
         this.modesConfiguration.gridUnitValue = this.lastValidUnitValue;
-
+        this.modesConfiguration.displayDimensionsOn = this._displayDimensionsOnInput;
         this.modesConfiguration.toggleGlobalValuesModal();
     }
 }

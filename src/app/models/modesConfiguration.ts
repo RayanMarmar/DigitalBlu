@@ -4,7 +4,6 @@ import {Injectable} from "@angular/core";
     providedIn: 'root',
 })
 export class ModesConfiguration {
-
     private _snapMode: boolean;
     private _straightLineMode: boolean;
     private _snapAngleMode: boolean;
@@ -17,6 +16,7 @@ export class ModesConfiguration {
     private _darkMode: boolean;
     private _nameModalOpened: boolean = false;
     private _valuesModalOpened: boolean = false;
+    private _displayDimensionsOn: boolean = true;
 
     // default wall thickness in pixels
     private _defaultThickness: number = 10;
@@ -42,6 +42,14 @@ export class ModesConfiguration {
         this._gridOn = true;
         this._darkMode = false;
         this._helperDisplayed = false;
+    }
+
+    get displayDimensionsOn(): boolean {
+        return this._displayDimensionsOn;
+    }
+
+    set displayDimensionsOn(value: boolean) {
+        this._displayDimensionsOn = value;
     }
 
     get gridSquareSize(): number {
