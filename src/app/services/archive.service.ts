@@ -10,6 +10,7 @@ import {DeleteCommand} from "../commands/deleteCommand";
 import {LinkedDrawables} from "../models/linkedDrawables";
 import {MoveCommand} from "../commands/moveCommand";
 import {MoveService} from "./move.service";
+import {WallOpening} from "../drawables/wallOpening";
 
 @Injectable({
     providedIn: 'root'
@@ -196,11 +197,26 @@ export class ArchiveService {
                 this._archiveWallsList,
             );
             this.addCommand(command);
+            this.addOpenings(wall.wallOpenings);
             this.clearArchive();
         }
         this._wallsList.push(wall);
         this._linkedDrawables.linkDrawable(wall);
     }
+    addOpenings(openings : WallOpening[]): void {
+        if (openings.length <= 0){
+            return ;
+        }
+        for (let i = 0; i < openings.length; i++) {
+            if (openings[i] instanceof  Window){
+                let window = openings[i] as Window;
+                this.addWindow(window);
+            }else if (openings[i] instanceof  Door){
+                let door = openings[i] as Door;
+                this.addWindow(door);
+            }
+        }
+        }
 
     addDoor(door: Door): void {
         this._doorsList.push(door);
