@@ -241,12 +241,16 @@ export class Line implements Drawable {
         const adjustedAngle = angle > Math.PI / 2 || angle < -Math.PI / 2 ? angle + Math.PI : angle;
         context.rotate(adjustedAngle);
 
+        // Compute the conversion factor (50 cm by 30 pixels grid square)
+        const conversionFactor = 50 / 30;
+        const convertedDistance = this.calculateDistance() * conversionFactor;
+
         // Draw dimension text on canvas
         context.fillStyle = textColor; // Use line color for dimension text
         context.font = fontSize;
         context.textAlign = 'center';
         context.textBaseline = 'bottom'; // Align the text baseline to the bottom
-        context.fillText(line.calculateDistance().toFixed(2), 0, 0); // Draw text at (0, 0)
+        context.fillText(convertedDistance.toFixed(2), 0, 0); // Draw text at (0, 0)
 
         // Restore the context state to prevent affecting other drawings
         context.restore();
