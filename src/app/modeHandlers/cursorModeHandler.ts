@@ -25,7 +25,7 @@ export class CursorModeHandler implements ModeHandler {
     onMouseDown(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
         try {
-            this.previousCoords = this.mouse.currentCoordinates!.transform(this.transformationService.reverseTransformationMatrix);
+            this.previousCoords = this.mouse.currentCoordinates!.reverseTransform(this.transformationService.reverseTransformationMatrix);
             let {component} = this.componentSelector.getNearestComponent(this.previousCoords);
 
             this.archiveService.selectedElement = component;
@@ -41,9 +41,9 @@ export class CursorModeHandler implements ModeHandler {
             if (this.modesConfiguration.moveMode && this.mouse.clickedCoordinates !== null && this.archiveService.selectedElement !== null) {
                 let delta = this.moveService.calculateDeltaCoordinates(
                     this.previousCoords!,
-                    this.mouse.currentCoordinates!.transform(this.transformationService.reverseTransformationMatrix)
+                    this.mouse.currentCoordinates!.reverseTransform(this.transformationService.reverseTransformationMatrix)
                 );
-                this.previousCoords = this.mouse.currentCoordinates!.transform(this.transformationService.reverseTransformationMatrix);
+                this.previousCoords = this.mouse.currentCoordinates!.reverseTransform(this.transformationService.reverseTransformationMatrix);
                 this.delta = new Point(this.delta.x + delta.x, this.delta.y + delta.y);
                 this.moveService.moveElement(delta, this.archiveService.selectedElement, this.delta);
             }
@@ -63,9 +63,9 @@ export class CursorModeHandler implements ModeHandler {
             ) {
                 let delta = this.moveService.calculateDeltaCoordinates(
                     this.previousCoords !,
-                    this.mouse.currentCoordinates!.transform(this.transformationService.reverseTransformationMatrix)
+                    this.mouse.currentCoordinates!.reverseTransform(this.transformationService.reverseTransformationMatrix)
                 );
-                
+
                 this.moveService.moveElement(delta, this.archiveService.selectedElement, this.delta, true);
                 this.archiveService.addMoveCommand(
                     this.delta,
