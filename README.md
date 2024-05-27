@@ -45,6 +45,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
     - Icon: <img src="icons/design-pencil.svg"><img src="icons/cube.svg">
     - Description: The primary mode for creating and modifying design elements.
     - Access: The draw mode is automatically selected when one of the two icons are selected (Line, Wall).
+    - **Cancel Draw Mode**: Press the Escape key to cancel and stop the drawing mode
 
 - **Delete Mode**
     - Icon: <img src="icons/erase.svg">
