@@ -122,7 +122,7 @@ export class Wall implements Drawable {
         let firstPoint: Point = this._fourthLine.calculateCenter().transform(transformationMatrix);
         let secondPoint: Point = this._secondLine.calculateCenter().transform(transformationMatrix);
         let height: number = this._height * transformationMatrix[0][0];
-        return new Wall(firstPoint, secondPoint, height,this.uid);
+        return new Wall(firstPoint, secondPoint, height, this.uid);
     }
 
     draw(
@@ -175,12 +175,10 @@ export class Wall implements Drawable {
             && this._fourthLine.equals(drawable.fourthLine);
     }
 
-    updateInfos(x: number, y: number): void {
+    updateInfos(): void {
         this._yFactor = (this._firstLine.firstPoint.y - this._firstLine.secondPoint.y) >= 0 ? -1 : 1;
         this._xFactor = (this._firstLine.firstPoint.x - this._firstLine.secondPoint.x) >= 0 ? -1 : 1;
         this._width = this._firstLine.calculateDistance();
-        this._wallOpenings
-            .forEach(wallOpening => wallOpening.shiftElement(x, y));
     }
 
     shiftElement(x: number, y: number): void {
@@ -188,7 +186,9 @@ export class Wall implements Drawable {
         this._secondLine.shiftElement(x, y)
         this._thirdLine.shiftElement(x, y)
         this._fourthLine.shiftElement(x, y)
-        this.updateInfos(x, y)
+        this._wallOpenings
+            .forEach(wallOpening => wallOpening.shiftElement(x, y));
+        this.updateInfos()
     }
 
     shiftExtremity(extremity: Point, x: number, y: number): void {
@@ -201,14 +201,15 @@ export class Wall implements Drawable {
             this._secondLine.shiftElement(x, y);
             this._thirdLine.firstPoint.shiftElement(x, y);
         }
-        this.updateInfos(x, y)
+        this.updateInfos()
     }
 
     get extremities(): Point[] {
         return [this._fourthLine.calculateCenter(), this._secondLine.calculateCenter()];
     }
-    clone() : Wall {
-        let wall =  new Wall(
+
+    clone(): Wall {
+        let wall = new Wall(
             this._fourthLine.calculateCenter().clone(),
             this._secondLine.calculateCenter().clone(),
             this._height,
