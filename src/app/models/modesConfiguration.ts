@@ -4,7 +4,6 @@ import {Injectable} from "@angular/core";
     providedIn: 'root',
 })
 export class ModesConfiguration {
-
     private _snapMode: boolean;
     private _straightLineMode: boolean;
     private _snapAngleMode: boolean;
@@ -16,6 +15,8 @@ export class ModesConfiguration {
     private _allCanvasNames: string[] = [];
     private _darkMode: boolean;
     private _nameModalOpened: boolean = false;
+    private _valuesModalOpened: boolean = false;
+    private _displayDimensionsOn: boolean = true;
 
     // default wall thickness in pixels
     private _defaultThickness: number = 10;
@@ -28,7 +29,7 @@ export class ModesConfiguration {
     // Grid square vertex size in pixels
     private readonly _gridSquareSize: number = 30;
     // Grid vertex value in centimeters
-    private readonly _gridUnitValue: number = 50;
+    private _gridUnitValue: number = 50;
 
 
     constructor() {
@@ -43,8 +44,24 @@ export class ModesConfiguration {
         this._helperDisplayed = false;
     }
 
+    get displayDimensionsOn(): boolean {
+        return this._displayDimensionsOn;
+    }
+
+    set displayDimensionsOn(value: boolean) {
+        this._displayDimensionsOn = value;
+    }
+
     get gridSquareSize(): number {
         return this._gridSquareSize;
+    }
+
+    get gridUnitValue(): number {
+        return this._gridUnitValue;
+    }
+
+    set gridUnitValue(value: number) {
+        this._gridUnitValue = value;
     }
 
     // Get the factor of conversion from pixels to centimeters
@@ -58,6 +75,10 @@ export class ModesConfiguration {
 
     set nameModalOpened(value: boolean) {
         this._nameModalOpened = value;
+    }
+
+    get valuesModalOpened(): boolean {
+        return this._valuesModalOpened;
     }
 
     get helperDisplayed(): boolean {
@@ -209,13 +230,17 @@ export class ModesConfiguration {
 
     checkSave(): boolean {
         if (this.canvasName == "") {
-            this.openModal();
+            this.openCanvasNameModal();
             return false;
         }
         return true;
     }
 
-    openModal(): void {
-        this.nameModalOpened = true;
+    openCanvasNameModal(): void {
+        this._nameModalOpened = true;
+    }
+
+    toggleGlobalValuesModal(): void {
+        this._valuesModalOpened = !this._valuesModalOpened;
     }
 }

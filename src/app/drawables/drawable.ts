@@ -4,6 +4,7 @@ interface Drawable {
         canvasColor: string,
         drawableColor: string,
         conversionFactor: number,
+        displayDimensions: boolean,
         transformationMatrix: number[][],
     ): void;
 

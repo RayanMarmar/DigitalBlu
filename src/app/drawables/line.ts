@@ -200,6 +200,7 @@ export class Line implements Drawable {
         canvasColor: string,
         lineColor: string,
         conversionFactor: number,
+        displayDimensions: boolean,
         transformationMatrix: number[][] = [[1, 0, 0], [0, 1, 0]],
     ): void {
         let line: Line = this.transform(transformationMatrix);
@@ -208,8 +209,10 @@ export class Line implements Drawable {
         context.lineTo(line.secondPoint.x, line.secondPoint.y);
         context.strokeStyle = lineColor;
         context.stroke();
-
-        this.displayDimensions(context, line, lineColor, conversionFactor);
+        
+        if (displayDimensions) {
+            this.displayDimensions(context, line, lineColor, conversionFactor);
+        }
     }
 
     displayDimensions(

@@ -68,12 +68,6 @@
             <span class="button-label">Wall mode</span>
         </button>
 
-        <div class="wall-thickness-container" *ngIf="eventHandlerConfiguration.wallMode">
-            <input type="number" id="wall-thickness-input" [(ngModel)]="lastValidThickness"
-                   (input)="onInput();updateThickness($event)" min="1">
-
-        </div>
-
 
         <button [class.active]="eventHandlerConfiguration.doorMode" (click)="switchDoorMode()"><i
                 class="iconoir iconoir-closet"></i>
@@ -120,6 +114,7 @@
 
     </div>
 
+
     <div class="vertical-line"></div>
 
     <!-- Right Section -->
@@ -161,6 +156,13 @@
     <!-- Right Section -->
     <div class="right-section">
 
+
+        <button [class.active]="modesConfiguration.valuesModalOpened"
+                (click)="modesConfiguration.toggleGlobalValuesModal()"><i
+                class="iconoir iconoir-control-slider"></i>
+            <span class="button-label">Modify global values</span>
+        </button>
+
         <button [class.active]="modesConfiguration.darkMode" (click)="switchDarkMode() ">
             <i class="iconoir iconoir-brightness"></i>
             <span class="button-label">Dark / Light</span>
@@ -198,6 +200,50 @@
 </div>
 
 
+<div class="modal" *ngIf="modesConfiguration.valuesModalOpened">
+    <div class="modal-content">
+        <!--<span class="close" (click)="closeModal()">&times;</span>-->
+        <div><i class="iconoir iconoir-control-slider"></i></div>
+        <div class="label">Change the global values:</div>
+
+        <div>Wall thickness :</div>
+        <div class="wall-thickness-container">
+            <input type="number" id="wall-thickness-input" [(ngModel)]="lastValidThickness"
+                   (input)="onThicknessInput();updateThickness($event)" min="1">
+        </div>
+
+        <div class="spacer"></div>
+
+        <div>Grid unit value (in centimeters) :</div>
+        <div class="wall-thickness-container">
+            <input type="number" id="grid-unit-input" [(ngModel)]="lastValidUnitValue"
+                   (input)="onUnitValueInput();updateUnitValue($event)" min="1">
+        </div>
+
+        <div class="spacer"></div>
+
+        <div>Show dimensions of elements :</div>
+        <div class="dimensions-container">
+            <form>
+                <div class="case">
+                    <label for="yes">Yes</label>
+                    <input type="radio" id="yes" name="choice" value="yes" [(ngModel)]="displayDimensionsOnInput">
+                </div>
+                <div class="case">
+                    <label for="no">No</label>
+                    <input type="radio" id="no" name="choice" value="no" [(ngModel)]="displayDimensionsOnInput">
+                </div>
+            </form>
+        </div>
+
+        <div class="spacer"></div>
+
+        <div class="buttons">
+            <button (click)="saveGlobalValues()">Save</button>
+            <button class="close" (click)="cancelGlobalValues()">Cancel</button>
+        </div>
+    </div>
+</div>
 
 
 
