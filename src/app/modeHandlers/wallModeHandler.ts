@@ -31,7 +31,7 @@ export class WallModeHandler implements ModeHandler {
                 )
             );
         }
-        this.mouse.mouseDown(event, false, snappedPoint);
+        this.mouse.mouseDown(event, snappedPoint);
         this.modesConfiguration.drawing = true;
     }
 

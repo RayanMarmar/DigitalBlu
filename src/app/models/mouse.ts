@@ -6,14 +6,12 @@ import {Injectable} from "@angular/core";
 })
 export class Mouse {
     private _moving: boolean;
-    public grabbed: boolean;
     private _notFirstMouseMoveEvent: boolean;
     private _clickedCoordinates: Point | null;
     private _currentCoordinates!: Point | null;
     private _canvasRect: Point | null;
 
     constructor() {
-        this.grabbed = false;
         this._moving = false;
         this._notFirstMouseMoveEvent = false;
         this._clickedCoordinates = null;
@@ -83,16 +81,14 @@ export class Mouse {
         this._canvasRect = new Point(rect.left, rect.top);
     }
 
-    mouseDown = (event: MouseEvent, grabMode = false,
-                 snappedPosition: Point | null = null): void => {
-
+    mouseDown(event: MouseEvent, snappedPosition: Point | null = null): void {
         this._moving = false;
         this._clickedCoordinates = snappedPosition ?? new Point(
             event.clientX - this._canvasRect!.x, event.clientY - this._canvasRect!.y
         );
         this._notFirstMouseMoveEvent = false;
-        this.grabbed = grabMode && !this.grabbed;
     }
+
     mouseMove = (event: MouseEvent): void => {
         this._moving = true;
         this._currentCoordinates = new Point(
