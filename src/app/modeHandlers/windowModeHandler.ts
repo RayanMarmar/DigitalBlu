@@ -39,6 +39,9 @@ export class WindowModeHandler implements ModeHandler {
     onMouseUp(event: MouseEvent): void {
     }
 
+    onMouseOut(event: MouseEvent): void {
+    }
+
     onKeyDown(event: KeyboardEvent): void {
     }
 

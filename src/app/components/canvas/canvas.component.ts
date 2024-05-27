@@ -57,6 +57,11 @@ export class CanvasComponent implements AfterViewInit {
         this.canvasService.drawAll(this.eventHandlerConfiguration.eraseMode);
     }
 
+    onMouseOut(event: MouseEvent): void {
+        this.eventHandlerConfiguration.onMouseOut(event)
+        this.canvasService.drawAll(this.eventHandlerConfiguration.eraseMode);
+    }
+
     setCanvasSize(): void {
         if (this.context) {
             this.canvas.nativeElement.width = 0.96 * window.innerWidth;

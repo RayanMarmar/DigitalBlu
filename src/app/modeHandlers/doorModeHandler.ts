@@ -39,6 +39,9 @@ export class DoorModeHandler implements ModeHandler {
     onMouseUp(event: MouseEvent): void {
     }
 
+    onMouseOut(event: MouseEvent): void {
+    }
+
     onKeyDown(event: KeyboardEvent): void {
         if (event.key === ' ') {
             this.changeDoorOrientation();

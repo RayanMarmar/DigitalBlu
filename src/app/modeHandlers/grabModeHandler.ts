@@ -33,4 +33,9 @@ export class GrabModeHandler implements ModeHandler {
 
     onKeyUp(event: KeyboardEvent): void {
     }
+
+    onMouseOut(event: MouseEvent): void {
+        this.transformationService.setTranslationMatrix(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!, true);
+        this.mouse.mouseDown(event, true);
+    }
 }

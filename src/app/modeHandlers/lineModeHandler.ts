@@ -65,6 +65,10 @@ export class LineModeHandler implements ModeHandler {
     }
 
 
+    onMouseOut(event: MouseEvent): void {
+        this.handleEscape();
+    }
+
     private handleEscape(): void {
         if (this.modesConfiguration.drawing) {
             this.modesConfiguration.drawing = false;

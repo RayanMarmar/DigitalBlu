@@ -101,6 +101,10 @@ export class EventHandlerConfiguration {
         this.eventHandler.onMouseMove(event);
     }
 
+    onMouseOut(event: MouseEvent): void {
+        this.eventHandler.onMouseOut(event);
+    }
+
     onKeyDown(event: KeyboardEvent): void {
         this.eventHandler.onKeyDown(event);
         this.globalHandler.onKeyDown(event);
