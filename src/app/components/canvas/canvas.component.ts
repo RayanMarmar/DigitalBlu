@@ -38,23 +38,28 @@ export class CanvasComponent implements AfterViewInit {
         this.mouse.setCanvasRectFromDomRect(this.canvasRect);
         this.canvasService.updateCanvasRect(this.canvasRect);
         this.canvasService.clear();
-        this.canvasService.drawAll();
+        this.canvasService.drawAll(this.eventHandlerConfiguration.eraseMode);
     }
 
     onMouseDown(event: MouseEvent): void {
         this.eventHandlerConfiguration.onMouseDown(event);
-        this.canvasService.drawAll();
+        this.canvasService.drawAll(this.eventHandlerConfiguration.eraseMode);
     }
 
     onMouseUp(event: MouseEvent): void {
         this.eventHandlerConfiguration.onMouseUp(event);
-        this.canvasService.drawAll();
+        this.canvasService.drawAll(this.eventHandlerConfiguration.eraseMode);
     }
 
 
     onMouseMove(event: MouseEvent): void {
         this.eventHandlerConfiguration.onMouseMove(event)
-        this.canvasService.drawAll();
+        this.canvasService.drawAll(this.eventHandlerConfiguration.eraseMode);
+    }
+
+    onMouseOut(event: MouseEvent): void {
+        this.eventHandlerConfiguration.onMouseOut(event)
+        this.canvasService.drawAll(this.eventHandlerConfiguration.eraseMode);
     }
 
     setCanvasSize(): void {

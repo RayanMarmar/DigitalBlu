@@ -18,7 +18,7 @@ export class DoorModeHandler implements ModeHandler {
 
     onMouseDown(event: MouseEvent): void {
         this.mouse.setCurrentCoordinatesFromEvent(event);
-        let point: Point = this.mouse.currentCoordinates!!.transform(this.transformationService.reverseTransformationMatrix);
+        let point: Point = this.mouse.currentCoordinates!!.reverseTransform(this.transformationService.reverseTransformationMatrix);
         let wall: Wall | null = this.archiveService.snapWallOpening(point);
         if (wall != null) {
             try {
@@ -39,6 +39,9 @@ export class DoorModeHandler implements ModeHandler {
     onMouseUp(event: MouseEvent): void {
     }
 
+    onMouseOut(event: MouseEvent): void {
+    }
+
     onKeyDown(event: KeyboardEvent): void {
         if (event.key === ' ') {
             this.changeDoorOrientation();
@@ -47,6 +50,9 @@ export class DoorModeHandler implements ModeHandler {
         } else if (event.key === 'ArrowDown') {
             this.changeDoorDirection(false);
         }
+    }
+
+    onKeyUp(event: KeyboardEvent): void {
     }
 
 

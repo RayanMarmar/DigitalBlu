@@ -5,24 +5,80 @@ import {Injectable} from "@angular/core";
 })
 export class ModesConfiguration {
     private _snapMode: boolean;
+    private _straightLineMode: boolean;
+    private _snapAngleMode: boolean;
+    private _moveMode: boolean;
     private _drawing: boolean;
     private _gridOn: boolean;
-    private _defaultThickness: number;
-    private _zoomLevel: number;
+    private _helperDisplayed: boolean;
+    private _canvasName: string = "";
+    private _allCanvasNames: string[] = [];
     private _darkMode: boolean;
+    private _nameModalOpened: boolean = false;
+    private _valuesModalOpened: boolean = false;
+    private _displayDimensionsOn: boolean = true;
+
+    // default wall thickness in pixels
+    private _defaultThickness: number = 10;
+    // Default angle snap PI/6 (30 degrees)
+    private _snapRadiantFactor: number = 6;
+    // Zoom levels
+    private _zoomLevel: number = 100;
     private readonly _minZoom: number = 50;
     private readonly _maxZoom: number = 150;
-    private _helperDisplayed: boolean;
+    // Grid square vertex size in pixels
+    private readonly _gridSquareSize: number = 30;
+    // Grid vertex value in centimeters
+    private _gridUnitValue: number = 50;
 
 
     constructor() {
         this._snapMode = true;
+        this._straightLineMode = false;
+        this._snapAngleMode = false;
+        this._moveMode = false;
+        this._snapRadiantFactor = 6;
         this._drawing = false;
         this._gridOn = true;
-        this._defaultThickness = 10;
-        this._zoomLevel = 100;
         this._darkMode = false;
         this._helperDisplayed = false;
+    }
+
+    get displayDimensionsOn(): boolean {
+        return this._displayDimensionsOn;
+    }
+
+    set displayDimensionsOn(value: boolean) {
+        this._displayDimensionsOn = value;
+    }
+
+    get gridSquareSize(): number {
+        return this._gridSquareSize;
+    }
+
+    get gridUnitValue(): number {
+        return this._gridUnitValue;
+    }
+
+    set gridUnitValue(value: number) {
+        this._gridUnitValue = value;
+    }
+
+    // Get the factor of conversion from pixels to centimeters
+    get conversionFactor(): number {
+        return this._gridUnitValue / this._gridSquareSize;
+    }
+
+    get nameModalOpened(): boolean {
+        return this._nameModalOpened;
+    }
+
+    set nameModalOpened(value: boolean) {
+        this._nameModalOpened = value;
+    }
+
+    get valuesModalOpened(): boolean {
+        return this._valuesModalOpened;
     }
 
     get helperDisplayed(): boolean {
@@ -49,6 +105,26 @@ export class ModesConfiguration {
         this._snapMode = value;
     }
 
+    get snapAngle(): number {
+        return this.straightLineMode ? Math.PI / 2 : Math.PI / this._snapRadiantFactor;
+    }
+
+    get snapAngleMode(): boolean {
+        return this._snapAngleMode;
+    }
+
+    set snapAngleMode(value: boolean) {
+        this._snapAngleMode = value;
+    }
+
+    get straightLineMode(): boolean {
+        return this._straightLineMode;
+    }
+
+    set straightLineMode(value: boolean) {
+        this._straightLineMode = value;
+    }
+
     get drawing(): boolean {
         return this._drawing;
     }
@@ -64,6 +140,15 @@ export class ModesConfiguration {
     set gridOn(value: boolean) {
         this._gridOn = value;
     }
+
+    get snapRadiantFactor(): number {
+        return this._snapRadiantFactor;
+    }
+
+    set snapRadiantFactor(value: number) {
+        this._snapRadiantFactor = value;
+    }
+
 
     get defaultThickness(): number {
         return this._defaultThickness;
@@ -108,5 +193,54 @@ export class ModesConfiguration {
 
     helperOn(): void {
         this._helperDisplayed = !this._helperDisplayed;
+    }
+
+    get moveMode(): boolean {
+        return this._moveMode;
+    }
+
+    set moveMode(value: boolean) {
+        this._moveMode = value;
+    }
+
+    changeSnapAngleMode(): void {
+        this._snapAngleMode = !this._snapAngleMode;
+    }
+
+    get canvasName(): string {
+        return this._canvasName;
+    }
+
+    set canvasName(value: string) {
+        this._canvasName = value;
+    }
+
+    get allCanvasNames(): string[] {
+        return this._allCanvasNames;
+    }
+
+    set allCanvasNames(names: string[]) {
+        this._allCanvasNames = names;
+    }
+
+    addCanvasName(value: string): void {
+        this.canvasName = value;
+        this._allCanvasNames.push(value);
+    }
+
+    checkSave(): boolean {
+        if (this.canvasName == "") {
+            this.openCanvasNameModal();
+            return false;
+        }
+        return true;
+    }
+
+    openCanvasNameModal(): void {
+        this._nameModalOpened = true;
+    }
+
+    toggleGlobalValuesModal(): void {
+        this._valuesModalOpened = !this._valuesModalOpened;
     }
 }

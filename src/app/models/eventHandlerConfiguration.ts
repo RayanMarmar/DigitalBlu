@@ -8,6 +8,7 @@ import {GrabModeHandler} from "../modeHandlers/grabModeHandler";
 import {EraseModeHandler} from "../modeHandlers/eraseModeHandler";
 import {CursorModeHandler} from "../modeHandlers/cursorModeHandler";
 import {GlobalHandler} from "../modeHandlers/globalHandler";
+import {ArchiveService} from "../services/archive.service";
 
 @Injectable({
     providedIn: 'root',
@@ -17,13 +18,15 @@ export class EventHandlerConfiguration {
     private globalHandler: GlobalHandler;
 
     constructor(
-        private modeService: ModeManagerService
+        private modeService: ModeManagerService,
+        private archiveService: ArchiveService
     ) {
         this.eventHandler = modeService.wallMode;
         this.globalHandler = modeService.globalHandler;
     }
 
     setLineMode(): void {
+        this.archiveService.selectedElement = null;
         this.eventHandler = this.modeService.lineMode
     }
 
@@ -32,6 +35,7 @@ export class EventHandlerConfiguration {
     }
 
     setWallMode(): void {
+        this.archiveService.selectedElement = null;
         this.eventHandler = this.modeService.wallMode;
     }
 
@@ -40,6 +44,7 @@ export class EventHandlerConfiguration {
     }
 
     setDoorMode(): void {
+        this.archiveService.selectedElement = null;
         this.eventHandler = this.modeService.doorMode;
     }
 
@@ -48,6 +53,7 @@ export class EventHandlerConfiguration {
     }
 
     setWindowMode(): void {
+        this.archiveService.selectedElement = null;
         this.eventHandler = this.modeService.windowMode;
     }
 
@@ -57,6 +63,7 @@ export class EventHandlerConfiguration {
 
 
     setGrabMode(): void {
+        this.archiveService.selectedElement = null;
         this.eventHandler = this.modeService.grabMode;
     }
 
@@ -73,6 +80,7 @@ export class EventHandlerConfiguration {
     }
 
     setEraseMode(): void {
+        this.archiveService.selectedElement = null;
         this.eventHandler = this.eraseMode ? this.modeService.wallMode : this.modeService.eraseMode;
     }
 
@@ -93,9 +101,18 @@ export class EventHandlerConfiguration {
         this.eventHandler.onMouseMove(event);
     }
 
+    onMouseOut(event: MouseEvent): void {
+        this.eventHandler.onMouseOut(event);
+    }
+
     onKeyDown(event: KeyboardEvent): void {
         this.eventHandler.onKeyDown(event);
         this.globalHandler.onKeyDown(event);
+    }
+
+    onKeyUp(event: KeyboardEvent): void {
+        this.eventHandler.onKeyUp(event);
+        this.globalHandler.onKeyUp(event);
     }
 
 }

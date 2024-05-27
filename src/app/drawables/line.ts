@@ -5,11 +5,13 @@ export class Line implements Drawable {
     private _firstPoint: Point;
     private _secondPoint: Point;
 
-    constructor(firstPoint: Point, secondPoint: Point,
-                reverseTransformationMatrix: number[][] = [[1, 1, 0], [1, 1, 0]],
+    constructor(
+        firstPoint: Point,
+        secondPoint: Point,
+        reverseTransformationMatrix: number[][] = [[1, 1, 0], [1, 1, 0]],
     ) {
-        this._firstPoint = firstPoint.transform(reverseTransformationMatrix);
-        this._secondPoint = secondPoint.transform(reverseTransformationMatrix);
+        this._firstPoint = firstPoint.reverseTransform(reverseTransformationMatrix);
+        this._secondPoint = secondPoint.reverseTransform(reverseTransformationMatrix);
     }
 
     // Getter for firstPoint
@@ -189,7 +191,7 @@ export class Line implements Drawable {
         let line = new Line(nearestPoint, point)
 
         // Step 5: Calculate the distance between the given point and the nearest point on the line
-        return line.calculateDistance()
+        return line.calculateDistance();
     }
 
 
@@ -197,6 +199,8 @@ export class Line implements Drawable {
         context: CanvasRenderingContext2D,
         canvasColor: string,
         lineColor: string,
+        conversionFactor: number,
+        displayDimensions: boolean,
         transformationMatrix: number[][] = [[1, 0, 0], [0, 1, 0]],
     ): void {
         let line: Line = this.transform(transformationMatrix);
@@ -205,9 +209,97 @@ export class Line implements Drawable {
         context.lineTo(line.secondPoint.x, line.secondPoint.y);
         context.strokeStyle = lineColor;
         context.stroke();
+        
+        if (displayDimensions) {
+            this.displayDimensions(context, line, lineColor, conversionFactor);
+        }
+    }
+
+    displayDimensions(
+        context: CanvasRenderingContext2D,
+        line: Line,
+        textColor: string,
+        conversionFactor: number,
+        offsetAboveLine: number = 15, // Offset for dimension text above the line
+        fontSize: string = '12px Arial', // Font size and family for dimension text
+    ): void {
+        // Calculate angle of the line segment relative to the x-axis
+        const angle = line.getAngleWithXVector();
+
+        // Calculate the x and y offsets for the dimension text
+        const xOffset = offsetAboveLine * Math.cos(angle + Math.PI / 2);
+        const yOffset = offsetAboveLine * Math.sin(angle + Math.PI / 2);
+
+        // Calculate position for displaying dimension text
+        const center = line.calculateCenter();
+        const dimensionX = center.x + xOffset;
+        const dimensionY = center.y + yOffset;
+
+        // Save the current context state
+        context.save();
+
+        // Translate to the position where the text should be drawn
+        context.translate(dimensionX, dimensionY);
+
+        // Rotate the canvas context to make the text parallel to the line
+        // Adjust rotation to ensure text is not upside down
+        const adjustedAngle = angle > Math.PI / 2 || angle < -Math.PI / 2 ? angle + Math.PI : angle;
+        context.rotate(adjustedAngle);
+
+        // Get the line dimension in centimeters
+        const convertedDistance = this.calculateDistance() * conversionFactor;
+
+        // Draw dimension text on canvas
+        context.fillStyle = textColor; // Use line color for dimension text
+        context.font = fontSize;
+        context.textAlign = 'center';
+        context.textBaseline = 'bottom'; // Align the text baseline to the bottom
+        context.fillText(convertedDistance.toFixed(2), 0, 0); // Draw text at (0, 0)
+
+        // Restore the context state to prevent affecting other drawings
+        context.restore();
+    }
+
+    clone() : Line {
+        return new Line(
+            this._firstPoint.clone(),
+            this._secondPoint.clone()
+        );
     }
 
     transform(transformationMatrix: number[][]): Line {
         return new Line(this._firstPoint.transform(transformationMatrix), this._secondPoint.transform(transformationMatrix));
+    }
+
+    getAngleWithXVector(): number {
+        // Calculate the difference in x and y coordinates
+        const deltaX = this._secondPoint.x - this._firstPoint.x;
+        const deltaY = this._secondPoint.y - this._firstPoint.y;
+
+        // Calculate the angle in radians using Math.atan2
+        return Math.atan2(deltaY, deltaX);
+    }
+
+    shiftElement(x: number, y: number): void {
+        this._firstPoint.shiftElement(x, y);
+        this._secondPoint.shiftElement(x, y);
+    }
+
+    equals(drawable: Drawable): boolean {
+        return drawable instanceof Line
+            && this._firstPoint.equals(drawable.firstPoint)
+            && this._secondPoint.equals(drawable.secondPoint);
+    }
+
+    get extremities(): Point[] {
+        return [this._firstPoint, this._secondPoint];
+    }
+
+    shiftExtremity(extremity: Point, x: number, y: number): void {
+        if (extremity.equals(this._firstPoint)) {
+            this._firstPoint.shiftElement(x, y);
+        } else if (extremity.equals(this._secondPoint)) {
+            this._secondPoint.shiftElement(x, y);
+        }
     }
 }

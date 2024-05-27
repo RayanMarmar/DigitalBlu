@@ -3,8 +3,20 @@ interface Drawable {
         context: CanvasRenderingContext2D,
         canvasColor: string,
         drawableColor: string,
+        conversionFactor: number,
+        displayDimensions: boolean,
         transformationMatrix: number[][],
     ): void;
 
     toString(): String;
+
+    shiftElement(x: number, y: number): void;
+
+    equals(drawable: Drawable): boolean;
+
+    shiftExtremity(extremity: Drawable, x: number, y: number): void;
+
+    transform(transformationMatrix: number[][]): Drawable;
+
+    clone() : Drawable;
 }

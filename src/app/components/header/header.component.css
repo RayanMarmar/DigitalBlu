@@ -128,3 +128,117 @@ button:hover .button-label {
     height: 40px;
     background-color: var(--button-hover-color);
 }
+
+.angle-snap-container {
+    font-family: 'Poppins', sans-serif;
+    color: var(--font-color);
+    border-radius: 50px;
+    display: inline-flex;
+    margin-left: 5px;
+    margin-right: 5px;
+    transition: all 1s ease-out;
+}
+
+.angle-snap-container select {
+    padding: 0px 5px;
+    font-family: 'Poppins', sans-serif;
+    color: var(--font-color);
+    background-color: var(--button-hover-color);
+    border-radius: 50px;
+    border: 0px;
+    transition: all 1s ease-out;;
+}
+
+.modal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    background-color: var(--main-bg-color);
+    border: 2px solid var(--borders-color);
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin-top: 20px;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins';
+    text-align: center;
+    transition: all 0.5s ease-in-out;
+    z-index: 10;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+.modal .buttons button {
+    border-radius: 50px;
+    padding: 5px 10px;
+    width: 100px;
+    height: auto;
+    color: var(--font-color);
+    border: 2px solid var(--borders-color);
+    font-family: 'Poppins', sans-serif;
+
+}
+
+.modal .label {
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: 0px;
+    margin-bottom: 10px;
+    color: var(--font-color);
+}
+
+.modal input {
+    border: 2px solid var(--borders-color);
+    border-radius: 20px;
+    padding: 5px 10px;
+    background-color: var(--button-hover-color);
+    font-family: 'Poppins', sans-serif;
+    width: 270px;
+    flex: 1;
+    color: var(--font-color);
+
+}
+
+.error-message {
+    font-size: 14px;
+    color: red;
+    margin-bottom: 10px;
+}
+
+.modal .wall-thickness-container input {
+    text-align: center;
+}
+
+.modal .dimensions-container form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 65px;
+    padding: 5px 10px;
+    color: var(--font-color);
+    background-color: var(--button-hover-color);
+    margin: 0 5px;
+}
+
+.spacer {
+    min-height: 20px;
+}
+
+.modal .dimensions-container form .case {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content {
+    color: var(--font-color);
+}

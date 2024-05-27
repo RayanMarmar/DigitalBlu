@@ -1,13 +1,40 @@
 <div id="myHeader" class="pill-header">
     <!-- Left Section -->
     <div class="left-section">
-        <button (click)="undo()" [class.disabled]="undoDisabled()"><i class="iconoir iconoir-undo-circle"></i>
+        <button (click)="undo()" [class.disabled]="undoDisabled()" [disabled]="undoDisabled()"><i
+                class="iconoir iconoir-undo-circle"></i>
             <span class="button-label">Undo</span>
         </button>
-        <button (click)="redo()" [class.disabled]="redoDisabled()"><i class="iconoir iconoir-redo-circle"></i>
+        <button (click)="redo()" [class.disabled]="redoDisabled()" [disabled]="redoDisabled()"><i
+                class="iconoir iconoir-redo-circle"></i>
             <span class="button-label">Redo</span>
         </button>
         <img class="logo-img" src="assets/logo.png" alt="Digital Blu Logo"/>
+    </div>
+
+
+    <div class="vertical-line"></div>
+
+    <div class="middle-section">
+        <button [class.active]="canvasSelectorOpened" (click)="openCanvasSelector()"><i
+                class="iconoir iconoir-folder"></i>
+            <span class="button-label">Recent saved files</span>
+        </button>
+
+        <div class="angle-snap-container" *ngIf="canvasSelectorOpened">
+            <select [(ngModel)]="selectedCanvas" (change)="onCanvasChange($event)">
+                <option [value]="null">+ New empty canvas</option>
+                <ng-container
+                        *ngIf="modesConfiguration.allCanvasNames && modesConfiguration.allCanvasNames.length > 0; else noCanvasNames">
+                    <option *ngFor="let canvasName of modesConfiguration.allCanvasNames" [value]="canvasName">
+                        {{ canvasName }}
+                    </option>
+                </ng-container>
+                <ng-template #noCanvasNames>
+                    <option disabled>No saved canvas</option>
+                </ng-template>
+            </select>
+        </div>
     </div>
 
     <div class="vertical-line"></div>
@@ -41,13 +68,6 @@
             <span class="button-label">Wall mode</span>
         </button>
 
-        <div class="wall-thickness-container" *ngIf="eventHandlerConfiguration.wallMode">
-            <i class="iconoir iconoir-de-compress"></i>
-            <input type="number" id="wall-thickness-input" [(ngModel)]="lastValidThickness"
-                   (input)="onInput();updateThickness($event)" min="1">
-
-        </div>
-
 
         <button [class.active]="eventHandlerConfiguration.doorMode" (click)="switchDoorMode()"><i
                 class="iconoir iconoir-closet"></i>
@@ -70,10 +90,21 @@
             <span class="button-label">Snap to point</span>
         </button>
 
-        <!--        <button [class.active]="modesConfiguration.snapMode" (click)="switchSnapMode()">-->
-        <!--            <i class="iconoir iconoir-precision-tool"></i>-->
-        <!--            <span class="button-label">Snap to grid</span>-->
-        <!--        </button>-->
+
+        <button [class.active]="modesConfiguration.snapAngleMode" (click)="changeAngleSnapMode()">
+            <i class="iconoir iconoir-angle-tool"></i>
+            <span class="button-label">Snap to angle</span>
+        </button>
+
+        <div class="angle-snap-container" *ngIf="modesConfiguration.snapAngleMode">
+            <select [(ngModel)]="modesConfiguration.snapRadiantFactor">
+                <option value="2">90, 180, 270, 360...</option>
+                <option value="4">45, 90, 135, 180...</option>
+                <option value="6">30, 60, 90, 120...</option>
+                <option value="12">15, 30, 45, 60...</option>
+            </select>
+
+        </div>
 
         <button [class.active]="modesConfiguration.gridOn" (click)="switchGridMode()">
             <i class="iconoir iconoir-orthogonal-view"></i>
@@ -82,6 +113,7 @@
 
 
     </div>
+
 
     <div class="vertical-line"></div>
 
@@ -93,21 +125,47 @@
             <span class="button-label">Erase</span>
         </button>
 
+        <button (click)="clearCanvas() ">
+            <i class="iconoir iconoir-bin-full"></i>
+            <span class="button-label">Clear canvas</span>
+        </button>
+
 
     </div>
+
+
+    <div class="vertical-line"></div>
+
+    <div class="right-section">
+
+        <button (click)="saveState()" [class.disabled]="!canSave()" [disabled]="!canSave()">
+            <i class="iconoir iconoir-floppy-disk"></i>
+            <span class="button-label">Save canvas</span>
+        </button>
+
+        <button (click)="canvasService.exportCanvas('Digital-Blu-canvas')"><i class="iconoir iconoir-share-ios"></i>
+            <span class="button-label">Export canvas</span>
+        </button>
+
+
+    </div>
+
 
     <div class="vertical-line"></div>
 
     <!-- Right Section -->
     <div class="right-section">
 
+
+        <button [class.active]="modesConfiguration.valuesModalOpened"
+                (click)="modesConfiguration.toggleGlobalValuesModal()"><i
+                class="iconoir iconoir-control-slider"></i>
+            <span class="button-label">Modify global values</span>
+        </button>
+
         <button [class.active]="modesConfiguration.darkMode" (click)="switchDarkMode() ">
             <i class="iconoir iconoir-brightness"></i>
             <span class="button-label">Dark / Light</span>
-        </button>
-
-        <button><i class="iconoir iconoir-share-ios"></i>
-            <span class="button-label">Share</span>
         </button>
 
         <button [class.active]="modesConfiguration.helperDisplayed" (click)="displayHelper()"><i
@@ -119,6 +177,73 @@
 
 </div>
 
+
+<div class="modal" *ngIf="modesConfiguration.nameModalOpened">
+    <div class="modal-content">
+        <!--<span class="close" (click)="closeModal()">&times;</span>-->
+        <div><i class="iconoir iconoir-folder"></i></div>
+        <div class="label">Enter a name for the canvas:</div>
+        <div class="error-message" *ngIf="isCanvasNameTaken">
+            Canvas name already taken. <br>Please choose a different name.
+        </div>
+
+        <div class="error-message" *ngIf="isCanvasNameEmpty">
+            Canvas name is empty.<br>Enter a name to save the canvas.
+        </div>
+
+        <input type="text" [(ngModel)]="canvasNameInput" placeholder="Canvas Name">
+        <div class="buttons">
+            <button (click)="saveCanvasName()">Save</button>
+            <button class="close" (click)="closeModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" *ngIf="modesConfiguration.valuesModalOpened">
+    <div class="modal-content">
+        <!--<span class="close" (click)="closeModal()">&times;</span>-->
+        <div><i class="iconoir iconoir-control-slider"></i></div>
+        <div class="label">Change the global values:</div>
+
+        <div>Wall thickness :</div>
+        <div class="wall-thickness-container">
+            <input type="number" id="wall-thickness-input" [(ngModel)]="lastValidThickness"
+                   (input)="onThicknessInput();updateThickness($event)" min="1">
+        </div>
+
+        <div class="spacer"></div>
+
+        <div>Grid unit value (in centimeters) :</div>
+        <div class="wall-thickness-container">
+            <input type="number" id="grid-unit-input" [(ngModel)]="lastValidUnitValue"
+                   (input)="onUnitValueInput();updateUnitValue($event)" min="1">
+        </div>
+
+        <div class="spacer"></div>
+
+        <div>Show dimensions of elements :</div>
+        <div class="dimensions-container">
+            <form>
+                <div class="case">
+                    <label for="yes">Yes</label>
+                    <input type="radio" id="yes" name="choice" value="yes" [(ngModel)]="displayDimensionsOnInput">
+                </div>
+                <div class="case">
+                    <label for="no">No</label>
+                    <input type="radio" id="no" name="choice" value="no" [(ngModel)]="displayDimensionsOnInput">
+                </div>
+            </form>
+        </div>
+
+        <div class="spacer"></div>
+
+        <div class="buttons">
+            <button (click)="saveGlobalValues()">Save</button>
+            <button class="close" (click)="cancelGlobalValues()">Cancel</button>
+        </div>
+    </div>
+</div>
 
 
 

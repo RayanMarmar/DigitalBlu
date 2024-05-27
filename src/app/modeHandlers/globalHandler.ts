@@ -3,6 +3,9 @@ import {ModesConfiguration} from "../models/modesConfiguration";
 import {TransformationService} from "../services/transformation.service";
 import {CanvasService} from "../services/canvas.service";
 import {GridService} from "../services/grid.service";
+import {SaveService} from "../services/save.service";
+import {ArchiveService} from "../services/archive.service";
+import {CopyPasteService} from "../services/copy-paste.service";
 
 export class GlobalHandler implements ModeHandler {
     constructor(
@@ -10,6 +13,9 @@ export class GlobalHandler implements ModeHandler {
         private readonly modesConfiguration: ModesConfiguration,
         private transformationService: TransformationService,
         private gridService: GridService,
+        private saveService: SaveService,
+        private archiveService: ArchiveService,
+        private copyPasteService: CopyPasteService,
     ) {
     }
 
@@ -20,6 +26,9 @@ export class GlobalHandler implements ModeHandler {
     }
 
     onMouseUp(event: MouseEvent): void {
+    }
+    
+    onMouseOut(event: MouseEvent): void {
     }
 
     onKeyDown(event: KeyboardEvent): void {
@@ -32,8 +41,30 @@ export class GlobalHandler implements ModeHandler {
                 this.undo();
             } else if (event.key === 'y') {
                 this.redo();
+            } else if (event.key === 's') {
+                if (!this.archiveService.upToDate && this.modesConfiguration.checkSave()) {
+                    this.archiveService.upToDate = true;
+                    this.saveService.saveState(this.modesConfiguration.canvasName);
+                }
+            } else if (event.key === 'c') {
+                this.copyPasteService.copy();
+            } else if (event.key === 'v') {
+                this.copyPasteService.paste();
             }
             event.preventDefault();
+        }
+        if (event.key === 'Shift') {
+            this.modesConfiguration.straightLineMode = true;
+        }
+
+        if (event.key === 'Escape') {
+            this.modesConfiguration.helperDisplayed = false;
+        }
+    }
+
+    onKeyUp(event: KeyboardEvent): void {
+        if (event.key === 'Shift') {
+            this.modesConfiguration.straightLineMode = false;
         }
     }
 

@@ -6,6 +6,9 @@ import {Door} from "../drawables/door";
 import {Window} from "../drawables/window";
 import {TransformationService} from "./transformation.service";
 import {ThemeService} from "./theme.service";
+import {ExportService} from "./export.service";
+import {SaveService} from "./save.service";
+import {ModesConfiguration} from "../models/modesConfiguration";
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +21,10 @@ export class CanvasService {
     constructor(
         private archiveService: ArchiveService,
         private transformationService: TransformationService,
-        private themeService: ThemeService
+        private themeService: ThemeService,
+        private saveService: SaveService,
+        private modeConfiguration: ModesConfiguration,
+        private exportService: ExportService,
     ) {
     }
 
@@ -26,6 +32,10 @@ export class CanvasService {
         this.canvas = canvas;
         this.context = this.canvas.nativeElement.getContext("2d");
         this.canvasRect = canvas.nativeElement.getBoundingClientRect();
+        this.saveService.getState(this.archiveService);
+        this.saveService.getModeConfiguration(this.modeConfiguration);
+        this.themeService.toggleDarkMode(this.modeConfiguration.darkMode)
+        this.drawAll();
     }
 
     private drawAllLines(): void {
@@ -34,6 +44,8 @@ export class CanvasService {
                 this.context!!,
                 this.themeService.getCanvasColor(),
                 this.themeService.getDrawableColor(),
+                this.modeConfiguration.conversionFactor,
+                this.modeConfiguration.displayDimensionsOn,
                 this.transformationService.transformationMatrix,
             );
         });
@@ -49,6 +61,8 @@ export class CanvasService {
                 this.context!!,
                 this.themeService.getCanvasColor(),
                 this.themeService.getDrawableColor(),
+                this.modeConfiguration.conversionFactor,
+                this.modeConfiguration.displayDimensionsOn,
                 this.transformationService.transformationMatrix,
             );
         });
@@ -60,6 +74,8 @@ export class CanvasService {
                 this.context!!,
                 this.themeService.getCanvasColor(),
                 this.themeService.getDrawableColor(),
+                this.modeConfiguration.conversionFactor,
+                this.modeConfiguration.displayDimensionsOn,
                 this.transformationService.transformationMatrix
             );
         });
@@ -71,34 +87,35 @@ export class CanvasService {
                 this.context!!,
                 this.themeService.getCanvasColor(),
                 this.themeService.getDrawableColor(),
+                this.modeConfiguration.conversionFactor,
+                this.modeConfiguration.displayDimensionsOn,
                 this.transformationService.transformationMatrix,
             );
         });
     }
 
-    private highlightSelectedElement(): void {
+    private highlightSelectedElement(eraseMode: boolean): void {
         if (this.archiveService.selectedElement !== null) {
             this.archiveService.selectedElement.draw(
                 this.context!!,
                 this.themeService.getCanvasColor(),
-                this.themeService.getDeleteDrawableColor(),
+                this.themeService.getSelectedDrawableColor(eraseMode),
+                this.modeConfiguration.conversionFactor,
+                this.modeConfiguration.displayDimensionsOn,
                 this.transformationService.transformationMatrix,
             )
         }
     }
 
-    drawAll(): void {
+    drawAll(eraseMode: boolean = false): void {
         if (this.context == null) {
-            console.log("Context is null...")
+            console.error("Context is null...")
             return;
         }
         this.clear();
         this.drawAllLines();
         this.drawAllWalls();
-        this.drawAllDoors();
-        this.drawAllWindows();
-        this.highlightSelectedElement();
-
+        this.highlightSelectedElement(eraseMode);
     }
 
     undo(): void {
@@ -113,5 +130,14 @@ export class CanvasService {
 
     clear(): void {
         this.context!.clearRect(0, 0, this.canvasRect!.width, this.canvasRect!.height);
+    }
+
+
+    exportCanvas(filename: string): void {
+        if (this.canvas !== null) {
+            this.exportService.exportCanvasAsSVG(this.canvas.nativeElement, filename);
+        } else {
+            console.error('Canvas element not found.');
+        }
     }
 }
