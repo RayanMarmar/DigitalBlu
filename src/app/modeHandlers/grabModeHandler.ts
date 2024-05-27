@@ -4,6 +4,8 @@ import {TransformationService} from "../services/transformation.service";
 import {GridService} from "../services/grid.service";
 
 export class GrabModeHandler implements ModeHandler {
+    private grabbed: boolean = false;
+
     constructor(
         private mouse: Mouse,
         private transformationService: TransformationService,
@@ -12,11 +14,12 @@ export class GrabModeHandler implements ModeHandler {
     }
 
     onMouseDown(event: MouseEvent): void {
-        this.mouse.mouseDown(event, true);
+        this.mouse.mouseDown(event);
+        this.grabbed = true;
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (this.mouse.grabbed) {
+        if (this.grabbed) {
             this.mouse.mouseMove(event);
             this.transformationService.setTranslationMatrix(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!);
             this.gridService.updateCanvas();
@@ -24,13 +27,22 @@ export class GrabModeHandler implements ModeHandler {
     }
 
     onMouseUp(event: MouseEvent): void {
-        this.transformationService.setTranslationMatrix(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!, true);
-        this.mouse.mouseDown(event, true);
+        if (this.grabbed) {
+            this.transformationService.setTranslationMatrix(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!, true);
+            this.grabbed = false;
+        }
     }
 
     onKeyDown(event: KeyboardEvent): void {
     }
 
     onKeyUp(event: KeyboardEvent): void {
+    }
+
+    onMouseOut(event: MouseEvent): void {
+        if (this.grabbed) {
+            this.transformationService.setTranslationMatrix(this.mouse.clickedCoordinates!!, this.mouse.currentCoordinates!!, true);
+            this.grabbed = false;
+        }
     }
 }

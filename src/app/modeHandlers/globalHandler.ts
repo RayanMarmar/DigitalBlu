@@ -15,7 +15,7 @@ export class GlobalHandler implements ModeHandler {
         private gridService: GridService,
         private saveService: SaveService,
         private archiveService: ArchiveService,
-        private copyPasteService : CopyPasteService,
+        private copyPasteService: CopyPasteService,
     ) {
     }
 
@@ -26,6 +26,9 @@ export class GlobalHandler implements ModeHandler {
     }
 
     onMouseUp(event: MouseEvent): void {
+    }
+    
+    onMouseOut(event: MouseEvent): void {
     }
 
     onKeyDown(event: KeyboardEvent): void {
@@ -43,9 +46,9 @@ export class GlobalHandler implements ModeHandler {
                     this.archiveService.upToDate = true;
                     this.saveService.saveState(this.modesConfiguration.canvasName);
                 }
-            }else if (event.key === 'c'){
+            } else if (event.key === 'c') {
                 this.copyPasteService.copy();
-            }else if (event.key === 'v'){
+            } else if (event.key === 'v') {
                 this.copyPasteService.paste();
             }
             event.preventDefault();

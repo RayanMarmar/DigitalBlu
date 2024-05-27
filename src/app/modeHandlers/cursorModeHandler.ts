@@ -64,7 +64,7 @@ export class CursorModeHandler implements ModeHandler {
                     this.previousCoords !,
                     this.mouse.currentCoordinates!.reverseTransform(this.transformationService.reverseTransformationMatrix)
                 );
-                if(delta.x != 0 || delta.y != 0) {
+                if (delta.x != 0 || delta.y != 0) {
                     this.moveService.moveElement(delta, this.archiveService.selectedElement, this.delta, true);
                     this.archiveService.addMoveCommand(
                         this.delta,
@@ -78,6 +78,9 @@ export class CursorModeHandler implements ModeHandler {
         } catch (e) {
             console.error("Problem on up cursor mode", e)
         }
+    }
+
+    onMouseOut(event: MouseEvent): void {
     }
 
     onKeyDown(event: KeyboardEvent): void {

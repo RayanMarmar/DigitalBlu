@@ -31,7 +31,7 @@ export class WallModeHandler implements ModeHandler {
                 )
             );
         }
-        this.mouse.mouseDown(event, false, snappedPoint);
+        this.mouse.mouseDown(event, snappedPoint);
         this.modesConfiguration.drawing = true;
     }
 
@@ -54,6 +54,10 @@ export class WallModeHandler implements ModeHandler {
     }
 
     onMouseUp(event: MouseEvent): void {
+    }
+
+    onMouseOut(event: MouseEvent): void {
+        this.handleEscape();
     }
 
     onKeyDown(event: KeyboardEvent): void {

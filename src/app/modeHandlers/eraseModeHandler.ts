@@ -47,6 +47,9 @@ export class EraseModeHandler implements ModeHandler {
         }
     }
 
+    onMouseOut(event: MouseEvent): void {
+    }
+
     onKeyUp(event: KeyboardEvent): void {
     }
 }
